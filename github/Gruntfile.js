@@ -56,6 +56,10 @@ module.exports = function(grunt) {
       less:{
         files: 'less/*.less',
         tasks: ['less']
+      },
+      jsdoc:{
+        files: 'js/**/*.js',
+        tasks: ['jsdoc']
       }
     },
 
@@ -74,7 +78,22 @@ module.exports = function(grunt) {
         }
       }
     },
-
+    jsdoc : {
+        dist : {
+            src: ['js/app.js','js/app/*.js','js/login.js'],
+            options: {
+                destination: 'docs',
+                //It's use a template configuration in it's folder
+                template : "node_modules/grunt-jsdoc/node_modules/ink-docstrap/template",
+                configure : "node_modules/grunt-jsdoc/node_modules/ink-docstrap/template/jsdoc.conf.json"
+                /*
+                  https://github.com/krampstudio/grunt-jsdoc
+                  http://terryweiss.github.io/docstrap/themes/cosmo/index.html
+                  http://usejsdoc.org/about-getting-started.html#generating-a-website
+                */
+            }
+        }
+    }
     //Uglify Angular
     /*uglify: {
        options: {
@@ -99,6 +118,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-usemin');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-jsdoc');
 
   //Register tasks
   grunt.registerTask(
@@ -129,6 +149,6 @@ module.exports = function(grunt) {
   grunt.registerTask(
     'dev',
     'Developing',
-    ['watch']
+    ['watch','jsdoc']
   );
 };

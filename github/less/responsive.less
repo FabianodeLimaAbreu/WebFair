@@ -2,109 +2,6 @@
           RESPONSIVE
 *******************************/
 
-@media only screen and (max-width:600px){
-	body{
-		font-size: 11px;
-	}
-	.content{
-		.viewport{
-			.col-sm-1{
-				width: 100%;
-			}
-		}
-	}
-	.detail{
-		border: none;
-		h6{
-			max-width: 100%;
-		}
-		.info-side{
-			top: -326px;
-			height: 326px;
-		}
-	}	
-	.view-rapport{
-		max-width: 210px;
-	}
-}
-@media only screen and(max-width:740px){
-	nav.groups{
-		.item{
-			&.active{
-				max-height: 1000px;
-			}
-		}
-	}
-}
-@media only screen and(max-width:999px){
-	/*.home-box{
-		width:800px;
-		margin-left:-400px;
-	}*/
-	/*nav.groups .item{
-		margin:0 15px 0 15px;
-	}*/
-	ul.result-group li{
-		left:60px;
-	}
-	/*head
-	.bread-container{
-	
-	}er{
-		.bread-box{
-
-			margin-left: auto;
-			.breadcrumb{
-				margin-left: 5px;
-			}
-		}
-	}*/
-
-	//In case I can't do detail's page to mobile, the lines below disable click in items
-	/*.content{
-		.viewport{
-			.col{
-				img,.caption .link{
-					pointer-events: none;
-				}
-			}
-			.col-insp{
-				pointer-events: auto;
-			}
-		}
-	}*/
-}
-@media only screen and(max-width:800px){
-	/*.home-box{
-		width:660px;
-		margin-left:-330px;
-	}*/
-	/*nav.groups .item{
-		margin:0 7px 0 7px;
-	}*/
-	ul.result-group li{
-		left:0px;
-	}
-	#toggle-menu ul li:after{
-		margin: 0 14px;
-	}	
-}
-@media only screen and (max-width:480px){
-	.bread-container{
-		margin-left: 15px;
-	}
-	.thumbnail{
-		left: 25px;	
-	}
-	.content{
-		.viewport{
-			.col-sm-1{
-				width: 50%;
-			}
-		}
-	}
-}
-
 @media only screen and(min-width:480px){
 	.content{
 		.viewport{
@@ -146,12 +43,6 @@
 	footer{
 		// display: block;
 	}
-	// #modal{
-		// .modal-content{
-			// left:50%;
-			// margin-left:-232px;
-		// }
-	// }
 }
 
 
@@ -181,49 +72,6 @@
 }
 
 @media only screen and(min-width:740px){
-	nav.groups{
-		text-align: center;
-		min-height: 186px;
-		.item{
-			width: 150px;
-			max-height: 100px;
-			border:none;
-			height: auto;
-			overflow: visible;
-			.circle{
-				width: 150px;
-				height: 150px;
-			}
-			h2{
-				display: block;
-				margin: 0;
-				font-weight: 600;
-			}
-			&.active{
-				&:before{
-					position:absolute;
-					width:0;
-					height:0;
-					content: "";
-					display: block;
-					border: 15px solid #234b63;
-					border-color: transparent transparent #234b63 transparent;
-					// background: url(../images/flag.png) no-repeat;
-					margin:0 0 0 60px;
-					top:199px;
-					z-index:1;
-				}
-			}
-		}
-	}
-	ul.result-group{
-		&.biggest{
-			display: block;
-		}
-		&.smallest{
-			display: none;
-		}
-	}
 	.content{
 		.viewport{
 			max-width: 710px;
@@ -282,41 +130,8 @@
 			}
 		}
 	}
-	.showseason{
-		display: none;
-	}
-	.menu-svg{
-		display: none;
-	}
-	.menu-ativo{
-		.maskmenu{
-			display: none;
-		}
-	}
 	header .user{
 		right:20px;
-	}
-	.detail{
-		.info-box{
-			.info-list{
-				li{
-					&.enviar{
-						display: block;
-					}
-				}
-			}
-		}
-	}
-	.filho{
-		.detail{
-			.info-box{
-				.info-list{
-					li{
-						width: 14.285%;
-					}
-				}
-			}
-		}
 	}
 }
 
@@ -335,7 +150,6 @@
 		}
 	}
 	.container{
-		.shadow-top;
 		&.container-page{
 			margin-top: 50px;
 		}
@@ -380,19 +194,6 @@
 			}
 		}
 	}
-	.detail-page{
-		.bread-container{
-			.bread-box{
-				.breadcrumb{
-					li{
-						&.bread-artigo{
-							display: inline-block;
-						}
-					}
-				}
-			}
-		}
-	}
 	.comand-container{
 		.comandbar{
 			max-width: 935px;
@@ -430,9 +231,9 @@
 			}
 		}
 	}
-	.container{
+	/*.container{
 		margin-top: 80px;
-	}
+	}*/
 	.comand-container{
 		padding: 10px 0;
 		.comandbar{
@@ -444,15 +245,7 @@
 			margin-left: auto;
 			max-width: 1160px;
 			left:-5px; // Fix
-		}
-	}
-	.detail-page{
-		.bread-container{
-			.bread-box{
-				margin-left: auto;
-				max-width: 1150px;
-			}
-		}
+		}	
 	}
 	.comand-container{
 		.comandbar{
@@ -474,69 +267,64 @@
 		.main-desc{
 			display: none;
 		}
-		.go_back{
-			top: 10px;
-		}
 		.info-back{
 			height: 15cm;
+		}
+		.go_back{
+			top: 20px;
 		}
 		.info-box{
 			max-width: 910px;
 			position: absolute;
-			right: 0; //-520px
+			right: -520px;
 			width: 910px;
 			height: 15cm;
+			background: #f8f4f1;
 			button.close-bar{
 				display: block;
 			}
 			.info-column{
 				float:left;
-				width:362px;
-				-webkit-box-shadow: 0px 0px 4px 0px rgba(239,239,239, 1);
-				-moz-box-shadow:    0px 0px 4px 0px rgba(239,239,239, 1);
-				box-shadow:         0px 0px 4px 0px rgba(239,239,239, 1);
+				width:370px;
 			}
 			.info-list{
 				position: relative;
 				float: right;
 				height: 100%;
-				width: 50px;
-				background: none;
+				width: 40px;
+				background-color: none;
 				li{
 					position: relative;
 					float: left;
-					background: none;
-					height: 50px;
-					&:hover{
-						background-color: none;
-						.icon-info{
-							background-color: none;
-						}
-					}
-					&.enviar{
-						display: block;
+					height: 40px;
+					width: auto;
+					background-color: none;
+					.icon-info{
+						background-color: #f8f4f1;
 					}
 				}
 			}
 			.info-text{
+				min-width: 310px;
 				width: 310px;
 				.info-text-holder{
 					max-width: 310px;
 					min-width: 310px;
 				}
 				&.info-text2{
-					margin-top: 10px;
-					min-width: 360px;
-					height: 125px;
-					overflow-y: auto;
-					overflow-x: hidden;
+					min-width: 350px;
+					width: 350px;
 					dl{
-						overflow: hidden;
-						height: auto;
-						width: 100%;
+						overflow-y: scroll;
+						height: 255px;
 					}
 				}
 			}
+		}
+		.info-top{
+			min-height:250px;
+			background:#f8f4f1;
+			border-bottom: 1px solid #ded9d3;
 		}
 		h6{
 			font-size: 0.9em;
@@ -545,8 +333,10 @@
 			position: relative;
 			float: left;
 			height: 97%;
-			width: 500px;
-			padding:10px 10px;
+			width: 488px;
+			padding:10px 10px;	
+			background-color: #4c4134;
+			color: #FFF;
 			text-align: center;
 			top: 0;
 			right: 0;
@@ -554,71 +344,23 @@
 				margin: 10px 0;
 				font-size: 1.1em;
 			}
-		}
-	}
-	.view-rapport{
-		width: 380px;
-	}
-	.icon{
-		&.icon-info{
-			border: 1px solid #d7d7d7;
-		}
-	}
-	.pai,.filho{
-		.detail{
-			.info-box{
-				.info-list{
-					border: none;
-					li{
-						width: auto;
-					}
-				}
+			.color-list{
+				height: 13cm;
 			}
 		}
 	}
-	.pai{
-		.info-top{
-			min-height:310px;
-		}
-		.detail{
-			.info-text{
-				&.info-text2{
-					height: auto;
-					dl{
-						overflow-y: scroll;
-						height: 190px;
-					}
-				}
-			}
+	.info-rapport{
+		.view-rapport{
+			width: 380px;
 		}
 	}
-	.filho{
-		.info-top{
-			//min-height:355px; when have colorbt
-			min-height: 375px;
+	.color-list{
+		overflow: auto;	
+		height: 13.2cm;
+		li{
+			margin: 7px;
+			width: auto;
 		}
-	}
-	.thumbnavigator{
-		display: block;
-	}
-	#slider{
-		width: 490px;
-		height: 530px;
-	}
-	.slides-container{
-		max-width: 353px;
-		width: 353px;
-		height: 530px;
-		top: 0;
-		left: 0;
-		.caption{
-			top: 500px;
-			max-width: 353px;
-			width: 353px;
-		}
-	}
-	.navigator{
-		display: none;
 	}
 }
 

@@ -1,3 +1,15 @@
+/**
+*@fileOverview Detail and Menu's class.
+* @module Menu
+* @module Detail
+*
+*/
+
+/**
+* Menu's class and actions
+* @exports Menu
+* @constructor
+*/
 window.Menu = Spine.Controller.sub({elements:{"li a":"buttons"}, events:{"click a":"action"}, action:function(a) {
   if("object" === typeof a) {
     a.preventDefault();
@@ -17,7 +29,14 @@ window.Menu = Spine.Controller.sub({elements:{"li a":"buttons"}, events:{"click 
       alert(b);
   }
   this.close();
-}, close:function(a) {
+}, 
+
+/**
+* `OK Set thed loading state`
+* @memberOf Menu#
+* @param {Boolean} a. If true show mask, else hide mask.
+*/  
+close:function(a) {
   if(a && (a.preventDefault(), a = $(a.target), this.el.find(a).length)) {
     return!1;
   }
@@ -35,6 +54,12 @@ window.Menu = Spine.Controller.sub({elements:{"li a":"buttons"}, events:{"click 
   this.doc = $(document);  
   // this.el.disableSelection && this.el.disableSelection();
 }});
+
+/**
+* Details's class and actions
+* @exports Detail
+* @constructor
+*/
 window.Detail = Spine.Controller.sub({
 elements:{
   ".title":"title",
@@ -86,7 +111,13 @@ elements:{
   this.infobox.css({right:-520}); //Return the bar to its initial position
   // $('.content .viewport').show();
   return!1;
-}, open: function(a){
+}, 
+/**
+* `OK Set thed loading state`
+* @memberOf Detail#
+* @param {Boolean} a. If true show mask, else hide mask.
+*/
+open: function(a){
   
   "use strict";
   // console.log("ENTROU DETALHE");

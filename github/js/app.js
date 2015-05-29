@@ -1,3 +1,9 @@
+/**
+*@fileOverview Main application class, responsible for all main funcionalities and call anothers classes constructors
+* @module App
+*
+*/
+
 require.config({
   shim: {
     spine: {
@@ -12,11 +18,16 @@ require.config({
     sp: "spine"
   }
 });
-require(["methods","jssor","jssor.slider","sp/min", "app/content", "app/detail"], function() {
+require(["methods","sp/min"/*, "app/content", "app/detail"*/], function() {
+  /**
+  * Main application class, responsible for all main funcionalities and call anothers classes constructors
+  * @exports App
+  * @constructor
+  */
   window.App = Spine.Controller.sub({
     el:$("body"),
     elements: {
-      ".container":"container",
+      /*".container":"container",
       "#toggle-menu a":"menuopt",
       "#wrap .mask":"maskEl",
       ".search":"searchEl",
@@ -28,14 +39,14 @@ require(["methods","jssor","jssor.slider","sp/min", "app/content", "app/detail"]
       ".content":"contentEl",
       ".bread-box":"breadEl",
       "#modal" : "modalEl",
-      ".detail":"detailEl"
+      ".detail":"detailEl"*/
     },
 
     events: {      
-      "click .right-list button":"changeview",
+      /*"click .right-list button":"changeview",
       "submit .search":"submit",
       "click button.icon.go_back_default":"goBack",
-      "click button.close":"getOut"
+      "click button.close":"getOut"*/
     },
     init:function(){
       this.view = "images";
@@ -48,14 +59,14 @@ require(["methods","jssor","jssor.slider","sp/min", "app/content", "app/detail"]
       this.father=!0;
       this.searchname="";
       this.breadarr = [];
-      this.content = new Content({el:this.contentEl});
-      this.modal = new Modal({el:this.modalEl});
-      this.detail = new Detail({el:this.detailEl, breadEl:this.breadEl,getloading:this.proxy(this.getloading), setloading:this.proxy(this.setloading),stage:this.proxy(this.stage), body:this.el,getfdata:this.proxy(this.getfdata)});
+      //this.content = new Content({el:this.contentEl});
+      //this.modal = new Modal({el:this.modalEl});
+      //this.detail = new Detail({el:this.detailEl, breadEl:this.breadEl,getloading:this.proxy(this.getloading), setloading:this.proxy(this.setloading),stage:this.proxy(this.stage), body:this.el,getfdata:this.proxy(this.getfdata)});
 
       this.usr = jQuery.parseJSON($.cookie("portal"));
-        if(!this.usr)
+        /*if(!this.usr)
           window.location.href = 'login.html';
-      this.username.text(this.usr.Nome);
+      this.username.text(this.usr.Nome);*/
       
       this.el.find("#wrap").removeClass("hide");
 
@@ -63,8 +74,8 @@ require(["methods","jssor","jssor.slider","sp/min", "app/content", "app/detail"]
       // this.spotlight = new Spotlight({el:this.spotEl});
       this.routes({
         "":function() {
-          alert("vazio");
-          this.menuopt.eq(0).trigger("click");
+          //alert("vazio");
+          //this.menuopt.eq(0).trigger("click");
         },
         "search/*loja/*area/*code":function(a){
           this.setMenu(a.loja.toUpperCase());
@@ -100,16 +111,12 @@ require(["methods","jssor","jssor.slider","sp/min", "app/content", "app/detail"]
           this.mode = "artigos-filho/"+a.loja+"/"+a.artigo+"/"+a.code;
           this.searchEl.find(".text").val(a.code).focus();
           $('body').removeClass().addClass('filho');
-          // $('body').removeClass('pai').addClass('filho');
           this.searchEl.trigger('submit');
         },
         "detail/*loja/*tipo/*code" : function(a) {
-          /*Tela de detalhes para pai*/
           this.detail.reload(!0,a.loja,a.tipo,a.code);
         },
         "detail/*tipo/*code" : function(a) {
-          // console.log(a);
-          // console.log("DETALHE FILHO")
           this.detail.reload(!0,!1,a.tipo, a.code);
         }
       });
@@ -123,14 +130,10 @@ require(["methods","jssor","jssor.slider","sp/min", "app/content", "app/detail"]
         window.location.href = './#'+this.loja;
       }else{
         var bread = $('.bread-colec').find("a").text();
-        // var grupo = bread.split("- ")[1];
         var grupo = this.fdata[0].GRUPO;
         var area = this.fdata[0].TYPE_MAT;
         this.navigate && this.navigate("artigos-pai", this.loja,area,grupo,!0);        
-      }      
-      /*if(this.loja !==""){
-        window.location.href = './';
-      }*/      
+      }       
 
     },
     setBreadcrumb : function(a, val){
@@ -183,7 +186,6 @@ require(["methods","jssor","jssor.slider","sp/min", "app/content", "app/detail"]
       });
     },
     submit:function(e){
-      // alert('submit');
       var _type, path;
       e.preventDefault();
       var val=$(e.target).find(".text").val();
@@ -218,8 +220,6 @@ require(["methods","jssor","jssor.slider","sp/min", "app/content", "app/detail"]
 
       }
             
-
-      // this.setBreadcrumb(this.loja,this.area,val);
       return this.setloading(!0), !1;
     },
     setdata:function(a,b){      
@@ -229,7 +229,6 @@ require(["methods","jssor","jssor.slider","sp/min", "app/content", "app/detail"]
       this.breadEl.find(".bread-load").text(0);
 
       if (!this.fdata.length) {        
-        // return this.modal.open("Tente novamente", "Nenhum resultado encontrado para busca.", !0), this.getloading(!1), this.breadEl.find(".bread-search span").text(""), this.filter.list = [], this.active.itens.remove(), !1;
         return this.modal.open(),this.breadEl.find('.bread-colec a').text("").removeClass('active'),this.setloading(!1), this.searchEl.find('input').blur();
       }  
       
@@ -342,14 +341,11 @@ require(["methods","jssor","jssor.slider","sp/min", "app/content", "app/detail"]
   },
 
     /**
-    * Set the loading state
-    *
+    * `Set the loading state`
+    * @memberOf App#
     * @param {Boolean} a. If true show mask, else hide mask.
     * @param {Boolean} b. If is false, open the loader ebook, else open just the mask div
-    *
-    * This method set the state loader
     */
-
     setloading: function(a, b) {
       if (!b) {
         if (a) {
@@ -374,7 +370,9 @@ require(["methods","jssor","jssor.slider","sp/min", "app/content", "app/detail"]
     },
 
     /**
-    * Return loading status
+    * `Return loading status`
+    * @memberOf App#
+    *@return {boolean} status - return loading status
     *
     */
     getloading:function(a){
