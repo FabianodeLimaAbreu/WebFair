@@ -86,6 +86,13 @@ body{
 		top: 48%;
 	}
 }*/
+.holder{
+	position: relative;
+	margin: 0 auto;
+	width: 100%;
+	max-width: 960px;
+}
+.sprite{ background:url("../images/sprite.png") top left no-repeat; }
 
 /****************
 *********************************		 HOME 				*******************/
@@ -228,10 +235,32 @@ header{
 	}
 }
 .header-top{
-	border-top: 1px solid #323232;
+	//border-top: 1px solid #323232;
 	height: 70px;
 	background:@dark-text;
-	.user{
+	.login-name{
+		position: relative;
+		clear: none;
+		display: block;
+		width: auto;
+		margin-right: 10px;
+		font-size: 10pt;
+		font-weight: 300;
+		color: #fff;
+		float: right;
+		height: 50px;
+		line-height: 50px;
+		margin-top: 10px;
+		span{
+			background: url(../images/border-shadow.png) no-repeat;
+			width: 15px;
+			height: 50px;
+			position: relative;
+			float: left;
+			margin: 0 10px 0 0;
+		}
+	}
+	/*.user{
 		position:absolute;
 		bottom:10px;
 		right:60px;
@@ -243,23 +272,91 @@ header{
 			font-size: 10pt;
 			font-weight: 300;
 		}
-		.close{
-			.fleft;
-			.button;			
-			width:15px;
-			height:15px;
-			background: url(../images/gui.png) no-repeat;
-			background-position: -15px -45px;
-			.transition(opacity,0.2s, ease-in-out);
-			&:hover{
-				.opacity(0.5);
+		.menu-logoff{
+			&:after{
+				width:25px; 
+				height:30px; 
+				background-position:-10px -90px; 
+				content: "";
+				display: block;
+				.sprite;
+				.fleft;
+				.button;			
+			}
+		}
+	}*/
+}
+.header-bottom{
+	.nav-container{
+		position: relative;
+		float: left;
+		width: 100%;
+		height: 50px;
+		background: @light-text;
+		nav{
+			height: auto;
+			vertical-align: middle;
+			margin: 0;
+			padding: 0;
+			overflow: hidden;
+			list-style: none;
+			z-index: 99;
+			width: auto;
+			position: relative;
+			float: left;
+			.nav-menu{
+				height: 55px;
 			}
 		}
 	}
-}
-.header-bottom{
-	height: 50px;
-	background: @light-text;
+	.nav-menu li{
+		list-style: none;
+		width: auto;
+		height: 55px;
+		display: inline-block;
+		/* height: 60px; */
+		position: relative;
+		float: left;
+		vertical-align: top;
+		top: 0;
+		margin: 0 10px;
+		a{
+			cursor: default;
+			line-height: 110px;
+			line-height: 15px;
+			text-decoration: none;
+			display: inline-block;
+			vertical-align: middle;
+			font-size: 1.1em;
+			color: #000;
+			height: 55px;
+			width: 100%;
+			padding:10px;
+			border: 1px solid transparent;
+			cursor: pointer;
+			&.amostras{
+				padding: 20px 10px;
+			}
+			/* background-color: red; */
+			&.sel,&:hover{
+				background: #6ea9ca;
+				.gradient(@from: #71abcc, @to: #4082a7);
+				border: 1px solid #457d9d;
+				height: 55px;
+				color: #fff;
+				&:after{
+					position: absolute;
+					content: "";
+					top: 50px;
+					width: 4px;
+					right: -4px;
+					height: 5px;
+					background: url(../images/nav-mask.png) no-repeat;
+					background-position: center;
+				}
+			}
+		}
+	}
 }
 
 .container{
@@ -267,7 +364,8 @@ header{
 	width:100%;
 	height:auto;
 	min-height:300px;
-	top: 120px;
+	top: 145px;
+	margin-bottom: 0;
 	// Shadow Top none in small resolutions
 	/*box-shadow: none;
 	margin-top: 50px;
@@ -280,6 +378,62 @@ header{
 		margin-top:50px;
 		// min-width:900px;
 	}*/
+}
+.menu{
+	position: relative;
+	float: right;
+	li{
+		  display: inline-block;
+		  height: 70px;
+		  position: relative;
+		  float: left;
+		  vertical-align: top;
+		  top: 0;
+		  a{
+		  	  text-decoration: none;
+			  display: inline-block;
+			  vertical-align: middle;
+			  font-size: 1em;
+			  color: #fff;
+			  height: 70px;
+			  line-height: 105px;
+			  margin-right: 20px;
+			  //padding: 22px 15px 0;
+			  //height: 50px;
+			  &:after{
+			  	content: "";
+			  	display: block;
+			  	position: relative;
+			  	height: 30px;
+			  	.sprite;
+			  	bottom: 90px;
+			  	left: 20px;
+			  }
+			  &.menu-legend{
+			  	&:after{
+					width:30px; background-position:-10px -130px;
+					left: 10px;
+			  	}
+			  }
+			  &.menu-settings{
+			  	&:after{
+					width:30px; background-position:-10px -10px;
+			  	}
+			  }
+			  &.menu-send_receive{
+			  	&:after{
+					width:40px; background-position:-10px -50px;
+			  	}
+			  }
+			  &.menu-logoff{
+			  	&:after{
+					width:30px; background-position:-10px -90px;
+					right: 2px;
+					left: 0;
+			  	}
+			  }
+		  }
+	}
 }
 /*****************************************
 ********************************************	HOME PAGE
@@ -559,7 +713,7 @@ form.search{
 			content: "";
 			width: 15px;
 			height: 15px;
-			background: url(../images/gui.png) no-repeat;
+			background: url(../images/sprite.png) no-repeat;
 			background-position: 0 -15px;
 			top: 7px;
 			left: 7px;
@@ -679,15 +833,13 @@ form.search{
 
 .content{
 	position: relative;
-	height: 420px;
-	//height: 100%;
-	width: 99%;
-	max-width: 1280px;
+	height: 100%;
+	width: 95%;
 	margin-bottom:50px;
 	overflow-x: hidden;
 	overflow-y: hidden;
 	margin: 0 auto;
-	background: blue;
+	//background: #c6c6c6;
 	/*.viewport{
 		position: relative;
 		height: auto;
@@ -701,6 +853,39 @@ form.search{
 			float: left;
 		}
 	}*/
+}
+
+.container-filter{
+	height: 30px;
+	margin-bottom: 10px;
+	.fake-form{
+		position: relative;
+		float: left;
+		width: 190px;
+		margin-right: 10px;
+	}
+	//background: blue;
+}
+.overview{
+	//height: auto;
+	height: 700px;
+	padding-bottom: 80px;
+	//background: green;
+}
+.aside-edit{
+	//background-color: red;
+	float: right;
+	width: 200px;
+	height: 100px;
+}
+/*********************************
+************************************	TABLE ***************************/
+.table{
+	position: relative;
+	float: left;
+	width: 100%;
+	height: 1000px;
+	//background: red;
 }
 
 /*********************************
@@ -830,7 +1015,7 @@ form.search{
 			display: block;
 			width: 15px;
 			height: 15px;
-			background: url(../images/gui.png) no-repeat;
+			background: url(../images/sprite.png) no-repeat;
 			background-position: 0 -180px;
 			top: 7px;
 			right: 7px;
@@ -1172,7 +1357,7 @@ form.search{
 			height: 15px;
 			right: 7px;
 			top: 7px;
-			background:url(../images/gui.png);
+			background:url(../images/sprite.png);
 			background-position: 0 -45px;
 			content: "";
 		}
@@ -1188,7 +1373,7 @@ form.search{
 	// 	.bclose,.bclose:hover{
 	// 		cursor: pointer;
 	// 		&:after{
-	// 			background:url(../images/gui.png);background-position: 0 -45px;display: block;position: absolute;right: 6px;top: 7px;width: 15px;height: 15px;content: "";
+	// 			background:url(../images/sprite.png);background-position: 0 -45px;display: block;position: absolute;right: 6px;top: 7px;width: 15px;height: 15px;content: "";
 	// 		}
 	// 	}
 	// }
@@ -1301,4 +1486,17 @@ footer {
 	display:none;
 }
 
+.edit{
+	overflow-x: auto;
+	body{
+		overflow-x: auto;
+	}
+	.container{
+		min-width: 1200px;
+	}
+	.holder{
+		float: left;
+		margin-left: 10px;
+	}
+}
 @import url(import.less);

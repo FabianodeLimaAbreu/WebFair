@@ -76,6 +76,15 @@ body.noscroll {
 		top: 48%;
 	}
 }*/
+.holder {
+  position: relative;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 960px;
+}
+.sprite {
+  background: url("../images/sprite.png") top left no-repeat;
+}
 /****************
 *********************************		 HOME 				*******************/
 .entrada {
@@ -217,53 +226,132 @@ header .logo-print {
   display: none;
 }
 .header-top {
-  border-top: 1px solid #323232;
   height: 70px;
   background: #414141;
+  /*.user{
+		position:absolute;
+		bottom:10px;
+		right:60px;
+		color:#FFF;
+		.login-name{
+			.fleft;
+			width:auto;
+			margin-right:10px;
+			font-size: 10pt;
+			font-weight: 300;
+		}
+		.menu-logoff{
+			&:after{
+				width:25px; 
+				height:30px; 
+				background-position:-10px -90px; 
+				content: "";
+				display: block;
+				.sprite;
+				.fleft;
+				.button;			
+			}
+		}
+	}*/
 }
-.header-top .user {
-  position: absolute;
-  bottom: 10px;
-  right: 60px;
-  color: #FFF;
-}
-.header-top .user .login-name {
+.header-top .login-name {
   position: relative;
-  float: left;
   clear: none;
   display: block;
   width: auto;
   margin-right: 10px;
   font-size: 10pt;
   font-weight: 300;
+  color: #fff;
+  float: right;
+  height: 50px;
+  line-height: 50px;
+  margin-top: 10px;
 }
-.header-top .user .close {
+.header-top .login-name span {
+  background: url(../images/border-shadow.png) no-repeat;
+  width: 15px;
+  height: 50px;
   position: relative;
   float: left;
-  clear: none;
-  display: block;
-  background: none;
-  border: none;
-  margin: 0;
-  padding: 0;
-  cursor: pointer;
-  width: 15px;
-  height: 15px;
-  background: url(../images/gui.png) no-repeat;
-  background-position: -15px -45px;
-  -webkit-transition: opacity 0.2s ease-in-out;
-  -moz-transition: opacity 0.2s ease-in-out;
-  -o-transition: opacity 0.2s ease-in-out;
-  -ms-transition: opacity 0.2s ease-in-out;
-  transition: opacity 0.2s ease-in-out;
+  margin: 0 10px 0 0;
 }
-.header-top .user .close:hover {
-  opacity: 0.5;
-  filter: alpha(opacity=50);
-}
-.header-bottom {
+.header-bottom .nav-container {
+  position: relative;
+  float: left;
+  width: 100%;
   height: 50px;
   background: #f1f6fa;
+}
+.header-bottom .nav-container nav {
+  height: auto;
+  vertical-align: middle;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  list-style: none;
+  z-index: 99;
+  width: auto;
+  position: relative;
+  float: left;
+}
+.header-bottom .nav-container nav .nav-menu {
+  height: 55px;
+}
+.header-bottom .nav-menu li {
+  list-style: none;
+  width: auto;
+  height: 55px;
+  display: inline-block;
+  /* height: 60px; */
+  position: relative;
+  float: left;
+  vertical-align: top;
+  top: 0;
+  margin: 0 10px;
+}
+.header-bottom .nav-menu li a {
+  cursor: default;
+  line-height: 110px;
+  line-height: 15px;
+  text-decoration: none;
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 1.1em;
+  color: #000;
+  height: 55px;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  /* background-color: red; */
+}
+.header-bottom .nav-menu li a.amostras {
+  padding: 20px 10px;
+}
+.header-bottom .nav-menu li a.sel,
+.header-bottom .nav-menu li a:hover {
+  background: #6ea9ca;
+  background: #71abcc;
+  background: -webkit-gradient(linear, left bottom, left top, color-stop(1, #71abcc), color-stop(0, #4082a7));
+  background: -ms-linear-gradient(bottom, #71abcc, #4082a7);
+  background: -moz-linear-gradient(center top, #71abcc 0%, #4082a7 100%);
+  background: -o-linear-gradient(#4082a7, #71abcc);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#71abcc', endColorstr='#4082a7', GradientType=0);
+  border: 1px solid #457d9d;
+  height: 55px;
+  color: #fff;
+}
+.header-bottom .nav-menu li a.sel:after,
+.header-bottom .nav-menu li a:hover:after {
+  position: absolute;
+  content: "";
+  top: 50px;
+  width: 4px;
+  right: -4px;
+  height: 5px;
+  background: url(../images/nav-mask.png) no-repeat;
+  background-position: center;
 }
 .container {
   position: relative;
@@ -273,7 +361,8 @@ header .logo-print {
   width: 100%;
   height: auto;
   min-height: 300px;
-  top: 120px;
+  top: 145px;
+  margin-bottom: 0;
   /*box-shadow: none;
 	margin-top: 50px;
 	&.container-page{		
@@ -285,6 +374,56 @@ header .logo-print {
 		margin-top:50px;
 		// min-width:900px;
 	}*/
+}
+.menu {
+  position: relative;
+  float: right;
+}
+.menu li {
+  display: inline-block;
+  height: 70px;
+  position: relative;
+  float: left;
+  vertical-align: top;
+  top: 0;
+}
+.menu li a {
+  text-decoration: none;
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 1em;
+  color: #fff;
+  height: 70px;
+  line-height: 105px;
+  margin-right: 20px;
+}
+.menu li a:after {
+  content: "";
+  display: block;
+  position: relative;
+  height: 30px;
+  background: url("../images/sprite.png") top left no-repeat;
+  bottom: 90px;
+  left: 20px;
+}
+.menu li a.menu-legend:after {
+  width: 30px;
+  background-position: -10px -130px;
+  left: 10px;
+}
+.menu li a.menu-settings:after {
+  width: 30px;
+  background-position: -10px -10px;
+}
+.menu li a.menu-send_receive:after {
+  width: 40px;
+  background-position: -10px -50px;
+}
+.menu li a.menu-logoff:after {
+  width: 30px;
+  background-position: -10px -90px;
+  right: 2px;
+  left: 0;
 }
 /*****************************************
 ********************************************	HOME PAGE
@@ -558,7 +697,7 @@ form.search {
 			content: "";
 			width: 15px;
 			height: 15px;
-			background: url(../images/gui.png) no-repeat;
+			background: url(../images/sprite.png) no-repeat;
 			background-position: 0 -15px;
 			top: 7px;
 			left: 7px;
@@ -663,14 +802,12 @@ form.search {
 ************************************	CONTENT ***************************/
 .content {
   position: relative;
-  height: 420px;
-  width: 99%;
-  max-width: 1280px;
+  height: 100%;
+  width: 95%;
   margin-bottom: 50px;
   overflow-x: hidden;
   overflow-y: hidden;
   margin: 0 auto;
-  background: blue;
   /*.viewport{
 		position: relative;
 		height: auto;
@@ -684,6 +821,33 @@ form.search {
 			float: left;
 		}
 	}*/
+}
+.container-filter {
+  height: 30px;
+  margin-bottom: 10px;
+}
+.container-filter .fake-form {
+  position: relative;
+  float: left;
+  width: 190px;
+  margin-right: 10px;
+}
+.overview {
+  height: 700px;
+  padding-bottom: 80px;
+}
+.aside-edit {
+  float: right;
+  width: 200px;
+  height: 100px;
+}
+/*********************************
+************************************	TABLE ***************************/
+.table {
+  position: relative;
+  float: left;
+  width: 100%;
+  height: 1000px;
 }
 /*********************************
 ************************************	THUMBNAIL ***************************/
@@ -812,7 +976,7 @@ form.search {
   display: block;
   width: 15px;
   height: 15px;
-  background: url(../images/gui.png) no-repeat;
+  background: url(../images/sprite.png) no-repeat;
   background-position: 0 -180px;
   top: 7px;
   right: 7px;
@@ -1176,7 +1340,7 @@ form.search {
   height: 15px;
   right: 7px;
   top: 7px;
-  background: url(../images/gui.png);
+  background: url(../images/sprite.png);
   background-position: 0 -45px;
   content: "";
 }
@@ -1273,81 +1437,51 @@ form.search {
 footer {
   display: none;
 }
+.edit {
+  overflow-x: auto;
+}
+.edit body {
+  overflow-x: auto;
+}
+.edit .container {
+  min-width: 1200px;
+}
+.edit .holder {
+  float: left;
+  margin-left: 10px;
+}
 .icon {
   position: relative;
   float: left;
   display: block;
-  border-radius: 2px;
   cursor: pointer;
-}
-.icon.icon-button {
-  cursor: pointer;
-}
-.icon.icon-info {
-  width: 50px;
-  height: 50px;
-  display: block;
-  margin: 0 auto;
-  float: none;
-  background: #f2f2f2 url(../images/gui.png) no-repeat;
+  background: #71abcc;
   border: none;
-}
-.icon.icon-info:hover {
-  background-color: #dadada;
-}
-.icon.icon-info.disable,
-.icon.icon-info.disable:hover {
-  background-color: #f1f1f1;
-  opacity: 0.2;
-  filter: alpha(opacity=20);
-}
-.icon.icon-info.sel,
-.icon.icon-info.sel:hover {
-  background-color: #dadada;
-}
-.icon.arrow {
-  background: url(../images/gui.png) no-repeat;
-  width: 15px;
+  outline: none;
+  border-radius: 50px;
   height: 30px;
-  position: absolute;
-  top: 280px;
-  left: 5px;
-  margin: 3px 5px 0 0;
+  color: #f1f6fa;
+  font-size: 1em;
 }
-.icon.arrow.arrow-open {
-  background-position: -50px -30px;
+.icon:hover {
+  background: #414141;
 }
-.icon.arrow.arrow-close {
-  background-position: -65px -30px;
-}
-.icon.price {
-  width: 28px;
-  height: 28px;
-  border: 1px solid #000;
-  background-color: #2a2a2a;
-  background-image: url(../images/cart-icon.png);
-  background: url(../images/cart-icon.png), -moz-linear-gradient(top, #1c1c1c, #404040);
-  background: url(../images/cart-icon.png), -webkit-gradient(linear, 0 0, 0 100%, from(#1c1c1c), to(#404040));
-  background: url(../images/cart-icon.png), -webkit-linear-gradient(top, #1c1c1c, #404040);
-  background: url(../images/cart-icon.png), -o-linear-gradient(top, #1c1c1c, #404040);
-  background: url(../images/cart-icon.png), linear-gradient(to bottom, #1c1c1c, #404040);
-  position: relative;
+.icon.new {
+  width: 110px;
   float: right;
-  margin: 0 10px 0 0;
-  bottom: 21px;
+  line-height: 30px;
 }
-.icon.price:hover {
-  background-color: #0a0a0a;
-  background-image: url(../images/cart-icon.png);
-  background: url(../images/cart-icon.png), -moz-linear-gradient(top, #111111, #000000);
-  background: url(../images/cart-icon.png), -webkit-gradient(linear, 0 0, 0 100%, from(#111111), to(#000000));
-  background: url(../images/cart-icon.png), -webkit-linear-gradient(top, #111111, #000000);
-  background: url(../images/cart-icon.png), -o-linear-gradient(top, #111111, #000000);
-  background: url(../images/cart-icon.png), linear-gradient(to bottom, #111111, #000000);
-}
-.icon.price.price-table {
-  bottom: 0;
-  top: 7px;
+.icon.new:before {
+  content: "";
+  width: 20px;
+  height: 20px;
+  background: url(../images/sprite.png) no-repeat;
+  background-position: -10px -1005px;
+  display: inline-block;
+  position: relative;
+  margin-right: 5px;
+  top: 4px;
+  left: -4px;
 }
 .table {
   width: 100%;
@@ -1410,7 +1544,6 @@ td {
   user-select: none;
 }
 .button {
-  background: none;
   border: none;
   margin: 0;
   padding: 0;
@@ -1432,8 +1565,8 @@ form {
 .form-group {
   position: relative;
   float: left;
-  width: 100%;
   height: auto;
+  width: 100%;
 }
 .form-group span {
   position: absolute;
@@ -1470,8 +1603,9 @@ form {
   max-width: 408px;
 }
 .form-control.default {
-  max-width: 275px;
-  margin: 5px 0;
+  height: 30px;
+  border: none;
+  max-width: 190px;
 }
 form .label {
   font-size: 1.1em;
@@ -1484,6 +1618,22 @@ form .label-pre {
 }
 form .label-default {
   font-size: 1.2em;
+}
+select.form-control.default {
+  background: transparent;
+  line-height: 1;
+  border: 0;
+  -webkit-appearance: none;
+  overflow: hidden;
+  cursor: pointer;
+}
+.styled-select {
+  overflow: hidden;
+  background: url(../images/arrow_top_bottom.png) no-repeat right #f3f5f8;
+  border-radius: 50px;
+}
+.styled-select:hover {
+  background: url(../images/arrow_top_bottom_dark.png) no-repeat right #f3f5f8;
 }
 .form-main .label-pre,
 .lav .label-pre {
@@ -1820,6 +1970,23 @@ form textarea {
   .color-list li {
     margin: 7px;
     width: auto;
+  }
+}
+@media only screen and (min-width: 1400px) {
+  .edit {
+    overflow-x: hidden;
+  }
+  .edit body {
+    overflow-x: hidden;
+  }
+  .edit .holder {
+    float: none;
+    margin: 0 auto;
+  }
+  .aside-edit {
+    position: absolute;
+    right: 0;
+    top: 330px;
   }
 }
 @media only screen and (min-width: 1440px) {

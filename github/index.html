@@ -23,23 +23,34 @@
     <div id="wrap">
       <header>
         <div class="header-collum header-top">
-          <a href="." class="logo"><img src="images/logo_small.png" alt=""></a>
-          <div class="user">
-            <h2 class="login-name"></h2>
-            <button class="close" title="Sair"></button>
+
+          <a href="index.html" class="logo"><img src="images/logo_small.png" alt=""></a>
+          <!--<div class="user">
+            <a class="close menu-logoff" title="Sair">Sair</a>
+            <h2 class="login-name">Nome do Usuário</h2>
           </div>
+          </div>-->
+          <h2 class="login-name"><span></span>Nome do Usuário</h2>
+          <ul class="menu">
+            <li><a href="#legend" class="menu-legend">Legendas</a></li>
+            <li><a href="#settings" class="menu-settings">Configurações</a></li>
+            <li><a href="#send_receive" class="menu-send_receive">Enviar/Receber</a></li>
+            <li><a href="#logoff" class="menu-logoff">Sair</a></li>
+          </ul>
         </div>
         <div class="header-collum header-bottom">
-          <nav>
-            <ul>
-              <li><a href="Teste1"></a></li>
-              <li><a href="Teste2"></a></li>
-              <li><a href="Teste3"></a></li>
-              <li><a href="Teste4"></a></li>
-              <li><a href="Teste5"></a></li>
-            </ul>
+          <div class="nav-container">
+            <nav>
+              <ul class="nav-menu">
+                <li><a href="Teste1">Gerar<br/>Relatório</a></li>
+                <li><a href="Teste2">Local da<br/>Coleta</a></li>
+                <li><a href="Teste3">Fornecedor<br/>e Contato</a></li>
+                <li><a href="Teste4" class="amostras sel">Amostras</a></li>
+                <li><a href="Teste5">Templates<br/>e-Mails</a></li>
+              </ul>
 
-          </nav>
+            </nav>
+          </div>
           <div class="config-menu">
             <ul>
               <li><a href="Teste1"></a></li>
@@ -49,9 +60,101 @@
         </div>
       </header>
       <div class="container">
+        <!--19
         <div class="content">
+          <div class="container-filter holder">
+            
+          </div>
+          <div class="table">
+            
+          </div>
+        </div>-->
+
+        <!--18-->
+        <div class="content">
+          <div class="container-filter holder">
+            <div class="fake-form">
+              <div class="form-group styled-select">
+                <select class="form-control default">
+                  <option value="País">País</option>
+                  <option value="África do Sul">África do Sul</option>
+                  <option value="Albânia">Albânia</option>
+                  <option value="Alemanha">Alemanha</option>
+                  <option value="Andorra">Andorra</option>
+                  <option value="Angola">Angola</option>
+                  <option value="Anguilla">Anguilla</option>
+                  <option value="Antigua">Antigua</option>
+                  <option value="Arábia Saudita">Arábia Saudita</option>
+                  <option value="Argentina">Argentina</option>
+                  <option value="Armênia">Armênia</option>
+                  <option value="Aruba">Aruba</option>
+                  <option value="Austrália">Austrália</option>
+                  <option value="Áustria">Áustria</option>
+                  <option value="Azerbaijão">Azerbaijão</option>
+                  <option value="Bahamas">Bahamas</option>
+                  <option value="Bahrein">Bahrein</option>
+                  <option value="Bangladesh">Bangladesh</option>
+                </select>
+              </div>
+            </div>
+            <div class="fake-form">
+              <div class="form-group styled-select">
+                <select class="form-control default">
+                  <option value="País">Província</option>
+                  <option value="África do Sul">África do Sul</option>
+                  <option value="Albânia">Albânia</option>
+                  <option value="Alemanha">Alemanha</option>
+                  <option value="Andorra">Andorra</option>
+                  <option value="Angola">Angola</option>
+                  <option value="Anguilla">Anguilla</option>
+                  <option value="Antigua">Antigua</option>
+                  <option value="Arábia Saudita">Arábia Saudita</option>
+                  <option value="Argentina">Argentina</option>
+                  <option value="Armênia">Armênia</option>
+                  <option value="Aruba">Aruba</option>
+                  <option value="Austrália">Austrália</option>
+                  <option value="Áustria">Áustria</option>
+                  <option value="Azerbaijão">Azerbaijão</option>
+                  <option value="Bahamas">Bahamas</option>
+                  <option value="Bahrein">Bahrein</option>
+                  <option value="Bangladesh">Bangladesh</option>
+                </select>
+              </div>
+            </div>
+            <div class="fake-form">
+              <div class="form-group styled-select">
+                <select class="form-control default">
+                  <option>Data Inicio/Fim</option>
+                </select>
+              </div>
+            </div>
+            <button type="button" class="icon new">Novo Local</button>
+          </div>
+          <div class="overview holder">
+            <!--<table class="table table-striped">
+              <thead>
+                  <tr>
+                      <th>Codigo</th><th>CNPJ</th><th>Cliente</th><th>E-Mail</th><th>Cód.Rep</th><th>Representante</th><th>Cód.Gestor</th><th>Gestor</th><th>Data Acesso</th><th>Pedido</th><th>Qtde</th><th>Descrição do artigo</th><th>Código SAP</th><th>Status do pedido</th>
+                  </tr>
+              </thead>
+              <tbody>
+              <tr><td>1383776300</td><td>00651587000107</td><td>MD</td><td>00651587000107</td><td>0000010577</td><td>Ilana Susskind Anielewicz</td><td></td><td></td><td>02/06/2015 16:13</td><td>0</td><td>-</td><td>-</td><td>-</td><td>-</td></tr><tr><td>1384516100</td><td>02840805000179</td><td>MCAVALLINI</td><td>02840805000179</td><td>0000010534</td><td>Cesar Fernandes Rodrigues</td><td></td><td></td><td>02/06/2015 15:22</td><td>0</td><td>-</td><td>-</td><td>-</td><td>-</td></tr><tr><td>1384800600</td><td>01738860000190</td><td>ALLSET</td><td>01738860000190</td><td>0000010683</td><td>Vanderli Ap. Botechio</td><td></td><td>Fernanda Ferreira</td><td>02/06/2015 15:07</td><td>0000343971</td><td>1200 m</td><td>OXFORD STRETCH TINTO MARINHO (2)</td><td>P11AF0143500073</td><td>AGUARDANDO</td></tr><tr><td>1380351100</td><td>25099904000147</td><td>DO RE ME</td><td>compras@doremi.com.br</td><td>0000010451</td><td>Walfredo Antunes Machado Junio</td><td></td><td></td><td>02/06/2015 14:47</td><td>0</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+              </tbody>
+            </table>-->
+          </div>
+        </div>
+
+
+        <!--16
+        <div class="container-filter holder">
+            
+        </div>
+        <div class="overview holder">
           
         </div>
+        <div class="aside-edit">
+          
+        </div>-->
       </div>
     </div>
     <script src="js/lib/jquery-1.10.1.min.js"></script>

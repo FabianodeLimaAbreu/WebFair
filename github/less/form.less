@@ -11,8 +11,8 @@ form{
 .form-group{
 	position: relative;
 	float: left;
-	width: 100%;
 	height: auto;
+	width: 100%;
 	span{
 		position: absolute;
 		right: 10px;
@@ -52,8 +52,10 @@ form{
 		max-width: 408px;
 	}
 	&.default{
-		max-width: 275px;
-		margin: 5px 0;
+		height: 30px;
+		border: none;
+		max-width: 190px;
+		//margin: 5px 0;
 	}
 }
 
@@ -71,6 +73,25 @@ form{
 		font-size: 1.2em;
 	}
 }
+
+select.form-control.default{
+	background: transparent;
+	line-height: 1;
+	border: 0;
+	-webkit-appearance: none;
+	overflow: hidden;
+	cursor: pointer;
+}
+
+.styled-select{
+  overflow: hidden;
+  background: url(../images/arrow_top_bottom.png) no-repeat right #f3f5f8;
+  border-radius: 50px;
+  &:hover{
+  	background: url(../images/arrow_top_bottom_dark.png) no-repeat right #f3f5f8;
+  }
+}
+
 .form-main .label-pre,.lav .label-pre{
 	left: 11px;
 	top: 10px;
