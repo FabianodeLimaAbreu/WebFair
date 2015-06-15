@@ -32,10 +32,10 @@
           </div>-->
           <h2 class="login-name"><span></span>Nome do Usuário</h2>
           <ul class="menu">
-            <li><a href="#legend" class="menu-legend">Legendas</a></li>
-            <li><a href="#settings" class="menu-settings">Configurações</a></li>
-            <li><a href="#send_receive" class="menu-send_receive">Enviar/Receber</a></li>
-            <li><a href="#logoff" class="menu-logoff">Sair</a></li>
+            <li><a href="#legend" class="bmenu-legend">Legendas</a></li>
+            <li><a href="#settings" class="bmenu-settings">Configurações</a></li>
+            <li><a href="#send_receive" class="bmenu-send_receive">Enviar/Receber</a></li>
+            <li><a href="#logoff" class="bmenu-logoff">Sair</a></li>
           </ul>
         </div>
         <div class="header-collum header-bottom">
@@ -60,101 +60,649 @@
         </div>
       </header>
       <div class="container">
-        <!--19
+        <!--16-->
         <div class="content">
-          <div class="container-filter holder">
-            
-          </div>
-          <div class="table">
-            
-          </div>
-        </div>-->
-
-        <!--18-->
-        <div class="content">
-          <div class="container-filter holder">
-            <div class="fake-form">
-              <div class="form-group styled-select">
-                <select class="form-control default">
-                  <option value="País">País</option>
-                  <option value="África do Sul">África do Sul</option>
-                  <option value="Albânia">Albânia</option>
-                  <option value="Alemanha">Alemanha</option>
-                  <option value="Andorra">Andorra</option>
-                  <option value="Angola">Angola</option>
-                  <option value="Anguilla">Anguilla</option>
-                  <option value="Antigua">Antigua</option>
-                  <option value="Arábia Saudita">Arábia Saudita</option>
-                  <option value="Argentina">Argentina</option>
-                  <option value="Armênia">Armênia</option>
-                  <option value="Aruba">Aruba</option>
-                  <option value="Austrália">Austrália</option>
-                  <option value="Áustria">Áustria</option>
-                  <option value="Azerbaijão">Azerbaijão</option>
-                  <option value="Bahamas">Bahamas</option>
-                  <option value="Bahrein">Bahrein</option>
-                  <option value="Bangladesh">Bangladesh</option>
-                </select>
+          <div class="container-fullsize">
+            <div class="container-fullsize-filter holder">
+              <div class="form-container">
+                <div class="fake-form m-ten">
+                  <div class="form-group styled-select">
+                    <select class="form-control bselect">
+                      <option value="País">País</option>
+                      <option value="África do Sul">África do Sul</option>
+                      <option value="Albânia">Albânia</option>
+                      <option value="Alemanha">Alemanha</option>
+                      <option value="Andorra">Andorra</option>
+                      <option value="Angola">Angola</option>
+                      <option value="Anguilla">Anguilla</option>
+                      <option value="Antigua">Antigua</option>
+                      <option value="Arábia Saudita">Arábia Saudita</option>
+                      <option value="Argentina">Argentina</option>
+                      <option value="Armênia">Armênia</option>
+                      <option value="Aruba">Aruba</option>
+                      <option value="Austrália">Austrália</option>
+                      <option value="Áustria">Áustria</option>
+                      <option value="Azerbaijão">Azerbaijão</option>
+                      <option value="Bahamas">Bahamas</option>
+                      <option value="Bahrein">Bahrein</option>
+                      <option value="Bangladesh">Bangladesh</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="fake-form m-ten">
+                  <div class="form-group styled-select">
+                    <select class="form-control bselect">
+                      <option value="País">País</option>
+                      <option value="África do Sul">África do Sul</option>
+                      <option value="Albânia">Albânia</option>
+                      <option value="Alemanha">Alemanha</option>
+                      <option value="Andorra">Andorra</option>
+                      <option value="Angola">Angola</option>
+                      <option value="Anguilla">Anguilla</option>
+                      <option value="Antigua">Antigua</option>
+                      <option value="Arábia Saudita">Arábia Saudita</option>
+                      <option value="Argentina">Argentina</option>
+                      <option value="Armênia">Armênia</option>
+                      <option value="Aruba">Aruba</option>
+                      <option value="Austrália">Austrália</option>
+                      <option value="Áustria">Áustria</option>
+                      <option value="Azerbaijão">Azerbaijão</option>
+                      <option value="Bahamas">Bahamas</option>
+                      <option value="Bahrein">Bahrein</option>
+                      <option value="Bangladesh">Bangladesh</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="fake-form m-ten">
+                  <div class="form-group">
+                    <input type="text" class="form-control form-control-search" name="login" placeholder="Busca por código ou nome da amostra" autofocus autocomplete="off">
+                  </div>
+                  <div class="fake-form-opt">
+                    <button type="button" class="bdefault s-four m-ten export" alt="list">Exportar Excel</button>
+                    <button type="button" class="bdefault s-four m-ten borderby" alt="list">Ordenar</button>
+                  </div>
+                </div>
+                <ul class="main_opt large">
+                  <li><button type="button">Data</button></li>
+                  <li><button type="button">Filtrar</button></li>
+                  <li><button type="button">Faixa de Preços</button></li>
+                  <li><button type="button">Status</button></li>
+                  <li><button type="button">Refinar Busca</button></li>
+                </ul>
+              </div>
+              <div class="right-list">
+                <button type="button" class="bdefault s-four m-ten bimages" alt="list">Imagens</button>
+                <button type="button" class="bdefault s-four m-ten blist" alt="list">Lista</button>
+                <button type="button" class="bdefault s-four m-ten bedit" alt="list">Editar Amostra</button>
+                <ul class="main_opt mini">
+                  <li class="first"><button type="button">Selecionar</button></li>
+                  <li><button type="button" class="bemail"></button></li>
+                  <li><button type="button" class="btrash"></button></li>
+                </ul>
               </div>
             </div>
-            <div class="fake-form">
-              <div class="form-group styled-select">
-                <select class="form-control default">
-                  <option value="País">Província</option>
-                  <option value="África do Sul">África do Sul</option>
-                  <option value="Albânia">Albânia</option>
-                  <option value="Alemanha">Alemanha</option>
-                  <option value="Andorra">Andorra</option>
-                  <option value="Angola">Angola</option>
-                  <option value="Anguilla">Anguilla</option>
-                  <option value="Antigua">Antigua</option>
-                  <option value="Arábia Saudita">Arábia Saudita</option>
-                  <option value="Argentina">Argentina</option>
-                  <option value="Armênia">Armênia</option>
-                  <option value="Aruba">Aruba</option>
-                  <option value="Austrália">Austrália</option>
-                  <option value="Áustria">Áustria</option>
-                  <option value="Azerbaijão">Azerbaijão</option>
-                  <option value="Bahamas">Bahamas</option>
-                  <option value="Bahrein">Bahrein</option>
-                  <option value="Bangladesh">Bangladesh</option>
-                </select>
-              </div>
-            </div>
-            <div class="fake-form">
-              <div class="form-group styled-select">
-                <select class="form-control default">
-                  <option>Data Inicio/Fim</option>
-                </select>
-              </div>
-            </div>
-            <button type="button" class="icon new">Novo Local</button>
           </div>
-          <div class="overview holder">
-            <!--<table class="table table-striped">
-              <thead>
-                  <tr>
-                      <th>Codigo</th><th>CNPJ</th><th>Cliente</th><th>E-Mail</th><th>Cód.Rep</th><th>Representante</th><th>Cód.Gestor</th><th>Gestor</th><th>Data Acesso</th><th>Pedido</th><th>Qtde</th><th>Descrição do artigo</th><th>Código SAP</th><th>Status do pedido</th>
-                  </tr>
-              </thead>
-              <tbody>
-              <tr><td>1383776300</td><td>00651587000107</td><td>MD</td><td>00651587000107</td><td>0000010577</td><td>Ilana Susskind Anielewicz</td><td></td><td></td><td>02/06/2015 16:13</td><td>0</td><td>-</td><td>-</td><td>-</td><td>-</td></tr><tr><td>1384516100</td><td>02840805000179</td><td>MCAVALLINI</td><td>02840805000179</td><td>0000010534</td><td>Cesar Fernandes Rodrigues</td><td></td><td></td><td>02/06/2015 15:22</td><td>0</td><td>-</td><td>-</td><td>-</td><td>-</td></tr><tr><td>1384800600</td><td>01738860000190</td><td>ALLSET</td><td>01738860000190</td><td>0000010683</td><td>Vanderli Ap. Botechio</td><td></td><td>Fernanda Ferreira</td><td>02/06/2015 15:07</td><td>0000343971</td><td>1200 m</td><td>OXFORD STRETCH TINTO MARINHO (2)</td><td>P11AF0143500073</td><td>AGUARDANDO</td></tr><tr><td>1380351100</td><td>25099904000147</td><td>DO RE ME</td><td>compras@doremi.com.br</td><td>0000010451</td><td>Walfredo Antunes Machado Junio</td><td></td><td></td><td>02/06/2015 14:47</td><td>0</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
-              </tbody>
-            </table>-->
+          <div class="container-fullsize">
+            <div class="overview holder">
+              <div class="filter-crumb">
+                <p class="bread-search">Mostrando:<span class="spec">280 Amostras</span>
+                </p>
+                <p class="bread-count">4 Mostrando: <span class="spec show"><span class="spec all">XAOXING LOREM IPSUM</span>
+                </p>
+              </div>
+              <ul class="viewport">
+                <li class="col col-small col-large">
+                  <div class="thumbnail">
+                    <button type="button" class="icon bselection"></button>
+                    <img src="http://189.126.197.169/img/small/small_P11TC0006005590.jpg"/>
+                    <div class="caption">
+                      <div class="caption-upside">
+                        <ul class="caption-icons">
+                          <li><button type="button" class="caption-icons-icon bstatus complet"></button></li>
+                          <li><button type="button" class="caption-icons-icon bemail"></button></li>
+                          <li><button type="button" class="caption-icons-icon bhomologado nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon bnote"></button></li>
+                          <li><button type="button" class="caption-icons-icon bfisica has"></button></li>
+                          <li><button type="button" class="caption-icons-icon bfav has"></button></li>
+                        </ul>
+                        <div class="caption-desc">
+                          <p><span>Código da Amostra: </span><span>P11TC0006005590</span></p>
+                          <p><span>Fornecedor: </span><span>P11TC0006005590</span></p>
+                          <p><span>Data: </span><span>P11TC0006005590</span></p>
+                          <button type="button" class="icon bannex"></button>
+                        </div>
+                      </div>
+                      <div class="caption-downside">
+                        <ul>
+                          <li>Plano</li>
+                          <li>Tinto</li>
+                          <li>Transparências</li>
+                          <li>Bordado</li>
+                          <li>Viscose</li>
+                          <li>Plano</li>
+                          <li>Tinto</li>
+                          <li>Transparências</li>
+                          <li>Bordado</li>
+                          <li>Viscose</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="col col-small col-large">
+                  <div class="thumbnail">
+                    <button type="button" class="icon bselection sel"></button>
+                    <img src="http://189.126.197.169/img/small/small_P11TC0006005590.jpg"/>
+                    <div class="caption">
+                      <div class="caption-upside">
+                        <ul class="caption-icons">
+                          <li><button type="button" class="caption-icons-icon bstatus incomplet"></button></li>
+                          <li><button type="button" class="caption-icons-icon bemail"></button></li>
+                          <li><button type="button" class="caption-icons-icon bhomologado has"></button></li>
+                          <li><button type="button" class="caption-icons-icon bnote"></button></li>
+                          <li><button type="button" class="caption-icons-icon bfisica nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon bfav nothas"></button></li>
+                        </ul>
+                        <div class="caption-desc">
+                          <p><span>Código da Amostra: </span><span>P11TC0006005590</span></p>
+                          <p><span>Fornecedor: </span><span>P11TC0006005590</span></p>
+                          <p><span>Data: </span><span>P11TC0006005590</span></p>
+                        </div>
+                      </div>
+                      <div class="caption-downside">
+                        
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="col col-small col-large">
+                  <div class="thumbnail">
+                    <button type="button" class="icon bselection"></button>
+                    <img src="http://189.126.197.169/img/small/small_P11TC0006005590.jpg"/>
+                    <div class="caption">
+                      <div class="caption-upside">
+                        <ul class="caption-icons">
+                          <li><button type="button" class="caption-icons-icon bstatus complet"></button></li>
+                          <li><button type="button" class="caption-icons-icon bemail"></button></li>
+                          <li><button type="button" class="caption-icons-icon bhomologado nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon bnote"></button></li>
+                          <li><button type="button" class="caption-icons-icon bfisica has"></button></li>
+                          <li><button type="button" class="caption-icons-icon bfav has"></button></li>
+                        </ul>
+                        <div class="caption-desc">
+                          <p><span>Código da Amostra: </span><span>P11TC0006005590</span></p>
+                          <p><span>Fornecedor: </span><span>P11TC0006005590</span></p>
+                          <p><span>Data: </span><span>P11TC0006005590</span></p>
+                          <button type="button" class="icon bannex"></button>
+                        </div>
+                      </div>
+                      <div class="caption-downside">
+                        <ul>
+                          <li>Plano</li>
+                          <li>Tinto</li>
+                          <li>Transparências</li>
+                          <li>Bordado</li>
+                          <li>Viscose</li>
+                          <li>Plano</li>
+                          <li>Tinto</li>
+                          <li>Transparências</li>
+                          <li>Bordado</li>
+                          <li>Viscose</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="col col-small col-large">
+                  <div class="thumbnail">
+                    <button type="button" class="icon bselection sel"></button>
+                    <img src="http://189.126.197.169/img/small/small_P11TC0006005590.jpg"/>
+                    <div class="caption">
+                      <div class="caption-upside">
+                        <ul class="caption-icons">
+                          <li><button type="button" class="caption-icons-icon bstatus incomplet"></button></li>
+                          <li><button type="button" class="caption-icons-icon bemail"></button></li>
+                          <li><button type="button" class="caption-icons-icon bhomologado has"></button></li>
+                          <li><button type="button" class="caption-icons-icon bnote"></button></li>
+                          <li><button type="button" class="caption-icons-icon bfisica nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon bfav nothas"></button></li>
+                        </ul>
+                        <div class="caption-desc">
+                          <p><span>Código da Amostra: </span><span>P11TC0006005590</span></p>
+                          <p><span>Fornecedor: </span><span>P11TC0006005590</span></p>
+                          <p><span>Data: </span><span>P11TC0006005590</span></p>
+                        </div>
+                      </div>
+                      <div class="caption-downside">
+                        
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="col col-small col-large">
+                  <div class="thumbnail">
+                    <button type="button" class="icon bselection"></button>
+                    <img src="http://189.126.197.169/img/small/small_P11TC0006005590.jpg"/>
+                    <div class="caption">
+                      <div class="caption-upside">
+                        <ul class="caption-icons">
+                          <li><button type="button" class="caption-icons-icon bstatus complet"></button></li>
+                          <li><button type="button" class="caption-icons-icon bemail"></button></li>
+                          <li><button type="button" class="caption-icons-icon bhomologado nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon bnote"></button></li>
+                          <li><button type="button" class="caption-icons-icon bfisica has"></button></li>
+                          <li><button type="button" class="caption-icons-icon bfav has"></button></li>
+                        </ul>
+                        <div class="caption-desc">
+                          <p><span>Código da Amostra: </span><span>P11TC0006005590</span></p>
+                          <p><span>Fornecedor: </span><span>P11TC0006005590</span></p>
+                          <p><span>Data: </span><span>P11TC0006005590</span></p>
+                          <button type="button" class="icon bannex"></button>
+                        </div>
+                      </div>
+                      <div class="caption-downside">
+                        <ul>
+                          <li>Plano</li>
+                          <li>Tinto</li>
+                          <li>Transparências</li>
+                          <li>Bordado</li>
+                          <li>Viscose</li>
+                          <li>Plano</li>
+                          <li>Tinto</li>
+                          <li>Transparências</li>
+                          <li>Bordado</li>
+                          <li>Viscose</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="col col-small col-large">
+                  <div class="thumbnail">
+                    <button type="button" class="icon bselection sel"></button>
+                    <img src="http://189.126.197.169/img/small/small_P11TC0006005590.jpg"/>
+                    <div class="caption">
+                      <div class="caption-upside">
+                        <ul class="caption-icons">
+                          <li><button type="button" class="caption-icons-icon bstatus incomplet"></button></li>
+                          <li><button type="button" class="caption-icons-icon bemail"></button></li>
+                          <li><button type="button" class="caption-icons-icon bhomologado has"></button></li>
+                          <li><button type="button" class="caption-icons-icon bnote"></button></li>
+                          <li><button type="button" class="caption-icons-icon bfisica nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon bfav nothas"></button></li>
+                        </ul>
+                        <div class="caption-desc">
+                          <p><span>Código da Amostra: </span><span>P11TC0006005590</span></p>
+                          <p><span>Fornecedor: </span><span>P11TC0006005590</span></p>
+                          <p><span>Data: </span><span>P11TC0006005590</span></p>
+                        </div>
+                      </div>
+                      <div class="caption-downside">
+                        
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="col col-small col-large">
+                  <div class="thumbnail">
+                    <button type="button" class="icon bselection"></button>
+                    <img src="http://189.126.197.169/img/small/small_P11TC0006005590.jpg"/>
+                    <div class="caption">
+                      <div class="caption-upside">
+                        <ul class="caption-icons">
+                          <li><button type="button" class="caption-icons-icon bstatus complet"></button></li>
+                          <li><button type="button" class="caption-icons-icon bemail"></button></li>
+                          <li><button type="button" class="caption-icons-icon bhomologado nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon bnote"></button></li>
+                          <li><button type="button" class="caption-icons-icon bfisica has"></button></li>
+                          <li><button type="button" class="caption-icons-icon bfav has"></button></li>
+                        </ul>
+                        <div class="caption-desc">
+                          <p><span>Código da Amostra: </span><span>P11TC0006005590</span></p>
+                          <p><span>Fornecedor: </span><span>P11TC0006005590</span></p>
+                          <p><span>Data: </span><span>P11TC0006005590</span></p>
+                          <button type="button" class="icon bannex"></button>
+                        </div>
+                      </div>
+                      <div class="caption-downside">
+                        <ul>
+                          <li>Plano</li>
+                          <li>Tinto</li>
+                          <li>Transparências</li>
+                          <li>Bordado</li>
+                          <li>Viscose</li>
+                          <li>Plano</li>
+                          <li>Tinto</li>
+                          <li>Transparências</li>
+                          <li>Bordado</li>
+                          <li>Viscose</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="col col-small col-large">
+                  <div class="thumbnail">
+                    <button type="button" class="icon bselection sel"></button>
+                    <img src="http://189.126.197.169/img/small/small_P11TC0006005590.jpg"/>
+                    <div class="caption">
+                      <div class="caption-upside">
+                        <ul class="caption-icons">
+                          <li><button type="button" class="caption-icons-icon bstatus incomplet"></button></li>
+                          <li><button type="button" class="caption-icons-icon bemail"></button></li>
+                          <li><button type="button" class="caption-icons-icon bhomologado has"></button></li>
+                          <li><button type="button" class="caption-icons-icon bnote"></button></li>
+                          <li><button type="button" class="caption-icons-icon bfisica nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon bfav nothas"></button></li>
+                        </ul>
+                        <div class="caption-desc">
+                          <p><span>Código da Amostra: </span><span>P11TC0006005590</span></p>
+                          <p><span>Fornecedor: </span><span>P11TC0006005590</span></p>
+                          <p><span>Data: </span><span>P11TC0006005590</span></p>
+                        </div>
+                      </div>
+                      <div class="caption-downside">
+                        
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+              <div class="filter-crumb">
+                <p class="bread-search">Mostrando:<span class="spec">280 Amostras</span>
+                </p>
+                <p class="bread-count">4 Mostrando: <span class="spec show"><span class="spec all">XAOXING LOREM IPSUM</span>
+                </p>
+              </div>
+              <ul class="viewport">
+                <li class="col col-small col-large">
+                  <div class="thumbnail">
+                    <button type="button" class="icon bselection"></button>
+                    <img src="http://189.126.197.169/img/small/small_P11TC0006005590.jpg"/>
+                    <div class="caption">
+                      <div class="caption-upside">
+                        <ul class="caption-icons">
+                          <li><button type="button" class="caption-icons-icon bstatus complet"></button></li>
+                          <li><button type="button" class="caption-icons-icon bemail"></button></li>
+                          <li><button type="button" class="caption-icons-icon bhomologado nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon bnote"></button></li>
+                          <li><button type="button" class="caption-icons-icon bfisica has"></button></li>
+                          <li><button type="button" class="caption-icons-icon bfav has"></button></li>
+                        </ul>
+                        <div class="caption-desc">
+                          <p><span>Código da Amostra: </span><span>P11TC0006005590</span></p>
+                          <p><span>Fornecedor: </span><span>P11TC0006005590</span></p>
+                          <p><span>Data: </span><span>P11TC0006005590</span></p>
+                          <button type="button" class="icon bannex"></button>
+                        </div>
+                      </div>
+                      <div class="caption-downside">
+                        <ul>
+                          <li>Plano</li>
+                          <li>Tinto</li>
+                          <li>Transparências</li>
+                          <li>Bordado</li>
+                          <li>Viscose</li>
+                          <li>Plano</li>
+                          <li>Tinto</li>
+                          <li>Transparências</li>
+                          <li>Bordado</li>
+                          <li>Viscose</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="col col-small col-large">
+                  <div class="thumbnail">
+                    <button type="button" class="icon bselection sel"></button>
+                    <img src="http://189.126.197.169/img/small/small_P11TC0006005590.jpg"/>
+                    <div class="caption">
+                      <div class="caption-upside">
+                        <ul class="caption-icons">
+                          <li><button type="button" class="caption-icons-icon bstatus incomplet"></button></li>
+                          <li><button type="button" class="caption-icons-icon bemail"></button></li>
+                          <li><button type="button" class="caption-icons-icon bhomologado has"></button></li>
+                          <li><button type="button" class="caption-icons-icon bnote"></button></li>
+                          <li><button type="button" class="caption-icons-icon bfisica nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon bfav nothas"></button></li>
+                        </ul>
+                        <div class="caption-desc">
+                          <p><span>Código da Amostra: </span><span>P11TC0006005590</span></p>
+                          <p><span>Fornecedor: </span><span>P11TC0006005590</span></p>
+                          <p><span>Data: </span><span>P11TC0006005590</span></p>
+                        </div>
+                      </div>
+                      <div class="caption-downside">
+                        
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="col col-small col-large">
+                  <div class="thumbnail">
+                    <button type="button" class="icon bselection"></button>
+                    <img src="http://189.126.197.169/img/small/small_P11TC0006005590.jpg"/>
+                    <div class="caption">
+                      <div class="caption-upside">
+                        <ul class="caption-icons">
+                          <li><button type="button" class="caption-icons-icon bstatus complet"></button></li>
+                          <li><button type="button" class="caption-icons-icon bemail"></button></li>
+                          <li><button type="button" class="caption-icons-icon bhomologado nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon bnote"></button></li>
+                          <li><button type="button" class="caption-icons-icon bfisica has"></button></li>
+                          <li><button type="button" class="caption-icons-icon bfav has"></button></li>
+                        </ul>
+                        <div class="caption-desc">
+                          <p><span>Código da Amostra: </span><span>P11TC0006005590</span></p>
+                          <p><span>Fornecedor: </span><span>P11TC0006005590</span></p>
+                          <p><span>Data: </span><span>P11TC0006005590</span></p>
+                          <button type="button" class="icon bannex"></button>
+                        </div>
+                      </div>
+                      <div class="caption-downside">
+                        <ul>
+                          <li>Plano</li>
+                          <li>Tinto</li>
+                          <li>Transparências</li>
+                          <li>Bordado</li>
+                          <li>Viscose</li>
+                          <li>Plano</li>
+                          <li>Tinto</li>
+                          <li>Transparências</li>
+                          <li>Bordado</li>
+                          <li>Viscose</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="col col-small col-large">
+                  <div class="thumbnail">
+                    <button type="button" class="icon bselection sel"></button>
+                    <img src="http://189.126.197.169/img/small/small_P11TC0006005590.jpg"/>
+                    <div class="caption">
+                      <div class="caption-upside">
+                        <ul class="caption-icons">
+                          <li><button type="button" class="caption-icons-icon bstatus incomplet"></button></li>
+                          <li><button type="button" class="caption-icons-icon bemail"></button></li>
+                          <li><button type="button" class="caption-icons-icon bhomologado has"></button></li>
+                          <li><button type="button" class="caption-icons-icon bnote"></button></li>
+                          <li><button type="button" class="caption-icons-icon bfisica nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon bfav nothas"></button></li>
+                        </ul>
+                        <div class="caption-desc">
+                          <p><span>Código da Amostra: </span><span>P11TC0006005590</span></p>
+                          <p><span>Fornecedor: </span><span>P11TC0006005590</span></p>
+                          <p><span>Data: </span><span>P11TC0006005590</span></p>
+                        </div>
+                      </div>
+                      <div class="caption-downside">
+                        
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="col col-small col-large">
+                  <div class="thumbnail">
+                    <button type="button" class="icon bselection"></button>
+                    <img src="http://189.126.197.169/img/small/small_P11TC0006005590.jpg"/>
+                    <div class="caption">
+                      <div class="caption-upside">
+                        <ul class="caption-icons">
+                          <li><button type="button" class="caption-icons-icon bstatus complet"></button></li>
+                          <li><button type="button" class="caption-icons-icon bemail"></button></li>
+                          <li><button type="button" class="caption-icons-icon bhomologado nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon bnote"></button></li>
+                          <li><button type="button" class="caption-icons-icon bfisica has"></button></li>
+                          <li><button type="button" class="caption-icons-icon bfav has"></button></li>
+                        </ul>
+                        <div class="caption-desc">
+                          <p><span>Código da Amostra: </span><span>P11TC0006005590</span></p>
+                          <p><span>Fornecedor: </span><span>P11TC0006005590</span></p>
+                          <p><span>Data: </span><span>P11TC0006005590</span></p>
+                          <button type="button" class="icon bannex"></button>
+                        </div>
+                      </div>
+                      <div class="caption-downside">
+                        <ul>
+                          <li>Plano</li>
+                          <li>Tinto</li>
+                          <li>Transparências</li>
+                          <li>Bordado</li>
+                          <li>Viscose</li>
+                          <li>Plano</li>
+                          <li>Tinto</li>
+                          <li>Transparências</li>
+                          <li>Bordado</li>
+                          <li>Viscose</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="col col-small col-large">
+                  <div class="thumbnail">
+                    <button type="button" class="icon bselection sel"></button>
+                    <img src="http://189.126.197.169/img/small/small_P11TC0006005590.jpg"/>
+                    <div class="caption">
+                      <div class="caption-upside">
+                        <ul class="caption-icons">
+                          <li><button type="button" class="caption-icons-icon bstatus incomplet"></button></li>
+                          <li><button type="button" class="caption-icons-icon bemail"></button></li>
+                          <li><button type="button" class="caption-icons-icon bhomologado has"></button></li>
+                          <li><button type="button" class="caption-icons-icon bnote"></button></li>
+                          <li><button type="button" class="caption-icons-icon bfisica nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon bfav nothas"></button></li>
+                        </ul>
+                        <div class="caption-desc">
+                          <p><span>Código da Amostra: </span><span>P11TC0006005590</span></p>
+                          <p><span>Fornecedor: </span><span>P11TC0006005590</span></p>
+                          <p><span>Data: </span><span>P11TC0006005590</span></p>
+                        </div>
+                      </div>
+                      <div class="caption-downside">
+                        
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="col col-small col-large">
+                  <div class="thumbnail">
+                    <button type="button" class="icon bselection"></button>
+                    <img src="http://189.126.197.169/img/small/small_P11TC0006005590.jpg"/>
+                    <div class="caption">
+                      <div class="caption-upside">
+                        <ul class="caption-icons">
+                          <li><button type="button" class="caption-icons-icon bstatus complet"></button></li>
+                          <li><button type="button" class="caption-icons-icon bemail"></button></li>
+                          <li><button type="button" class="caption-icons-icon bhomologado nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon bnote"></button></li>
+                          <li><button type="button" class="caption-icons-icon bfisica has"></button></li>
+                          <li><button type="button" class="caption-icons-icon bfav has"></button></li>
+                        </ul>
+                        <div class="caption-desc">
+                          <p><span>Código da Amostra: </span><span>P11TC0006005590</span></p>
+                          <p><span>Fornecedor: </span><span>P11TC0006005590</span></p>
+                          <p><span>Data: </span><span>P11TC0006005590</span></p>
+                          <button type="button" class="icon bannex"></button>
+                        </div>
+                      </div>
+                      <div class="caption-downside">
+                        <ul>
+                          <li>Plano</li>
+                          <li>Tinto</li>
+                          <li>Transparências</li>
+                          <li>Bordado</li>
+                          <li>Viscose</li>
+                          <li>Plano</li>
+                          <li>Tinto</li>
+                          <li>Transparências</li>
+                          <li>Bordado</li>
+                          <li>Viscose</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="col col-small col-large">
+                  <div class="thumbnail">
+                    <button type="button" class="icon bselection sel"></button>
+                    <img src="http://189.126.197.169/img/small/small_P11TC0006005590.jpg"/>
+                    <div class="caption">
+                      <div class="caption-upside">
+                        <ul class="caption-icons">
+                          <li><button type="button" class="caption-icons-icon bstatus incomplet"></button></li>
+                          <li><button type="button" class="caption-icons-icon bemail"></button></li>
+                          <li><button type="button" class="caption-icons-icon bhomologado has"></button></li>
+                          <li><button type="button" class="caption-icons-icon bnote"></button></li>
+                          <li><button type="button" class="caption-icons-icon bfisica nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon bfav nothas"></button></li>
+                        </ul>
+                        <div class="caption-desc">
+                          <p><span>Código da Amostra: </span><span>P11TC0006005590</span></p>
+                          <p><span>Fornecedor: </span><span>P11TC0006005590</span></p>
+                          <p><span>Data: </span><span>P11TC0006005590</span></p>
+                        </div>
+                      </div>
+                      <div class="caption-downside">
+                        
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="aside-edit">
+              <ul class="category">
+                <li><a href="#cama" class="category_button cama first">Tecimento</a>
+                  <ul class="sub_category">
+                  </ul>
+                </li>
+                <li><a href="#cama" class="category_button cama">Base</a>
+                  <ul class="sub_category">
+                  </ul>
+                </li>
+                <li>
+                  <!--Add actived to actived item menu--><a href="#cortinas" class="category_button cortinas">Grupo</a>
+                  <ul class="sub_category maximum">
+                    <li><a href="#blackouts" name=".blackouts" title="Blackouts">Tecimento</a></li>
+                    <li><a href="#cetins" name=".cetins" title="Cetins">Base</a></li>
+                    <li><a href="#voiles" name=".voiles" title="Voiles">Grupo</a></li>
+                  </ul>
+                </li>
+                <li><a href="#decoracao" class="category_button decoracao">Subgrupo</a>
+                  <ul class="sub_category">
+                  </ul>
+                </li>
+                <li><a href="#mesa" class="category_button mesa last">Composição</a>
+                  <ul class="sub_category">
+                  </ul>
+                </li>
+                <button onclick="scrollDown(event)" class="upstair hide"><span class="upstair-text">Voltar para o topo</span><span class="upstair-ico"></span></button>
+              </ul>
+            </div>
           </div>
-        </div>
-
-
-        <!--16
-        <div class="container-filter holder">
-            
-        </div>
-        <div class="overview holder">
-          
-        </div>
-        <div class="aside-edit">
-          
-        </div>-->
       </div>
     </div>
     <script src="js/lib/jquery-1.10.1.min.js"></script>

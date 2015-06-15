@@ -2,84 +2,7 @@
           RESPONSIVE
 *******************************/
 
-@media only screen and(min-width:480px){
-	.content{
-		.viewport{
-			.col-sm-2{
-				width: 50%;
-			}
-		}
-	}
-	.thumbnail{
-		width: 225px;
-		height: 310px;
-		&.big{
-			height: 360px;
-		}
-		.caption{
-			width: 225px;
-			.link{
-				min-height: 45px;
-				width: 215px;
-				h4{
-					padding: 1px 2px 3px 5px;
-				}
-				p{
-					line-height: 1.5em;
-				}
-
-			}
-			h3{
-				font-size: 11px;
-			}
-			ul{
-				width: 225px;
-			}
-			li{
-				// width: 75px;
-			}
-		}
-	}
-	footer{
-		// display: block;
-	}
-}
-
-
-@media only screen and(min-width:500px){
-	.comand-container{
-		.comandbar{
-			max-width: 465px;
-		}
-	}
-	.bread-container{
-		.bread-box{
-			margin-left: auto;
-			max-width: 465px;
-		}
-	}
-	.table-container{
-		.table-content{
-			max-width: 465px;
-		}
-	}
-	form.search.search-result{
-		width: 350px;
-		input{
-			width: 350px;
-		}
-	}
-}
-
 @media only screen and(min-width:740px){
-	.content{
-		.viewport{
-			max-width: 710px;
-			.col-md-1{
-				width: 33.3%;
-			}
-		}
-	}
 	.bread-container{
 		.bread-box{
 			margin-left: auto;
@@ -172,7 +95,7 @@
 	// }
 }
 
-@media only screen and(min-width:945px){	
+/*@media only screen and(min-width:945px){	
 	.content{
 		.viewport{
 			max-width: 945px;
@@ -205,6 +128,11 @@
 			max-width: 935px;
 			left:-5px; // Fix
 		}
+	}aside-edit
+}*/
+@media only screen and(min-width:900px){
+	.container-fullsize .right-list{
+		font-size: 1em;
 	}
 }
 
@@ -219,21 +147,13 @@
 		input{
 			width: 400px;
 		}
+	}
+	.overview .viewport .col-large{
+		width: 25%;
 	}	
 }
 
 @media only screen and(min-width:1200px){
-	.content{
-		.viewport{
-			max-width: 1170px;
-			.col-md-3{
-				width: 20%;
-			}
-		}
-	}
-	/*.container{
-		margin-top: 80px;
-	}*/
 	.comand-container{
 		padding: 10px 0;
 		.comandbar{
@@ -378,19 +298,65 @@
 	.aside-edit{
 		position: absolute;
 		right: 0;
-		top: 330px;
+		top: 50px;
+		width: 155px;
+		display: inline-block;
+		height: auto;
+		transition: left 1.5s ease-out;
+		-webkit-transition: left 1.5s ease-out;
+		.category{
+			position: relative;
+			float: left;
+			width: 155px;
+			li{
+				width: 100%;
+				height: auto;
+				background: #fff;
+				a{
+					line-height: 40px;
+					height: 40px;
+					display: block;
+					cursor: pointer;
+					color: @dark-text;
+					border-bottom: 1px solid #e3eaee;
+					border-left: 1px solid #e3eaee;
+  					&.first{
+						border-top: 1px solid #e3eaee;
+  						border-radius: 10px 0px 0px 0px;
+  					}
+  					&.last{
+  						  border-radius: 0px 0px 0px 10px;
+  					}
+				}
+			}
+			.sub_category{
+				padding: 0;
+				height: 0;
+				transition: all .3s ease-out;
+				-webkit-transition: all .3s ease-out;
+				overflow: hidden;
+				&.maximum{
+					height: auto;
+					padding: 0 0 0 20px;
+					border-bottom: 1px solid #e3eaee;
+				}
+				li{
+					width: 100%;
+					background: #f8f9fa;
+					a{
+						line-height: 40px;
+  						height: 40px;
+						color: @dark-text;
+						display: block;
+						padding-left: 5px;
+					}
+				}
+			}
+		}
 	}
 }
 
 @media only screen and(min-width:1440px){
-	.container{
-		.viewport{
-			max-width: 1420px;
-			.col-lg-1{
-				width: 16.6%;
-			}
-		}
-	}
 	.bread-container{
 		.bread-box{
 			margin-left: auto;
@@ -412,14 +378,6 @@
 	}
 }
 @media only screen and(min-width:1690px){
-	.container{
-		.viewport{
-			max-width: 1670px;
-			.col-lg-2{
-				width: 14.2%;
-			}
-		}
-	}
 	.bread-container{
 		.bread-box{
 			margin-left: auto;

@@ -13,11 +13,18 @@ form{
 	float: left;
 	height: auto;
 	width: 100%;
-	span{
-		position: absolute;
-		right: 10px;
-		top: 25px;
-		color: #a4a4a4;
+	&.styled-select{
+	  overflow: hidden;
+	  background: url(../images/arrow_top_bottom.png) no-repeat right #f3f5f8;
+	  border-radius: 50px;
+	  &:hover{
+	  	background: url(../images/arrow_top_bottom_dark.png) no-repeat right #f3f5f8;
+	  }
+	}
+	&.styled-select-none{
+		overflow: hidden;
+		background: #f3f5f8;
+		border-radius: 50px;
 	}
 }
 
@@ -25,23 +32,25 @@ form{
 	display: block;
 	float: left;
 	width: 100%;
-	height: 18px;
+	height: 30px;
 	padding: 5px 2%;
 	font-size: 1em;
 	line-height: 1.42857143;
 	color: #8e8e93;
 	background-color: #f3f5f8;
-	border-style: solid;
-	border-width: 1px;
-	border-color: @light-text;
 	background-image: none;
 	border-radius: 50px;
-	&.error{
-		border-color: #d64242;
+	&.form-control-search{
+		padding: 5px 285px 0 2%;
 	}
-}
-
-.form-control{
+	&.bselect{
+		background: transparent;
+		line-height: 1;
+		border: 0;
+		-webkit-appearance: none;
+		overflow: hidden;
+		cursor: pointer;
+	}
 	&.bigger{
 		max-width: 298px;
 	}
@@ -51,50 +60,6 @@ form{
 	&.biggest{
 		max-width: 408px;
 	}
-	&.default{
-		height: 30px;
-		border: none;
-		max-width: 190px;
-		//margin: 5px 0;
-	}
-}
-
-form{
-	.label{
-		font-size: 1.1em;
-		cursor: text;
-	}
-	.label-pre{
-		position: absolute;
-		left: 11px;
-		top: 5px;
-	}
-	.label-default{
-		font-size: 1.2em;
-	}
-}
-
-select.form-control.default{
-	background: transparent;
-	line-height: 1;
-	border: 0;
-	-webkit-appearance: none;
-	overflow: hidden;
-	cursor: pointer;
-}
-
-.styled-select{
-  overflow: hidden;
-  background: url(../images/arrow_top_bottom.png) no-repeat right #f3f5f8;
-  border-radius: 50px;
-  &:hover{
-  	background: url(../images/arrow_top_bottom_dark.png) no-repeat right #f3f5f8;
-  }
-}
-
-.form-main .label-pre,.lav .label-pre{
-	left: 11px;
-	top: 10px;
 }
 
 .search{
@@ -106,13 +71,63 @@ select.form-control.default{
 	}
 }
 
-.filterLav{
-	background-position: -140px 0;
-	&:hover{
-		background-position: -170px 0;
+.bdefault{
+	float: none;
+	width: 100%;
+	max-width: 140px;
+	height: 30px;
+	border: none;
+	display: inline-block;
+	position: relative;
+	outline: none;
+	cursor: pointer;
+	font-size: 1.1em;
+	line-height: 27px;
+	text-align: center;
+	font-weight: 300;
+	color: #fff;
+	background: @buttons;
+	border-radius: 50px;
+	margin: 0 auto;
+	&:hover,&.sel{
+		background: @dark-text;
+	}
+	&.m-ten{
+		margin-bottom: 10px;
+	}
+	&.borderby{
+		position: relative;
+		float: left;
+		&:after{
+			.sprite;
+			.opt_ordering;
+			position: relative;
+			float: left;
+			content: "";
+			top: 7px;
+			left: 10px;
+		}
+	}
+	&.export{
+		position: relative;
+		float: left;
+		&:after{
+			.sprite;
+			.actions-export_hover;
+			position: relative;
+			float: left;
+			content: "";
+			top: 1px;
+			left: 5px;
+		}
+		&.disabled{
+			color: #dfe1e2;
+			&:after{
+				.actions-export;
+			}
+		}
 	}
 }
-
 /*
 **********************************
 ***************************************Contato*/
