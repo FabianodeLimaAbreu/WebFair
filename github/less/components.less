@@ -27,6 +27,37 @@
 			left: -4px;
 		}
 	}
+	&.delete{
+		line-height: 30px;
+		text-align: right;
+		padding-right: 30px;
+		margin-right: 10px;
+		&:before{
+			content: "";
+			.sprite;
+			.actions-trash;
+			display: inline-block;
+			position: relative;
+			margin-right: 5px;
+			top: 4px;
+			left: -4px;
+		}
+	}
+	&.edit{
+		line-height: 24px;
+		text-align: right;
+		padding-right: 30px;
+		&:before{
+			content: "";
+			.sprite;
+			.actions-edit;
+			display: inline-block;
+			position: relative;
+			margin-right: 5px;
+			top: 4px;
+			left: -4px;
+		}
+	}
 	&.edit-big{
 		background: none;
 		margin: 0 auto;
@@ -89,16 +120,18 @@
 }
 
 .caption-icons-icon{
-	position: relative;
-	height: 20px;
-	width: 20px;
-	margin: 0 auto;
-	border: 0;
-	padding: 0;
-	outline: none;
-	cursor: pointer;
-	background: none;
-	display: block;
+	&.justit{
+		position: relative;
+		height: 20px;
+		width: 20px;
+		margin: 0 auto;
+		border: 0;
+		padding: 0;
+		outline: none;
+		cursor: pointer;
+		background: none;
+		display: block;
+	}
 	&:after{
 		.sprite;
 		display: block;
@@ -165,6 +198,22 @@
 			.insiders-notepad_black;
 		}
 	}
+	&.btrash{
+		&:after{
+			.item-trash_black;
+		}
+	}
+	&.btrash-big{
+		cursor: pointer;
+		&:after{
+			.actions-trash_blue;
+		}
+	}
+	&.bsend_receive{
+		&:after{
+			.menu-send_receive_mini;
+		}
+	}
 	&.bfisica{
 		&.has{
 			&:after{
@@ -225,25 +274,20 @@
 			}
 		}
 	}
+	&.bedit_mini{
+		&:after{
+			.actions-edit-mini;
+		}
+	}
 	&.bstar{
 		&.has{
 			&:after{
 				.item-fav;
 			}
-			&:hover{
-				&:after{
-					.item-not_fav;
-				}
-			}
 		}
 		&.nothas{
 			&:after{
 				.item-not_fav;
-			}
-			&:hover{
-				&:after{
-					.item-fav;
-				}
 			}
 		}
 	}
@@ -331,6 +375,11 @@ td,th{
 .table-striped{
 	&>tbody>tr:nth-child(even)>td, &>tbody>tr:nth-child(odd)>th{
 		background-color: #e8eff5;
+	}
+}
+.sample{
+	td,th{
+		max-width: 560px;
 	}
 }
 

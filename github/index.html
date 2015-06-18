@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br" ng-app="app">
+<html lang="pt-br" ng-app="app" class="edit">
   <head>
     <title>WebFair - Home</title>
     <head>
@@ -23,7 +23,6 @@
     <div id="wrap">
       <header>
         <div class="header-collum header-top">
-
           <a href="index.html" class="logo"><img src="images/logo_small.png" alt=""></a>
           <!--<div class="user">
             <a class="close menu-logoff" title="Sair">Sair</a>
@@ -32,10 +31,58 @@
           </div>-->
           <h2 class="login-name"><span></span>Nome do Usuário</h2>
           <ul class="menu">
-            <li><a href="#legend" class="bmenu-legend">Legendas</a></li>
-            <li><a href="#settings" class="bmenu-settings">Configurações</a></li>
-            <li><a href="#send_receive" class="bmenu-send_receive">Enviar/Receber</a></li>
-            <li><a href="#logoff" class="bmenu-logoff">Sair</a></li>
+            <li class="menu-item">
+              <a href="#legend" class="bmenu-legend tooltip tooltip-selectable">
+                <span class="tooltip-item">Legendas</span>
+                <ul class="tooltip-content legend col-large">
+                  <li>
+                    <p class="tooltip-item caption-icons-icon bemail">Enviar por e-mail</p>
+                  </li>
+                  <li>
+                    <p class="tooltip-item caption-icons-icon bfisica nothas unable">Amostra Física</p>
+                  </li>
+                  <li>
+                    <p class="tooltip-item caption-icons-icon bstatus incomplet">Completar Cadastro</p>
+                  </li>
+                  <li>
+                    <p class="tooltip-item caption-icons-icon bfav nothas unable">Amostra Favorita</p>
+                  </li>
+                  <li>
+                    <p class="tooltip-item caption-icons-icon bstatus complet">Cadastro completo</p>
+                  </li>
+                  <li>
+                    <p class="tooltip-item caption-icons-icon bstar nothas">Fornecedor Favorito</p>
+                  </li>
+                  <li>
+                    <p class="tooltip-item caption-icons-icon bedit_mini">Editar</p>
+                  </li>
+                  <li>
+                    <p class="tooltip-item bselect">Selecionar</p>
+                  </li>
+                  <li>
+                    <p class="tooltip-item caption-icons-icon bsend_receive">Enviar e Receber</p>
+                  </li>
+                  <li>
+                    <p class="tooltip-item caption-icons-icon btrash">Excluir</p>
+                  </li>
+                  <li>
+                    <p class="tooltip-item caption-icons-icon bnote">Anotações</p>
+                  </li>
+                  <li>
+                    <p class="tooltip-item caption-icons-icon bhomologado nothas unable">Homologar</p>
+                  </li>
+                  <li>
+                    <p class="tooltip-item bannex-leg">Arquivo Anexo</p>
+                  </li>
+                  <li>
+                    <p class="tooltip-item bannex-leg add">Anexar Arquivo</p>
+                  </li>
+                </ul>
+              </a>
+            </li>
+            <li class="menu-item"><a href="#settings" class="bmenu-settings">Configurações</a></li>
+            <li class="menu-item"><a href="#send_receive" class="bmenu-send_receive">Enviar/Receber</a></li>
+            <li class="menu-item"><a href="#logoff" class="bmenu-logoff">Sair</a></li>
           </ul>
         </div>
         <div class="header-collum header-bottom">
@@ -48,7 +95,6 @@
                 <li><a href="Teste4" class="amostras sel">Amostras</a></li>
                 <li><a href="Teste5">Templates<br/>e-Mails</a></li>
               </ul>
-
             </nav>
           </div>
           <div class="config-menu">
@@ -119,15 +165,85 @@
                   </div>
                   <div class="fake-form-opt">
                     <button type="button" class="bdefault s-four m-ten export" alt="list">Exportar Excel</button>
-                    <button type="button" class="bdefault s-four m-ten borderby" alt="list">Ordenar</button>
+                    <div class="tooltip tooltip-selectable borderby">
+                      <button type="button" class="bdefault s-four m-ten borderby" alt="list">Ordenar</button>
+                      <ul class="tooltip-content col-small">
+                        <li>
+                          <button type="button" class="tooltip-item caption-icons-icon bcircle">Código da Amostra</button>
+                        </li>
+                        <li>
+                          <button type="button" class="tooltip-item caption-icons-icon bcircle">Fornecedor</button>
+                        </li>
+                        <li>
+                          <button type="button" class="tooltip-item caption-icons-icon bcircle">Data / Hora</button>
+                        </li>
+                        <li>
+                          <button type="button" class="tooltip-item caption-icons-icon bcircle">Preço Maior</button>
+                        </li>
+                        <li>
+                          <button type="button" class="tooltip-item caption-icons-icon bcircle">Preço Menor</button>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
                 <ul class="main_opt large">
-                  <li><button type="button">Data</button></li>
-                  <li><button type="button">Filtrar</button></li>
-                  <li><button type="button">Faixa de Preços</button></li>
-                  <li><button type="button">Status</button></li>
-                  <li><button type="button">Refinar Busca</button></li>
+                  <li class="main_opt_item"><button type="button"  class="main_opt_button">Data</button></li>
+                  <li class="main_opt_item tooltip-filter">
+                    <button type="button" class="main_opt_button">Filtrar</button><!--class="sel"-->
+                    <ul class="tooltip-content status col-large">
+                      <li>
+                        <button type="button" class="tooltip-item">Enviar por e-mail</button>
+                      </li>
+                      <li>
+                        <button type="button" class="tooltip-item">Enviar por e-mail</button>
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="main_opt_item tooltip tooltip-selectable ">
+                    <button type="button" class="main_opt_button">Faixa de Preços</button>
+                    <div class="tooltip-content price col-largest">
+                      <form class="form-inline">
+                        <div class="form-group">
+                          <label for="initial_price">Preço Inicial</label>
+                          <input type="text" class="form-control" name="login" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                          <label for="initial_price">Preço Final</label>
+                          <input type="text" class="form-control" name="login" autocomplete="off">
+                        </div>
+                        <button type="button" class="icon s-five">Ok</button>
+                      </form>
+                    </div>
+                  </li>
+                  <li class="main_opt_item tooltip tooltip-selectable">
+                    <button type="button" class="main_opt_button">Status</button>
+                    <ul class="tooltip-content status col-large">
+                      <li>
+                        <button type="button" class="tooltip-item">Completar Cadastro</button>
+                      </li>
+                      <li>
+                        <button type="button" class="tooltip-item">Cadastro Completo</button>
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="main_opt_item tooltip-filter">
+                    <button type="button" class="main_opt_button">Refinar Busca</button>
+                    <div class="tooltip-content refine">
+                      <div class="filter-area-collum filter-area-top">
+                        <ul class="filter_list">
+                          <li><a href="#TECIMENTO" role="1" ng-class="{off:selcount[1].isOff == true}" fb-opensublist="fb-opensublist" class="first unsel">Tecimento</a><span ng-show="selcount[1].show" class="topcount ng-binding ng-hide">0</span></li>
+                          <li><a href="#BASE" role="2" ng-class="{off:selcount[2].isOff == true}" fb-opensublist="fb-opensublist" class="unsel">Base</a><span ng-show="selcount[2].count" class="topcount ng-binding ng-hide">0</span></li>
+                          <li><a href="#GRUPO" role="3" ng-class="{off:selcount[3].isOff == true}" fb-opensublist="fb-opensublist" class="unsel">Grupo</a><span ng-show="selcount[3].count" class="topcount ng-binding ng-hide">0</span></li>
+                          <li><a href="#SGRUPO" role="4" ng-class="{off:selcount[4].isOff == true}" fb-opensublist="fb-opensublist" class="unsel">SubGrupo</a><span ng-show="selcount[4].count" class="topcount ng-binding ng-hide">0</span>
+                          </li>
+                          <li><a href="#CMP" role="6" ng-class="{off:selcount[6].isOff == true}" fb-opensublist="fb-opensublist" class="unsel">Composição</a><span ng-show="selcount[6].count" class="topcount ng-binding ng-hide">0</span></li>
+                          <li><a href="#limpar" ng-click="cancelFilter($event)" fb-opensublist="fb-opensublist" class="icon icon-button bcancel unsel">Limpar Filtros</a></li>
+                        </ul>
+                      </div>
+
+                    </div>
+                  </li>
                 </ul>
               </div>
               <div class="right-list">
@@ -135,10 +251,15 @@
                 <button type="button" class="bdefault s-four m-ten blist" alt="list">Lista</button>
                 <button type="button" class="bdefault s-four m-ten bedit" alt="list">Editar Amostra</button>
                 <ul class="main_opt mini">
-                  <li class="first"><button type="button">Selecionar</button></li>
-                  <li><button type="button" class="bemail"></button></li>
-                  <li><button type="button" class="btrash"></button></li>
+                  <li class="main_opt_item first"><button type="button" class="main_opt_button">Selecionar</button></li>
+                  <li class="main_opt_item"><button type="button" class="main_opt_button bemail"></button></li>
+                  <li class="main_opt_item"><button type="button" class="main_opt_button btrash"></button></li>
                 </ul>
+              </div>
+              <div class="filter-container">
+                <div class="refine">
+                  
+                </div>
               </div>
             </div>
           </div>
@@ -158,12 +279,12 @@
                     <div class="caption">
                       <div class="caption-upside">
                         <ul class="caption-icons">
-                          <li><button type="button" class="caption-icons-icon bstatus complet"></button></li>
-                          <li><button type="button" class="caption-icons-icon bemail"></button></li>
-                          <li><button type="button" class="caption-icons-icon bhomologado nothas"></button></li>
-                          <li><button type="button" class="caption-icons-icon bnote"></button></li>
-                          <li><button type="button" class="caption-icons-icon bfisica has"></button></li>
-                          <li><button type="button" class="caption-icons-icon bfav has"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bstatus complet"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bemail"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bhomologado nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bnote"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bfisica has"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bfav has"></button></li>
                         </ul>
                         <div class="caption-desc">
                           <p><span>Código da Amostra: </span><span>P11TC0006005590</span></p>
@@ -196,12 +317,12 @@
                     <div class="caption">
                       <div class="caption-upside">
                         <ul class="caption-icons">
-                          <li><button type="button" class="caption-icons-icon bstatus incomplet"></button></li>
-                          <li><button type="button" class="caption-icons-icon bemail"></button></li>
-                          <li><button type="button" class="caption-icons-icon bhomologado has"></button></li>
-                          <li><button type="button" class="caption-icons-icon bnote"></button></li>
-                          <li><button type="button" class="caption-icons-icon bfisica nothas"></button></li>
-                          <li><button type="button" class="caption-icons-icon bfav nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bstatus incomplet"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bemail"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bhomologado has"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bnote"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bfisica nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bfav nothas"></button></li>
                         </ul>
                         <div class="caption-desc">
                           <p><span>Código da Amostra: </span><span>P11TC0006005590</span></p>
@@ -222,12 +343,12 @@
                     <div class="caption">
                       <div class="caption-upside">
                         <ul class="caption-icons">
-                          <li><button type="button" class="caption-icons-icon bstatus complet"></button></li>
-                          <li><button type="button" class="caption-icons-icon bemail"></button></li>
-                          <li><button type="button" class="caption-icons-icon bhomologado nothas"></button></li>
-                          <li><button type="button" class="caption-icons-icon bnote"></button></li>
-                          <li><button type="button" class="caption-icons-icon bfisica has"></button></li>
-                          <li><button type="button" class="caption-icons-icon bfav has"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bstatus complet"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bemail"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bhomologado nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bnote"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bfisica has"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bfav has"></button></li>
                         </ul>
                         <div class="caption-desc">
                           <p><span>Código da Amostra: </span><span>P11TC0006005590</span></p>
@@ -260,12 +381,12 @@
                     <div class="caption">
                       <div class="caption-upside">
                         <ul class="caption-icons">
-                          <li><button type="button" class="caption-icons-icon bstatus incomplet"></button></li>
-                          <li><button type="button" class="caption-icons-icon bemail"></button></li>
-                          <li><button type="button" class="caption-icons-icon bhomologado has"></button></li>
-                          <li><button type="button" class="caption-icons-icon bnote"></button></li>
-                          <li><button type="button" class="caption-icons-icon bfisica nothas"></button></li>
-                          <li><button type="button" class="caption-icons-icon bfav nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bstatus incomplet"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bemail"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bhomologado has"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bnote"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bfisica nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bfav nothas"></button></li>
                         </ul>
                         <div class="caption-desc">
                           <p><span>Código da Amostra: </span><span>P11TC0006005590</span></p>
@@ -286,12 +407,12 @@
                     <div class="caption">
                       <div class="caption-upside">
                         <ul class="caption-icons">
-                          <li><button type="button" class="caption-icons-icon bstatus complet"></button></li>
-                          <li><button type="button" class="caption-icons-icon bemail"></button></li>
-                          <li><button type="button" class="caption-icons-icon bhomologado nothas"></button></li>
-                          <li><button type="button" class="caption-icons-icon bnote"></button></li>
-                          <li><button type="button" class="caption-icons-icon bfisica has"></button></li>
-                          <li><button type="button" class="caption-icons-icon bfav has"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bstatus complet"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bemail"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bhomologado nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bnote"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bfisica has"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bfav has"></button></li>
                         </ul>
                         <div class="caption-desc">
                           <p><span>Código da Amostra: </span><span>P11TC0006005590</span></p>
@@ -324,12 +445,12 @@
                     <div class="caption">
                       <div class="caption-upside">
                         <ul class="caption-icons">
-                          <li><button type="button" class="caption-icons-icon bstatus incomplet"></button></li>
-                          <li><button type="button" class="caption-icons-icon bemail"></button></li>
-                          <li><button type="button" class="caption-icons-icon bhomologado has"></button></li>
-                          <li><button type="button" class="caption-icons-icon bnote"></button></li>
-                          <li><button type="button" class="caption-icons-icon bfisica nothas"></button></li>
-                          <li><button type="button" class="caption-icons-icon bfav nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bstatus incomplet"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bemail"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bhomologado has"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bnote"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bfisica nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bfav nothas"></button></li>
                         </ul>
                         <div class="caption-desc">
                           <p><span>Código da Amostra: </span><span>P11TC0006005590</span></p>
@@ -350,12 +471,12 @@
                     <div class="caption">
                       <div class="caption-upside">
                         <ul class="caption-icons">
-                          <li><button type="button" class="caption-icons-icon bstatus complet"></button></li>
-                          <li><button type="button" class="caption-icons-icon bemail"></button></li>
-                          <li><button type="button" class="caption-icons-icon bhomologado nothas"></button></li>
-                          <li><button type="button" class="caption-icons-icon bnote"></button></li>
-                          <li><button type="button" class="caption-icons-icon bfisica has"></button></li>
-                          <li><button type="button" class="caption-icons-icon bfav has"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bstatus complet"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bemail"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bhomologado nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bnote"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bfisica has"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bfav has"></button></li>
                         </ul>
                         <div class="caption-desc">
                           <p><span>Código da Amostra: </span><span>P11TC0006005590</span></p>
@@ -388,12 +509,12 @@
                     <div class="caption">
                       <div class="caption-upside">
                         <ul class="caption-icons">
-                          <li><button type="button" class="caption-icons-icon bstatus incomplet"></button></li>
-                          <li><button type="button" class="caption-icons-icon bemail"></button></li>
-                          <li><button type="button" class="caption-icons-icon bhomologado has"></button></li>
-                          <li><button type="button" class="caption-icons-icon bnote"></button></li>
-                          <li><button type="button" class="caption-icons-icon bfisica nothas"></button></li>
-                          <li><button type="button" class="caption-icons-icon bfav nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bstatus incomplet"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bemail"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bhomologado has"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bnote"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bfisica nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bfav nothas"></button></li>
                         </ul>
                         <div class="caption-desc">
                           <p><span>Código da Amostra: </span><span>P11TC0006005590</span></p>
@@ -422,12 +543,12 @@
                     <div class="caption">
                       <div class="caption-upside">
                         <ul class="caption-icons">
-                          <li><button type="button" class="caption-icons-icon bstatus complet"></button></li>
-                          <li><button type="button" class="caption-icons-icon bemail"></button></li>
-                          <li><button type="button" class="caption-icons-icon bhomologado nothas"></button></li>
-                          <li><button type="button" class="caption-icons-icon bnote"></button></li>
-                          <li><button type="button" class="caption-icons-icon bfisica has"></button></li>
-                          <li><button type="button" class="caption-icons-icon bfav has"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bstatus complet"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bemail"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bhomologado nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bnote"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bfisica has"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bfav has"></button></li>
                         </ul>
                         <div class="caption-desc">
                           <p><span>Código da Amostra: </span><span>P11TC0006005590</span></p>
@@ -460,12 +581,12 @@
                     <div class="caption">
                       <div class="caption-upside">
                         <ul class="caption-icons">
-                          <li><button type="button" class="caption-icons-icon bstatus incomplet"></button></li>
-                          <li><button type="button" class="caption-icons-icon bemail"></button></li>
-                          <li><button type="button" class="caption-icons-icon bhomologado has"></button></li>
-                          <li><button type="button" class="caption-icons-icon bnote"></button></li>
-                          <li><button type="button" class="caption-icons-icon bfisica nothas"></button></li>
-                          <li><button type="button" class="caption-icons-icon bfav nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bstatus incomplet"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bemail"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bhomologado has"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bnote"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bfisica nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bfav nothas"></button></li>
                         </ul>
                         <div class="caption-desc">
                           <p><span>Código da Amostra: </span><span>P11TC0006005590</span></p>
@@ -486,12 +607,12 @@
                     <div class="caption">
                       <div class="caption-upside">
                         <ul class="caption-icons">
-                          <li><button type="button" class="caption-icons-icon bstatus complet"></button></li>
-                          <li><button type="button" class="caption-icons-icon bemail"></button></li>
-                          <li><button type="button" class="caption-icons-icon bhomologado nothas"></button></li>
-                          <li><button type="button" class="caption-icons-icon bnote"></button></li>
-                          <li><button type="button" class="caption-icons-icon bfisica has"></button></li>
-                          <li><button type="button" class="caption-icons-icon bfav has"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bstatus complet"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bemail"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bhomologado nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bnote"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bfisica has"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bfav has"></button></li>
                         </ul>
                         <div class="caption-desc">
                           <p><span>Código da Amostra: </span><span>P11TC0006005590</span></p>
@@ -524,12 +645,12 @@
                     <div class="caption">
                       <div class="caption-upside">
                         <ul class="caption-icons">
-                          <li><button type="button" class="caption-icons-icon bstatus incomplet"></button></li>
-                          <li><button type="button" class="caption-icons-icon bemail"></button></li>
-                          <li><button type="button" class="caption-icons-icon bhomologado has"></button></li>
-                          <li><button type="button" class="caption-icons-icon bnote"></button></li>
-                          <li><button type="button" class="caption-icons-icon bfisica nothas"></button></li>
-                          <li><button type="button" class="caption-icons-icon bfav nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bstatus incomplet"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bemail"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bhomologado has"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bnote"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bfisica nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bfav nothas"></button></li>
                         </ul>
                         <div class="caption-desc">
                           <p><span>Código da Amostra: </span><span>P11TC0006005590</span></p>
@@ -550,12 +671,12 @@
                     <div class="caption">
                       <div class="caption-upside">
                         <ul class="caption-icons">
-                          <li><button type="button" class="caption-icons-icon bstatus complet"></button></li>
-                          <li><button type="button" class="caption-icons-icon bemail"></button></li>
-                          <li><button type="button" class="caption-icons-icon bhomologado nothas"></button></li>
-                          <li><button type="button" class="caption-icons-icon bnote"></button></li>
-                          <li><button type="button" class="caption-icons-icon bfisica has"></button></li>
-                          <li><button type="button" class="caption-icons-icon bfav has"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bstatus complet"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bemail"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bhomologado nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bnote"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bfisica has"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bfav has"></button></li>
                         </ul>
                         <div class="caption-desc">
                           <p><span>Código da Amostra: </span><span>P11TC0006005590</span></p>
@@ -588,12 +709,12 @@
                     <div class="caption">
                       <div class="caption-upside">
                         <ul class="caption-icons">
-                          <li><button type="button" class="caption-icons-icon bstatus incomplet"></button></li>
-                          <li><button type="button" class="caption-icons-icon bemail"></button></li>
-                          <li><button type="button" class="caption-icons-icon bhomologado has"></button></li>
-                          <li><button type="button" class="caption-icons-icon bnote"></button></li>
-                          <li><button type="button" class="caption-icons-icon bfisica nothas"></button></li>
-                          <li><button type="button" class="caption-icons-icon bfav nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bstatus incomplet"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bemail"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bhomologado has"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bnote"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bfisica nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bfav nothas"></button></li>
                         </ul>
                         <div class="caption-desc">
                           <p><span>Código da Amostra: </span><span>P11TC0006005590</span></p>
@@ -614,12 +735,12 @@
                     <div class="caption">
                       <div class="caption-upside">
                         <ul class="caption-icons">
-                          <li><button type="button" class="caption-icons-icon bstatus complet"></button></li>
-                          <li><button type="button" class="caption-icons-icon bemail"></button></li>
-                          <li><button type="button" class="caption-icons-icon bhomologado nothas"></button></li>
-                          <li><button type="button" class="caption-icons-icon bnote"></button></li>
-                          <li><button type="button" class="caption-icons-icon bfisica has"></button></li>
-                          <li><button type="button" class="caption-icons-icon bfav has"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bstatus complet"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bemail"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bhomologado nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bnote"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bfisica has"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bfav has"></button></li>
                         </ul>
                         <div class="caption-desc">
                           <p><span>Código da Amostra: </span><span>P11TC0006005590</span></p>
@@ -652,12 +773,12 @@
                     <div class="caption">
                       <div class="caption-upside">
                         <ul class="caption-icons">
-                          <li><button type="button" class="caption-icons-icon bstatus incomplet"></button></li>
-                          <li><button type="button" class="caption-icons-icon bemail"></button></li>
-                          <li><button type="button" class="caption-icons-icon bhomologado has"></button></li>
-                          <li><button type="button" class="caption-icons-icon bnote"></button></li>
-                          <li><button type="button" class="caption-icons-icon bfisica nothas"></button></li>
-                          <li><button type="button" class="caption-icons-icon bfav nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bstatus incomplet"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bemail"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bhomologado has"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bnote"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bfisica nothas"></button></li>
+                          <li><button type="button" class="caption-icons-icon justit bfav nothas"></button></li>
                         </ul>
                         <div class="caption-desc">
                           <p><span>Código da Amostra: </span><span>P11TC0006005590</span></p>
@@ -671,38 +792,40 @@
                     </div>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="aside-edit">
-              <ul class="category">
-                <li><a href="#cama" class="category_button cama first">Tecimento</a>
-                  <ul class="sub_category">
-                  </ul>
-                </li>
-                <li><a href="#cama" class="category_button cama">Base</a>
-                  <ul class="sub_category">
-                  </ul>
-                </li>
-                <li>
-                  <!--Add actived to actived item menu--><a href="#cortinas" class="category_button cortinas">Grupo</a>
-                  <ul class="sub_category maximum">
-                    <li><a href="#blackouts" name=".blackouts" title="Blackouts">Tecimento</a></li>
-                    <li><a href="#cetins" name=".cetins" title="Cetins">Base</a></li>
-                    <li><a href="#voiles" name=".voiles" title="Voiles">Grupo</a></li>
-                  </ul>
-                </li>
-                <li><a href="#decoracao" class="category_button decoracao">Subgrupo</a>
-                  <ul class="sub_category">
-                  </ul>
-                </li>
-                <li><a href="#mesa" class="category_button mesa last">Composição</a>
-                  <ul class="sub_category">
-                  </ul>
-                </li>
-                <button onclick="scrollDown(event)" class="upstair hide"><span class="upstair-text">Voltar para o topo</span><span class="upstair-ico"></span></button>
               </ul>
             </div>
           </div>
+      </div>
+      <div class="aside-edit">
+        <ul class="category">
+          <li><a href="#cama" class="category_button cama first">Tecimento</a>
+            <ul class="sub_category">
+            </ul>
+          </li>
+          <li><a href="#cama" class="category_button cama">Base</a>
+            <ul class="sub_category">
+            </ul>
+          </li>
+          <li>
+            <!--Add actived to actived item menu--><a href="#cortinas" class="category_button cortinas actived">Grupo</a>
+            <ul class="sub_category maximum">
+              <li><a href="#blackouts" name=".blackouts" title="Blackouts"><span>Tecimento</span><span class="sub_category_counter">34</span></a></li>
+              <li><a href="#cetins" name=".cetins" title="Cetins"><span>Base</span><span class="sub_category_counter hide">0</span></a></li>
+              <li><a href="#voiles" name=".voiles" title="Voiles"><span>Grupo</span><span class="sub_category_counter">12</span></a></li>
+            </ul>
+          </li>
+          <li><a href="#decoracao" class="category_button decoracao">Subgrupo</a>
+            <ul class="sub_category">
+            </ul>
+          </li>
+          <li><a href="#mesa" class="category_button mesa last">Composição</a>
+            <ul class="sub_category">
+              <li><a href="#cetins" name=".cetins" title="Cetins">Base</a></li>
+              <li><a href="#voiles" name=".voiles" title="Voiles">Grupo</a></li>
+            </ul>
+          </li>
+          <button onclick="scrollDown(event)" class="upstair hide"><span class="upstair-text">Voltar para o topo</span><span class="upstair-ico"></span></button>
+        </ul>
       </div>
     </div>
     <script src="js/lib/jquery-1.10.1.min.js"></script>

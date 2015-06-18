@@ -26,6 +26,7 @@
 //SIZES
 .s-four{width: 140px;}
 .s-one{width: 110px;}
+.s-five{width: 50px}
 .m-ten{margin-bottom: 10px;}
 
 html, body{
@@ -107,6 +108,9 @@ body{
 		}
 	}
 }
+.hide{
+	display: none !important;
+}
 
 /****************
 *********************************		 HOME 				*******************/
@@ -178,23 +182,6 @@ body{
 			border-color: @light-text;
 			&.error{
 				border-color: #d64242;
-			}
-		}
-		.button-container{
-			position: relative;
-			display: inline-block;
-			width: 100%;
-			height: auto;
-			.warn{
-				position: relative;
-				float: left;
-				width: 185px;
-				color: #d64242;
-				font-size: 1em;
-				margin-bottom: 10px;
-				line-height: 1.1em;
-				text-align: left;
-				display: none;
 			}
 		}
 	}
@@ -376,57 +363,268 @@ header{
 .menu{
 	position: relative;
 	float: right;
-	li{
-		  display: inline-block;
-		  height: 70px;
-		  position: relative;
-		  float: left;
-		  vertical-align: top;
-		  top: 0;
-		  a{
-		  	  text-decoration: none;
-			  display: inline-block;
-			  vertical-align: middle;
-			  font-size: 1em;
-			  color: #fff;
-			  height: 70px;
-			  line-height: 105px;
-			  margin-right: 20px;
-			  //padding: 22px 15px 0;
-			  //height: 50px;
-			  &:after{
-			  	content: "";
-			  	display: block;
-			  	position: relative;
-			  	.sprite;
-			  	bottom: 90px;
-			  	left: 20px;
-			  }
-			  &.bmenu-legend{
-			  	&:after{
-			  		.menu-legend;
+	.menu-item{
+		display: inline-block;
+		height: 70px;
+		position: relative;
+		float: left;
+		vertical-align: top;
+		top: 0;
+		a{
+			text-decoration: none;
+			display: inline-block;
+			vertical-align: middle;
+			font-size: 1em;
+			color: #fff;
+			height: 70px;
+			line-height: 105px;
+			margin-right: 20px;
+			//padding: 22px 15px 0;
+			//height: 50px;
+			&:after{
+				content: "";
+				display: block;
+				position: relative;
+				.sprite;
+				bottom: 90px;
+				left: 20px;
+			}
+			&.bmenu-legend{
+				&:after{
+					.menu-legend;
 					left: 10px;
-			  	}
-			  }
-			  &.bmenu-settings{
-			  	&:after{
-			  		.menu-settings;
-			  	}
-			  }
-			  &.bmenu-send_receive{
-			  	&:after{
-			  		.menu-send_receive;
-			  	}
-			  }
-			  &.bmenu-logoff{
+				}
+			}
+			&.bmenu-settings{
+				&:after{
+					.menu-settings;
+				}
+			}
+			&.bmenu-send_receive{
+				&:after{
+					.menu-send_receive;
+				}
+			}
+			&.bmenu-logoff{
 			  	&:after{
 			  		.menu-logoff;
 					right: 2px;
 					left: 0;
 			  	}
-			  }
-		  }
+			}
+		}
 	}
+}
+
+.tooltip-content{
+	position: absolute;
+	top: 35px;
+  	right: -6px;
+	background: #fdfdfd;
+	border: 1px solid #e6ebf0;
+	width: auto;
+	height: auto;
+	display: block;
+	z-index: 99;
+	display: none;
+	cursor: default;
+	transition: all 0.3s;
+	color: #414141;
+	border-radius: 10px;
+	&:before{
+		  content: "";
+		  display: block;
+		  position: relative;
+		  background: url(../images/pointer_background.png) no-repeat;
+		  width: 26px;
+		  height: 12px;
+		  top: -12px;
+		  margin: 0 auto;
+	}
+	li{
+		position: relative;
+		float: left;
+		width: auto;
+		min-height: 40px;
+		min-width: 200px;
+		border-top: 1px solid #e6ebf0;
+		&:nth-child(odd){
+			border-right: 1px solid #e6ebf0;
+		}
+		&.tooltip-title{
+			border: none;
+			padding-left: 20px;
+			font-size: 1.3em;
+			font-weight: 700;
+		}
+		.tooltip-item{
+			line-height: 38px;
+			border:none;
+			outline: none;
+			width: 100%;
+			background: none;
+			&:after{
+				position: absolute;
+				left: 20px;
+				top: 12px;
+			}
+			&.bselect{
+				&:after{
+					position: absolute;
+					left: 15px;
+					top: 5px;
+					content: "";
+					display: block;
+					background: #fff url(../images/sprite.png);
+					border: 1px solid #e5ecef;
+					border-radius: 50%;
+					width: 15px;
+					height: 15px;
+					background-position: -4px -1303px;
+					padding: 14px;
+				}
+			}
+			&.bannex-leg{
+				&:after{
+					position: absolute;
+					left: 25px;
+					top: 7px;
+					content: "";
+					display: block;
+					.sprite;
+					.status-annex;
+				}
+				&.add{
+					&:after{
+						left: 20px;
+						.actions_annex;
+					}
+				}
+			}
+			&.bcircle{
+				cursor: pointer;
+				&:after{
+					position: absolute;
+					left: 10px;
+					top: 10px;
+					content: "";
+					display: block;
+					.sprite;
+					.other_notdot;
+				}
+				&.sel,&:hover{
+					&:after{
+						.other_dot;
+					}
+				}
+			}
+			&.btrash-big{
+				&:after{
+					left: 10px;
+					top: 20px;
+				}
+			}
+		}
+	}
+	&.legend{
+		top: 75px;
+		right: -175px;
+		width: 405px;
+		.tooltip-item{
+			padding-left: 60px;
+		}
+	}
+	&.status{
+		width: 405px;
+		right: -80px;
+		.tooltip-item{
+			cursor: pointer;
+			&:hover{
+				background: @dark-text;
+				color: #fff;
+			}
+		}
+	}
+	&.notepad{
+		width: 405px;
+		right: -100px;
+		li{
+			min-width: 100%;
+			.tooltip-item{
+				text-align: left;
+			}
+		}
+		.blockquote{
+			position: relative;
+			float: left;
+			min-width: 50px;
+			height: auto;
+		}
+		.notepad-note{
+			font-size: 0.9em;
+			line-height: 1.3em;
+			width: 350px;
+			padding: 20px 0 20px 20px;
+		}
+	}
+	&.price{
+		right: -160px;
+	}
+	&.refine{
+		width:900px;
+		max-width: 900px;
+		right: -171px;
+		&:before{
+			left: 190px;
+		} 
+	}
+	&.col-small{
+		max-width: 201px;
+	}
+	&.col-large{
+		max-width: 405px;
+	}
+	&.col-largest{
+		width: 500px;
+		li{
+			min-width: 244px;
+		}
+	}
+}
+
+.tooltip{
+	position: relative;
+	&.borderby{
+		position: relative;
+		float: left;
+		width: 100%;
+		max-width: 140px;
+	}
+	button:hover+.tooltip-content {
+		display: block;
+	}
+}
+.tooltip-selectable:hover{
+	.tooltip-content {
+		display: block;
+	}
+}
+.tooltip-filter{
+	button.sel+.tooltip-content{
+		display: block;
+	}
+}
+
+
+/****************************************
+********************************************    FORMULARIO ***********/
+.viewform{
+	float: left;
+	width: 100%;
+	position: relative;
+	background: #f7fafc;
+	border-radius: 20px;
+	padding: 20px;
 }
 
 
@@ -752,6 +950,23 @@ form.search{
 // }
 
 
+/*********************************
+************************************	FILTER ***************************/
+/*.filter-container{
+	position: absolute;
+	width: auto;
+	left: 0;
+	bottom: -190px;
+	height: 40px;
+	background: #fdfdfd;
+	border:1px solid #e6ebf0;
+	border-radius: 10px;
+	z-index: 9;
+	.refine{
+		width: 100%;
+		height: 40px;
+	}
+}*/
 
 /*********************************
 ************************************	CONTENT ***************************/
@@ -760,10 +975,10 @@ form.search{
 	position: relative;
 	height: 100%;
 	width: 95%;
-	margin-bottom:50px;
 	overflow-x: hidden;
 	overflow-y: hidden;
-	margin: 0 auto;
+	margin: 0 auto 50px;
+	padding-bottom: 115px;
 	//background: #c6c6c6;
 	/*.viewport{
 		position: relative;
@@ -788,28 +1003,6 @@ form.search{
 	margin-bottom: 10px;
 	.container-fullsize-filter{
 		height: auto;
-	}
-	.fake-form{
-		position: relative;
-		float: left;
-		width: 100%;
-		&.smaller{
-			margin-right: 10px;
-			width: 190px;
-		}
-		&.medium{
-			margin-right: 19px;
-  			width: 230px;
-		}
-		&.last{
-			margin-right: 0;
-		}
-		.fake-form-opt{
-			position: absolute;
-			right: 0;
-			width: 280px;
-			height: 30px;
-		}
 	}
 	.right-list{
 		position: relative;
@@ -851,7 +1044,7 @@ form.search{
 		padding: 0;
 		height: 30px;
 		display: block;
-		li{
+		.main_opt_item{
 			display: inline-block;
 			height: 30px;
 			position: relative;
@@ -862,7 +1055,7 @@ form.search{
 			&.first{
 				min-width: 75px;
 			}
-			button{
+			.main_opt_button{
 				text-decoration: none;
 				display: inline-block;
 				vertical-align: middle;
@@ -908,7 +1101,7 @@ form.search{
 			}
 		}
 		&.large{
-			li{
+			.main_opt_item{
 				width: 20%;
 			}
 		}
@@ -982,10 +1175,95 @@ form.search{
 	}
 }
 .aside-edit{
-	//background-color: red;
-	float: right;
-	width: 200px;
-	height: 100px;
+	position: absolute;
+	right: 0;
+	top: 210px;
+	width: 155px;
+	display: inline-block;
+	height: auto;
+	transition: left 1.5s ease-out;
+	-webkit-transition: left 1.5s ease-out;
+	.category{
+		position: relative;
+		float: left;
+		width: 155px;
+		li{
+			width: 100%;
+			height: auto;
+			background: #fff;
+			.category_button{
+				line-height: 40px;
+				height: 40px;
+				display: block;
+				cursor: pointer;
+				color: @dark-text;
+				border-bottom: 1px solid #e3eaee;
+				border-left: 1px solid #e3eaee;
+				padding-left: 25px;
+					&.first{
+					border-top: 1px solid #e3eaee;
+						border-radius: 10px 0px 0px 0px;
+					}
+					&.last{
+						  border-radius: 0px 0px 0px 10px;
+					}
+					&:after{
+						.sprite;
+						content: "";
+						display: inline-block;
+						.other-arrow_right;
+						position: relative;
+						float: right;
+						right: 5px;
+						top: 15px;
+					}
+					&.actived{
+						&:after{
+							.other-arrow_down;
+						}
+					}
+			}
+		}
+		.sub_category{
+			padding: 0;
+			height: 0;
+			transition: all .3s ease-out;
+			-webkit-transition: all .3s ease-out;
+			overflow: hidden;
+			&.maximum{
+				height: auto;
+				padding: 0 0 0 20px;
+				border-bottom: 1px solid #e3eaee;
+			}
+			li{
+				width: 100%;
+				background: #f8f9fa;
+				a{
+					line-height: 40px;
+					height: 40px;
+					color: @dark-text;
+					display: block;
+					padding-left: 5px;
+					border-bottom: 1px solid #e3eaee;
+					border-left: 1px solid #e3eaee;
+					.sub_category_counter{
+						position: relative;
+						float: right;
+						right: 10px;
+						display: block;
+						right: 5px;
+						background: #ff6527;
+						padding: 0 3px;
+						color: #fff;
+						border-radius: 50%;
+						top: 10px;
+						font-size: 0.9em;
+						line-height: 1.9em;
+					}
+				}
+			}
+		}
+	}
 }
 
 
@@ -1548,37 +1826,6 @@ form.search{
 		}
 	}
 }
-#print-form{
-	position: absolute;
-	display:none;
-	margin:0;
-	padding:0;
-	width:223px;
-	height:100%;
-	display:none;
-	margin-top:10px;
-  right:0;  
-	img{
-		.fleft;
-		width: auto;
-	  height: 283px;
-	  margin-top:10px;
-	  &:first-child{
-	  	margin-top:0;
-	  }
-	}
-	p{
-		position:absolute;
-		width:auto;
-		font-weight: 600;
-		font-size:8pt;
-		margin-top:-6px;
-		text-align: left;
-	}
-}
-footer {
-	display:none;
-}
 
 .edit{
 	overflow-x: auto;
@@ -1586,7 +1833,7 @@ footer {
 		overflow-x: auto;
 	}
 	.container{
-		min-width: 1200px;
+		min-width: 1120px;
 	}
 	.holder{
 		float: left;

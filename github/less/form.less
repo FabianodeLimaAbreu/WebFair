@@ -8,6 +8,14 @@ form{
 	width: 100%;
 }
 
+label{
+	display: inline-block;
+	max-width: 100%;
+	float: left;
+	font-size: 1em;
+	line-height: 2.5em;
+}
+
 .form-group{
 	position: relative;
 	float: left;
@@ -62,6 +70,29 @@ form{
 	}
 }
 
+.white-form{
+	.form-control{
+		background-color: #fff;
+		border: 1px solid #e3eaee;
+	}
+}
+
+.form-inline{
+	.form-group{
+		width: 220px;
+		border-right: 1px solid #e6ebf0;
+		padding-left: 5px;
+
+	}
+	.form-control{
+		display: inline-block;
+		width: auto;
+		vertical-align: middle;
+	}
+	.icon{
+		margin-left: 5px;
+	}
+}
 .search{
 	position: relative;
 	float: left;
@@ -72,7 +103,6 @@ form{
 }
 
 .bdefault{
-	float: none;
 	width: 100%;
 	max-width: 140px;
 	height: 30px;
@@ -95,9 +125,12 @@ form{
 	&.m-ten{
 		margin-bottom: 10px;
 	}
+	&.bdefault-odd{
+		float: right;
+		margin-top: 20px;
+	}
 	&.borderby{
-		position: relative;
-		float: left;
+
 		&:after{
 			.sprite;
 			.opt_ordering;
@@ -126,6 +159,52 @@ form{
 				.actions-export;
 			}
 		}
+	}
+}
+
+.fake-form{
+	position: relative;
+	float: left;
+	width: 100%;
+	&.smaller{
+		margin-right: 10px;
+		width: 190px;
+	}
+	&.medium{
+		margin-right: 19px;
+			width: 230px;
+	}
+	&.biggest{
+		margin-right: 2%;
+		width: 32%;
+		max-width: 274px;
+	}
+	&.last{
+		margin-right: 0;
+	}
+	.fake-form-opt{
+		position: absolute;
+		right: 0;
+		width: 280px;
+		height: 30px;
+	}
+}
+
+.button-container{
+	position: relative;
+	display: inline-block;
+	width: 100%;
+	height: auto;
+	.warn{
+		position: relative;
+		float: left;
+		width: 185px;
+		color: #d64242;
+		font-size: 1em;
+		margin-bottom: 10px;
+		line-height: 1.1em;
+		text-align: left;
+		display: none;
 	}
 }
 /*

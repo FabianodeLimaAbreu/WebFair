@@ -35,8 +35,8 @@ var App={
 		this.events();
 		this.usr = jQuery.parseJSON($.cookie("portal")); 
 		this.elements.inputs.attr("autocomplete", "off");
-		if(this.usr)
-            window.location.href = './index.html';
+		/*if(this.usr)
+            window.location.href = './index.html';*/
 	},
 
 	/**
