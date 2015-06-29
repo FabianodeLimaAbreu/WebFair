@@ -122,6 +122,10 @@ label{
 	&:hover,&.sel{
 		background: @dark-text;
 	}
+	&.unable,&.unable:hover{
+		background:#e5e8ea;
+		cursor: default;
+	}
 	&.m-ten{
 		margin-bottom: 10px;
 	}
@@ -187,6 +191,29 @@ label{
 		right: 0;
 		width: 280px;
 		height: 30px;
+	}
+	&.fake-form-supplier-biggest{
+		//width: 500px;
+		width: 425px;
+		height: 40px;
+	}
+	&.fake-form-supplier-middle{
+		width: 360px;
+	}
+	&.fake-form-supplier-equal{
+		width: 49%;
+		&.right{
+			float: right;
+		}
+		&.divisor{
+			border-right: 1px solid #e3eaee;
+		}
+		.delete{
+			margin: 0;
+		}
+	}
+	&.fake-form-supplier-three{
+		width: 33%;
 	}
 }
 

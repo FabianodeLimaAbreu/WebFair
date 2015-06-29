@@ -1,7 +1,7 @@
 <html>
     <head>
         <title>Calling Web Service from jQuery</title>
-        <script type="text/javascript" src="js/lib/jquery-1.10.1.min.js"></script>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
         <script type="text/javascript">
             function strToJson(str) {
                 eval("var x = " + str + ";");
@@ -9,10 +9,10 @@
             }
             $(document).ready(function () {
               $("#btnCallWebService").click(function (event) {
-                  var wsUrl = "../WebService.asmx?op=ListSamples";
+                  var wsUrl = "../WebService.asmx?op=ListUsers";
                   
                   var soapRequest =
-                  '<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListSamples xmlns="http://tempuri.org/"><FEIR_COD>10</FEIR_COD><FORN_ID>4200000</FORN_ID><LINHA_I>1</LINHA_I><LINHA_F>20</LINHA_F></ListSamples></soap:Body></soap:Envelope>';
+                  '<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListUsers xmlns="http://tempuri.org/" /></soap:Body></soap:Envelope>';
                   $.support.cors=true;
                   $.ajax({
                            type: "POST",
@@ -21,23 +21,35 @@
                            dataType: "xml",
                            crossDomain: true,
                            data: soapRequest,
-                        success: processSuccess,
+                         /*beforeSend:function(xhr){
+                            xhr.withCredentials=false;
+                         },
+                         xhrFields:{
+                          withCredentials:false
+                         },*/
+                         success: processSuccess,
                          error: processError
                          });
                   });
-            });
+              });
             
             function processSuccess(data, status, req) {
                 if (status == "success") {
-                    $("#response").text($(req.responseXML).text());
-                    console.dir(jQuery.parseJSON($(req.responseXML).text()));
-
+                //console.log($(req.responseXML)[0].childNodes[0].textContent);
+                console.dir(jQuery.parseJSON($(req.responseXML)[0].childNodes[0].textContent));
+                    $("#response").text($(req.responseXML));
                 }
             }
             
             function processError(data, status, req) {
                 alert(req.responseText + " " + status);
-            }            
+            }
+            /*$(document).ready(function(){
+              $.getJSON("http://189.126.197.169/node/server/index2.js?service=SearchMaterial.svc/ebook/&query=Tule?callback=?",function(a){
+                console.dir(a);
+              });
+            });*/
+            
             </script>
     </head>
     <body>

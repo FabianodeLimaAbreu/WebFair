@@ -1,6 +1,5 @@
 .icon{
 	position: relative;
-	float: left;
 	display: block;
 	cursor: pointer;
 	background: @buttons;
@@ -25,6 +24,18 @@
 			margin-right: 5px;
 			top: 4px;
 			left: -4px;
+		}
+	}
+	&.gotop{
+		&:after{
+			content: "";
+			display: inline-block;
+			position: relative;
+			float: right;
+			top: -1px;
+			right: 20px;
+			.sprite;
+			.other-go_top;
 		}
 	}
 	&.delete{
@@ -74,7 +85,41 @@
 		 	content: "";
 		 }
 	}
-	&.bannex,&.bselection{
+	&.fav-big,&.trash-big,&.bplus-big{
+		background: none;
+		margin-left: 10px;
+		width: 30px;
+		padding: 0;
+		float: right;
+	}
+	&.fav-big{
+		&:after{
+		 	.sprite;
+		 	.actions-fav-big;
+		 	display: block;
+		 	position: relative;
+		 	content: "";
+		 }
+	}
+	&.trash-big{
+		&:after{
+			.sprite;
+			.actions-trash_blue;
+			display: block;
+			position: relative;
+			content: "";
+		}
+	}
+	&.bplus-big{
+		&:after{
+			.sprite;
+			.actions-plus_blue;
+			display: block;
+			position: relative;
+			content: "";
+		}
+	}
+	&.bannex,&.bselection-edit,&.bselection{
 		background: none;
 		margin: 0 auto;
 		width: 30px;
@@ -87,11 +132,42 @@
 			content: "";
 		}
 	}
-	&.bselection{
+	&.bselection-edit,&.bselection{
 		background: #fff;
 		z-index: 9;
 		border:1px solid #e5ecef;
 		top: 8px;
+		&:hover,&.sel{
+			background: @inative-itens;
+		}
+		&.sel:hover{
+			background: #fff;
+		}
+	}
+	&.bselection{
+		&:after{
+			.item_select;
+			display: block;
+			left: 7px;
+  			top: 6px;
+		}
+		&:hover{
+			&:after{
+				.item_selected;
+			}
+		}
+		&.sel{
+			&:after{
+				.item_selected;
+			}
+			&:hover{
+				&:after{
+					.item_select;
+				}
+			}
+		}
+	}
+	&.bselection-edit{
 		&:after{
 			.insiders-edit_blue;
 			display: block;
@@ -99,18 +175,15 @@
   			top: 6px;
 		}
 		&:hover{
-			background: @inative-itens;
 			&:after{
 				.insiders-edit_gray;
 			}
 		}
 		&.sel{
-			background: @inative-itens;
 			&:after{
 				.insiders-edit_gray;
 			}
 			&:hover{
-				background: #fff;
 				&:after{
 					.insiders-edit_blue;
 				}
@@ -138,6 +211,19 @@
 		position: relative;
 		content: "";
 		margin: 0 auto;
+	}
+	&.bstatus{
+		cursor: default;
+		&.complet{
+			&:after{
+				.status_check;
+			}
+		}
+		&.incomplet{
+			&:after{
+				.status-warning;
+			}
+		}
 	}
 	&.bstatus{
 		cursor: default;
@@ -295,8 +381,7 @@
 
 .thumbnail{
 	.icon{
-		&.bannex,&.bselection{
-			float: none;
+		&.bannex,&.bselection-edit,&.bselection{
 			top: 10px;
 			right: 10px;
 			position: absolute;
@@ -305,7 +390,11 @@
 			top: 25px;
 			right: 0;
 		}
-		&.bselection{
+		&.bselection-edit,&.bselection{
+			background: #fff;
+			border:none;
+		}
+		&.bselection-edit{
 			background: #fff;
 			border:none;
 			&:after{
@@ -341,6 +430,13 @@
 	}
 }
 
+.photo-buttons{
+	.caption-icons-icon{
+		margin: 0;
+		width: 33.3%;
+		float: left;
+	}
+}
 .wrapper{
 	position: relative;
 	clear: both;

@@ -27,19 +27,21 @@ require(["methods","sp/min"/*, "app/content", "app/detail"*/], function() {
   window.App = Spine.Controller.sub({
     el:$("body"),
     elements: {
-      /*".container":"container",
-      "#toggle-menu a":"menuopt",
-      "#wrap .mask":"maskEl",
-      ".search":"searchEl",
-      ".right-list button":"viewBtn",
-      "button.close":"closeBtn",
+      ".container":"container",
+      ".nav-menu a":"menuopt",
+      "header":"header",
+      //"#wrap .mask":"maskEl",
+      //".search":"searchEl",
+      //".right-list button":"viewBtn",
+      //"button.close":"closeBtn",
       ".login-name":"username",
-      ".table-container":"viewList",
-      ".viewport":"viewImage",
+      //".table-container":"viewList",
+      /*".viewport":"viewImage",
       ".content":"contentEl",
       ".bread-box":"breadEl",
       "#modal" : "modalEl",
       ".detail":"detailEl"*/
+
     },
 
     events: {      
@@ -50,23 +52,24 @@ require(["methods","sp/min"/*, "app/content", "app/detail"*/], function() {
     },
     init:function(){
       this.view = "images";
-      this.mode = "artigos-pai";
+      this.mode = "amostras";
       this.itens = $([]);
       this.data=[];
       this.fdata = [];
-      this.loja="";
+      /*this.loja="";
       this.area="";
       this.father=!0;
-      this.searchname="";
+      this.searchname="";*/
       this.breadarr = [];
       //this.content = new Content({el:this.contentEl});
       //this.modal = new Modal({el:this.modalEl});
       //this.detail = new Detail({el:this.detailEl, breadEl:this.breadEl,getloading:this.proxy(this.getloading), setloading:this.proxy(this.setloading),stage:this.proxy(this.stage), body:this.el,getfdata:this.proxy(this.getfdata)});
 
+      this.header.addClass("goDown");
       this.usr = jQuery.parseJSON($.cookie("portal"));
-        /*if(!this.usr)
+        if(!this.usr)
           window.location.href = 'login.html';
-      this.username.text(this.usr.Nome);*/
+      this.username.text(this.usr.Nome);
       
       this.el.find("#wrap").removeClass("hide");
 
@@ -74,10 +77,14 @@ require(["methods","sp/min"/*, "app/content", "app/detail"*/], function() {
       // this.spotlight = new Spotlight({el:this.spotEl});
       this.routes({
         "":function() {
-          //alert("vazio");
-          //this.menuopt.eq(0).trigger("click");
+          this.menuopt.eq(3)[0].click();
         },
-        "search/*loja/*area/*code":function(a){
+        "amostras":function(){
+          this.mode ="amostras";
+          this.container.load("pages/"+this.mode+".html");
+          //this.submit(this.mode,10,4200000,1,20);
+        }
+        /*"search/*loja/*area/*code":function(a){
           this.setMenu(a.loja.toUpperCase());
           this.mode = "artigos-pai/"+a.loja+"/"+a.area+"/"+a.code;
           this.loja=a.loja.toUpperCase();
@@ -118,9 +125,10 @@ require(["methods","sp/min"/*, "app/content", "app/detail"*/], function() {
         },
         "detail/*tipo/*code" : function(a) {
           this.detail.reload(!0,!1,a.tipo, a.code);
-        }
+        }*/
       });
     },
+
     getOut : function(a){
       a.preventDefault();
       Logout();
@@ -185,45 +193,41 @@ require(["methods","sp/min"/*, "app/content", "app/detail"*/], function() {
         }        
       });
     },
-    submit:function(e){
-      var _type, path;
-      e.preventDefault();
-      var val=$(e.target).find(".text").val();
-      /*This part of code deal with hash value and search form values, for exemplo
-        User came from home with a loja=verao and a search=Tule, then its hash is http://institucionalteste/briefing/app.html#search/verao/tule
-        Then, this same user do a search with form search by Renda, the app do a request for rendas but hash continue ..verao/tule, didn't change to /renda
-        Then this part verify if hash's value is igual form value, if it isn't change reload hash's value*/                  
-        
-      if(-1 !== this.mode.indexOf(val)){
-        this.navigate(this.mode, !1);
-      }
-      else{
-        this.mode="artigos-pai/"+this.loja+"/"+this.area+"/"+val;
-        this.navigate(this.mode, !1);
-      }
-      if (this.getloading() || !val) {
-        return!1;
-      }
-
-
-      
-      $('body').hasClass('pai') ? _type = "Briefing/"+this.loja+"/"+this.area+"/"+val : _type = "BriefingZwte/"+this.loja+"/"+this.code;
-      if(this.searchname === _type){
-        this.setdata(this.fdata);
-      }
-      else{
-        this.searchname=_type;
-
-        $.getJSON( nodePath + "service=SearchMaterial.svc/" + _type + "?callback=?", this.proxy(this.setdata)).fail(function() {
-          return!1;
-        }); 
-
-      }
-            
-      return this.setloading(!0), !1;
+    submit:function(name,a,b,c,d){
+      var core=this;
+      var soapRequest=[
+        {
+          'name':'amostras',
+          'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListSamples xmlns="http://tempuri.org/"><FEIR_COD>'+a+'</FEIR_COD><FORN_ID>'+b+'</FORN_ID><LINHA_I>'+c+'</LINHA_I><LINHA_F>'+d+'</LINHA_F></ListSamples></soap:Body></soap:Envelope>'
+        },
+        {
+          'name':'teste',
+          'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListSamples xmlns="http://tempuri.org/"><FEIR_COD>10</FEIR_COD><FORN_ID>4200000</FORN_ID><LINHA_I>1</LINHA_I><LINHA_F>20</LINHA_F></ListSamples></soap:Body></soap:Envelope>'
+        }
+      ];
+      $.support.cors=true;
+      soapRequest.filter(function(a,b){
+        if(a['name'] === name){
+          $.ajax({
+              type: "POST",
+              url: nodePath,
+              contentType: "text/xml; charset=utf-8",
+              dataType: "xml",
+              crossDomain: true,
+              context: core,
+              data: a['code'],
+              success: core.convertData,
+              error: core.processError
+          });
+        }
+      });
     },
-    setdata:function(a,b){      
-      var val = this.searchEl.find(".text").val();
+    processError:function(data, status, req){
+
+    },
+    setdata:function(a,b){   
+      console.dir(a);
+      /*var val = this.searchEl.find(".text").val();
       this.setBreadcrumb(a,val);
       this.fdata = a.sortBy("MAKTX").unique();
       this.breadEl.find(".bread-load").text(0);
@@ -236,7 +240,13 @@ require(["methods","sp/min"/*, "app/content", "app/detail"*/], function() {
       
       b ? (this.data = this.fdata || this.data) : this.fdata = this.data;
       this.content.changeview(this.view);
-      this.createbox(this.fdata, this.content.page, !0);      
+      this.createbox(this.fdata, this.content.page, !0);   */   
+    },
+    convertData:function(data, status, req){
+      if (status == "success") {
+        this.fdata=jQuery.parseJSON($(req.responseXML).text()).sortBy('AMOS_DESC').unique();
+        this.setdata(this.fdata);
+      }
     },
     createbox : function(a, b, d, c) {      
       var f, m, g, n, v;      

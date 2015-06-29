@@ -1,4 +1,4 @@
-var nodePath = "http://189.126.197.169/node/server/briefing.js?", scrollTop = document.documentElement ? document.documentElement.scrollTop : document.body.scrollTop;
+var nodePath = "../WebService.asmx?op=ListSamples", scrollTop = document.documentElement ? document.documentElement.scrollTop : document.body.scrollTop;
 window.console = window.console || {log:function() {
 }};
 window.intervalList = [];
