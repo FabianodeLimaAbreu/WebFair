@@ -13,7 +13,7 @@
 */
 window.Modal = Spine.Controller.sub({
   events:{
-    "click .bclose":"close"    
+    /*"click .bclose":"close" */
   },
 
   /**
@@ -42,9 +42,9 @@ window.Modal = Spine.Controller.sub({
 */
 window.Content = Spine.Controller.sub({
   elements:{
-    ".viewport":"table",
-    ".table-content .tbody":"tbody",
-    ".table-container":"tcontainer"
+    /*".viewport":"table",
+    ".table tbody":"tbody",
+    ".floatThead":"tcontainer"*/
   },
 
   /**
@@ -53,30 +53,39 @@ window.Content = Spine.Controller.sub({
   * @param {Boolean} a. If true show mask, else hide mask.
   */
   changeview:function(a) {
+    if(typeof this.table !== "object"){
+      this.table=$(".viewport");
+      this.tbody=$(".table tbody");
+      this.tcontainer=$(".floatThead");
+      this.bedit=$(".bedit");
+    }
     this.create = this[a];
-    "images" === a ? this.itens && this.clean() : this.itens && this.reset();
+    "images" === a ? this.itens && this.bedit.removeClass("unable") && this.clean(): this.itens && this.bedit.addClass("unable") && this.reset();
     this.tbody.empty();
     this.table.empty();
   }, images:function(a) {
+    $("body").attr("class","").addClass("images");
+    /*$("body").addClass()
     this.tcontainer.hide();
     this.table.show();
     a.appendTo(this.table);
-    this.itens = this.el.find(".thumbnail");
+    this.itens = this.el.find(".thumbnail");*/
   }, list:function(a) {
-    this.tcontainer.show();
+    $("body").attr("class","").addClass("list");
+    /*this.tcontainer.show();
     this.tbody.show();
     this.table.hide();
     // this.tbody.show();
     a.appendTo(this.tbody);
-    this.itens = this.tbody.find('tr');
+    this.itens = this.tbody.find('tr');*/
   }, clean:function() {
-    this.itens.remove();
-    this.itens = $([]);
+    //this.itens.remove();
+    //this.itens = $([]);
   }, reset:function() {
-    this.table.hide();
+    //this.table.hide();
     // this.tbody.hide();
     // this.bread.fadeOut();
-    this.page = 0;
+    this.page = "";
     this.clean();
   }, init:function() {
     // (this.type !== "CLIENTE" && this.type !== "VISITANTE") ? this.table.addClass('cseven') : this.table.addClass('cfive');

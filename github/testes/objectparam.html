@@ -1,7 +1,7 @@
 <html>
     <head>
         <title>Calling Web Service from jQuery</title>
-        <script type="text/javascript" src="js/lib/jquery-1.10.1.min.js"></script>
+        <script type="text/javascript" src="../js/lib/jquery-1.10.1.min.js"></script>
         <script type="text/javascript">
             function strToJson(str) {
                 eval("var x = " + str + ";");
@@ -9,17 +9,17 @@
             }
             $(document).ready(function () {
               $("#btnCallWebService").click(function (event) {
-                  var wsUrl = "../WebService.asmx?op=ListSamples";
+                  var wsUrl = "../WebService.asmx?op=UpdateSample";
                   
                   var soapRequest =
-                  '<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListSamples xmlns="http://tempuri.org/"><FEIR_COD>10</FEIR_COD><FORN_ID>4200000</FORN_ID><LINHA_I>1</LINHA_I><LINHA_F>20</LINHA_F></ListSamples></soap:Body></soap:Envelope>';
+                  '<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><UpdateSample xmlns="http://tempuri.org/"><sample><AMOS_COD>10</AMOS_COD><AMOS_DESC>TESTE</AMOS_DESC></sample></UpdateSample></soap:Body></soap:Envelope>';
                   $.support.cors=true;
                   $.ajax({
                            type: "POST",
                            url: wsUrl,
                            contentType: "text/xml; charset=utf-8",
                            dataType: "xml",
-                           crossDomain: true,
+                           //crossDomain: true,
                            data: soapRequest,
                         success: processSuccess,
                          error: processError

@@ -18,7 +18,7 @@ require.config({
     sp: "spine"
   }
 });
-require(["methods","sp/min"/*, "app/content", "app/detail"*/], function() {
+require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
   /**
   * Main application class, responsible for all main funcionalities and call anothers classes constructors
   * @exports App
@@ -30,14 +30,14 @@ require(["methods","sp/min"/*, "app/content", "app/detail"*/], function() {
       ".container":"container",
       ".nav-menu a":"menuopt",
       "header":"header",
-      //"#wrap .mask":"maskEl",
-      //".search":"searchEl",
+      ".content":"contentEl",
+      "#wrap .mask":"maskEl",
+      //".form-control":"searchEl",
       //".right-list button":"viewBtn",
       //"button.close":"closeBtn",
       ".login-name":"username",
       //".table-container":"viewList",
       /*".viewport":"viewImage",
-      ".content":"contentEl",
       ".bread-box":"breadEl",
       "#modal" : "modalEl",
       ".detail":"detailEl"*/
@@ -45,23 +45,24 @@ require(["methods","sp/min"/*, "app/content", "app/detail"*/], function() {
     },
 
     events: {      
-      /*"click .right-list button":"changeview",
-      "submit .search":"submit",
+      "click .changeview button":"changeview",
+      /*"submit .search":"submit",
       "click button.icon.go_back_default":"goBack",
       "click button.close":"getOut"*/
     },
     init:function(){
       this.view = "images";
-      this.mode = "amostras";
+      this.page = "amostras";
       this.itens = $([]);
       this.data=[];
       this.fdata = [];
+      this.loading=!1;
       /*this.loja="";
       this.area="";
       this.father=!0;
       this.searchname="";*/
       this.breadarr = [];
-      //this.content = new Content({el:this.contentEl});
+      this.content = new Content({el:this.contentEl, /*bread:this.breadEl, type:this.usr.TIPO*/});
       //this.modal = new Modal({el:this.modalEl});
       //this.detail = new Detail({el:this.detailEl, breadEl:this.breadEl,getloading:this.proxy(this.getloading), setloading:this.proxy(this.setloading),stage:this.proxy(this.stage), body:this.el,getfdata:this.proxy(this.getfdata)});
 
@@ -80,9 +81,35 @@ require(["methods","sp/min"/*, "app/content", "app/detail"*/], function() {
           this.menuopt.eq(3)[0].click();
         },
         "amostras":function(){
-          this.mode ="amostras";
-          this.container.load("pages/"+this.mode+".html");
-          //this.submit(this.mode,10,4200000,1,20);
+          var context=this;
+          this.page ="amostras";
+          this.writePage(this.page);
+          
+        },
+        "fornecedor":function(){
+          var context=this;
+          this.page ="fornecedor";
+          this.writePage(this.page);
+        },
+        "relatorio":function(){
+          var context=this;
+          this.page ="relatorio";
+          this.writePage(this.page);
+        },
+        "local":function(){
+          var context=this;
+          this.page ="local";
+          this.writePage(this.page);
+        },
+        "template_email":function(){
+          var context=this;
+          this.page ="template_email";
+          this.writePage(this.page);
+        },
+        "gestao":function(){
+          var context=this;
+          this.page ="gestao";
+          this.writePage(this.page);
         }
         /*"search/*loja/*area/*code":function(a){
           this.setMenu(a.loja.toUpperCase());
@@ -144,6 +171,20 @@ require(["methods","sp/min"/*, "app/content", "app/detail"*/], function() {
       }       
 
     },
+    writePage:function(hash,callback){
+      var context=this;
+      $("html").attr("class","").addClass(hash);
+      this.container.load("pages/"+hash+".html",function( response, status, xhr){
+        if(context.page === "amostras"){
+          if(typeof context.viewBtn !== "object"){
+            context.viewBtn=$(".changeview button");
+          }
+
+        }
+        //context.reset();
+        context.submit(context.page,10,4200000,1,20);
+      });
+    },
     setBreadcrumb : function(a, val){
       var loja, area, grupo, artigo, bread_text;
       
@@ -178,9 +219,9 @@ require(["methods","sp/min"/*, "app/content", "app/detail"*/], function() {
       } else {
           return !1;
       }
-      if (this.loading){
+      /*if (this.loading){
         return !1;
-      }            
+      }*/ 
       a.hasClass("sel") || (this.viewBtn.removeClass("sel"), a.addClass("sel"), this.view = a.attr('alt'), this.setdata(this.fdata));
     },
     setMenu:function(loja){
@@ -198,7 +239,7 @@ require(["methods","sp/min"/*, "app/content", "app/detail"*/], function() {
       var soapRequest=[
         {
           'name':'amostras',
-          'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListSamples xmlns="http://tempuri.org/"><FEIR_COD>'+a+'</FEIR_COD><FORN_ID>'+b+'</FORN_ID><LINHA_I>'+c+'</LINHA_I><LINHA_F>'+d+'</LINHA_F></ListSamples></soap:Body></soap:Envelope>'
+          'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GetSamples xmlns="http://tempuri.org/"><FEIR_COD>10</FEIR_COD><FORN_ID>4200000</FORN_ID><LINHA_I>1</LINHA_I><LINHA_F>20</LINHA_F></GetSamples></soap:Body></soap:Envelope>'
         },
         {
           'name':'teste',
@@ -223,13 +264,14 @@ require(["methods","sp/min"/*, "app/content", "app/detail"*/], function() {
       });
     },
     processError:function(data, status, req){
-
+      console.log("DEU ERRO");
     },
     setdata:function(a,b){   
-      console.dir(a);
-      /*var val = this.searchEl.find(".text").val();
-      this.setBreadcrumb(a,val);
+      var val = $(".form-control-search").val("ddssa");
+      this.content.changeview(this.view);
       this.fdata = a.sortBy("MAKTX").unique();
+      this.content.page = 0;
+      /*this.setBreadcrumb(a,val);
       this.breadEl.find(".bread-load").text(0);
 
       if (!this.fdata.length) {        
@@ -238,9 +280,10 @@ require(["methods","sp/min"/*, "app/content", "app/detail"*/], function() {
       
       this.content.page = 0;
       
-      b ? (this.data = this.fdata || this.data) : this.fdata = this.data;
+      b ? (this.data = this.fdata || this.data) : this.fdata = this.data;*/
       this.content.changeview(this.view);
-      this.createbox(this.fdata, this.content.page, !0);   */   
+      this.content.create(this.fdata[0]);
+      //this.createbox(this.fdata, this.content.page, !0);    
     },
     convertData:function(data, status, req){
       if (status == "success") {
@@ -393,9 +436,11 @@ require(["methods","sp/min"/*, "app/content", "app/detail"*/], function() {
       return this.fdata;
     },
     reset:function(){
+      //this.data = [];
       //this.fdata = [];
-      this.itens.remove();
-      this.itens = $([]);
+      /*this.itens = $([]);
+      this.itens.remove();*/
+      this.content.reset();
     }
   });
   new App;
