@@ -37,6 +37,9 @@
 .m-right {
   margin-right: 10px;
 }
+.m-left {
+  margin-left: 10px;
+}
 html,
 body {
   height: 100%;
@@ -459,7 +462,7 @@ header .logo-print {
   background: #ffffff url(../images/sprite.png);
   width: 15px;
   height: 15px;
-  background-position: -29px -1218px;
+  background-position: -4px -1403px;
   border: 1px solid #e5ecef;
   border-radius: 50%;
   padding: 14px;
@@ -607,6 +610,16 @@ header .logo-print {
   width: 405px;
   right: -100px;
 }
+.tooltip-content.notepadmess {
+  top: 45px;
+  right: -180px;
+}
+.tooltip-content.rightless {
+  top: 32px;
+}
+.tooltip-content.rightless:before {
+  right: 70px;
+}
 .tooltip-content.legend {
   top: 75px;
   right: -175px;
@@ -639,6 +652,7 @@ header .logo-print {
 }
 .tooltip-content.col-small {
   max-width: 201px;
+  top: 45px;
 }
 .tooltip-content.col-large {
   max-width: 405px;
@@ -1503,6 +1517,9 @@ form.search {
   line-height: 1.6em;
   font-size: 0.9em;
   color: #414141;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .caption .caption-downside {
   position: relative;
@@ -1960,6 +1977,7 @@ form.search {
   display: inline-block;
   position: relative;
   float: right;
+  text-align: center;
   top: -1px;
   right: 20px;
   background: url("../images/sprite.png") top left no-repeat;
@@ -2449,6 +2467,9 @@ th {
   font-weight: 700;
   background-color: #e8eff5;
 }
+th.hasicon {
+  text-align: center;
+}
 tr {
   line-height: 3em;
 }
@@ -2459,9 +2480,6 @@ td {
 td,
 th {
   border: 1px solid #e1e1e1;
-}
-.tlast {
-  text-align: center;
 }
 .table-striped > tbody > tr:nth-child(even) > td,
 .table-striped > tbody > tr:nth-child(odd) > th {

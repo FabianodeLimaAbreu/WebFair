@@ -32,6 +32,7 @@
 			display: inline-block;
 			position: relative;
 			float: right;
+			text-align: center;
 			top: -1px;
 			right: 20px;
 			.sprite;
@@ -500,6 +501,9 @@ th{
 	font-size: 1.1em;
 	font-weight: 700;
 	background-color: #e8eff5;
+	&.hasicon{
+		text-align: center;
+	}
 }
 tr{
 	line-height: 3em;
@@ -509,9 +513,6 @@ th,td{
 }
 td,th{
 	border:1px solid #e1e1e1;
-}
-.tlast{
-	text-align: center;
 }
 .table-striped{
 	&>tbody>tr:nth-child(even)>td, &>tbody>tr:nth-child(odd)>th{

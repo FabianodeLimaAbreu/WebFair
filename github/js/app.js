@@ -238,8 +238,9 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       var core=this;
       var soapRequest=[
         {
+          //FEIR_COD e FORN_ID are optional fields
           'name':'amostras',
-          'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GetSamples xmlns="http://tempuri.org/"><FEIR_COD>10</FEIR_COD><FORN_ID>4200000</FORN_ID><LINHA_I>1</LINHA_I><LINHA_F>20</LINHA_F></GetSamples></soap:Body></soap:Envelope>'
+          'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GetSamples xmlns="http://tempuri.org/"><FEIR_COD>'+a+'</FEIR_COD><FORN_ID>'+b+'</FORN_ID><LINHA_I>'+c+'</LINHA_I><LINHA_F>'+d+'</LINHA_F></GetSamples></soap:Body></soap:Envelope>'
         },
         {
           'name':'teste',
@@ -270,6 +271,7 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       var val = $(".form-control-search").val("ddssa");
       this.content.changeview(this.view);
       this.fdata = a.sortBy("MAKTX").unique();
+      console.dir(this.fdata);
       this.content.page = 0;
       /*this.setBreadcrumb(a,val);
       this.breadEl.find(".bread-load").text(0);
@@ -282,8 +284,8 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       
       b ? (this.data = this.fdata || this.data) : this.fdata = this.data;*/
       this.content.changeview(this.view);
-      this.content.create(this.fdata[0]);
-      //this.createbox(this.fdata, this.content.page, !0);    
+      //this.content.create(this.fdata[0]);
+      this.createbox(this.fdata, this.content.page, !0);    
     },
     convertData:function(data, status, req){
       if (status == "success") {
@@ -291,8 +293,89 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
         this.setdata(this.fdata);
       }
     },
-    createbox : function(a, b, d, c) {      
+    createbox : function(a, b, d, c) {  
       var f, m, g, n, v;      
+      c = c || this.view;
+      n = "images" === c ? "li" : "tr";
+      this.loading = !0; 
+      this.maskEl.fadeIn().find(".loader").show();
+      this.active = this.active || this.content;
+      d = this.active.itens && !d ? this.active.itens.length : 0;
+      m = 300 * (b + 1) < a.length ? 300 * (b + 1) : a.length;
+      var p, h, q, k = 300 * b, l = m - k, e = this;
+      if (d < a.length && a[k]) {
+          f = setInterval(function() {
+              h = a[k];   
+              if (!h) {
+                  clearInterval(f);
+                  e.endloading();
+                  return !1;
+              }
+              if ("images" === c && l > 0) {
+                  if (h && v === h.AMOS_ID)
+                    return !1;
+
+                  v = h.AMOS_ID || null; 
+                  console.dir(h);   
+                  //var material = h.MATERIAL_REF.replace(' ','');
+                  p = new Image, q = "http://189.126.197.169/img/small/small_P11JF0157306705.jpg", $(p).load(function() {
+                      if (!l > 0)
+                          return !1;
+                      g = new Box({
+                          item : h,
+                          view : c,
+                          tag : n,
+                          // reloadcart : e.proxy(e.reloadcart),
+                          detail : e.detail,
+                          url : this
+                      });
+
+                      e.active.create(g.render());
+
+                      // Mostrando (box sendo carregados)
+                      $('.bread-search').find(".spec").text(k+1+" Amostras");
+
+                      l--;
+                      k++;
+                  }).error(function() {
+
+                      if (!l > 0)
+                          return !1;
+                      var a = new Image;
+                      //console.log('Sem imagem: *' + h.MATNR + " " + h.MAKTX + " " + h.GRUPO + " " + h.SGRUPO);
+                      a.src = "http://189.126.197.169/img/small/small_NONE.jpg";
+
+                      g = new Box({
+                          item : h,
+                          view : c,
+                          tag : n,
+                          // reloadcart : e.proxy(e.reloadcart),
+                          detail : e.detail,
+                          url : a
+                      });
+                      e.active.create(g.render());
+                  }).attr("src", q);
+              } else {
+                  if (l > 0) {
+                      return g = new Box({
+                          item : h,
+                          view : c,
+                          tag : n,
+                          // reloadcart : e.proxy(e.reloadcart),
+                          detail : e.detail,
+                          modal : e.modal
+                      }), e.active.create(g.render()), $('.bread-box').find(".bread-load").text(k+1), l--, k++, !1;
+                  } else {
+                      clearInterval(f), e.endloading();
+                  }
+              }
+          }, 0.1);
+      } else {
+          return this.endloading(), !1;
+      }
+
+
+      /*var f, m, g, n, v;      
       c = c || this.view;
       n = "images" === c ? "li" : "tr";
       this.loading = !0; 
@@ -376,7 +459,7 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       } else {
           return this.endloading(), !1;
 
-      }      
+      }*/      
   },  
   stage:function() {
     var a, c;
@@ -386,11 +469,10 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
   endloading : function(a) {
       a && clearInterval(a);
       var b = this;
-      b.active.tbody.find("tr").removeClass('odd').filter(":odd").addClass("odd");
-      b.active.tbody.find("input").parent().addClass("ajust");
-      b.active.itens.fadeIn(function() {
+      b.getloading(!1);
+      /*b.content.itens.fadeIn(function() {
           b.getloading(!1);
-      });            
+      });  */          
   },
 
     /**

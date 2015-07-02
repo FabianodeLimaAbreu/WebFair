@@ -31,6 +31,7 @@
 .s-eight-five{width: 85px;}
 .m-ten{margin-bottom: 10px;}
 .m-right{margin-right: 10px;}
+.m-left{margin-left: 10px}
 
 html, body{
 	height:100%;
@@ -455,7 +456,7 @@ header{
 			background: #fff url(../images/sprite.png);
 			width: 15px;
 			height: 15px;
-			background-position: -29px -1218px;
+			background-position: -4px -1403px;
 			border: 1px solid #e5ecef;
 			border-radius: 50%;
 			padding: 14px;
@@ -601,6 +602,16 @@ header{
 		width: 405px;
 		right: -100px;
 	}
+	&.notepadmess{
+		top:45px;
+		right: -180px;
+	}
+	&.rightless{
+		top: 32px;
+		&:before{
+			right: 70px;
+		}
+	}
 	&.legend{
 		top: 75px;
 		right: -175px;
@@ -633,6 +644,7 @@ header{
 	}
 	&.col-small{
 		max-width: 201px;
+		top: 45px;
 	}
 	&.col-large{
 		max-width: 405px;
@@ -1547,6 +1559,9 @@ form.search{
 				line-height: 1.6em;
 				font-size: 0.9em;
 				color: @dark-text;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
 			}
 		}
 	}
