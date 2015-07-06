@@ -652,7 +652,7 @@ header .logo-print {
 }
 .tooltip-content.col-small {
   max-width: 201px;
-  top: 45px;
+  top: 41px;
 }
 .tooltip-content.col-large {
   max-width: 405px;
@@ -2169,8 +2169,8 @@ form.search {
   height: 15px;
   background-position: -10px -1410px;
   display: block;
-  left: 7px;
-  top: 6px;
+  left: 0;
+  top: 0;
 }
 .icon.bselection:hover:after {
   width: 15px;
@@ -2192,8 +2192,8 @@ form.search {
   height: 15px;
   background-position: -10px -1310px;
   display: block;
-  left: 7px;
-  top: 6px;
+  left: 0;
+  top: 0;
 }
 .icon.bselection-edit:hover:after {
   width: 15px;
@@ -2386,6 +2386,9 @@ form.search {
   top: 4px;
   margin-left: 5px;
 }
+.thumbnail .icon {
+  display: none;
+}
 .thumbnail .icon.bannex,
 .thumbnail .icon.bselection-edit,
 .thumbnail .icon.bselection {
@@ -2402,36 +2405,37 @@ form.search {
   background: #fff;
   border: none;
 }
-.thumbnail .icon.bselection-edit {
+.thumbnail .icon.bselection-edit:after,
+.thumbnail .icon.bselection:after {
+  display: block;
+  left: 2px;
+}
+.thumbnail .icon.bselection-edit:hover,
+.thumbnail .icon.bselection:hover {
+  background: #555555;
+}
+.thumbnail .icon.bselection-edit.sel,
+.thumbnail .icon.bselection.sel {
+  background: #555555;
+}
+.thumbnail .icon.bselection-edit.sel:hover,
+.thumbnail .icon.bselection.sel:hover {
   background: #fff;
-  border: none;
 }
 .thumbnail .icon.bselection-edit:after {
   width: 15px;
   height: 15px;
   background-position: -10px -1310px;
-  display: block;
-  left: 2px;
-  top: 0;
-}
-.thumbnail .icon.bselection-edit:hover {
-  background: #555555;
 }
 .thumbnail .icon.bselection-edit:hover:after {
   width: 15px;
   height: 15px;
   background-position: -35px -1310px;
 }
-.thumbnail .icon.bselection-edit.sel {
-  background: #555555;
-}
 .thumbnail .icon.bselection-edit.sel:after {
   width: 15px;
   height: 15px;
   background-position: -35px -1310px;
-}
-.thumbnail .icon.bselection-edit.sel:hover {
-  background: #fff;
 }
 .thumbnail .icon.bselection-edit.sel:hover:after {
   width: 15px;
@@ -2442,6 +2446,10 @@ form.search {
   margin: 0;
   width: 16.6%;
   float: left;
+}
+.select .thumbnail .icon,
+.edit .thumbnail .icon {
+  display: block;
 }
 .photo-buttons .caption-icons-icon {
   margin: 0;

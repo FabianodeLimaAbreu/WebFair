@@ -193,8 +193,8 @@
 		&:after{
 			.item_select;
 			display: block;
-			left: 7px;
-  			top: 6px;
+			left: 0;
+  			top: 0;
 		}
 		&:hover{
 			&:after{
@@ -216,8 +216,8 @@
 		&:after{
 			.insiders-edit_blue;
 			display: block;
-			left: 7px;
-  			top: 6px;
+			left: 0;
+  			top: 0;
 		}
 		&:hover{
 			&:after{
@@ -427,6 +427,7 @@
 }
 .thumbnail{
 	.icon{
+		display: none;
 		&.bannex,&.bselection-edit,&.bselection{
 			top: 10px;
 			right: 10px;
@@ -439,29 +440,34 @@
 		&.bselection-edit,&.bselection{
 			background: #fff;
 			border:none;
-		}
-		&.bselection-edit{
-			background: #fff;
-			border:none;
 			&:after{
-				.insiders-edit_blue;
 				display: block;
 				left: 2px;
-				top: 0;
 			}
 			&:hover{
 				background: @inative-itens;
+			}
+			&.sel{
+				background: @inative-itens;
+				&:hover{
+					background: #fff;
+				}
+			}
+		}
+		&.bselection-edit{
+			&:after{
+				.insiders-edit_blue;
+			}
+			&:hover{
 				&:after{
 					.insiders-edit_gray;
 				}
 			}
 			&.sel{
-				background: @inative-itens;
 				&:after{
 					.insiders-edit_gray;
 				}
 				&:hover{
-					background: #fff;
 					&:after{
 						.insiders-edit_blue;
 					}
@@ -473,6 +479,14 @@
 		margin: 0;
 		width: 16.6%;
 		float: left;
+	}
+}
+
+.select,.edit{
+	.thumbnail{
+		.icon{
+			display: block;
+		}
 	}
 }
 
