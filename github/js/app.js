@@ -31,6 +31,7 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       ".nav-menu a":"menuopt",
       "header":"header",
       ".content":"contentEl",
+      ".spotlight":"spotEl",
       "#wrap .mask":"maskEl",
       //".form-control":"searchEl",
       //".right-list button":"viewBtn",
@@ -47,11 +48,14 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
     events: {      
       "click .changeview button":"changeview",
       "click .tooltip.borderby .tooltip-item":"sortItems",
-      "click .bselect":"selectItems",
+      "click .bsel":"selectItems",
       "click .btrash-big":'deleteNote',
       "click .bfav":'actionHeart',
       "click .bfisica":'actionFlag',
       "click .bhomologado":'actionHomolog',
+      "change .countries": "changeCountries",
+      "keyup .forn": "getSpot",
+      "change .fair":"changeFair"
       /*"submit .search":"submit",
       "click button.icon.go_back_default":"goBack",
       "click button.close":"getOut"*/
@@ -64,9 +68,14 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       this.fdata = [];
       this.loading=!1;
       this.callback=null;
+      this.bfair;
+      this.bforn;
 
       //Var to storage the basic data
-      this.locals=[];
+      this.fair=[];
+      this.cities=[];
+      this.forn=[];
+      this.fairval=0;
 
 
 
@@ -76,6 +85,7 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       this.searchname="";*/
       this.breadarr = [];
       this.content = new Content({el:this.contentEl, /*bread:this.breadEl, type:this.usr.TIPO*/});
+      //this.spotlight = new Spotlight({el: this.spotEl});
       //this.modal = new Modal({el:this.modalEl});
       //this.detail = new Detail({el:this.detailEl, breadEl:this.breadEl,getloading:this.proxy(this.getloading), setloading:this.proxy(this.setloading),stage:this.proxy(this.stage), body:this.el,getfdata:this.proxy(this.getfdata)});
 
@@ -87,7 +97,12 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       
       this.el.find("#wrap").removeClass("hide");
 
-
+      if(!this.fair.length){
+        this.callService("local",'<FEIR_COD></FEIR_COD>','<PAIS_COD></PAIS_COD>','<REGI_COD></REGI_COD>');
+      }
+      /*if(!this.forn.length){
+        this.callService("fornecedores",'<FEIR_COD></FEIR_COD>','<PAIS_COD></PAIS_COD>','<REGI_COD></REGI_COD>');
+      }*/
       // this.spotlight = new Spotlight({el:this.spotEl});
       this.routes({
         "":function() {
@@ -97,7 +112,6 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
           var context=this;
           this.page ="amostras";
           this.writePage(this.page);
-          
         },
         "fornecedor":function(){
           var context=this;
@@ -128,49 +142,6 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
           alert(a.code);
           //this.detail.reload(a.code);
         }
-
-        /*"search/*loja/*area/*code":function(a){
-          this.setMenu(a.loja.toUpperCase());
-          this.mode = "artigos-pai/"+a.loja+"/"+a.area+"/"+a.code;
-          this.loja=a.loja.toUpperCase();
-          this.area = a.area;
-          this.code = a.code;
-          this.searchEl.find(".text").val(this.code).focus();
-          this.searchEl.trigger('submit');
-        },
-        "artigos-pai/*loja/*area/*code":function(a){
-          this.reset();
-          $(".detail").hide();
-          this.setMenu(a.loja.toUpperCase());
-          this.mode = "artigos-pai/"+a.loja+"/"+a.area+"/"+a.code;
-          this.loja = a.loja.toUpperCase();
-          this.area = a.area;
-          this.code = a.code;
-          this.father=!0;
-          $('body').removeClass().addClass('pai');
-          this.searchEl.find(".text").val(a.code).focus();
-          this.searchEl.trigger('submit');
-        },
-        "artigos-filho/*loja/*artigo/*code":function(a){
-          this.reset();
-          $(".detail").hide();
-
-          this.setMenu(a.loja);
-          this.code = a.code;
-          this.artigo = a.artigo;
-          this.loja=a.loja;
-          this.father=!1;
-          this.mode = "artigos-filho/"+a.loja+"/"+a.artigo+"/"+a.code;
-          this.searchEl.find(".text").val(a.code).focus();
-          $('body').removeClass().addClass('filho');
-          this.searchEl.trigger('submit');
-        },
-        "detail/*loja/*tipo/*code" : function(a) {
-          this.detail.reload(!0,a.loja,a.tipo,a.code);
-        },
-        "detail/*tipo/*code" : function(a) {
-          this.detail.reload(!0,!1,a.tipo, a.code);
-        }*/
       });
     },
 
@@ -193,18 +164,29 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       var context=this;
       $("html").attr("class","").addClass(hash);
       this.container.load("pages/"+hash+".html",function( response, status, xhr){
-        if(context.page === "amostras"){
-          if(typeof context.viewBtn !== "object"){
+        switch(context.page){
+          case "amostras":
             context.viewBtn=$(".changeview button");
             context.order_box=$(".tooltip.borderby");
-            context.locals=$(".locals");
-          }
-          context.submit("locals");
-          //context.submit(context.page,10,4200000,1,20);
+            context.bfair=$(".fair");
+            context.bforn=$(".forn");
+            context.createComponent(context.fair,context.bfair,'fair');
+            //context.callService("fornecedores",'<FORN_DESC></FORN_DESC>','<FEIR_COD></FEIR_COD>','<CREATE_DATE_I>1900-10-17</CREATE_DATE_I>','<CREATE_DATE_F>2020-10-17</CREATE_DATE_F>',20);
+            //context.callService(context.page,"<FEIR_COD>10</FEIR_COD>","<FORN_ID>4200000</FORN_ID>",1,20);
+            break;
+          case "fornecedor":
+            context.bfair=$(".fair");
+            context.createComponent(context.fair,context.bfair,'fair');
+            //console.dir(context.fair);
+            break;
+          case "local":
+            context.bcity=$(".city");
+            context.callService(context.page,"<FEIR_COD></FEIR_COD>","<PAIS_COD>BR</PAIS_COD>","<REGI_COD>SP</REGI_COD>");
+            break;
+          default:
+            alert("dssda");
         }
-        else{
-          context.submit("locals");
-        }
+
         //context.reset();
       });
     },
@@ -259,27 +241,39 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
         }        
       });
     },
-    submit:function(name,a,b,c,d){
+    callService:function(name,a,b,c,d,e){
       var core=this;
       var soapRequest=[
         {
           //FEIR_COD e FORN_ID are optional fields
           'name':'amostras',
-          'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GetSamples xmlns="http://tempuri.org/"><FEIR_COD>'+a+'</FEIR_COD><FORN_ID>'+b+'</FORN_ID><LINHA_I>'+c+'</LINHA_I><LINHA_F>'+d+'</LINHA_F></GetSamples></soap:Body></soap:Envelope>',
+          'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarAmostras xmlns="http://tempuri.org/">'+a+''+b+'<LINHA_I>1</LINHA_I><LINHA_F>20</LINHA_F></ListarAmostras></soap:Body></soap:Envelope>',
           callback:function(data,req){
             core.convertData(data,req,name);
           }
         },
         {
           'name':'delete',
-          'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><SetSampleNotes xmlns="http://tempuri.org/"><note><NOTA_ID>'+a+'</NOTA_ID><USU_COD>'+b+'</USU_COD></note><action>D</action></SetSampleNotes></soap:Body></soap:Envelope>',
-          callback:function(){
-            core.ok();
+          'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarAnotacao xmlns="http://tempuri.org/"><note><NOTA_ID>'+a+'</NOTA_ID><USU_COD>'+b+'</USU_COD><PLAT_ID>2</PLAT_ID><CREATE_DATE>2016-07-08</CREATE_DATE></note><action>D</action></GravarAnotacao></soap:Body></soap:Envelope>',
+          'callback':null
+        },
+        {
+          'name':'local',
+          'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFeiras xmlns="http://tempuri.org/">'+a+''+b+''+c+'</ListarFeiras></soap:Body></soap:Envelope>',
+          callback:function(data,req){
+            core.convertData(data,req,name);
           }
         },
         {
-          'name':'locals',
-          'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GetLocals xmlns="http://tempuri.org/" /></soap:Body></soap:Envelope>',
+          'name':'fornecedores',
+          'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedores xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+'<LINHA_I>1</LINHA_I><LINHA_F>'+e+'</LINHA_F></ListarFornecedores></soap:Body></soap:Envelope>',
+          callback:function(data,req){
+            core.convertData(data,req,name);
+          }
+        },
+        {
+          'name':'cities',
+          'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarRegioes xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+'</ListarRegioes></soap:Body></soap:Envelope>',
           callback:function(data,req){
             core.convertData(data,req,name);
           }
@@ -312,6 +306,7 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       this.content.changeview(this.view);
       this.fdata = a.sortBy("MAKTX").unique();
       this.content.page = 0;
+      //console.dir(this.fdata);
       /*this.setBreadcrumb(a,val);
       this.breadEl.find(".bread-load").text(0);
 
@@ -326,38 +321,56 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       //this.content.create(this.fdata[0]);
       this.createbox(this.fdata, this.content.page, !0);    
     },
-    ok:function(){
-
-    },
     callRequest:function(data, status, req){
       if (status == "success") {
         if(this.callback && "function" === typeof this.callback){
           this.callback(data,req);
         }
       }
-      //if(this.callback && "function" === typeof this.callback){
-          
-        //}
-      //this.callback;
     },
     convertData:function(data,req,what){
-      if(this.page === "amostras"){
-        if(what === "amostras"){
+      switch(what){
+        case "amostras":
           this.fdata=jQuery.parseJSON($(req.responseXML).text()).sortBy('AMOS_DESC').unique();
           this.setdata(this.fdata);
-        }
-        else{
-          this.fdata=jQuery.parseJSON($(req.responseXML).text()).sortBy('FEIR_DESC').unique();
-          this.createComponent(this.fdata,this.locals);
-        }
+          break;
+        case "local":
+          this.fair=jQuery.parseJSON($(req.responseXML).text()).sortBy('FEIR_DESC').unique();
+          
+          break;
+        case "fornecedores":
+          this.forn=jQuery.parseJSON($(req.responseXML).text()).sortBy('FORN_DESC').unique();
+          this.createComponent(this.forn,this.bforn,what);
+          break;
+        case "cities":
+          this.cities=jQuery.parseJSON($(req.responseXML).text());//.sortBy('FEIR_DESC').unique();
+          this.createComponent(this.cities,this.bcity,what);
+          break;
+        default:
       }
     },
-    createComponent:function(data,comp){
-      var i,html="<option value='Local'>Local de Coleta: </option>";
+    createComponent:function(data,comp,what){
       console.dir(data);
-      console.dir(comp);
-      for(i=0;i<data.length;i++){
-          html+="<option value='"+data[i].FEIR_COD.replace("         ","").replace("        ","")+"'>"+data[i].FEIR_DESC+"</option>";
+      var i,html="";
+      switch (what){
+        case "fair":
+          html+="<option value='0'>Local de Coleta: </option>";
+          for(i=0;i<data.length;i++){
+            html+="<option value='"+data[i].FEIR_COD.replace("         ","").replace("        ","")+"'>"+data[i].FEIR_DESC+"</option>";
+          }
+          break;
+        case "fornecedores":
+          html+="<option value='Local'>Fornecedores: </option>";
+          for(i=0;i<data.length;i++){
+            html+="<option value='"+data[i].FORN_ID+"'>"+data[i].FORN_DESC+"</option>";
+          }
+          break;
+        case "cities":
+          comp.empty();
+          html+="<option value='Local'>Cidades: </option>";
+          for(i=0;i<data.length;i++){
+            html+="<option value='"+data[i].REGI_COD+"'>"+data[i].REGI_DESC+"</option>";
+          }
       }
       comp.html(html);
     },
@@ -458,7 +471,7 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
   deleteNote:function(a){
     a.preventDefault();
     var obj=$(a.target);
-    this.submit("delete",obj.attr("id"),obj.attr("name"));
+    this.callService("delete",obj.attr("id"),obj.attr("name"));
     obj.closest("li").fadeOut();
   },
   actionHeart:function(a){
@@ -501,7 +514,16 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
     $(".thumbnail .icon").attr("class","icon").addClass($(a.target).attr("name"));
     $("html").attr("class","amostras").addClass("select");
   },
-
+  changeCountries: function(a){
+    this.callService("cities",'<PAIS_COD>'+$(a.target).find("option:selected").val()+'</PAIS_COD>','<PAIS_DESC></PAIS_DESC>','<REGI_COD></REGI_COD>','<REGI_DESC></REGI_DESC>');
+  },
+  changeFair:function(a){
+    this.fairval=$(a.target).find("option:selected").val();
+  },
+  getSpot:function(a){
+    //13 === a.keyCode ? (this.spotlight.close(), this.searchEl.trigger("submit")) : (this.filter.close(), 1 < a.target.value.length ? this.spotlight.open(a) : this.spotlight.close());
+    return !1;
+  },
     /**
     * `Set the loading state`
     * @memberOf App#

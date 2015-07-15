@@ -1,0 +1,59 @@
+<html>
+    <head>
+        <title>Calling Web Service from jQuery</title>
+        <script type="text/javascript" src="../js/lib/jquery-1.10.1.min.js"></script>
+        <script type="text/javascript" src="jquery.soap.js"></script>
+        <script type="text/javascript">
+            function strToJson(str) {
+                eval("var x = " + str + ";");
+                return JSON.stringify(x);
+            }
+            $(document).ready(function () {
+              $("#btnCallWebService").click(function (event) {
+                  var wsUrl = "../../WebService.asmx?op=GravarFornecedorProfile ";
+
+
+                  var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFornecedorProfile xmlns="http://tempuri.org/"><Forn_ID>777</Forn_ID><profiles><Profile><FAB_COD>1</FAB_COD><PERF_COD>3</PERF_COD><TP_FAB_COD>1</TP_FAB_COD></Profile><Profile><FAB_COD>0</FAB_COD><PERF_COD>1</PERF_COD><TP_FAB_COD>0</TP_FAB_COD></Profile></profiles></GravarFornecedorProfile></soap:Body></soap:Envelope>';
+
+                  //Serviço com fabrica
+                  //var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFornecedorProfile xmlns="http://tempuri.org/"><Forn_ID>4200000</Forn_ID><profiles><Profile><FAB_COD>1</FAB_COD><PERF_COD>3</PERF_COD><TP_FAB_COD>1</TP_FAB_COD></Profile></profiles></GravarFornecedorProfile></soap:Body></soap:Envelope>';
+
+
+                  //NAO ENVIANDO FABRICA- passo FAB_COD e TP_FAB_COD como 0
+                  //var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFornecedorProfile xmlns="http://tempuri.org/"><Forn_ID>4200000</Forn_ID><profiles><Profile><FAB_COD>0</FAB_COD><PERF_COD>1</PERF_COD><TP_FAB_COD>0</TP_FAB_COD></Profile></profiles></GravarFornecedorProfile></soap:Body></soap:Envelope>';
+
+                  $.support.cors=true;
+                  $.ajax({
+                           type: "POST",
+                           url: wsUrl,
+                           contentType: "text/xml; charset=utf-8",
+                           dataType: "xml",
+                           crossDomain: true,
+                           data: soapRequest,
+                        success: processSuccess,
+                         error: processError
+                         });
+                  });
+            });
+            
+            function processSuccess(data, status, req) {
+                if (status == "success") {
+                    $("#response").text($(req.responseXML).text());
+                    console.dir(jQuery.parseJSON($(req.responseXML).text()));
+
+                }
+            }
+            
+            function processError(data, status, req) {
+                alert(req.responseText + " " + status);
+            }            
+            </script>
+    </head>
+    <body>
+        <h3>
+            Calling Web Services with jQuery/AJAX
+        </h3>
+        <input id="btnCallWebService" value="Call web service" type="button" />
+        <div id="response"></div>
+    </body>
+</html>

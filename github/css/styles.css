@@ -1295,6 +1295,7 @@ form.search {
 .overview {
   height: 700px;
   padding-bottom: 80px;
+  display: none;
 }
 .overview .viewport {
   position: relative;
@@ -2132,7 +2133,7 @@ form.search {
   background: #fff;
   z-index: 9;
   border: 1px solid #e5ecef;
-  top: 8px;
+  top: 0;
 }
 .icon.bselection-edit:hover,
 .icon.bselection:hover,
@@ -2501,6 +2502,9 @@ th {
   width: 1805px;
 }
 .hide {
+  display: none;
+}
+.floatThead {
   display: none;
 }
 /*****************

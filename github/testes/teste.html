@@ -10,9 +10,14 @@
             }
             $(document).ready(function () {
               $("#btnCallWebService").click(function (event) {
-                  var wsUrl = "../../WebService.asmx?op=GetSamples";
+                  var wsUrl = "../../WebService.asmx?op=ListarAmostras";
                   
-                  var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GetSamples xmlns="http://tempuri.org/"><FEIR_COD>10</FEIR_COD><FORN_ID>4200000</FORN_ID><LINHA_I>1</LINHA_I><LINHA_F>20</LINHA_F></GetSamples></soap:Body></soap:Envelope>';
+                  var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarAmostras xmlns="http://tempuri.org/"><AMOS_DESC></AMOS_DESC><FORN_DESC></FORN_DESC><FEIR_COD>11</FEIR_COD><CREATE_DATE_I>1900-07-05</CREATE_DATE_I><CREATE_DATE_F>2050-10-10</CREATE_DATE_F><LINHA_I>1</LINHA_I><LINHA_F>20</LINHA_F></ListarAmostras></soap:Body></soap:Envelope>';
+                                            
+                                            //<CREATE_DATE_I>2015-07-05</CREATE_DATE_I><CREATE_DATE_F>2015-10-10</CREATE_DATE_F>
+
+                  //var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarAmostras xmlns="http://tempuri.org/"><AMOS_DESC></AMOS_DESC><FORN_DESC></FORN_DESC><FEIR_COD>10</FEIR_COD><FORN_ID>4200000</FORN_ID><LINHA_I>1</LINHA_I><LINHA_F>20</LINHA_F></ListarAmostras></soap:Body></soap:Envelope>';
+
                   $.support.cors=true;
                   $.ajax({
                            type: "POST",
