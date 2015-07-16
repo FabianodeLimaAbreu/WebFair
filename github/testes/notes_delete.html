@@ -10,10 +10,10 @@
             }
             $(document).ready(function () {
               $("#btnCallWebService").click(function (event) {
-                  var wsUrl = "../../WebService.asmx?op=GravarAnotacao";
-                  //var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarAnotacao xmlns="http://tempuri.org/"><note><NOTA_ID>2</NOTA_ID><USU_COD>41</USU_COD><PLAT_ID>2</PLAT_ID><CREATE_DATE>2016-07-08</CREATE_DATE></note><action>D</action></GravarAnotacao></soap:Body></soap:Envelope>';
+                  var wsUrl = "../../WebService.asmx?op=SetSampleNotes";
+                  var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><SetSampleNotes xmlns="http://tempuri.org/"><note><NOTA_ID>3</NOTA_ID><USU_COD>41</USU_COD></note><action>D</action></SetSampleNotes></soap:Body></soap:Envelope>';
 
-                  var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><SetSampleNotes xmlns="http://tempuri.org/"><note><NOTA_ID>3</NOTA_ID><OBJ_ID>101000001</OBJ_ID><TP_NOTA_ID>2</TP_NOTA_ID><USU_COD>41</USU_COD><PLAT_ID>2</PLAT_ID><NOTA_DESC>Teste de anotação</NOTA_DESC></note><action>I</action></SetSampleNotes></soap:Body></soap:Envelope>';
+                  //var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><SetSampleNotes xmlns="http://tempuri.org/"><note><NOTA_ID>3</NOTA_ID><OBJ_ID>101000001</OBJ_ID><TP_NOTA_ID>2</TP_NOTA_ID><USU_COD>41</USU_COD><NOTA_DESC>Teste de anotação</NOTA_DESC></note><action>D</action></SetSampleNotes></soap:Body></soap:Envelope>';
                   $.support.cors=true;
                   $.ajax({
                            type: "POST",

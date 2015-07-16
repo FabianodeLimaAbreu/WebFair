@@ -152,7 +152,7 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
     events: {      
       "click .changeview button":"changeview",
       "click .tooltip.borderby .tooltip-item":"sortItems",
-      "click .bsel":"selectItems",
+      "click .bselect":"selectItems",
       "click .btrash-big":'deleteNote',
       "click .bfav":'actionHeart',
       "click .bfisica":'actionFlag',
@@ -169,11 +169,9 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       this.fdata = [];
       this.loading=!1;
       this.callback=null;
-      this.blocals;
 
       //Var to storage the basic data
       this.locals=[];
-      this.cities=[];
 
 
 
@@ -194,9 +192,7 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       
       this.el.find("#wrap").removeClass("hide");
 
-      if(!this.locals.length){
-        this.submit("locals",'&lt;FEIR_COD>&lt;/FEIR_COD>','&lt;PAIS_COD>&lt;/PAIS_COD>','&lt;REGI_COD>&lt;/REGI_COD>');
-      }
+
       // this.spotlight = new Spotlight({el:this.spotEl});
       this.routes({
         "":function() {
@@ -206,6 +202,7 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
           var context=this;
           this.page ="amostras";
           this.writePage(this.page);
+          
         },
         "fornecedor":function(){
           var context=this;
@@ -236,6 +233,49 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
           alert(a.code);
           //this.detail.reload(a.code);
         }
+
+        /*"search/*loja/*area/*code":function(a){
+          this.setMenu(a.loja.toUpperCase());
+          this.mode = "artigos-pai/"+a.loja+"/"+a.area+"/"+a.code;
+          this.loja=a.loja.toUpperCase();
+          this.area = a.area;
+          this.code = a.code;
+          this.searchEl.find(".text").val(this.code).focus();
+          this.searchEl.trigger('submit');
+        },
+        "artigos-pai/*loja/*area/*code":function(a){
+          this.reset();
+          $(".detail").hide();
+          this.setMenu(a.loja.toUpperCase());
+          this.mode = "artigos-pai/"+a.loja+"/"+a.area+"/"+a.code;
+          this.loja = a.loja.toUpperCase();
+          this.area = a.area;
+          this.code = a.code;
+          this.father=!0;
+          $('body').removeClass().addClass('pai');
+          this.searchEl.find(".text").val(a.code).focus();
+          this.searchEl.trigger('submit');
+        },
+        "artigos-filho/*loja/*artigo/*code":function(a){
+          this.reset();
+          $(".detail").hide();
+
+          this.setMenu(a.loja);
+          this.code = a.code;
+          this.artigo = a.artigo;
+          this.loja=a.loja;
+          this.father=!1;
+          this.mode = "artigos-filho/"+a.loja+"/"+a.artigo+"/"+a.code;
+          this.searchEl.find(".text").val(a.code).focus();
+          $('body').removeClass().addClass('filho');
+          this.searchEl.trigger('submit');
+        },
+        "detail/*loja/*tipo/*code" : function(a) {
+          this.detail.reload(!0,a.loja,a.tipo,a.code);
+        },
+        "detail/*tipo/*code" : function(a) {
+          this.detail.reload(!0,!1,a.tipo, a.code);
+        }*/
       });
     },
 
@@ -258,30 +298,18 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       var context=this;
       $("html").attr("class","").addClass(hash);
       this.container.load("pages/"+hash+".html",function( response, status, xhr){
-        switch(context.page){
-          case "amostras":
+        if(context.page === "amostras"){
+          if(typeof context.viewBtn !== "object"){
             context.viewBtn=$(".changeview button");
             context.order_box=$(".tooltip.borderby");
-            context.blocals=$(".locals");
-            context.createComponent(context.locals,context.blocals,'locals');
-            context.submit(context.page,"&lt;FEIR_COD>10&lt;/FEIR_COD>","&lt;FORN_ID>4200000&lt;/FORN_ID>",1,20);
-            break;
-          case "fornecedor":
-            context.blocals=$(".locals");
-            context.createComponent(context.locals,context.blocals,'locals');
-            console.dir(context.locals);
-            break;
-          case "local":
-            context.bcity=$(".city");
-            if(!context.cities.length){
-              context.submit("cities");
-            }
-
-            break;
-          default:
-            alert("dssda");
+            context.locals=$(".locals");
+          }
+          context.submit("locals");
+          //context.submit(context.page,10,4200000,1,20);
         }
-
+        else{
+          context.submit("locals");
+        }
         //context.reset();
       });
     },
@@ -342,26 +370,21 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
         {
           //FEIR_COD e FORN_ID are optional fields
           'name':'amostras',
-          'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;ListarAmostras xmlns="http://tempuri.org/">'+a+''+b+'&lt;LINHA_I>1&lt;/LINHA_I>&lt;LINHA_F>20&lt;/LINHA_F>&lt;/ListarAmostras>&lt;/soap:Body>&lt;/soap:Envelope>',
+          'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;GetSamples xmlns="http://tempuri.org/">&lt;FEIR_COD>'+a+'&lt;/FEIR_COD>&lt;FORN_ID>'+b+'&lt;/FORN_ID>&lt;LINHA_I>'+c+'&lt;/LINHA_I>&lt;LINHA_F>'+d+'&lt;/LINHA_F>&lt;/GetSamples>&lt;/soap:Body>&lt;/soap:Envelope>',
           callback:function(data,req){
             core.convertData(data,req,name);
           }
         },
         {
           'name':'delete',
-          'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;GravarAnotacao xmlns="http://tempuri.org/">&lt;note>&lt;NOTA_ID>'+a+'&lt;/NOTA_ID>&lt;USU_COD>'+b+'&lt;/USU_COD>&lt;PLAT_ID>2&lt;/PLAT_ID>&lt;CREATE_DATE>2016-07-08&lt;/CREATE_DATE>&lt;/note>&lt;action>D&lt;/action>&lt;/GravarAnotacao>&lt;/soap:Body>&lt;/soap:Envelope>',
-          'callback':null
-        },
-        {
-          'name':'locals',
-          'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;ListarFeiras xmlns="http://tempuri.org/">'+a+''+b+''+c+'&lt;/ListarFeiras>&lt;/soap:Body>&lt;/soap:Envelope>',
-          callback:function(data,req){
-            core.convertData(data,req,name);
+          'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;SetSampleNotes xmlns="http://tempuri.org/">&lt;note>&lt;NOTA_ID>'+a+'&lt;/NOTA_ID>&lt;USU_COD>'+b+'&lt;/USU_COD>&lt;/note>&lt;action>D&lt;/action>&lt;/SetSampleNotes>&lt;/soap:Body>&lt;/soap:Envelope>',
+          callback:function(){
+            core.ok();
           }
         },
         {
-          'name':'cities',
-          'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;ListarRegioes xmlns="http://tempuri.org/">&lt;PAIS_COD>&lt;/PAIS_COD>&lt;PAIS_DESC>&lt;/PAIS_DESC>&lt;REGI_COD>&lt;/REGI_COD>&lt;REGI_DESC>&lt;/REGI_DESC>&lt;/ListarRegioes>&lt;/soap:Body>&lt;/soap:Envelope>',
+          'name':'locals',
+          'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;GetLocals xmlns="http://tempuri.org/" />&lt;/soap:Body>&lt;/soap:Envelope>',
           callback:function(data,req){
             core.convertData(data,req,name);
           }
@@ -404,10 +427,12 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       this.content.page = 0;
       
       b ? (this.data = this.fdata || this.data) : this.fdata = this.data;*/
-      console.dir(this.fdata);
       this.content.changeview(this.view);
       //this.content.create(this.fdata[0]);
       this.createbox(this.fdata, this.content.page, !0);    
+    },
+    ok:function(){
+
     },
     callRequest:function(data, status, req){
       if (status == "success") {
@@ -415,40 +440,29 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
           this.callback(data,req);
         }
       }
+      //if(this.callback &amp;&amp; "function" === typeof this.callback){
+          
+        //}
+      //this.callback;
     },
     convertData:function(data,req,what){
-      switch(what){
-        case "amostras":
+      if(this.page === "amostras"){
+        if(what === "amostras"){
           this.fdata=jQuery.parseJSON($(req.responseXML).text()).sortBy('AMOS_DESC').unique();
           this.setdata(this.fdata);
-          break;
-        case "locals":
-          this.locals=jQuery.parseJSON($(req.responseXML).text()).sortBy('FEIR_DESC').unique();
-          break;
-        case "cities":
-          this.cities=jQuery.parseJSON($(req.responseXML).text());//.sortBy('FEIR_DESC').unique();
-          this.createComponent(this.cities,this.bcity,what);
-          break;
-        default:
-          console.log("algo errado");
+        }
+        else{
+          this.fdata=jQuery.parseJSON($(req.responseXML).text()).sortBy('FEIR_DESC').unique();
+          this.createComponent(this.fdata,this.locals);
+        }
       }
     },
-    createComponent:function(data,comp,what){
-      var i,html="";
+    createComponent:function(data,comp){
+      var i,html="&lt;option value='Local'>Local de Coleta: &lt;/option>";
       console.dir(data);
       console.dir(comp);
-      switch (what){
-        case "locals":
-          html+="&lt;option value='Local'>Local de Coleta: &lt;/option>";
-          for(i=0;i&lt;data.length;i++){
-            html+="&lt;option value='"+data[i].FEIR_COD.replace("         ","").replace("        ","")+"'>"+data[i].FEIR_DESC+"&lt;/option>";
-          }
-          break;
-        case "cities":
-          html+="&lt;option value='Local'>Cidades: &lt;/option>";
-          for(i=0;i&lt;data.length;i++){
-            html+="&lt;option value='"+data[i].REGI_COD+"'>"+data[i].REGI_DESC+"&lt;/option>";
-          }
+      for(i=0;i&lt;data.length;i++){
+          html+="&lt;option value='"+data[i].FEIR_COD.replace("         ","").replace("        ","")+"'>"+data[i].FEIR_DESC+"&lt;/option>";
       }
       comp.html(html);
     },
@@ -666,7 +680,7 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Mon Jul 13th 2015 using the <a
+		on Mon Jul 6th 2015 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>

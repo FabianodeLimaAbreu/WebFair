@@ -130,7 +130,7 @@ window.Box = Spine.Controller.sub({init:function() {
       //result+="<li><button type='button' class='caption-icons-icon justit bnote'></button></li>";
       result+="<li class='tooltip tooltip-selectable'><button type='button' class='caption-icons-icon justit bnote'></button><ul class='tooltip-content notepad notepadmess rightless'><li class='tooltip-title'><p class='tooltip-item'>Anotações</p></li>";
       for(i=0;i<a.NOTES.length;i++){
-        result+="<li><article><div class='notepad-note blockquote'><p>"+a.NOTES[i].CREATE_DATE+/*a.NOTES[i].CREATE_DATE*/" | "+ a.NOTES[i].USU_NOME+" | "+a.NOTES[i].OBJ_ID+"</p><p>"+a.NOTES[i].SEGM_DESC+" - Assunto:</p><p>"+a.NOTES[i].NOTA_DESC+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+a.NOTES[i].NOTA_ID+"' name='"+a.NOTES[i].USU_COD+"'></button></div></article></li>"
+        result+="<li><article><div class='notepad-note blockquote'><p>"+"12/15/2015"+/*a.NOTES[i].CREATE_DATE*/" | "+ a.NOTES[i].USU_NOME+" | "+a.NOTES[i].OBJ_ID+"</p><p>"+a.NOTES[i].SEGM_DESC+" - Assunto:</p><p>"+a.NOTES[i].NOTA_DESC+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+a.NOTES[i].NOTA_ID+"' name='"+a.NOTES[i].USU_COD+"'></button></div></article></li>"
       }
       result+="</ul></li>"
     }
