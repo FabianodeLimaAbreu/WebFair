@@ -1,3 +1,87 @@
+window.Spotlight = Spine.Controller.sub({
+  elements:{
+    //dd:"buttons"
+  }, 
+  events:{
+    //"click .spotlight button":"select"
+  }, 
+  select:function(a) {
+  if("object" === typeof a) {
+    a.preventDefault(), a = $(a.target);
+  }else {
+    return!1;
+  }
+  //this.input.val(this.list + a.text()).focus().trigger("submit");
+  this.close();
+}, over:function(a) {
+  a.addClass("sel");
+  this.input.val(a.text()).focus();
+}, close:function(a) {
+  this.list = "";
+  this.id = -1;
+  this.doc.unbind("click");
+  this.el.empty().fadeOut();
+  return!1;
+}, open:function() {
+  var i,length,html="";
+  length=this.forn.length;
+  this.doc.unbind("click").bind("click", this.proxy(this.close));
+  if(2 > length) {
+      this.close();
+      return!1;
+  }
+  for(i=0;i<length;i++){
+    html+="<li><button type='button' name='"+this.forn[i].FORN_ID+"'>"+this.forn[i].FORN_DESC+"</button></li>";
+  }
+  this.el.html(html).show();
+  $(".spotlight button").bind("click",this.proxy(this.select));
+}, hint:function(a, b) {
+  console.log("fdsfds");
+  var c, d, e = [];
+  this.el.empty();
+  if(!a.length)
+    return !1;
+  this.doc.unbind("click").bind("click", this.proxy(this.close));
+  d = 26 * a.length + 10;
+  e.push("<dt style='height:" + d + "px'>Você quis dizer:</dt>");
+    for(c = 0;c < a.length;c++) {
+        e.push("<dd>" + a[c].WORD.capitalize() + "</dd>");
+    }
+    this.el.html(e.join(" ")).fadeIn();
+    this.buttons = this.el.find("dd");
+}, arrow:function(a) {
+  a = a || window.event;
+  this.buttons=$(".spotlight button");
+  this.buttons.removeClass("sel");
+  switch(a.keyCode) {
+    case 38:
+      this.id--;
+      this.id < -this.buttons.length && (this.id = 0);
+      a = this.buttons.eq(this.id);
+      this.over(a);
+      break;
+    case 40:
+      this.id++, this.id > this.buttons.length - 1 && (this.id = 0), a = this.buttons.eq(this.id), this.over(a);
+  }
+  return !1;
+}, gettips: function(a){
+    $.getJSON(nodePath + "index.js?service=SearchMaterial.svc/searchTermo/&query=" + a + "?callback=?", this.proxy(this.hint));
+}, init:function() {
+  this.forn=[];
+  this.input=null;
+  this.id = -1;
+  this.doc = $(document);
+  /*this.spot = [];
+  this.list = "";
+  this.id = 0;
+  this.input = null;
+  this.doc = $(document);
+  $.getJSON("/library/ajax/spotlight.js", this.proxy(function(a) {
+    this.spot = a;
+  }));
+  this.el.disableSelection && this.el.disableSelection();*/
+}});
+
 /**
 *@fileOverview Content's page with Modal, Content and Boxes classes
 * @module Content
@@ -127,10 +211,9 @@ window.Box = Spine.Controller.sub({init:function() {
     result+="<div class='caption'><div class='caption-upside'><ul class='caption-icons'><li><button type='button' class='caption-icons-icon justit bstatus "+status+"'></button></li><li><button type='button' class='caption-icons-icon justit bemail "+email+"'></button></li>";
     result+="<li><button type='button' class='caption-icons-icon justit bhomologado "+homologado+"'></button></li>"
     if(note){
-      //result+="<li><button type='button' class='caption-icons-icon justit bnote'></button></li>";
       result+="<li class='tooltip tooltip-selectable'><button type='button' class='caption-icons-icon justit bnote'></button><ul class='tooltip-content notepad notepadmess rightless'><li class='tooltip-title'><p class='tooltip-item'>Anotações</p></li>";
       for(i=0;i<a.NOTES.length;i++){
-        result+="<li><article><div class='notepad-note blockquote'><p>"+"12/15/2015"+/*a.NOTES[i].CREATE_DATE*/" | "+ a.NOTES[i].USU_NOME+" | "+a.NOTES[i].OBJ_ID+"</p><p>"+a.NOTES[i].SEGM_DESC+" - Assunto:</p><p>"+a.NOTES[i].NOTA_DESC+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+a.NOTES[i].NOTA_ID+"' name='"+a.NOTES[i].USU_COD+"'></button></div></article></li>"
+        result+="<li><article><div class='notepad-note blockquote'><p>"+a.NOTES[i].CREATE_DATE+/*a.NOTES[i].CREATE_DATE*/" | "+ a.NOTES[i].USU_NOME+" | "+a.NOTES[i].OBJ_ID+"</p><p>"+a.NOTES[i].SEGM_DESC+" - Assunto:</p><p>"+a.NOTES[i].NOTA_DESC+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+a.NOTES[i].NOTA_ID+"' name='"+a.NOTES[i].USU_COD+"'></button></div></article></li>"
       }
       result+="</ul></li>"
     }
@@ -145,6 +228,7 @@ window.Box = Spine.Controller.sub({init:function() {
     result+="</ul></div></div></div></a>";
     return result;
   }, list:function(a) {
+    console.dir(a);
     var homologado,note,fisica,fav,email,annex,status,result="",i;
     this.el.addClass('col col-small col-large');
     homologado= a.AMOS_HOMOLOGAR ? "has":"nothas";

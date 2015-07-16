@@ -1295,6 +1295,7 @@ form.search {
 .overview {
   height: 700px;
   padding-bottom: 80px;
+  display: none;
 }
 .overview .viewport {
   position: relative;
@@ -1508,7 +1509,7 @@ form.search {
   position: relative;
   float: left;
   padding: 4%;
-  width: 100%;
+  width: 220px;
 }
 .caption .caption-upside .caption-desc p {
   position: relative;
@@ -1875,6 +1876,33 @@ form.search {
   background: -o-linear-gradient(#eaeaea, #f6f6f6);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f6f6f6', endColorstr='#eaeaea', GradientType=0);
 }
+/******************************
+**************************************		SPOTLIGHT ******************************/
+.spotlight {
+  position: absolute;
+  top: 30px;
+  z-index: 9;
+  width: 100%;
+  height: 190px;
+  overflow-y: auto;
+  background-color: #c6c6c6;
+  display: none;
+}
+.spotlight button {
+  position: relative;
+  float: left;
+  width: 100%;
+  text-align: center;
+  outline: none;
+  border: none;
+  background-color: transparent;
+  line-height: 30px;
+  cursor: pointer;
+}
+.spotlight button:hover,
+.spotlight button.sel {
+  background-color: red;
+}
 /***********************************
 *********************************************			INTERAÇÃO ENTRE PÁGINAS ******************************/
 .detail-page .comand-container {
@@ -2132,7 +2160,7 @@ form.search {
   background: #fff;
   z-index: 9;
   border: 1px solid #e5ecef;
-  top: 8px;
+  top: 0;
 }
 .icon.bselection-edit:hover,
 .icon.bselection:hover,
@@ -2501,6 +2529,9 @@ th {
   width: 1805px;
 }
 .hide {
+  display: none;
+}
+.floatThead {
   display: none;
 }
 /*****************

@@ -103,7 +103,91 @@
 <section>
 	<article>
 		<pre
-			class="sunlight-highlight-javascript linenums">/**
+			class="sunlight-highlight-javascript linenums">window.Spotlight = Spine.Controller.sub({
+  elements:{
+    //dd:"buttons"
+  }, 
+  events:{
+    //"click .spotlight button":"select"
+  }, 
+  select:function(a) {
+  if("object" === typeof a) {
+    a.preventDefault(), a = $(a.target);
+  }else {
+    return!1;
+  }
+  //this.input.val(this.list + a.text()).focus().trigger("submit");
+  this.close();
+}, over:function(a) {
+  a.addClass("sel");
+  this.input.val(a.text()).focus();
+}, close:function(a) {
+  this.list = "";
+  this.id = -1;
+  this.doc.unbind("click");
+  this.el.empty().fadeOut();
+  return!1;
+}, open:function() {
+  var i,length,html="";
+  length=this.forn.length;
+  this.doc.unbind("click").bind("click", this.proxy(this.close));
+  if(2 > length) {
+      this.close();
+      return!1;
+  }
+  for(i=0;i&lt;length;i++){
+    html+="&lt;li>&lt;button type='button' name='"+this.forn[i].FORN_ID+"'>"+this.forn[i].FORN_DESC+"&lt;/button>&lt;/li>";
+  }
+  this.el.html(html).show();
+  $(".spotlight button").bind("click",this.proxy(this.select));
+}, hint:function(a, b) {
+  console.log("fdsfds");
+  var c, d, e = [];
+  this.el.empty();
+  if(!a.length)
+    return !1;
+  this.doc.unbind("click").bind("click", this.proxy(this.close));
+  d = 26 * a.length + 10;
+  e.push("&lt;dt style='height:" + d + "px'>Você quis dizer:&lt;/dt>");
+    for(c = 0;c &lt; a.length;c++) {
+        e.push("&lt;dd>" + a[c].WORD.capitalize() + "&lt;/dd>");
+    }
+    this.el.html(e.join(" ")).fadeIn();
+    this.buttons = this.el.find("dd");
+}, arrow:function(a) {
+  a = a || window.event;
+  this.buttons=$(".spotlight button");
+  this.buttons.removeClass("sel");
+  switch(a.keyCode) {
+    case 38:
+      this.id--;
+      this.id &lt; -this.buttons.length &amp;&amp; (this.id = 0);
+      a = this.buttons.eq(this.id);
+      this.over(a);
+      break;
+    case 40:
+      this.id++, this.id > this.buttons.length - 1 &amp;&amp; (this.id = 0), a = this.buttons.eq(this.id), this.over(a);
+  }
+  return !1;
+}, gettips: function(a){
+    $.getJSON(nodePath + "index.js?service=SearchMaterial.svc/searchTermo/&amp;query=" + a + "?callback=?", this.proxy(this.hint));
+}, init:function() {
+  this.forn=[];
+  this.input=null;
+  this.id = -1;
+  this.doc = $(document);
+  /*this.spot = [];
+  this.list = "";
+  this.id = 0;
+  this.input = null;
+  this.doc = $(document);
+  $.getJSON("/library/ajax/spotlight.js", this.proxy(function(a) {
+    this.spot = a;
+  }));
+  this.el.disableSelection &amp;&amp; this.el.disableSelection();*/
+}});
+
+/**
 *@fileOverview Content's page with Modal, Content and Boxes classes
 * @module Content
 * @module Modal
@@ -232,10 +316,9 @@ window.Box = Spine.Controller.sub({init:function() {
     result+="&lt;div class='caption'>&lt;div class='caption-upside'>&lt;ul class='caption-icons'>&lt;li>&lt;button type='button' class='caption-icons-icon justit bstatus "+status+"'>&lt;/button>&lt;/li>&lt;li>&lt;button type='button' class='caption-icons-icon justit bemail "+email+"'>&lt;/button>&lt;/li>";
     result+="&lt;li>&lt;button type='button' class='caption-icons-icon justit bhomologado "+homologado+"'>&lt;/button>&lt;/li>"
     if(note){
-      //result+="&lt;li>&lt;button type='button' class='caption-icons-icon justit bnote'>&lt;/button>&lt;/li>";
       result+="&lt;li class='tooltip tooltip-selectable'>&lt;button type='button' class='caption-icons-icon justit bnote'>&lt;/button>&lt;ul class='tooltip-content notepad notepadmess rightless'>&lt;li class='tooltip-title'>&lt;p class='tooltip-item'>Anotações&lt;/p>&lt;/li>";
       for(i=0;i&lt;a.NOTES.length;i++){
-        result+="&lt;li>&lt;article>&lt;div class='notepad-note blockquote'>&lt;p>"+"12/15/2015"+/*a.NOTES[i].CREATE_DATE*/" | "+ a.NOTES[i].USU_NOME+" | "+a.NOTES[i].OBJ_ID+"&lt;/p>&lt;p>"+a.NOTES[i].SEGM_DESC+" - Assunto:&lt;/p>&lt;p>"+a.NOTES[i].NOTA_DESC+"&lt;/p>&lt;/div>&lt;div class='blockquote'>&lt;button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+a.NOTES[i].NOTA_ID+"' name='"+a.NOTES[i].USU_COD+"'>&lt;/button>&lt;/div>&lt;/article>&lt;/li>"
+        result+="&lt;li>&lt;article>&lt;div class='notepad-note blockquote'>&lt;p>"+a.NOTES[i].CREATE_DATE+/*a.NOTES[i].CREATE_DATE*/" | "+ a.NOTES[i].USU_NOME+" | "+a.NOTES[i].OBJ_ID+"&lt;/p>&lt;p>"+a.NOTES[i].SEGM_DESC+" - Assunto:&lt;/p>&lt;p>"+a.NOTES[i].NOTA_DESC+"&lt;/p>&lt;/div>&lt;div class='blockquote'>&lt;button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+a.NOTES[i].NOTA_ID+"' name='"+a.NOTES[i].USU_COD+"'>&lt;/button>&lt;/div>&lt;/article>&lt;/li>"
       }
       result+="&lt;/ul>&lt;/li>"
     }
@@ -250,6 +333,7 @@ window.Box = Spine.Controller.sub({init:function() {
     result+="&lt;/ul>&lt;/div>&lt;/div>&lt;/div>&lt;/a>";
     return result;
   }, list:function(a) {
+    console.dir(a);
     var homologado,note,fisica,fav,email,annex,status,result="",i;
     this.el.addClass('col col-small col-large');
     homologado= a.AMOS_HOMOLOGAR ? "has":"nothas";
@@ -312,7 +396,7 @@ window.Box = Spine.Controller.sub({init:function() {
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Mon Jul 6th 2015 using the <a
+		on Thu Jul 16th 2015 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>
