@@ -68,13 +68,16 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       this.loading=!1;
       this.callback=null;
       this.bfair;
-      this.bforn;
+      this.bforn; 
 
       //Var to storage the basic data
       this.fair=[];
       this.cities=[];
       this.forn=[];
-      this.fairval=0;
+      this.fairval="";
+      this.fornval="";
+      this.initialTime='2015-01-08';
+      this.endTime='2015-10-10';
 
 
 
@@ -84,14 +87,14 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       this.searchname="";*/
       this.breadarr = [];
       this.content = new Content({el:this.contentEl, /*bread:this.breadEl, type:this.usr.TIPO*/});
-      this.spotlight = new Spotlight({callService:this.proxy(this.callService)});
+      this.spotlight = new Spotlight({callService:this.proxy(this.callService),reset:this.proxy(this.reset),getFornVal:this.proxy(this.getFornVal),setFornVal:this.proxy(this.setFornVal),getFairVal:this.proxy(this.getFairVal),setFairVal:this.proxy(this.setFairVal)});
       //this.modal = new Modal({el:this.modalEl});
       //this.detail = new Detail({el:this.detailEl, breadEl:this.breadEl,getloading:this.proxy(this.getloading), setloading:this.proxy(this.setloading),stage:this.proxy(this.stage), body:this.el,getfdata:this.proxy(this.getfdata)});
 
       this.header.addClass("goDown");
       this.usr = jQuery.parseJSON($.cookie("portal"));
-        if(!this.usr)
-          window.location.href = 'login.html';
+      if(!this.usr)
+        window.location.href = 'login.html';
       this.username.text(this.usr.Nome);
       
       this.el.find("#wrap").removeClass("hide");
@@ -172,7 +175,6 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
             context.spotlight.el=$(".spotlight");
             context.createComponent(context.fair,context.bfair,'fair');
             //context.callService("fornecedores",'<FORN_DESC></FORN_DESC>','<FEIR_COD></FEIR_COD>','<CREATE_DATE_I>1900-10-17</CREATE_DATE_I>','<CREATE_DATE_F>2020-10-17</CREATE_DATE_F>',20);
-            context.callService(context.page,"<FEIR_COD>11</FEIR_COD>","<FORN_ID>147</FORN_ID>",1,20);
             break;
           case "fornecedor":
             context.bfair=$(".fair");
@@ -216,9 +218,7 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       }
       // PAI      
       (this.area=="X") ? (bread_text=loja+' - '+val) : bread_text=(loja+' - '+area+' - '+val);
-      this.breadEl.find('.bread-colec a').text(bread_text).addClass('active')
-       
-      
+      this.breadEl.find('.bread-colec a').text(bread_text).addClass('active')   
     },
     changeview : function(a) {
       if ("object" === typeof a) {
@@ -234,325 +234,345 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       a.hasClass("sel") || (this.viewBtn.removeClass("sel"), a.addClass("sel"), this.view = a.attr('alt'), this.setdata(this.fdata));
     },
     setMenu:function(loja){
-      if(this.menuopt.hasClass("sel")){
-        this.menuopt.removeClass("sel");
-      }
-      this.menuopt.each(function(a,b){
-        if(b.hash === "#"+loja){
-          $(b).addClass("sel");
-        }        
-      });
+        if(this.menuopt.hasClass("sel")){
+          this.menuopt.removeClass("sel");
+        }
+        this.menuopt.each(function(a,b){
+          if(b.hash === "#"+loja){
+            $(b).addClass("sel");
+          }        
+        });
     },
     callService:function(name,a,b,c,d,e,f){
-      var core=this;
-      var soapRequest=[
-        {
-          //FEIR_COD e FORN_ID are optional fields
-          'name':'amostras',
-          'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarAmostras xmlns="http://tempuri.org/">'+a+''+b+'<LINHA_I>'+c+'</LINHA_I><LINHA_F>'+d+'</LINHA_F><CREATE_DATE_I>1900-07-05</CREATE_DATE_I><CREATE_DATE_F>2050-10-10</CREATE_DATE_F></ListarAmostras></soap:Body></soap:Envelope>',
-          callback:function(data,req){
-            core.convertData(data,req,name);
+        var core=this;
+        var soapRequest=[
+          {
+            //FEIR_COD e FORN_ID are optional fields
+            'name':'amostras',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarAmostras xmlns="http://tempuri.org/">'+a+''+b+'<LINHA_I>'+c+'</LINHA_I><LINHA_F>'+d+'</LINHA_F><CREATE_DATE_I>'+e+'</CREATE_DATE_I><CREATE_DATE_F>'+f+'</CREATE_DATE_F></ListarAmostras></soap:Body></soap:Envelope>',
+            callback:function(data,req){
+              core.convertData(data,req,name);
+            }
+          },
+          {
+            'name':'delete',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarAnotacao xmlns="http://tempuri.org/"><note><NOTA_ID>'+a+'</NOTA_ID><USU_COD>'+b+'</USU_COD><PLAT_ID>2</PLAT_ID><CREATE_DATE>2016-07-08</CREATE_DATE></note><action>D</action></GravarAnotacao></soap:Body></soap:Envelope>',
+            'callback':null
+          },
+          {
+            'name':'local',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFeiras xmlns="http://tempuri.org/">'+a+''+b+''+c+'</ListarFeiras></soap:Body></soap:Envelope>',
+            callback:function(data,req){
+              core.convertData(data,req,name);
+            }
+          },
+          {
+            'name':'fornecedores',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedores xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+'<LINHA_I>'+e+'</LINHA_I><LINHA_F>'+f+'</LINHA_F></ListarFornecedores></soap:Body></soap:Envelope>',
+            callback:function(data,req){
+              core.convertData(data,req,name);
+            }
+          },
+          {
+            'name':'cities',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarRegioes xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+'</ListarRegioes></soap:Body></soap:Envelope>',
+            callback:function(data,req){
+              core.convertData(data,req,name);
+            }
           }
-        },
-        {
-          'name':'delete',
-          'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarAnotacao xmlns="http://tempuri.org/"><note><NOTA_ID>'+a+'</NOTA_ID><USU_COD>'+b+'</USU_COD><PLAT_ID>2</PLAT_ID><CREATE_DATE>2016-07-08</CREATE_DATE></note><action>D</action></GravarAnotacao></soap:Body></soap:Envelope>',
-          'callback':null
-        },
-        {
-          'name':'local',
-          'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFeiras xmlns="http://tempuri.org/">'+a+''+b+''+c+'</ListarFeiras></soap:Body></soap:Envelope>',
-          callback:function(data,req){
-            core.convertData(data,req,name);
-          }
-        },
-        {
-          'name':'fornecedores',
-          'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedores xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+'<LINHA_I>'+e+'</LINHA_I><LINHA_F>'+f+'</LINHA_F></ListarFornecedores></soap:Body></soap:Envelope>',
-          callback:function(data,req){
-            core.convertData(data,req,name);
-          }
-        },
-        {
-          'name':'cities',
-          'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarRegioes xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+'</ListarRegioes></soap:Body></soap:Envelope>',
-          callback:function(data,req){
-            core.convertData(data,req,name);
-          }
-        }
-      ];
+        ];
 
-      $.support.cors=true;
-      soapRequest.filter(function(a,b){
-        if(a['name'] === name){
-          core.callback=a['callback'];
-          $.ajax({
-              type: "POST",
-              url: nodePath,
-              contentType: "text/xml; charset=utf-8",
-              dataType: "xml",
-              crossDomain: true,
-              context: core,
-              data: a['code'],
-              success: core.callRequest,
-              error: core.processError
-          });
-        }
-      });
+        $.support.cors=true;
+        soapRequest.filter(function(a,b){
+          if(a['name'] === name){
+            console.log(a['code']);
+            core.callback=a['callback'];
+            $.ajax({
+                type: "POST",
+                url: nodePath,
+                contentType: "text/xml; charset=utf-8",
+                dataType: "xml",
+                crossDomain: true,
+                context: core,
+                data: a['code'],
+                success: core.callRequest,
+                error: core.processError
+            });
+          }
+        });
+    },
+    submit:function(a){
+      this.reset();
+      console.time("timerName");
+      this.callService(this.page,"<FEIR_COD>"+a+"</FEIR_COD>","",1,20,'2015-04-10',"2015-10-10");
     },
     processError:function(data, status, req){
       console.log("DEU ERRO");
     },
     setdata:function(a,b){   
-      var val = $(".form-control-search").val("ddssa");
-      this.content.changeview(this.view);
-      this.fdata = a.sortBy("AMOS_ID");
-      this.content.page = 0;
-      console.dir(this.fdata);
-      /*this.setBreadcrumb(a,val);
-      this.breadEl.find(".bread-load").text(0);
+        var val = $(".form-control-search").val("ddssa");
+        this.content.changeview(this.view);
+        this.fdata = a.sortBy("AMOS_ID");
+        this.content.page = 0;
+        console.dir(this.fdata);
+        console.timeEnd("timerName");
+        /*this.setBreadcrumb(a,val);
+        this.breadEl.find(".bread-load").text(0);
 
-      if (!this.fdata.length) {        
-        return this.modal.open(),this.breadEl.find('.bread-colec a').text("").removeClass('active'),this.setloading(!1), this.searchEl.find('input').blur();
-      }  
-      
-      this.content.page = 0;
-      
-      b ? (this.data = this.fdata || this.data) : this.fdata = this.data;*/
-      this.content.changeview(this.view);
-      //this.content.create(this.fdata[0]);
-      this.createbox(this.fdata, this.content.page, !0);    
+        if (!this.fdata.length) {        
+          return this.modal.open(),this.breadEl.find('.bread-colec a').text("").removeClass('active'),this.setloading(!1), this.searchEl.find('input').blur();
+        }  
+        
+        this.content.page = 0;
+        
+        b ? (this.data = this.fdata || this.data) : this.fdata = this.data;*/
+        this.content.changeview(this.view);
+        //this.content.create(this.fdata[0]);
+        this.createbox(this.fdata, this.content.page, !0);    
     },
     callRequest:function(data, status, req){
-      if (status == "success") {
-        if(this.callback && "function" === typeof this.callback){
-          this.callback(data,req);
+        if (status == "success") {
+          if(this.callback && "function" === typeof this.callback){
+            this.callback(data,req);
+          }
         }
-      }
     },
     convertData:function(data,req,what){
-      switch(what){
-        case "amostras":
-          this.fdata=jQuery.parseJSON($(req.responseXML).text()).sortBy('AMOS_DESC').unique();
-          this.setdata(this.fdata);
-          break;
-        case "local":
-          this.fair=jQuery.parseJSON($(req.responseXML).text()).sortBy('FEIR_DESC').unique();
-          
-          break;
-        case "fornecedores":
-          this.spotlight.forn=[];
-          this.spotlight.forn=jQuery.parseJSON($(req.responseXML).text()).sortBy('FORN_DESC').unique();
-          //this.createComponent(this.forn,this.bforn,what);
-          this.spotlight.open();
-          //this.callService(this.page,"<FEIR_COD>10</FEIR_COD>","<FORN_ID>4200000</FORN_ID>",1,20);
-          break;
-        case "cities":
-          this.cities=jQuery.parseJSON($(req.responseXML).text());//.sortBy('FEIR_DESC').unique();
-          this.createComponent(this.cities,this.bcity,what);
-          break;
-        default:
-      }
+        switch(what){
+          case "amostras":
+            this.fdata=jQuery.parseJSON($(req.responseXML).text()).sortBy('AMOS_DESC').unique();
+            console.dir(this.fdata);
+            this.setdata(this.fdata);
+            break;
+          case "local":
+            this.fair=jQuery.parseJSON($(req.responseXML).text()).sortBy('FEIR_DESC').unique();
+            
+            break;
+          case "fornecedores":
+            this.spotlight.forn=[];
+            this.spotlight.forn=jQuery.parseJSON($(req.responseXML).text()).sortBy('FORN_DESC').unique();
+            //this.createComponent(this.forn,this.bforn,what);
+            this.spotlight.open();
+            //this.callService(this.page,"<FEIR_COD>10</FEIR_COD>","<FORN_ID>4200000</FORN_ID>",1,20);
+            break;
+          case "cities":
+            this.cities=jQuery.parseJSON($(req.responseXML).text());//.sortBy('FEIR_DESC').unique();
+            this.createComponent(this.cities,this.bcity,what);
+            break;
+          default:
+        }
     },
     createComponent:function(data,comp,what){
-      var i,html="";
-      switch (what){
-        case "fair":
-          html+="<option value='0'>Local de Coleta: </option>";
-          for(i=0;i<data.length;i++){
-            html+="<option value='"+data[i].FEIR_COD.replace("         ","").replace("        ","")+"'>"+data[i].FEIR_DESC+" - "+data[i].PAIS_COD+"</option>";
-          }
-          break;
-        case "fornecedores":
-          html+="<option value='Local'>Fornecedores: </option>";
-          for(i=0;i<data.length;i++){
-            html+="<option value='"+data[i].FORN_ID+"'>"+data[i].FORN_DESC+"</option>";
-          }
-          break;
-        case "cities":
-          comp.empty();
-          html+="<option value='Local'>Cidades: </option>";
-          for(i=0;i<data.length;i++){
-            html+="<option value='"+data[i].REGI_COD+"'>"+data[i].REGI_DESC+"</option>";
-          }
-      }
-      comp.html(html);
+        var i,html="";
+        switch (what){
+          case "fair":
+            html+="<option value=''>Local de Coleta: </option>";
+            for(i=0;i<data.length;i++){
+              html+="<option value='"+data[i].FEIR_COD.replace("         ","").replace("        ","")+"'>"+data[i].FEIR_DESC+" - "+data[i].PAIS_COD+"</option>";
+            }
+            break;
+          case "fornecedores":
+            html+="<option value=''>Fornecedores: </option>";
+            for(i=0;i<data.length;i++){
+              html+="<option value='"+data[i].FORN_ID+"'>"+data[i].FORN_DESC+"</option>";
+            }
+            break;
+          case "cities":
+            comp.empty();
+            html+="<option value=''>Cidades: </option>";
+            for(i=0;i<data.length;i++){
+              html+="<option value='"+data[i].REGI_COD+"'>"+data[i].REGI_DESC+"</option>";
+            }
+        }
+        comp.html(html);
     },
     createbox : function(a, b, d, c) {  
-      var f, m, g, n, v;      
-      c = c || this.view;
-      n = "images" === c ? "li" : "tr";
-      this.loading = !0; 
-      this.maskEl.fadeIn().find(".loader").show();
-      this.active = this.active || this.content;
-      d = this.active.itens && !d ? this.active.itens.length : 0;
-      m = 300 * (b + 1) < a.length ? 300 * (b + 1) : a.length;
-      var p, h, q, k = 300 * b, l = m - k, e = this;
-      if (d < a.length && a[k]) {
-          f = setInterval(function() {
-              h = a[k];   
-              if (!h) {
+        var f, m, g, n, v;      
+        c = c || this.view;
+        n = "images" === c ? "li" : "tr";
+        this.loading = !0; 
+        this.maskEl.fadeIn().find(".loader").show();
+        this.active = this.active || this.content;
+        d = this.active.itens && !d ? this.active.itens.length : 0;
+        m = 300 * (b + 1) < a.length ? 300 * (b + 1) : a.length;
+        var p, h, q, k = 300 * b, l = m - k, e = this;
+        if (d < a.length && a[k]) {
+            f = setInterval(function() {
+                h = a[k];   
+                if (!h) {
 
-                  clearInterval(f);
-                  e.endloading();
-                  return !1;
-              }
-              if ("images" === c && l > 0) {
-                  /*if (h && v === h.AMOS_ID)
-                    return !1;*/
+                    clearInterval(f);
+                    e.endloading();
+                    return !1;
+                }
+                if ("images" === c && l > 0) {
+                    /*if (h && v === h.AMOS_ID)
+                      return !1;*/
 
-                  v = h.AMOS_ID || null; 
-                  //var material = h.MATERIAL_REF.replace(' ','');
-                  p = new Image, q = "http://189.126.197.169/img/small/small_P11JF0157306705.jpg", $(p).load(function() {
-                      if (!l > 0)
-                          return !1;
+                    v = h.AMOS_ID || null; 
+                    //var material = h.MATERIAL_REF.replace(' ','');
+                    p = new Image, q = "http://189.126.197.169/img/small/small_P11JF0157306705.jpg", $(p).load(function() {
+                        if (!l > 0)
+                            return !1;
 
-                      g = new Box({
-                          item : h,
-                          view : c,
-                          tag : n,
-                          // reloadcart : e.proxy(e.reloadcart),
-                          detail : e.detail,
-                          url : this
-                      });
+                        g = new Box({
+                            item : h,
+                            view : c,
+                            tag : n,
+                            // reloadcart : e.proxy(e.reloadcart),
+                            detail : e.detail,
+                            url : this
+                        });
 
-                      e.active.create(g.render());
+                        e.active.create(g.render());
 
-                      // Mostrando (box sendo carregados)
-                      $('.bread-search').find(".spec").text(k+1+" Amostras");
+                        // Mostrando (box sendo carregados)
+                        $('.bread-search').find(".spec").text(k+1+" Amostras");
 
-                      l--;
-                      k++;
-                  }).error(function() {
+                        l--;
+                        k++;
+                    }).error(function() {
 
-                      if (!l > 0)
-                          return !1;
-                      var a = new Image;
-                      //console.log('Sem imagem: *' + h.MATNR + " " + h.MAKTX + " " + h.GRUPO + " " + h.SGRUPO);
-                      a.src = "http://189.126.197.169/img/small/small_NONE.jpg";
+                        if (!l > 0)
+                            return !1;
+                        var a = new Image;
+                        //console.log('Sem imagem: *' + h.MATNR + " " + h.MAKTX + " " + h.GRUPO + " " + h.SGRUPO);
+                        a.src = "http://189.126.197.169/img/small/small_NONE.jpg";
 
-                      g = new Box({
-                          item : h,
-                          view : c,
-                          tag : n,
-                          // reloadcart : e.proxy(e.reloadcart),
-                          detail : e.detail,
-                          url : a
-                      });
-                      e.active.create(g.render());
-                  }).attr("src", q);
-              } else {
-                  if (l > 0) {
-                      return g = new Box({
-                          item : h,
-                          view : c,
-                          tag : n,
-                          // reloadcart : e.proxy(e.reloadcart),
-                          detail : e.detail,
-                          modal : e.modal
-                      }), e.active.create(g.render()), $('.bread-box').find(".bread-load").text(k+1), l--, k++, !1;
-                  } else {
-                      clearInterval(f), e.endloading();
-                  }
-              }
-          }, 0.1);
-      } else {
-                            console.log("cds");
+                        g = new Box({
+                            item : h,
+                            view : c,
+                            tag : n,
+                            // reloadcart : e.proxy(e.reloadcart),
+                            detail : e.detail,
+                            url : a
+                        });
+                        e.active.create(g.render());
+                    }).attr("src", q);
+                } else {
+                    if (l > 0) {
+                        return g = new Box({
+                            item : h,
+                            view : c,
+                            tag : n,
+                            // reloadcart : e.proxy(e.reloadcart),
+                            detail : e.detail,
+                            modal : e.modal
+                        }), e.active.create(g.render()), $('.bread-box').find(".bread-load").text(k+1), l--, k++, !1;
+                    } else {
+                        clearInterval(f), e.endloading();
+                    }
+                }
+            }, 0.1);
+        } else {
+                              console.log("cds");
 
-          return this.endloading(), !1;
-      }  
-  },  
-  stage:function() {
-    var a, c;
-    "number" === typeof window.innerWidth ? (a = window.innerWidth, c = window.innerHeight) : (a = document.documentElement.clientWidth, c = document.documentElement.clientHeight);
-    return{w:a, h:c};
-  },  
-  endloading : function(a) {
-      a && clearInterval(a);
-      var b = this;
-      b.getloading(!1);
-      /*b.content.itens.fadeIn(function() {
-          b.getloading(!1);
-      });  */          
-  },
-  deleteNote:function(a){
-    a.preventDefault();
-    var obj=$(a.target);
-    this.callService("delete",obj.attr("id"),obj.attr("name"));
-    obj.closest("li").fadeOut();
-  },
-  actionHeart:function(a){
-    a.preventDefault();
-    var obj=$(a.target);
-  },
-  actionFlag:function(a){
-    a.preventDefault();
-    var obj=$(a.target);
-  },
-  actionHomolog:function(a){
-    a.preventDefault();
-    var obj=$(a.target);
-  },
-  sortItems : function(a){
-    var type,i,length,temp=[];
-    if($(a.target).hasClass("sel") || this.loading){
-      return !1;
-    }
-    type=$(a.target).attr("name");
-    $("html").attr("class","amostras");
-    this.content.reset();
-    this.order_box.find("button").removeClass("sel");
-    $(a.target).addClass("sel");
-    if(type !== "BIGPRICE"){
-      length= this.fdata.length;
-      temp = this.fdata.sortBy(type).unique();
-      this.createbox(temp, this.content.page);
-    }
-    else{
-      temp = this.fdata.sortBy("PE").unique();
-      length=this.fdata.length-1;
-      for(i=length;i>=0;i--){
-        temp.push(this.fdata[i]);
+            return this.endloading(), !1;
+        }  
+    },  
+    stage:function() {
+      var a, c;
+      "number" === typeof window.innerWidth ? (a = window.innerWidth, c = window.innerHeight) : (a = document.documentElement.clientWidth, c = document.documentElement.clientHeight);
+      return{w:a, h:c};
+    },  
+    endloading : function(a) {
+        a && clearInterval(a);
+        var b = this;
+        b.getloading(!1);
+        /*b.content.itens.fadeIn(function() {
+            b.getloading(!1);
+        });  */          
+    },
+    deleteNote:function(a){
+      a.preventDefault();
+      var obj=$(a.target);
+      this.callService("delete",obj.attr("id"),obj.attr("name"));
+      obj.closest("li").fadeOut();
+    },
+    actionHeart:function(a){
+      a.preventDefault();
+      var obj=$(a.target);
+    },
+    actionFlag:function(a){
+      a.preventDefault();
+      var obj=$(a.target);
+    },
+    actionHomolog:function(a){
+      a.preventDefault();
+      var obj=$(a.target);
+    },
+    sortItems : function(a){
+      var type,i,length,temp=[];
+      if($(a.target).hasClass("sel") || this.loading){
+        return !1;
       }
-      this.createbox(temp.unique(), this.content.page);
-    }
-  },
-  selectItems : function(a){
-    $(".thumbnail .icon").attr("class","icon").addClass($(a.target).attr("name"));
-    $("html").attr("class","amostras").addClass("select");
-  },
-  changeCountries: function(a){
-    this.callService("cities",'<PAIS_COD>'+$(a.target).find("option:selected").val()+'</PAIS_COD>','<PAIS_DESC></PAIS_DESC>','<REGI_COD></REGI_COD>','<REGI_DESC></REGI_DESC>');
-  },
-  changeFair:function(a){
-    this.fairval=$(a.target).find("option:selected").val();
-  },
-  getSpot:function(a){
-    var fairval;
-    //13 === a.keyCode ? (this.spotlight.close(), this.searchEl.trigger("submit")) : (this.filter.close(), 1 < a.target.value.length ? this.spotlight.open(a) : this.spotlight.close());
-    if(13 === a.keyCode){
-      this.spotlight.select();
-    }
-    else{
-      if(3 < a.target.value.length){
-        this.spotlight.input=$(a.target);
-        this.fairval ? fairval='<FEIR_COD>'+this.fairval+'</FEIR_COD>' : fairval= "<FEIR_COD></FEIR_COD>"
-        if(48 <= a.keyCode && 90 >= a.keyCode || 8 == a.keyCode) {
-              this.callService("fornecedores",'<FORN_DESC>'+a.target.value+'</FORN_DESC>',fairval,'<CREATE_DATE_I>1900-10-17</CREATE_DATE_I>','',1,2000);
-            }
-            else{
-              if(40 === a.keyCode || 38 === a.keyCode) {
-                return this.spotlight.arrow(a), !1;
-                //return this.arrow(a), !1;
-              }
-            }
+      type=$(a.target).attr("name");
+      $("html").attr("class","amostras");
+      this.content.reset();
+      this.order_box.find("button").removeClass("sel");
+      $(a.target).addClass("sel");
+      if(type !== "BIGPRICE"){
+        length= this.fdata.length;
+        temp = this.fdata.sortBy(type).unique();
+        this.createbox(temp, this.content.page);
       }
       else{
-        this.spotlight.close();
+        temp = this.fdata.sortBy("PE").unique();
+        length=this.fdata.length-1;
+        for(i=length;i>=0;i--){
+          temp.push(this.fdata[i]);
+        }
+        this.createbox(temp.unique(), this.content.page);
       }
-    }
-    return !1;
-  },
+    },
+    selectItems : function(a){
+      $(".thumbnail .icon").attr("class","icon").addClass($(a.target).attr("name"));
+      $("html").attr("class","amostras").addClass("select");
+    },
+    changeCountries: function(a){
+      this.callService("cities",'<PAIS_COD>'+$(a.target).find("option:selected").val()+'</PAIS_COD>','<PAIS_DESC></PAIS_DESC>','<REGI_COD></REGI_COD>','<REGI_DESC></REGI_DESC>');
+    },
+    changeFair:function(a){
+      this.bforn.val("");
+      this.fairval=$(a.target).find("option:selected").val();
+      this.submit(this.fairval);
+    },
+    getSpot:function(a){
+      //13 === a.keyCode ? (this.spotlight.close(), this.searchEl.trigger("submit")) : (this.filter.close(), 1 < a.target.value.length ? this.spotlight.open(a) : this.spotlight.close());
+      if(13 === a.keyCode){
+        this.spotlight.select(a);
+      }
+      else{
+        if(3 < a.target.value.length){
+          this.spotlight.input=$(a.target);
+          if(48 <= a.keyCode && 90 >= a.keyCode || 8 == a.keyCode) {
+                this.callService("fornecedores",'<FORN_DESC>'+a.target.value+'</FORN_DESC>','<FEIR_COD>'+this.fairval+'</FEIR_COD>','<CREATE_DATE_I>1900-10-17</CREATE_DATE_I>','',1,2000);
+              }
+              else{
+                if(40 === a.keyCode || 38 === a.keyCode) {
+                  return this.spotlight.arrow(a), !1;
+                  //return this.arrow(a), !1;
+                }
+              }
+        }
+        else{
+          this.spotlight.close();
+        }
+      }
+      return !1;
+    },
+    getFornVal:function(){
+      return this.fornval;
+    },
+    getFairVal:function(){
+      return this.fairval;
+    },
+    setFairVal:function(a){
+      this.fairval=a;
+    },
+    setFornVal:function(a){
+      this.fornval=a;
+    },
     /**
     * `Set the loading state`
     * @memberOf App#
@@ -592,6 +612,7 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       a && !this.loading ? (this.maskEl.fadeIn(), this.loading = !0) : !1 === a && this.loading && (this.maskEl.fadeOut(), this.loading = !1);
       return this.loading;
     },
+
     getfdata:function(){
       return this.fdata;
     },

@@ -6,12 +6,31 @@ window.Spotlight = Spine.Controller.sub({
     //"click .spotlight button":"select"
   }, 
   select:function(a) {
+  var fair="<FEIR_COD>",name="<FORN_ID>";
   if("object" === typeof a) {
-    a.preventDefault(), a = $(a.target);
+   a = $(a.target);
   }else {
     return!1;
   }
+  if(a.attr("type") === "button"){
+    name+=a.attr("name")+"</FORN_ID>";
+  }
+  else{
+    console.dir(a);
+    name="<FORN_DESC>"+a.val()+"</FORN_DESC>";
+    console.log(name);
+  }
   //this.input.val(this.list + a.text()).focus().trigger("submit");
+  this.reset();
+  this.setFornVal(a.attr("name"));
+  if(this.getFairVal()){
+    fair+=this.getFairVal()+"</FEIR_COD>";
+  }
+  else{
+    fair+="</FEIR_COD>";
+  }
+
+  this.callService("amostras",fair,name,1,20,'2010-01-01','2050-01-01');
   this.close();
 }, over:function(a) {
   a.addClass("sel");
@@ -218,7 +237,7 @@ window.Box = Spine.Controller.sub({init:function() {
       result+="</ul></li>"
     }
     result+="<li><button type='button' class='caption-icons-icon justit bfisica "+fisica+"'></button></li><li><button type='button' class='caption-icons-icon justit bfav "+fav+"'></button></li></ul>";
-    result+="<div class='caption-desc'><p><span>Código da Amostra: </span><span>"+a.AMOS_ID+"</span></p><p><span>Fornecedor: </span><span>"+a.FORN_DESC+"</span></p><p><span>Data: </span><span>"+a.CREATE_DATE+"</span></p>";
+    result+="<div class='caption-desc'><p><span>Nome da Amostra: </span><span>"+a.AMOS_DESC+"</span></p><p><span>Fornecedor: </span><span>"+a.FORN_DESC+"</span></p><p><span>Data: </span><span>"+a.CREATE_DATE+"</span></p>";
     if(annex){
       result+="<button type='button' class='icon bannex'></button>";
     }
