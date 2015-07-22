@@ -1968,6 +1968,12 @@ form.search {
 .list .floatThead {
   display: block;
 }
+.local .list .overview {
+  display: block;
+}
+.local .list .floatThead {
+  display: block;
+}
 .icon {
   position: relative;
   display: block;

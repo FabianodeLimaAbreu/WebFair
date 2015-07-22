@@ -53,6 +53,7 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       "click .bfisica":'actionFlag',
       "click .bhomologado":'actionHomolog',
       "change .countries": "changeCountries",
+      "change .city": "changeCity",
       "keyup .forn": "getSpot",
       "change .fair":"changeFair",
       "click .export":"exportExcel",
@@ -248,7 +249,7 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       }*/ 
       $(".thumbnail .icon").attr("class","icon");
       $("html").attr("class","amostras");
-      a.hasClass("sel") || (this.viewBtn.removeClass("sel"), a.addClass("sel"), this.view = a.attr('alt'), this.setdata(this.fdata));
+      a.hasClass("sel") || (this.viewBtn.removeClass("sel"), a.addClass("sel"), this.view = a.attr('alt'), this.setdata(this.fdata, "amostras"));
     },
     setMenu:function(loja){
         if(this.menuopt.hasClass("sel")){
@@ -333,38 +334,60 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       }
     },
     search:function(a){
+      var search;
       var forn_desc=this.fornval || "";
       var fair_id=this.fairval || "";
       if(13 === a.keyCode){
-        this.submit("<FEIR_COD>"+fair_id+"</FEIR_COD>","<FORN_DESC>"+forn_desc+"</FORN_DESC>","<AMOS_DESC>"+$(a.target).val()+"</AMOS_DESC>");
+        if(isNaN($(a.target).val())){
+          search="<AMOS_DESC>"+$(a.target).val()+"</AMOS_DESC>";
+        }
+        else{
+          search="<AMOS_ID>"+$(a.target).val()+"</AMOS_ID>";
+        }
+        this.submit("<FEIR_COD>"+fair_id+"</FEIR_COD>","<FORN_DESC>"+forn_desc+"</FORN_DESC>",search);
       }
     },
     processError:function(data, status, req){
       console.log("DEU ERRO");
     },
     setdata:function(a,b){   
-        var val = $(".form-control-search").val("ddssa");
         this.content.page = 0;
         /*this.setBreadcrumb(a,val);
         this.breadEl.find(".bread-load").text(0);*/
 
-        if (!this.fdata.length) {        
+        
+
+        if (!this.fdata.length && b !="local") {        
           return alert("NENHUMA AMOSTRA***"), $('.bread-search').find(".spec").text("0 Amostras");
           //return this.modal.open(),this.breadEl.find('.bread-colec a').text("").removeClass('active'),this.setloading(!1), this.searchEl.find('input').blur();
         }  
+        switch(b){
+          case 'amostras':
+            this.fdata = a.sortBy("AMOS_ID");
+            //console.dir(this.fdata);
+            this.content.changeview(this.view);
+            this.createbox(this.fdata, this.content.page, !0);
+            break;
+          case 'fornecedores':
+            this.fdata = a.sortBy("FORN_ID");
+            this.content.changeview("list");
+            console.dir(this.fdata);
+            this.createbox(this.fdata, this.content.page, !0,"list");
+            break;
+          case 'local':
+            this.content.changeview("list");
+            this.createbox(a, this.content.page, !0,"list");
+            break;
+          default:
+            console.log("ALGO ERRADO");
+        }
 
-        if(b){
-          this.fdata = a.sortBy("FORN_ID");
-          this.content.changeview("list");
-          //console.dir(this.fdata);
-          this.createbox(this.fdata, this.content.page, !0,"list");
+        /*if(b){
+          
         }
         else{
-          this.fdata = a.sortBy("AMOS_ID");
-          //console.dir(this.fdata);
-          this.content.changeview(this.view);
-          this.createbox(this.fdata, this.content.page, !0);
-        }
+          
+        }*/
         
         /*this.content.page = 0;
         
@@ -384,7 +407,7 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
         switch(what){
           case "amostras":
             this.fdata=jQuery.parseJSON($(req.responseXML).text()).sortBy('AMOS_DESC').unique();
-            this.setdata(this.fdata);
+            this.setdata(this.fdata,"amostras");
             break;
           case "local":
             this.fair=jQuery.parseJSON($(req.responseXML).text()).sortBy('FEIR_DESC').unique();
@@ -393,7 +416,7 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
             if(notcombo){
               this.fdata=jQuery.parseJSON($(req.responseXML).text()).sortBy('FORN_DESC').unique();
               //this.setdata(this.fdata);
-              this.setdata(this.fdata,!0);
+              this.setdata(this.fdata,"fornecedores");
             }
             else{
               this.spotlight.forn=[];
@@ -579,6 +602,22 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
     },
     changeCountries: function(a){
       this.callService("cities",'<PAIS_COD>'+$(a.target).find("option:selected").val()+'</PAIS_COD>','<PAIS_DESC></PAIS_DESC>','<REGI_COD></REGI_COD>','<REGI_DESC></REGI_DESC>');
+    },
+    changeCity:function(val){
+      var country,city,context=this,arr=[];
+      country=$(".countries").find("option:selected").val();
+      city=$(".city").find("option:selected").val();
+      if(this.fair.length){
+        arr.push(this.fair.filter(function(a,b){
+          if(a.PAIS_COD === country && a.REGI_COD === city){
+            return a;
+          }
+        }));
+        context.setdata(arr[0],"local");
+      }
+      else{
+        this.callService("local",'<FEIR_COD></FEIR_COD>','<PAIS_COD>'+country+'</PAIS_COD>','<REGI_COD>'+city+'</REGI_COD>');
+      }
     },
     changeFair:function(a){
       this.bforn.val("");

@@ -15,6 +15,7 @@ window.Spotlight = Spine.Controller.sub({
     if(a.attr("type") === "button"){
       name+=a.attr("name")+"</FORN_ID>";
       this.setFornVal(a.attr("name"));
+      $(".forn").val(a.text());
     }
     else{
       name="<FORN_DESC>"+a.val()+"</FORN_DESC>";
@@ -252,87 +253,107 @@ window.Box = Spine.Controller.sub({init:function() {
     result+="</ul></div></div></div></a>";
     return result;
   }, list:function(a) {
-    if(this.page === "fornecedores"){
-      var result="",i,status,nome_contato,segmento=[];
-      status= a.FORN_STATUS ? "complet":"incomplet";
-      result+="<td>"+a.FORN_DESC+"</td>"+"<td>"+a.FEIR_DESC+"</td>"+"<td>"+a.CREATE_DATE+"</td>";
-      if(a.CONTACTS.length){
-        result+="<td>";
-        for(i=0;i<a.CONTACTS.length;i++){
-          if(a.CONTACTS[i].CONT_NOME.length){
-            nome_contato=a.CONTACTS[i].CONT_NOME;
+    switch (this.page){
+      case "fornecedores":
+        var result="",i,status,nome_contato,segmento=[];
+        status= a.FORN_STATUS ? "complet":"incomplet";
+        result+="<td>"+a.FORN_DESC+"</td>"+"<td>"+a.FEIR_DESC+"</td>"+"<td>"+a.CREATE_DATE+"</td>";
+        if(a.CONTACTS.length){
+          result+="<td>";
+          for(i=0;i<a.CONTACTS.length;i++){
+            if(a.CONTACTS[i].CONT_NOME.length){
+              nome_contato=a.CONTACTS[i].CONT_NOME;
+            }
+            else{
+              nome_contato="SEM NOME";
+            }
+            segmento.push(a.CONTACTS[i].SEGM_DESC);
+            result+=""+nome_contato+"<br/>";
           }
-          else{
-            nome_contato="SEM NOME";
+          result+="</td>";
+        }
+        else{
+          result+="<td></td>";
+        }
+
+        if(segmento.length){
+          result+="<td>"+segmento.join("<br/>")+"</td>";
+        }
+        else{
+          result+="<td></td>";
+        }
+
+        if(a.FAVORITES.length){
+          result+="<td class='tooltip'><button type='button' class='caption-icons-icon justit bstar has'></button><ul class='tooltip-content col-large'>";
+          for(i=0;i<a.FAVORITES.length;i++){
+            result+="<li><button type='button' class='tooltip-item caption-icons-icon bstar has'>"+a.FAVORITES[i].SEGM_DESC+"</li>";
           }
-          segmento.push(a.CONTACTS[i].SEGM_DESC);
-          result+=""+nome_contato+"<br/>";
+          result+="</ul></td>";
         }
-        result+="</td>";
-      }
-      else{
-        result+="<td></td>";
-      }
-      if(segmento.length){
-        result+="<td>"+segmento.join("<br/>")+"</td>";
-      }
-      else{
-        result+="<td></td>";
-      }
-      result+="<td>"+a.FAVORITOS+"</td>";
-      if(a.NOTES.length){
-        result+="<td class='tooltip tooltip-selectable'><button type='button' class='caption-icons-icon justit bnote'></button><ul class='tooltip-content notepad notepadmess col-large'><li class='tooltip-title'><p class='tooltip-item'>Anotações</p></li>";
-        for(i=0;i<a.NOTES.length;i++){
-          result+="<li><article><div class='notepad-note blockquote'><p>"+a.NOTES[i].CREATE_DATE+" | "+ a.NOTES[i].USU_NOME+" | "+a.NOTES[i].OBJ_ID+"</p><p>"+a.NOTES[i].SEGM_DESC+" - Assunto:</p><p>"+a.NOTES[i].NOTA_DESC+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+a.NOTES[i].NOTA_ID+"' name='"+a.NOTES[i].USU_COD+"'></button></div></article></li>"
+        else{
+          result+="<td><button type='button' class='caption-icons-icon justit bstar nothas'></button></td>";
         }
-        result+="</ul></td>"
-      }
-      else{
-        result+="<td>d</td>";
-      }
-      result+="<td><button type='button' class='caption-icons-icon justit bstatus "+status+"'>"+status+"</button></td>";
-      return result;
-    }
 
-    else{
-      var homologado,note,fisica,fav,email,annex,status,result="",i;
-      this.el.addClass('col col-small col-large');
-      homologado= a.AMOS_HOMOLOGAR ? "has":"nothas";
-      note= a.NOTES.length   ? true:false;
-      fisica= a.FLAG_FISICA ? "has":"nothas";
-      fav= a.FLAG_PRIORIDADE ? "has":"nothas";
-      annex= a.AMOS_HOMOLOGAR ? true:false;
-      status= a.AMOS_STATUS ? "complet":"incomplet";
-      email= a.AMOS_ENV_EMAIL? "sent":"disabled";
+        if(a.NOTES.length){
+          result+="<td class='tooltip tooltip-selectable'><button type='button' class='caption-icons-icon justit bnote'></button><ul class='tooltip-content notepad notepadmess col-large'><li class='tooltip-title'><p class='tooltip-item'>Anotações</p></li>";
+          for(i=0;i<a.NOTES.length;i++){
+            result+="<li><article><div class='notepad-note blockquote'><p>"+a.NOTES[i].CREATE_DATE+" | "+ a.NOTES[i].USU_NOME+" | "+a.NOTES[i].OBJ_ID+"</p><p>"+a.NOTES[i].SEGM_DESC+" - Assunto:</p><p>"+a.NOTES[i].NOTA_DESC+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+a.NOTES[i].NOTA_ID+"' name='"+a.NOTES[i].USU_COD+"'></button></div></article></li>"
+          }
+          result+="</ul></td>"
+        }
+        else{
+          result+="<td></td>";
+        }
+        result+="<td><button type='button' class='caption-icons-icon justit bstatus "+status+"'>"+status+"</button></td>";
+        return result;
+        break;
+      case 'amostras':
+        var homologado,note,fisica,fav,email,annex,status,result="",i;
+        this.el.addClass('col col-small col-large');
+        homologado= a.AMOS_HOMOLOGAR ? "has":"nothas";
+        note= a.NOTES.length   ? true:false;
+        fisica= a.FLAG_FISICA ? "has":"nothas";
+        fav= a.FLAG_PRIORIDADE ? "has":"nothas";
+        annex= a.AMOS_HOMOLOGAR ? true:false;
+        status= a.AMOS_STATUS ? "complet":"incomplet";
+        email= a.AMOS_ENV_EMAIL? "sent":"disabled";
 
-      //Creating result
-      result+="<td><button type='button' name='"+a.AMOS_ID+"'' class='icon bselection' name='"+a.AMOS_ID+"''></button></td><td>"+a.FORN_DESC+"</td><td>"+a.AMOS_ID+"</td><td>"+a.CREATE_DATE+"</td><td><button type='button' class='caption-icons-icon justit bfisica "+fisica+"'></button></td><td>"+a.AMOS_PRECO+"</td><td>"+a.AMOS_COTACAO_KG+"</td><td><button type='button' class='caption-icons-icon justit bfav "+fav+"'></button></td><td><button type='button' class='caption-icons-icon justit bhomologado "+homologado+"'></button></td>";
-      if(note){
-        result+="<td class='tooltip tooltip-selectable'><button type='button' class='caption-icons-icon justit bnote'></button><ul class='tooltip-content notepad notepadmess col-large'><li class='tooltip-title'><p class='tooltip-item'>Anotações</p></li>";
-        for(i=0;i<a.NOTES.length;i++){
-          result+="<li><article><div class='notepad-note blockquote'><p>"+a.NOTES[i].CREATE_DATE+" | "+ a.NOTES[i].USU_NOME+" | "+a.NOTES[i].OBJ_ID+"</p><p>"+a.NOTES[i].SEGM_DESC+" - Assunto:</p><p>"+a.NOTES[i].NOTA_DESC+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+a.NOTES[i].NOTA_ID+"' name='"+a.NOTES[i].USU_COD+"'></button></div></article></li>"
+        //Creating result
+        result+="<td><button type='button' name='"+a.AMOS_ID+"'' class='icon bselection' name='"+a.AMOS_ID+"''></button></td><td>"+a.FORN_DESC+"</td><td>"+a.AMOS_ID+"</td><td>"+a.CREATE_DATE+"</td><td><button type='button' class='caption-icons-icon justit bfisica "+fisica+"'></button></td><td>"+a.AMOS_PRECO+"</td><td>"+a.AMOS_COTACAO_KG+"</td><td><button type='button' class='caption-icons-icon justit bfav "+fav+"'></button></td><td><button type='button' class='caption-icons-icon justit bhomologado "+homologado+"'></button></td>";
+        if(note){
+          result+="<td class='tooltip tooltip-selectable'><button type='button' class='caption-icons-icon justit bnote'></button><ul class='tooltip-content notepad notepadmess col-large'><li class='tooltip-title'><p class='tooltip-item'>Anotações</p></li>";
+          for(i=0;i<a.NOTES.length;i++){
+            result+="<li><article><div class='notepad-note blockquote'><p>"+a.NOTES[i].CREATE_DATE+" | "+ a.NOTES[i].USU_NOME+" | "+a.NOTES[i].OBJ_ID+"</p><p>"+a.NOTES[i].SEGM_DESC+" - Assunto:</p><p>"+a.NOTES[i].NOTA_DESC+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+a.NOTES[i].NOTA_ID+"' name='"+a.NOTES[i].USU_COD+"'></button></div></article></li>"
+          }
+          result+="</ul></td>"
         }
-        result+="</ul></td>"
-      }
-      else{
-        result+="<td></td>";
-      }
-      annex ? result+="<td><button type='button' class='icon bannex'></button></td>" : result+="<td></td>";
-      result+="<td><button type='button' class='caption-icons-icon justit bemail "+email+"'></button></td><td>"+a.TECI_DESC+"</td><td>"+a.BASE_DESC+"</td><td>"+a.GRUP_DESC+"</td><td>"+a.SUBG_DESC+"</td>";
-      if(a.COMPOSITIONS.length){
-        var concat=[];
-        result+="<td>";
-        for(i=0;i<a.COMPOSITIONS.length;i++){
-          concat.push(a.COMPOSITIONS[i].COMP_DESC);
+        else{
+          result+="<td></td>";
         }
-        concat.join();
-        result+=concat+"</td>";
-      }
-      else{
-        result+="<td></td>";
-      }
-      result+="<td><button type='button' class='caption-icons-icon justit bstatus "+status+"'>"+status+"</button></td>";
-      return result;
+        annex ? result+="<td><button type='button' class='icon bannex'></button></td>" : result+="<td></td>";
+        result+="<td><button type='button' class='caption-icons-icon justit bemail "+email+"'></button></td><td>"+a.TECI_DESC+"</td><td>"+a.BASE_DESC+"</td><td>"+a.GRUP_DESC+"</td><td>"+a.SUBG_DESC+"</td>";
+        if(a.COMPOSITIONS.length){
+          var concat=[];
+          result+="<td>";
+          for(i=0;i<a.COMPOSITIONS.length;i++){
+            concat.push(a.COMPOSITIONS[i].COMP_DESC);
+          }
+          concat.join();
+          result+=concat+"</td>";
+        }
+        else{
+          result+="<td></td>";
+        }
+        result+="<td><button type='button' class='caption-icons-icon justit bstatus "+status+"'>"+status+"</button></td>";
+        return result;
+        break;
+      case 'local':
+        var result="";
+        result+="<td>"+a.FEIR_DESC+"</td>"+"<td>"+a.REGI_DESC+"</td>"+"<td>"+a.PAIS_DESC+"</td>"+"<td><a href='#"+a.FEIR_COD+"' class='icon floatLeft edit-big'></a></td>";
+        return result;
+        break;
+      default:
+        console.log("ALGO ERRADO");
     }
   }
 });
