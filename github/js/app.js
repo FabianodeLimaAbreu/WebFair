@@ -54,7 +54,10 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       "click .bhomologado":'actionHomolog',
       "change .countries": "changeCountries",
       "keyup .forn": "getSpot",
-      "change .fair":"changeFair"
+      "change .fair":"changeFair",
+      "click .export":"exportExcel",
+      "blur .form-control-search":"search",
+      "keyup .form-control-search":"search"
       /*"submit .search":"submit",
       "click button.icon.go_back_default":"goBack",
       "click button.close":"getOut"*/
@@ -76,8 +79,10 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       this.forn=[];
       this.fairval="";
       this.fornval="";
+      this.amosval="";
       this.initialTime='2015-01-08';
       this.endTime='2015-10-10';
+      this.notcombo=0;
 
 
 
@@ -86,8 +91,18 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       this.father=!0;
       this.searchname="";*/
       this.breadarr = [];
-      this.content = new Content({el:this.contentEl, /*bread:this.breadEl, type:this.usr.TIPO*/});
-      this.spotlight = new Spotlight({callService:this.proxy(this.callService),reset:this.proxy(this.reset),getFornVal:this.proxy(this.getFornVal),setFornVal:this.proxy(this.setFornVal),getFairVal:this.proxy(this.getFairVal),setFairVal:this.proxy(this.setFairVal)});
+      this.content = new Content({el:this.contentEl/*bread:this.breadEl, type:this.usr.TIPO*/});
+      this.spotlight = new Spotlight({
+        callService:this.proxy(this.callService),
+        reset:this.proxy(this.reset),
+        getFornVal:this.proxy(this.getFornVal),
+        setFornVal:this.proxy(this.setFornVal),
+        getFairVal:this.proxy(this.getFairVal),
+        setFairVal:this.proxy(this.setFairVal),
+        getNotCombo:this.proxy(this.getNotCombo),
+        setNotCombo:this.proxy(this.setNotCombo),
+        getPage:this.proxy(this.getPage)
+      });
       //this.modal = new Modal({el:this.modalEl});
       //this.detail = new Detail({el:this.detailEl, breadEl:this.breadEl,getloading:this.proxy(this.getloading), setloading:this.proxy(this.setloading),stage:this.proxy(this.stage), body:this.el,getfdata:this.proxy(this.getfdata)});
 
@@ -115,9 +130,9 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
           this.page ="amostras";
           this.writePage(this.page);
         },
-        "fornecedor":function(){
+        "fornecedores":function(){
           var context=this;
-          this.page ="fornecedor";
+          this.page ="fornecedores";
           this.writePage(this.page);
         },
         "relatorio":function(){
@@ -165,6 +180,8 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
     writePage:function(hash,callback){
       var context=this;
       $("html").attr("class","").addClass(hash);
+      context.reset();
+      context.restartValues();
       this.container.load("pages/"+hash+".html",function( response, status, xhr){
         switch(context.page){
           case "amostras":
@@ -173,14 +190,16 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
             context.bfair=$(".fair");
             context.bforn=$(".forn");
             context.spotlight.el=$(".spotlight");
+            this.view = "images";
+            $("body").removeAttr("class");
             context.createComponent(context.fair,context.bfair,'fair');
             //context.callService("fornecedores",'<FORN_DESC></FORN_DESC>','<FEIR_COD></FEIR_COD>','<CREATE_DATE_I>1900-10-17</CREATE_DATE_I>','<CREATE_DATE_F>2020-10-17</CREATE_DATE_F>',20);
             break;
-          case "fornecedor":
+          case "fornecedores":
             context.bfair=$(".fair");
             context.bforn=$(".forn");
             context.spotlight.el=$(".spotlight");
-            //context.createComponent(context.fair,context.bfair,'fair');
+            context.createComponent(context.fair,context.bfair,'fair');
             //console.dir(context.fair);
             break;
           case "local":
@@ -190,8 +209,6 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
           default:
             alert("dssda");
         }
-
-        //context.reset();
       });
     },
     setBreadcrumb : function(a, val){
@@ -243,13 +260,13 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
           }        
         });
     },
-    callService:function(name,a,b,c,d,e,f){
+    callService:function(name,a,b,c,d,e,f,g){
         var core=this;
         var soapRequest=[
           {
             //FEIR_COD e FORN_ID are optional fields
             'name':'amostras',
-            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarAmostras xmlns="http://tempuri.org/">'+a+''+b+'<LINHA_I>'+c+'</LINHA_I><LINHA_F>'+d+'</LINHA_F><CREATE_DATE_I>'+e+'</CREATE_DATE_I><CREATE_DATE_F>'+f+'</CREATE_DATE_F></ListarAmostras></soap:Body></soap:Envelope>',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarAmostras xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+'<LINHA_F>'+e+'</LINHA_F>'+f+''+g+'</ListarAmostras></soap:Body></soap:Envelope>',
             callback:function(data,req){
               core.convertData(data,req,name);
             }
@@ -268,8 +285,11 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
           },
           {
             'name':'fornecedores',
-            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedores xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+'<LINHA_I>'+e+'</LINHA_I><LINHA_F>'+f+'</LINHA_F></ListarFornecedores></soap:Body></soap:Envelope>',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedores xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+''+e+''+f+'</ListarFornecedores></soap:Body></soap:Envelope>',
             callback:function(data,req){
+              if(core.notcombo){
+                core.convertData(data,req,name,!0);
+              }
               core.convertData(data,req,name);
             }
           },
@@ -285,7 +305,7 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
         $.support.cors=true;
         soapRequest.filter(function(a,b){
           if(a['name'] === name){
-            console.log(a['code']);
+            //console.log(a['code']);
             core.callback=a['callback'];
             $.ajax({
                 type: "POST",
@@ -301,34 +321,57 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
           }
         });
     },
-    submit:function(a){
+    submit:function(a,b,c){
+      var b=b || "";
+      var c=c || "";
       this.reset();
-      console.time("timerName");
-      this.callService(this.page,"<FEIR_COD>"+a+"</FEIR_COD>","",1,20,'2015-04-10',"2015-10-10");
+      if(this.page ===  "amostras"){
+        this.callService(this.page,a,b,c,'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20'+'</LINHA_F>','<CREATE_DATE_I>2010-04-10</CREATE_DATE_I>',"<CREATE_DATE_F>2015-10-10</CREATE_DATE_F>");
+      }
+      else{
+        this.callService(this.page,a,b,'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20'+'</LINHA_F>','<CREATE_DATE_I>2010-04-10</CREATE_DATE_I>',"<CREATE_DATE_F>2015-10-10</CREATE_DATE_F>");
+      }
+    },
+    search:function(a){
+      var forn_desc=this.fornval || "";
+      var fair_id=this.fairval || "";
+      if(13 === a.keyCode){
+        this.submit("<FEIR_COD>"+fair_id+"</FEIR_COD>","<FORN_DESC>"+forn_desc+"</FORN_DESC>","<AMOS_DESC>"+$(a.target).val()+"</AMOS_DESC>");
+      }
     },
     processError:function(data, status, req){
       console.log("DEU ERRO");
     },
     setdata:function(a,b){   
         var val = $(".form-control-search").val("ddssa");
-        this.content.changeview(this.view);
-        this.fdata = a.sortBy("AMOS_ID");
         this.content.page = 0;
-        console.dir(this.fdata);
-        console.timeEnd("timerName");
         /*this.setBreadcrumb(a,val);
-        this.breadEl.find(".bread-load").text(0);
+        this.breadEl.find(".bread-load").text(0);*/
 
         if (!this.fdata.length) {        
-          return this.modal.open(),this.breadEl.find('.bread-colec a').text("").removeClass('active'),this.setloading(!1), this.searchEl.find('input').blur();
+          return alert("NENHUMA AMOSTRA***"), $('.bread-search').find(".spec").text("0 Amostras");
+          //return this.modal.open(),this.breadEl.find('.bread-colec a').text("").removeClass('active'),this.setloading(!1), this.searchEl.find('input').blur();
         }  
+
+        if(b){
+          this.fdata = a.sortBy("FORN_ID");
+          this.content.changeview("list");
+          //console.dir(this.fdata);
+          this.createbox(this.fdata, this.content.page, !0,"list");
+        }
+        else{
+          this.fdata = a.sortBy("AMOS_ID");
+          //console.dir(this.fdata);
+          this.content.changeview(this.view);
+          this.createbox(this.fdata, this.content.page, !0);
+        }
         
-        this.content.page = 0;
+        /*this.content.page = 0;
         
         b ? (this.data = this.fdata || this.data) : this.fdata = this.data;*/
-        this.content.changeview(this.view);
+        
         //this.content.create(this.fdata[0]);
-        this.createbox(this.fdata, this.content.page, !0);    
+            
     },
     callRequest:function(data, status, req){
         if (status == "success") {
@@ -337,23 +380,29 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
           }
         }
     },
-    convertData:function(data,req,what){
+    convertData:function(data,req,what,notcombo){
         switch(what){
           case "amostras":
             this.fdata=jQuery.parseJSON($(req.responseXML).text()).sortBy('AMOS_DESC').unique();
-            console.dir(this.fdata);
             this.setdata(this.fdata);
             break;
           case "local":
             this.fair=jQuery.parseJSON($(req.responseXML).text()).sortBy('FEIR_DESC').unique();
-            
             break;
           case "fornecedores":
-            this.spotlight.forn=[];
-            this.spotlight.forn=jQuery.parseJSON($(req.responseXML).text()).sortBy('FORN_DESC').unique();
-            //this.createComponent(this.forn,this.bforn,what);
-            this.spotlight.open();
-            //this.callService(this.page,"<FEIR_COD>10</FEIR_COD>","<FORN_ID>4200000</FORN_ID>",1,20);
+            if(notcombo){
+              this.fdata=jQuery.parseJSON($(req.responseXML).text()).sortBy('FORN_DESC').unique();
+              //this.setdata(this.fdata);
+              this.setdata(this.fdata,!0);
+            }
+            else{
+              this.spotlight.forn=[];
+              this.spotlight.forn=jQuery.parseJSON($(req.responseXML).text()).sortBy('FORN_DESC').unique();
+              //this.createComponent(this.forn,this.bforn,what);
+              this.spotlight.open();
+              //this.callService(this.page,"<FEIR_COD>10</FEIR_COD>","<FORN_ID>4200000</FORN_ID>",1,20);
+            }
+            
             break;
           case "cities":
             this.cities=jQuery.parseJSON($(req.responseXML).text());//.sortBy('FEIR_DESC').unique();
@@ -395,7 +444,7 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
         this.active = this.active || this.content;
         d = this.active.itens && !d ? this.active.itens.length : 0;
         m = 300 * (b + 1) < a.length ? 300 * (b + 1) : a.length;
-        var p, h, q, k = 300 * b, l = m - k, e = this;
+        var p, h, q, k = 0, l = 21, e = this;
         if (d < a.length && a[k]) {
             f = setInterval(function() {
                 h = a[k];   
@@ -410,8 +459,9 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
                       return !1;*/
 
                     v = h.AMOS_ID || null; 
-                    //var material = h.MATERIAL_REF.replace(' ','');
-                    p = new Image, q = "http://189.126.197.169/img/small/small_P11JF0157306705.jpg", $(p).load(function() {
+                    //console.dir(h);
+                    //Usando por enquanto o caminho para a imagem large, pois as amostras antigas eram salvas em tamanho muito pequeno
+                    p = new Image, q = "http://bdb/ifair_img/"+h.IMG_PATH_SAMPLE.replace("thumb","large"), $(p).load(function() {
                         if (!l > 0)
                             return !1;
 
@@ -425,12 +475,6 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
                         });
 
                         e.active.create(g.render());
-
-                        // Mostrando (box sendo carregados)
-                        $('.bread-search').find(".spec").text(k+1+" Amostras");
-
-                        l--;
-                        k++;
                     }).error(function() {
 
                         if (!l > 0)
@@ -449,24 +493,28 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
                         });
                         e.active.create(g.render());
                     }).attr("src", q);
+
+                    // Mostrando (box sendo carregados)
+                    $('.bread-search').find(".spec").text(k+1+" Amostras");
+                    l--;
+                    k++;
                 } else {
                     if (l > 0) {
                         return g = new Box({
                             item : h,
                             view : c,
                             tag : n,
-                            // reloadcart : e.proxy(e.reloadcart),
                             detail : e.detail,
-                            modal : e.modal
-                        }), e.active.create(g.render()), $('.bread-box').find(".bread-load").text(k+1), l--, k++, !1;
+                            modal : e.modal,
+                            page: e.page
+                        }), e.active.create(g.render()),l--, k++,!1;
+                        //, $('.bread-box').find(".bread-load").text(k+1), l--, k++, !1*/
                     } else {
                         clearInterval(f), e.endloading();
                     }
                 }
-            }, 0.1);
+            }, 300);
         } else {
-                              console.log("cds");
-
             return this.endloading(), !1;
         }  
     },  
@@ -535,7 +583,43 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
     changeFair:function(a){
       this.bforn.val("");
       this.fairval=$(a.target).find("option:selected").val();
-      this.submit(this.fairval);
+      this.notcombo=!0;
+      this.submit("<FEIR_COD>"+this.fairval+"</FEIR_COD>");
+    },
+    exportExcel:function(){
+      //Extracted from: http://stackoverflow.com/questions/22317951/export-html-table-data-to-excel-using-javascript-jquery-is-not-working-properl/24081343#24081343
+
+      
+      var tab_text="<table border='2px'><tr bgcolor='#71abcc'>";
+      var textRange; var j=0;
+      tab = document.getElementById('table'); // id of table
+
+      for(j = 0 ; j < tab.rows.length ; j++) 
+      {     
+          tab_text=tab_text+tab.rows[j].innerHTML+"</tr>";
+          //tab_text=tab_text+"</tr>";
+      }
+
+      tab_text=tab_text+"</table>";
+      tab_text= tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+      tab_text= tab_text.replace(/<img[^>]*>/gi,""); // remove if u want images in your table
+      tab_text= tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
+
+      var ua = window.navigator.userAgent;
+      var msie = ua.indexOf("MSIE "); 
+
+      if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+      {
+          txtArea1.document.open("txt/html","replace");
+          txtArea1.document.write(tab_text);
+          txtArea1.document.close();
+          txtArea1.focus(); 
+          sa=txtArea1.document.execCommand("SaveAs",true,"WebFair Report.xls");
+      }  
+      else                 //other browser not tested on IE 11
+          sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));  
+
+      return (sa);
     },
     getSpot:function(a){
       //13 === a.keyCode ? (this.spotlight.close(), this.searchEl.trigger("submit")) : (this.filter.close(), 1 < a.target.value.length ? this.spotlight.open(a) : this.spotlight.close());
@@ -546,7 +630,8 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
         if(3 < a.target.value.length){
           this.spotlight.input=$(a.target);
           if(48 <= a.keyCode && 90 >= a.keyCode || 8 == a.keyCode) {
-                this.callService("fornecedores",'<FORN_DESC>'+a.target.value+'</FORN_DESC>','<FEIR_COD>'+this.fairval+'</FEIR_COD>','<CREATE_DATE_I>1900-10-17</CREATE_DATE_I>','',1,2000);
+                this.notcombo=!1;
+                this.callService("fornecedores",'<FORN_DESC>'+a.target.value+'</FORN_DESC>','<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'60'+'</LINHA_F>','<CREATE_DATE_I>1900-10-17</CREATE_DATE_I>','');
               }
               else{
                 if(40 === a.keyCode || 38 === a.keyCode) {
@@ -572,6 +657,18 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
     },
     setFornVal:function(a){
       this.fornval=a;
+    },
+    getNotCombo:function(){
+      return this.notcombo;
+    },
+    setNotCombo:function(a){
+      this.notcombo=a;
+    },
+    getPage:function(){
+      return this.page;
+    },
+    setPage:function(a){
+      this.page=a;
     },
     /**
     * `Set the loading state`
@@ -617,11 +714,20 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       return this.fdata;
     },
     reset:function(){
-      //this.data = [];
-      //this.fdata = [];
-      /*this.itens = $([]);
-      this.itens.remove();*/
+      this.data = [];
+      this.fdata = [];
+      this.itens = $([]);
+      this.itens.remove();
       this.content.reset();
+    },
+    restartValues:function(){
+      //Var to storage the basic data
+      this.fairval="";
+      this.fornval="";
+      this.amosval="";
+      this.initialTime='2015-01-08';
+      this.endTime='2015-10-10';
+      this.notcombo=0;
     }
   });
   new App;

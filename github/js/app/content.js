@@ -6,32 +6,38 @@ window.Spotlight = Spine.Controller.sub({
     //"click .spotlight button":"select"
   }, 
   select:function(a) {
-  var fair="<FEIR_COD>",name="<FORN_ID>";
-  if("object" === typeof a) {
-   a = $(a.target);
-  }else {
-    return!1;
-  }
-  if(a.attr("type") === "button"){
-    name+=a.attr("name")+"</FORN_ID>";
-  }
-  else{
-    console.dir(a);
-    name="<FORN_DESC>"+a.val()+"</FORN_DESC>";
-    console.log(name);
-  }
-  //this.input.val(this.list + a.text()).focus().trigger("submit");
-  this.reset();
-  this.setFornVal(a.attr("name"));
-  if(this.getFairVal()){
-    fair+=this.getFairVal()+"</FEIR_COD>";
-  }
-  else{
-    fair+="</FEIR_COD>";
-  }
+    var fair="<FEIR_COD>",name="<FORN_ID>";
+    if("object" === typeof a) {
+     a = $(a.target);
+    }else {
+      return!1;
+    }
+    if(a.attr("type") === "button"){
+      name+=a.attr("name")+"</FORN_ID>";
+      this.setFornVal(a.attr("name"));
+    }
+    else{
+      name="<FORN_DESC>"+a.val()+"</FORN_DESC>";
+      this.setFornVal(a.val());
+    }
+    this.reset();
+    if(this.getFairVal()){
+      fair+=this.getFairVal()+"</FEIR_COD>";
+    }
+    else{
+      fair+="</FEIR_COD>";
+    }
 
-  this.callService("amostras",fair,name,1,20,'2010-01-01','2050-01-01');
-  this.close();
+    if(this.getPage() === "amostras"){
+      
+      this.callService("amostras",fair,name,"",'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20'+'</LINHA_F>','2010-01-01','2050-01-01');
+      this.close();
+    }
+    else{
+      this.setNotCombo(!0);
+      this.callService("fornecedores",fair,name,'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20'+'</LINHA_F>','<CREATE_DATE_I>2010-04-10</CREATE_DATE_I>','<CREATE_DATE_F>2050-04-10</CREATE_DATE_F>');
+      this.close();
+    }
 }, over:function(a) {
   a.addClass("sel");
   this.input.val(a.text()).focus();
@@ -55,7 +61,6 @@ window.Spotlight = Spine.Controller.sub({
   this.el.html(html).show();
   $(".spotlight button").bind("click",this.proxy(this.select));
 }, hint:function(a, b) {
-  console.log("fdsfds");
   var c, d, e = [];
   this.el.empty();
   if(!a.length)
@@ -159,7 +164,7 @@ window.Content = Spine.Controller.sub({
     //console.log("1");
     if(typeof this.table !== "object"){
       this.table=$(".viewport");
-      this.tbody=$(".table tbody");
+      this.tbody=$("#table tbody");
       this.tcontainer=$(".floatThead");
       this.bedit=$(".bedit");
     }
@@ -169,12 +174,12 @@ window.Content = Spine.Controller.sub({
     this.table.empty();
   }, images:function(a) {
     $("body").attr("class","").addClass("images");
-    a.appendTo(this.table);
-    this.itens = this.table.find(".thumbnail");
+    a.appendTo($(".viewport"));
+    this.itens = $(".viewport").find(".thumbnail");
   }, list:function(a) {
     $("body").attr("class","").addClass("list");
-    a.appendTo(this.tbody);
-    this.itens = this.tbody.find('tr');
+    a.appendTo($("#table tbody"));
+    this.itens = $("#table tbody").find('tr');
   }, clean:function() {
     this.itens.remove();
     this.itens = $([]);
@@ -237,7 +242,7 @@ window.Box = Spine.Controller.sub({init:function() {
       result+="</ul></li>"
     }
     result+="<li><button type='button' class='caption-icons-icon justit bfisica "+fisica+"'></button></li><li><button type='button' class='caption-icons-icon justit bfav "+fav+"'></button></li></ul>";
-    result+="<div class='caption-desc'><p><span>Nome da Amostra: </span><span>"+a.AMOS_DESC+"</span></p><p><span>Fornecedor: </span><span>"+a.FORN_DESC+"</span></p><p><span>Data: </span><span>"+a.CREATE_DATE+"</span></p>";
+    result+="<div class='caption-desc'><p><span>Código da Amostra: </span><span>"+a.AMOS_ID+"</span></p><p><span>Fornecedor: </span><span>"+a.FORN_DESC+"</span></p><p><span>Data: </span><span>"+a.CREATE_DATE+"</span></p>";
     if(annex){
       result+="<button type='button' class='icon bannex'></button>";
     }
@@ -247,46 +252,87 @@ window.Box = Spine.Controller.sub({init:function() {
     result+="</ul></div></div></div></a>";
     return result;
   }, list:function(a) {
-    console.dir(a);
-    var homologado,note,fisica,fav,email,annex,status,result="",i;
-    this.el.addClass('col col-small col-large');
-    homologado= a.AMOS_HOMOLOGAR ? "has":"nothas";
-    note= a.NOTES.length   ? true:false;
-    fisica= a.FLAG_FISICA ? "has":"nothas";
-    fav= a.FLAG_PRIORIDADE ? "has":"nothas";
-    annex= a.AMOS_HOMOLOGAR ? true:false;
-    status= a.AMOS_STATUS ? "complet":"incomplet";
-    email= a.AMOS_ENV_EMAIL? "sent":"disabled";
+    if(this.page === "fornecedores"){
+      var result="",i,status,nome_contato,segmento=[];
+      status= a.FORN_STATUS ? "complet":"incomplet";
+      result+="<td>"+a.FORN_DESC+"</td>"+"<td>"+a.FEIR_DESC+"</td>"+"<td>"+a.CREATE_DATE+"</td>";
+      if(a.CONTACTS.length){
+        result+="<td>";
+        for(i=0;i<a.CONTACTS.length;i++){
+          if(a.CONTACTS[i].CONT_NOME.length){
+            nome_contato=a.CONTACTS[i].CONT_NOME;
+          }
+          else{
+            nome_contato="SEM NOME";
+          }
+          segmento.push(a.CONTACTS[i].SEGM_DESC);
+          result+=""+nome_contato+"<br/>";
+        }
+        result+="</td>";
+      }
+      else{
+        result+="<td></td>";
+      }
+      if(segmento.length){
+        result+="<td>"+segmento.join("<br/>")+"</td>";
+      }
+      else{
+        result+="<td></td>";
+      }
+      result+="<td>"+a.FAVORITOS+"</td>";
+      if(a.NOTES.length){
+        result+="<td class='tooltip tooltip-selectable'><button type='button' class='caption-icons-icon justit bnote'></button><ul class='tooltip-content notepad notepadmess col-large'><li class='tooltip-title'><p class='tooltip-item'>Anotações</p></li>";
+        for(i=0;i<a.NOTES.length;i++){
+          result+="<li><article><div class='notepad-note blockquote'><p>"+a.NOTES[i].CREATE_DATE+" | "+ a.NOTES[i].USU_NOME+" | "+a.NOTES[i].OBJ_ID+"</p><p>"+a.NOTES[i].SEGM_DESC+" - Assunto:</p><p>"+a.NOTES[i].NOTA_DESC+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+a.NOTES[i].NOTA_ID+"' name='"+a.NOTES[i].USU_COD+"'></button></div></article></li>"
+        }
+        result+="</ul></td>"
+      }
+      else{
+        result+="<td>d</td>";
+      }
+      result+="<td><button type='button' class='caption-icons-icon justit bstatus "+status+"'>"+status+"</button></td>";
+      return result;
+    }
 
-    //Creating result
-    result+="<td><button type='button' name='"+a.AMOS_ID+"'' class='icon bselection' name='"+a.AMOS_ID+"''></button></td><td>"+a.FORN_DESC+"</td><td>"+a.AMOS_ID+"</td><td>"+a.CREATE_DATE+"</td><td><button type='button' class='caption-icons-icon justit bfisica "+fisica+"'></button></td><td>"+a.AMOS_PRECO+"</td><td>"+a.AMOS_COTACAO_KG+"</td><td><button type='button' class='caption-icons-icon justit bfav "+fav+"'></button></td><td><button type='button' class='caption-icons-icon justit bhomologado "+homologado+"'></button></td>";
-    if(note){
-      result+="<td class='tooltip tooltip-selectable'><button type='button' class='caption-icons-icon justit bnote'></button><ul class='tooltip-content notepad notepadmess col-large'><li class='tooltip-title'><p class='tooltip-item'>Anotações</p></li>";
-      for(i=0;i<a.NOTES.length;i++){
-        result+="<li><article><div class='notepad-note blockquote'><p>"+"12/15/2015"+/*a.NOTES[i].CREATE_DATE*/" | "+ a.NOTES[i].USU_NOME+" | "+a.NOTES[i].OBJ_ID+"</p><p>"+a.NOTES[i].SEGM_DESC+" - Assunto:</p><p>"+a.NOTES[i].NOTA_DESC+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+a.NOTES[i].NOTA_ID+"' name='"+a.NOTES[i].USU_COD+"'></button></div></article></li>"
-      }
-      result+="</ul></td>"
-    }
     else{
-      result+="<td></td>";
-    }
-    annex ? result+="<td><button type='button' class='icon bannex'></button></td>" : result+="<td></td>";
-    result+="<td><button type='button' class='caption-icons-icon justit bemail "+email+"'></button></td><td>"+a.TECI_DESC+"</td><td>"+a.BASE_DESC+"</td><td>"+a.GRUP_DESC+"</td><td>"+a.SUBG_DESC+"</td>";
-    if(a.COMPOSITIONS.length){
-      var concat=[];
-      result+="<td>";
-      for(i=0;i<a.COMPOSITIONS.length;i++){
-        concat.push(a.COMPOSITIONS[i].COMP_DESC);
+      var homologado,note,fisica,fav,email,annex,status,result="",i;
+      this.el.addClass('col col-small col-large');
+      homologado= a.AMOS_HOMOLOGAR ? "has":"nothas";
+      note= a.NOTES.length   ? true:false;
+      fisica= a.FLAG_FISICA ? "has":"nothas";
+      fav= a.FLAG_PRIORIDADE ? "has":"nothas";
+      annex= a.AMOS_HOMOLOGAR ? true:false;
+      status= a.AMOS_STATUS ? "complet":"incomplet";
+      email= a.AMOS_ENV_EMAIL? "sent":"disabled";
+
+      //Creating result
+      result+="<td><button type='button' name='"+a.AMOS_ID+"'' class='icon bselection' name='"+a.AMOS_ID+"''></button></td><td>"+a.FORN_DESC+"</td><td>"+a.AMOS_ID+"</td><td>"+a.CREATE_DATE+"</td><td><button type='button' class='caption-icons-icon justit bfisica "+fisica+"'></button></td><td>"+a.AMOS_PRECO+"</td><td>"+a.AMOS_COTACAO_KG+"</td><td><button type='button' class='caption-icons-icon justit bfav "+fav+"'></button></td><td><button type='button' class='caption-icons-icon justit bhomologado "+homologado+"'></button></td>";
+      if(note){
+        result+="<td class='tooltip tooltip-selectable'><button type='button' class='caption-icons-icon justit bnote'></button><ul class='tooltip-content notepad notepadmess col-large'><li class='tooltip-title'><p class='tooltip-item'>Anotações</p></li>";
+        for(i=0;i<a.NOTES.length;i++){
+          result+="<li><article><div class='notepad-note blockquote'><p>"+a.NOTES[i].CREATE_DATE+" | "+ a.NOTES[i].USU_NOME+" | "+a.NOTES[i].OBJ_ID+"</p><p>"+a.NOTES[i].SEGM_DESC+" - Assunto:</p><p>"+a.NOTES[i].NOTA_DESC+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+a.NOTES[i].NOTA_ID+"' name='"+a.NOTES[i].USU_COD+"'></button></div></article></li>"
+        }
+        result+="</ul></td>"
       }
-      concat.join();
-      result+=concat+"</td>";
+      else{
+        result+="<td></td>";
+      }
+      annex ? result+="<td><button type='button' class='icon bannex'></button></td>" : result+="<td></td>";
+      result+="<td><button type='button' class='caption-icons-icon justit bemail "+email+"'></button></td><td>"+a.TECI_DESC+"</td><td>"+a.BASE_DESC+"</td><td>"+a.GRUP_DESC+"</td><td>"+a.SUBG_DESC+"</td>";
+      if(a.COMPOSITIONS.length){
+        var concat=[];
+        result+="<td>";
+        for(i=0;i<a.COMPOSITIONS.length;i++){
+          concat.push(a.COMPOSITIONS[i].COMP_DESC);
+        }
+        concat.join();
+        result+=concat+"</td>";
+      }
+      else{
+        result+="<td></td>";
+      }
+      result+="<td><button type='button' class='caption-icons-icon justit bstatus "+status+"'>"+status+"</button></td>";
+      return result;
     }
-    else{
-      result+="<td></td>";
-    }
-    result+="<td><button type='button' class='caption-icons-icon justit bstatus "+status+"'></button></td>";
-    return result;
-    //return "<td class='tcode'><a href='#detail/"+detail+"' >"+ a.MATNR +"</a></td>";
-    //return "<td><a href='#detail/"+detail+"' >"+ a.MAKTX +"</td><td class='tcode'><a href='#detail/"+detail+"' >"+ a.MATNR +"</a></td>";
   }
 });

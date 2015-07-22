@@ -1444,7 +1444,7 @@ form.search {
 }
 /*********************************
 ************************************	TABLE ***************************/
-.table {
+#table {
   position: relative;
   float: left;
   width: 100%;
@@ -2249,6 +2249,8 @@ form.search {
   cursor: pointer;
   background: none;
   display: block;
+  font-size: 0;
+  line-height: 0;
 }
 .caption-icons-icon:after {
   background: url("../images/sprite.png") top left no-repeat;
@@ -2491,7 +2493,7 @@ form.search {
   height: auto;
   overflow-x: auto;
 }
-.table {
+#table {
   width: 100%;
   max-width: 100%;
   border-spacing: 0;
