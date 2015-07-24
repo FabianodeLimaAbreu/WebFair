@@ -41,7 +41,6 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       ".bread-box":"breadEl",
       "#modal" : "modalEl",
       ".detail":"detailEl"*/
-
     },
 
     events: {      
@@ -59,7 +58,8 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       "click .export":"exportExcel",
       "blur .form-control-search":"search",
       "keyup .form-control-search":"search",
-      "change .filter-data":"filterForn"
+      "change .filter-data":"filterForn",
+      "click .caption-downside a":"compChange"
       /*"submit .search":"submit",
       "click button.icon.go_back_default":"goBack",
       "click button.close":"getOut"*/
@@ -80,6 +80,7 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       this.cities=[];
       this.forn=[];
       this.segm=[];
+      this.select_items=[];
       this.fairval="";
       this.fornval="";
       this.amosval="";
@@ -94,7 +95,18 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       this.father=!0;
       this.searchname="";*/
       this.breadarr = [];
-      this.content = new Content({el:this.contentEl/*bread:this.breadEl, type:this.usr.TIPO*/});
+      //this.modal = new Modal({el:this.modalEl});
+      //this.detail = new Detail({el:this.detailEl, breadEl:this.breadEl,getloading:this.proxy(this.getloading), setloading:this.proxy(this.setloading),stage:this.proxy(this.stage), body:this.el,getdata:this.proxy(this.getdata)});
+
+      this.header.addClass("goDown");
+      this.usr = jQuery.parseJSON($.cookie("webfair"));
+      if(!this.usr)
+        window.location.href = 'login.html';
+      this.username.text(this.usr.USU_NOME);
+      
+      this.el.find("#wrap").removeClass("hide");
+
+      this.content = new Content({el:this.contentEl,usr_segm:this.usr.SEGM_COD,/*bread:this.breadEl, type:this.usr.TIPO*/});
       this.spotlight = new Spotlight({
         callService:this.proxy(this.callService),
         reset:this.proxy(this.reset),
@@ -106,16 +118,6 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
         setNotCombo:this.proxy(this.setNotCombo),
         getPage:this.proxy(this.getPage)
       });
-      //this.modal = new Modal({el:this.modalEl});
-      //this.detail = new Detail({el:this.detailEl, breadEl:this.breadEl,getloading:this.proxy(this.getloading), setloading:this.proxy(this.setloading),stage:this.proxy(this.stage), body:this.el,getdata:this.proxy(this.getdata)});
-
-      this.header.addClass("goDown");
-      this.usr = jQuery.parseJSON($.cookie("webfair"));
-      if(!this.usr)
-        window.location.href = 'login.html';
-      this.username.text(this.usr.USU_NOME);
-      
-      this.el.find("#wrap").removeClass("hide");
 
       if(!this.fair.length){
         this.callService("local",'<FEIR_COD></FEIR_COD>','<PAIS_COD></PAIS_COD>','<REGI_COD></REGI_COD>');
@@ -146,6 +148,11 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
         "local":function(){
           var context=this;
           this.page ="local";
+          this.writePage(this.page);
+        },
+        "local/*func/*code":function(){
+          var context=this;
+          this.page ="local_cadastro";
           this.writePage(this.page);
         },
         "template_email":function(){
@@ -207,6 +214,9 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
             break;
           case "local":
             context.bcity=$(".city");
+            //context.callService(context.page,"<FEIR_COD></FEIR_COD>","<PAIS_COD>BR</PAIS_COD>","<REGI_COD>SP</REGI_COD>");
+            break;
+          case "local_cadastro":
             //context.callService(context.page,"<FEIR_COD></FEIR_COD>","<PAIS_COD>BR</PAIS_COD>","<REGI_COD>SP</REGI_COD>");
             break;
           default:
@@ -302,7 +312,12 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
             callback:function(data,req){
               core.convertData(data,req,name);
             }
-          }
+          },
+          {
+            'name':'gravarAmostraComposicao',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarAmostraComposicao xmlns="http://tempuri.org/"><AMOS_ID>'+a+'</AMOS_ID><compositions>'+b+'</compositions></GravarAmostraComposicao></soap:Body></soap:Envelope>',
+            'callback':null
+          },
         ];
 
         $.support.cors=true;
@@ -367,6 +382,7 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       switch(b){
         case 'amostras':
           this.data = a.sortBy("AMOS_ID");
+          console.dir(this.data);
           this.content.changeview(this.view);
           this.createbox(this.data, this.content.page, !0);
           break;
@@ -377,6 +393,7 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
           break;
         case 'local':
           this.content.changeview("list");
+          console.dir(a);
           this.createbox(a, this.content.page, !0,"list");
           break;
         default:
@@ -613,16 +630,21 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
     selectItems : function(a){
       if($(a.target).hasClass("sel")){
         //Reseta array
+        this.select_items=[];
         $(a.target).removeClass("sel");
         $(".thumbnail .icon").attr("class","icon");
         $("html").attr("class","amostras");
       }
       else{
         //Inicia gravação
+        this.select_items=[];
         $(".bsel").removeClass("sel");
         $(a.target).addClass("sel");
         $(".thumbnail .icon").attr("class","icon").addClass($(a.target).attr("name"));
         $("html").attr("class","amostras").addClass("select");
+        if($(a.target).hasClass("bedit")){
+          $("html").addClass("edit");
+        }
       }
     },
     changeCountries: function(a){
@@ -642,6 +664,25 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       this.content.page = 0;
       this.createbox(this.fdata, this.content.page, !0,"list");
       //console.dir(typeof Boolean($(a.target).find("option:selected").val()));
+    },
+    compChange:function(ev){
+      ev.preventDefault();
+      var aux,html="";
+      var el=$(ev.target);
+      aux=el.closest("ul");
+      console.log(aux.find("a").length);
+      if(aux.find("a").length>1){
+        el.parent().remove();
+        var items=aux.find("a");
+        items.each(function(a,b){
+          html+="<string>"+$(b).attr("href").replace("#","")+"</string>";
+        });
+        this.callService("gravarAmostraComposicao",$(items[0]).attr("name"),html);
+      }
+      else{
+        this.callService("gravarAmostraComposicao",el.attr("name"),"");
+        el.parent().remove();
+      }
     },
     changeCity:function(val){
       var country,city,context=this,arr=[];

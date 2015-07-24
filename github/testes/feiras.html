@@ -12,7 +12,7 @@
               $("#btnCallWebService").click(function (event) {
                   var wsUrl = "../../WebService.asmx?op=ListarFeiras";
                   
-                  var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFeiras xmlns="http://tempuri.org/"><FEIR_COD></FEIR_COD><PAIS_COD>BR</PAIS_COD><REGI_COD>RJ</REGI_COD></ListarFeiras></soap:Body></soap:Envelope>';
+                  var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFeiras xmlns="http://tempuri.org/"><FEIR_COD>16</FEIR_COD><PAIS_COD>BR</PAIS_COD><REGI_COD>RJ</REGI_COD></ListarFeiras></soap:Body></soap:Envelope>';
 //4200000
 
                   $.support.cors=true;

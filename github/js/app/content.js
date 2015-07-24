@@ -247,10 +247,22 @@ window.Box = Spine.Controller.sub({init:function() {
     if(annex){
       result+="<button type='button' class='icon bannex'></button>";
     }
-    result+="</div></div><div class='caption-downside'><ul>";
+    result+="</div></div></a><div class='caption-downside'><ul>";
+    if(a.COMPOSITIONS.length){
+      //result+="<li>";
+      for(i=0;i<a.COMPOSITIONS.length;i++){
+        result+="<li>";
+        result+="<a href='#"+a.COMPOSITIONS[i].COMP_COD.replace("   ","")+"' name='"+a.AMOS_ID+"'>"+a.COMPOSITIONS[i].COMP_DESC+"</a></li>";
+        //concat.push(a.COMPOSITIONS[i].COMP_DESC);
+      }
+      result+="</ul>";
+    }
+    else{
+      result+="</ul>";
+    }
     //Por Enquanto
-    result+="<li>Plano</li><li>Tinto</li><li>Transparências</li><li>Bordado</li><li>Viscose</li><li>Plano</li><li>Tinto</li><li>Transparências</li><li>Bordado</li><li>Viscose</li>";
-    result+="</ul></div></div></div></a>";
+    //result+="<li>Plano</li><li>Tinto</li><li>Transparências</li><li>Bordado</li><li>Viscose</li><li>Plano</li><li>Tinto</li><li>Transparências</li><li>Bordado</li><li>Viscose</li>";
+    result+="</div></div></div>";
     return result;
   }, list:function(a) {
     switch (this.page){
@@ -349,7 +361,7 @@ window.Box = Spine.Controller.sub({init:function() {
         break;
       case 'local':
         var result="";
-        result+="<td>"+a.FEIR_DESC+"</td>"+"<td>"+a.REGI_DESC+"</td>"+"<td>"+a.PAIS_DESC+"</td>"+"<td><a href='#"+a.FEIR_COD+"' class='icon floatLeft edit-big'></a></td>";
+        result+="<td>"+a.FEIR_DESC+"</td>"+"<td>"+a.REGI_DESC+"</td>"+"<td>"+a.PAIS_DESC+"</td>"+"<td><a href='#local/edit/"+a.FEIR_COD+"' class='icon floatLeft edit-big'></a></td>";
         return result;
         break;
       default:

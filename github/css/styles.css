@@ -1317,6 +1317,7 @@ form.search {
   width: 155px;
   display: inline-block;
   height: auto;
+  display: none;
   transition: left 1.5s ease-out;
   -webkit-transition: left 1.5s ease-out;
 }
@@ -1540,6 +1541,9 @@ form.search {
   float: left;
   display: inline-block;
   margin: 0 2px;
+}
+.caption .caption-downside li a {
+  color: red;
 }
 /*********************************
 ************************************	DETAIL ***************************/
@@ -1955,6 +1959,9 @@ form.search {
 .edit .holder {
   float: left;
   margin-left: 10px;
+}
+.edit .aside-edit {
+  display: block;
 }
 .images .floatThead {
   display: none;
