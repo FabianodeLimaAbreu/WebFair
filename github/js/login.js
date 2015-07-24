@@ -60,15 +60,33 @@ var App={
 	      complet = !0;
 	    });
 	    if(complet){
-	    	val = val.join("/");
 	    	$(".mask").fadeIn();
-	    	$.getJSON("http://189.126.197.169/node/express/setuser?query=" + val + "?callback=?", function(a) {   
-			    if(a.TIPO && null !== a.TIPO) {
-			    	return $.cookie.json = !0, $.cookie("portal", a, {expires:7, path:"/"}), window.location.href = "./index.html", !1;
-			    }
-			    contex.elements.warn.fadeIn();
-			    $(".mask").fadeOut();
-		  	});
+	    	var wsUrl = "../../WebService.asmx?op=Login";
+	    	var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><Login xmlns="http://tempuri.org/"><USU_LOGIN>'+val[0]+'</USU_LOGIN><USU_PASS>'+val[1]+'</USU_PASS></Login></soap:Body></soap:Envelope>';
+	    	$.support.cors=true;
+			$.ajax({
+				type: "POST",
+				url: wsUrl,
+				contentType: "text/xml; charset=utf-8",
+				dataType: "xml",
+				crossDomain: true,
+				data: soapRequest,
+				success: function(data, status, req){
+					if (status == "success") {
+						$(".mask").fadeOut();
+						var result=jQuery.parseJSON($(req.responseXML).text());
+				        if(result.USU_LOGIN !== null){
+				        	return $.cookie.json = !0, $.cookie("webfair", result, {expires:7, path:"/"}), window.location.href = "./index.html", !1;
+				        }
+				        else{
+				        	contex.elements.warn.fadeIn();
+				        }
+				    }
+				},
+				error: function(data, status, req) {
+					alert(req.responseText + " " + status);
+				}
+			});
 	    }
 	    else{
 	    	contex.elements.warn.fadeIn();
@@ -77,5 +95,4 @@ var App={
 	}
 	
 };
-
 App.init();

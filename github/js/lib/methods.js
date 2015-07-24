@@ -11,6 +11,12 @@ window.setInterval = function(c, a) {
   window.intervalList.push(e);
   return e;
 };
+function parseJsonDate(jsonDateString){
+    return new Date(parseInt(jsonDateString.replace('/Date(', '')));
+}
+String.prototype.bool = function() {
+    return (/^true$/i).test(this);
+};
 window.clearInterval = function(c) {
   var a = window.intervalList.indexOf(c);
   0 <= a && window.intervalList.splice(a, 1);
