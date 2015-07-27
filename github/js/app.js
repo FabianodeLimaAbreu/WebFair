@@ -59,7 +59,10 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       "blur .form-control-search":"search",
       "keyup .form-control-search":"search",
       "change .filter-data":"filterForn",
-      "click .caption-downside a":"compChange"
+      "click .caption-downside a":"compChange",
+      "click .edit-fair":"editFair",
+      "click .fair-save":"saveFair",
+      "click .delete-fair":"deleteFair"
       /*"submit .search":"submit",
       "click button.icon.go_back_default":"goBack",
       "click button.close":"getOut"*/
@@ -77,6 +80,7 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
 
       //Var to storage the basic data
       this.fair=[];
+      this.ffair=[];
       this.cities=[];
       this.forn=[];
       this.segm=[];
@@ -133,11 +137,19 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
         "amostras":function(){
           var context=this;
           this.page ="amostras";
+          $("html").attr("class","").addClass(this.page);
           this.writePage(this.page);
         },
         "fornecedores":function(){
           var context=this;
           this.page ="fornecedores";
+          $("html").attr("class","").addClass(this.page);
+          this.writePage(this.page);
+        },
+        "fornecedores/*code":function(a){
+          var context=this;
+          this.page ="fornecedor_cadastro";
+          $("html").attr("class","").addClass(this.page);
           this.writePage(this.page);
         },
         "relatorio":function(){
@@ -148,12 +160,20 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
         "local":function(){
           var context=this;
           this.page ="local";
+          $("html").attr("class","").addClass(this.page);
           this.writePage(this.page);
         },
-        "local/*func/*code":function(){
+        "local/*func/*code":function(a){
           var context=this;
           this.page ="local_cadastro";
-          this.writePage(this.page);
+          $("html").attr("class","local_cadastro view_fair");
+          this.writePage(this.page,a.code);
+        },
+        "local/*func":function(a){
+          var context=this;
+          this.page ="local_cadastro";
+          $("html").attr("class","local_cadastro add_fair");
+          this.writePage(this.page,"new");
         },
         "template_email":function(){
           var context=this;
@@ -187,9 +207,8 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       }       
 
     },
-    writePage:function(hash,callback){
+    writePage:function(hash,val){
       var context=this;
-      $("html").attr("class","").addClass(hash);
       context.reset();
       context.restartValues();
       this.container.load("pages/"+hash+".html",function( response, status, xhr){
@@ -217,16 +236,90 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
             //context.callService(context.page,"<FEIR_COD></FEIR_COD>","<PAIS_COD>BR</PAIS_COD>","<REGI_COD>SP</REGI_COD>");
             break;
           case "local_cadastro":
+            context.bcity=$(".city");
+            if(context.ffair.length){
+              context.createComponent(context.cities,context.bcity,"cities");
+              context.fair.filter(function(a,b){
+                if((parseInt(a.FEIR_COD) == (parseInt(val)))){
+                  context.popComponent(a);
+                }
+              });
+            }
+            else{
+              //Mandar para pagina anterior
+            }
             //context.callService(context.page,"<FEIR_COD></FEIR_COD>","<PAIS_COD>BR</PAIS_COD>","<REGI_COD>SP</REGI_COD>");
+            break;
+          case "fornecedor_cadastro":
+            console.log("fornecedor cadastro");
+            /*$('body').scrollspy({ target: '.ScrollSpy' });
+            $('ul.nav-list li a').bind('click', function(e) {
+              console.dir($(this.hash));
+              e.preventDefault();
+              $('.supplier-scroller').animate({scrollTop: $(this.hash).position().top});
+            });*/
             break;
           default:
             alert("dssda");
         }
       });
     },
+    popComponent:function(item){
+      var elem=$(".form-control");
+      elem.each(function(a,b){
+        $(b).attr("disabled","disabled").val(item[$(b).attr("name")]);
+      });
+      this.fairval=item;
+    },
+    editFair:function(a){
+      $(a.target).addClass("sel");
+      $("html").attr("class","local_cadastro edit");
+      var elem=$(".form-control").removeAttr("disabled");
+    },
+    saveFair:function(){
+      var elem=$(".form-control"),html="";
+      if($("html").hasClass("edit")){
+        html+="<FEIR_COD>"+parseInt(this.fairval.FEIR_COD)+"</FEIR_COD>";
+        elem.each(function(a,b){
+          //console.log($(b).attr("class"));
+          if($(b).hasClass("bselect")){
+            //console.log($(b).find("option:selected").val());
+            html+="<"+$(b).attr("name")+">"+$(b).find("option:selected").val().replace(' ',"")+"</"+$(b).attr("name")+">";
+          }
+          else{
+            html+="<FEIR_DESC>"+$(b).val()+"</FEIR_DESC>";
+          }
+        });
+        //html+="<CREATE_DATE>"+new Date().toLocaleDateString().replace("/","-").replace("/","-")+"</CREATE_DATE>";
+        html+="<CREATE_DATE>"+"2015-12-12"+"</CREATE_DATE>";
+        this.callService("gravarLocal",html,"U");
+      }
+      else{
+        html+="<FEIR_COD>24</FEIR_COD>";
+        elem.each(function(a,b){
+          //console.log($(b).attr("class"));
+          if($(b).hasClass("bselect")){
+            //console.log($(b).find("option:selected").val());
+            html+="<"+$(b).attr("name")+">"+$(b).find("option:selected").val().replace(' ',"")+"</"+$(b).attr("name")+">";
+          }
+          else{
+            html+="<FEIR_DESC>"+$(b).val()+"</FEIR_DESC>";
+          }
+        });
+        //html+="<CREATE_DATE>"+new Date().toLocaleDateString().replace("/","-").replace("/","-")+"</CREATE_DATE>";
+        html+="<CREATE_DATE>"+"2015-12-12"+"</CREATE_DATE>";
+        this.callService("gravarLocal",html,"I");
+      }
+    },
+    deleteFair:function(){
+      console.log(this.fairval);
+      var html="";
+      html+="<FEIR_COD>"+parseInt(this.fairval.FEIR_COD)+"</FEIR_COD>"+"<CREATE_DATE>"+"2015-12-12"+"</CREATE_DATE>";
+      this.callService("gravarLocal",html,"D");
+    },
     setBreadcrumb : function(a, val){
       var loja, area, grupo, artigo, bread_text;
-      
+        
       // Error
       if(!a[0]){
         return this.modal.open(),this.breadEl.find('.bread-colec a').text("").removeClass('active'),this.setloading(!1), this.searchEl.find('input').blur();
@@ -294,6 +387,15 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
             'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFeiras xmlns="http://tempuri.org/">'+a+''+b+''+c+'</ListarFeiras></soap:Body></soap:Envelope>',
             callback:function(data,req){
               core.convertData(data,req,name);
+            }
+          },
+          {
+            'name':'gravarLocal',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFeira xmlns="http://tempuri.org/"><fair>'+a+'</fair><action>'+b+'</action></GravarFeira></soap:Body></soap:Envelope>',
+            callback:function(data,req){
+              alert("gravou no banco");
+              //core.convertData(data,req,name);
+              window.location.reload();
             }
           },
           {
@@ -434,9 +536,7 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
           case "fornecedores":
             if(notcombo){
               this.data=jQuery.parseJSON($(req.responseXML).text()).sortBy('FORN_DESC').unique();
-              console.dir(this.data);
               this.setDate(this.data);
-              console.dir(this.data);
               this.setdata(this.data,"fornecedores");
             }
             else{
@@ -448,6 +548,7 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
             }
             break;
           case "cities":
+          console.log("ok");
             this.cities=jQuery.parseJSON($(req.responseXML).text());//.sortBy('FEIR_DESC').unique();
             this.createComponent(this.cities,this.bcity,what);
             break;
@@ -457,11 +558,9 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
     setDate:function(list){
       var i,length;
       length=list.length;
-
+      console.dir(list);
       for(i=0;i<length;i++){
-        this.data[i].CREATE_DATE=parseJsonDate(this.data[i].CREATE_DATE).toLocaleDateString();
-        //this.data[i].CREATE_DATE=parseJsonDate('/Date(-62135589600000-0300)/');
-        ///Date(-62135589600000-0200)/
+        list[i].CREATE_DATE=parseJsonDate(list[i].CREATE_DATE).toLocaleDateString();
       }
     },
     createComponent:function(data,comp,what){
@@ -670,7 +769,7 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       var aux,html="";
       var el=$(ev.target);
       aux=el.closest("ul");
-      console.log(aux.find("a").length);
+      //console.log(aux.find("a").length);
       if(aux.find("a").length>1){
         el.parent().remove();
         var items=aux.find("a");
@@ -688,16 +787,20 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       var country,city,context=this,arr=[];
       country=$(".countries").find("option:selected").val();
       city=$(".city").find("option:selected").val();
-      if(this.fair.length){
-        arr.push(this.fair.filter(function(a,b){
-          if(a.PAIS_COD === country && a.REGI_COD === city){
-            return a;
-          }
-        }));
-        context.setdata(arr[0],"local");
-      }
-      else{
-        this.callService("local",'<FEIR_COD></FEIR_COD>','<PAIS_COD>'+country+'</PAIS_COD>','<REGI_COD>'+city+'</REGI_COD>');
+      this.ffair=[];
+      if(this.page !== "local_cadastro"){
+        if(this.fair.length){
+          arr.push(this.fair.filter(function(a,b){
+            if(a.PAIS_COD === country && a.REGI_COD === city){
+              return a;
+            }
+          }));
+          this.ffair=arr[0];
+          context.setdata(arr[0],"local");
+        }
+        else{
+          this.callService("local",'<FEIR_COD></FEIR_COD>','<PAIS_COD>'+country+'</PAIS_COD>','<REGI_COD>'+city+'</REGI_COD>');
+        }
       }
     },
     changeFair:function(a){

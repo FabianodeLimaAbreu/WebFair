@@ -269,9 +269,9 @@ window.Box = Spine.Controller.sub({init:function() {
       case "fornecedores":
         var result="",i,status,nome_contato,segmento=[];
         status= a.FORN_STATUS ? "complet":"incomplet";
-        result+="<td>"+a.FORN_DESC+"</td>"+"<td>"+a.FEIR_DESC+"</td>"+"<td>"+a.CREATE_DATE+"</td>";
+        result+="<td><a href='#fornecedores/"+a.FEIR_COD+"'>"+a.FORN_DESC+"</a></td>"+"<td><a href='#fornecedores/"+a.FEIR_COD+"'>"+a.FEIR_DESC+"</a></td>"+"<td><a href='#fornecedores/"+a.FEIR_COD+"'>"+a.CREATE_DATE+"</a></td>";
         if(a.CONTACTS.length){
-          result+="<td>";
+          result+="<td><a href='#fornecedores/"+a.FEIR_COD+"'>";
           for(i=0;i<a.CONTACTS.length;i++){
             if(a.CONTACTS[i].CONT_NOME.length){
               nome_contato=a.CONTACTS[i].CONT_NOME;
@@ -282,17 +282,17 @@ window.Box = Spine.Controller.sub({init:function() {
             segmento.push(a.CONTACTS[i].SEGM_DESC);
             result+=""+nome_contato+"<br/>";
           }
-          result+="</td>";
+          result+="</a></td>";
         }
         else{
-          result+="<td></td>";
+          result+="<td><a href='#fornecedores/"+a.FEIR_COD+"'></a></td>";
         }
 
         if(segmento.length){
-          result+="<td>"+segmento.join("<br/>")+"</td>";
+          result+="<td><a href='#fornecedores/"+a.FEIR_COD+"'>"+segmento.join("<br/>")+"</a></td>";
         }
         else{
-          result+="<td></td>";
+          result+="<td><a href='#fornecedores/"+a.FEIR_COD+"'></td>";
         }
 
         if(a.FAVORITES.length){
@@ -331,7 +331,7 @@ window.Box = Spine.Controller.sub({init:function() {
         email= a.AMOS_ENV_EMAIL? "sent":"disabled";
 
         //Creating result
-        result+="<td><button type='button' name='"+a.AMOS_ID+"'' class='icon bselection' name='"+a.AMOS_ID+"''></button></td><td>"+a.FORN_DESC+"</td><td>"+a.AMOS_ID+"</td><td>"+a.CREATE_DATE+"</td><td><button type='button' class='caption-icons-icon justit bfisica "+fisica+"'></button></td><td>"+a.AMOS_PRECO+"</td><td>"+a.AMOS_COTACAO_KG+"</td><td><button type='button' class='caption-icons-icon justit bfav "+fav+"'></button></td><td><button type='button' class='caption-icons-icon justit bhomologado "+homologado+"'></button></td>";
+        result+="<td><button type='button' name='"+a.AMOS_ID+"'' class='icon bselection' name='"+a.AMOS_ID+"''></button></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.FORN_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.AMOS_ID+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.CREATE_DATE+"</a></td><td><button type='button' class='caption-icons-icon justit bfisica "+fisica+"'></button></td><td>"+a.AMOS_PRECO+"</td><td>"+a.AMOS_COTACAO_KG+"</td><td><button type='button' class='caption-icons-icon justit bfav "+fav+"'></button></td><td><button type='button' class='caption-icons-icon justit bhomologado "+homologado+"'></button></td>";
         if(note){
           result+="<td class='tooltip tooltip-selectable'><button type='button' class='caption-icons-icon justit bnote'></button><ul class='tooltip-content notepad notepadmess col-large'><li class='tooltip-title'><p class='tooltip-item'>Anotações</p></li>";
           for(i=0;i<a.NOTES.length;i++){
@@ -343,7 +343,7 @@ window.Box = Spine.Controller.sub({init:function() {
           result+="<td></td>";
         }
         annex ? result+="<td><button type='button' class='icon bannex'></button></td>" : result+="<td></td>";
-        result+="<td><button type='button' class='caption-icons-icon justit bemail "+email+"'></button></td><td>"+a.TECI_DESC+"</td><td>"+a.BASE_DESC+"</td><td>"+a.GRUP_DESC+"</td><td>"+a.SUBG_DESC+"</td>";
+        result+="<td><button type='button' class='caption-icons-icon justit bemail "+email+"'></button></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.TECI_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.BASE_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.GRUP_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.SUBG_DESC+"</a></td>";
         if(a.COMPOSITIONS.length){
           var concat=[];
           result+="<td>";

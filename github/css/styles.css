@@ -1963,6 +1963,18 @@ form.search {
 .edit .aside-edit {
   display: block;
 }
+.edit .new {
+  display: none;
+}
+.view_fair .fair-save {
+  display: none;
+}
+.add_fair .edit {
+  display: none;
+}
+.add_fair .delete {
+  display: none;
+}
 .images .floatThead {
   display: none;
 }
@@ -2511,6 +2523,9 @@ form.search {
   max-width: 100%;
   border-spacing: 0;
   border-collapse: collapse;
+}
+#table a {
+  color: inherit;
 }
 th {
   text-align: left;
