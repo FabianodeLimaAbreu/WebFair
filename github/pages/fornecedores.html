@@ -32,27 +32,21 @@
       </div>
       <div class="form-container">
         <div class="fake-form medium">
-          <div class="form-group styled-select">
-            <select class="form-control bselect">
-              <option value="País">Data do Cadastro</option>
-              <option value="África do Sul">África do Sul</option>
-              <option value="Albânia">Albânia</option>
-              <option value="Alemanha">Alemanha</option>
-              <option value="Andorra">Andorra</option>
-              <option value="Angola">Angola</option>
-              <option value="Anguilla">Anguilla</option>
-              <option value="Antigua">Antigua</option>
-              <option value="Arábia Saudita">Arábia Saudita</option>
-              <option value="Argentina">Argentina</option>
-              <option value="Armênia">Armênia</option>
-              <option value="Aruba">Aruba</option>
-              <option value="Austrália">Austrália</option>
-              <option value="Áustria">Áustria</option>
-              <option value="Azerbaijão">Azerbaijão</option>
-              <option value="Bahamas">Bahamas</option>
-              <option value="Bahrein">Bahrein</option>
-              <option value="Bangladesh">Bangladesh</option>
-            </select>
+          <div class="form-group main_opt_item tooltip">
+            <button type="button" class="main_opt_button date-filter">Data do Cadastro</button>
+            <div class="tooltip-content price col-largest" style="right: -100px;top: 32px;">
+              <form class="form-inline">
+                <div class="form-group">
+                  <label for="initial_date">Data Inicial</label>
+                  <input type="text" class="form-control" name="initial_date" autocomplete="off">
+                </div>
+                <div class="form-group">
+                  <label for="end_date">Data Final</label>
+                  <input type="text" class="form-control" name="end_date" autocomplete="off">
+                </div>
+                <button type="button" class="icon s-five floatLeft save-date-filter">Ok</button>
+              </form>
+            </div>
           </div>
         </div>
         <div class="fake-form medium">

@@ -50,7 +50,7 @@
                   <button type="button" class="tooltip-item caption-icons-icon bcircle" name="FORN_DESC">Fornecedor</button>
                 </li>
                 <li>
-                  <button type="button" class="tooltip-item caption-icons-icon bcircle" name="CREATE_DATE">Data / Hora</button>
+                  <button type="button" class="tooltip-item caption-icons-icon bcircle" name="CREATE_DATE">Data</button>
                 </li>
                 <li>
                   <button type="button" class="tooltip-item caption-icons-icon bcircle" name="BIGPRICE">Preço Maior</button>
@@ -63,7 +63,22 @@
           </div>
         </div>
         <ul class="main_opt large">
-          <li class="main_opt_item"><button type="button"  class="main_opt_button">Data</button></li>
+          <li class="main_opt_item tooltip">
+            <button type="button" class="main_opt_button date-filter">Data</button>
+            <div class="tooltip-content price col-largest" style="right: -100px;top: 32px;">
+              <form class="form-inline">
+                <div class="form-group">
+                  <label for="initial_date">Data Inicial</label>
+                  <input type="text" class="form-control" name="initial_date" autocomplete="off">
+                </div>
+                <div class="form-group">
+                  <label for="end_date">Data Final</label>
+                  <input type="text" class="form-control" name="end_date" autocomplete="off">
+                </div>
+                <button type="button" class="icon s-five floatLeft save-date-filter">Ok</button>
+              </form>
+            </div>
+          </li>
           <li class="main_opt_item tooltip-filter">
             <button type="button" class="main_opt_button">Filtrar</button><!--class="sel"-->
             <ul class="tooltip-content status col-large">

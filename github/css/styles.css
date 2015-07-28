@@ -675,6 +675,12 @@ header .logo-print {
 .tooltip button:hover + .tooltip-content {
   display: block;
 }
+.tooltip button.date-filter:hover + .tooltip-content {
+  display: none;
+}
+.tooltip button.date-filter.sel + .tooltip-content {
+  display: block;
+}
 .tooltip-selectable:hover .tooltip-content {
   display: block;
 }
@@ -1907,6 +1913,98 @@ form.search {
 .spotlight button.sel {
   background-color: red;
 }
+/*Datepicker*/
+.ui-widget {
+  font-family: Verdana, Arial, sans-serif;
+  font-size: 1em;
+}
+.ui-widget-content {
+  background: #fdfdfd;
+  color: #227fa5;
+}
+.ui-widget-header {
+  color: #fff;
+  font-weight: normal;
+  background: #435676;
+}
+.ui-datepicker {
+  -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+}
+.ui-datepicker th,
+.ui-datepicker tr {
+  font-size: inherit;
+  line-height: inherit;
+}
+.ui-state-hover,
+.ui-widget-content .ui-state-hover,
+.ui-widget-header .ui-state-hover,
+.ui-state-focus,
+.ui-widget-content .ui-state-focus,
+.ui-widget-header .ui-state-focus {
+  border: none;
+  background: url(../images/gui_promocoes.png) no-repeat;
+  font-weight: normal;
+  color: #212121;
+}
+.ui-datepicker .ui-datepicker-prev,
+.ui-datepicker .ui-datepicker-next {
+  position: absolute;
+  top: 2px;
+  width: 30px;
+  height: 30px;
+}
+.ui-datepicker-prev,
+.ui-datepicker-next {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  cursor: pointer;
+  background: url(../images/gui_promocoes.png) no-repeat;
+  overflow: hidden;
+}
+.ui-datepicker-prev {
+  background-position: 0 -80px;
+}
+.ui-datepicker .ui-datepicker-prev-hover {
+  left: 2px;
+  background-position: 0 -50px;
+}
+.ui-datepicker-next {
+  background-position: -60px -80px;
+}
+.ui-datepicker .ui-datepicker-next-hover {
+  right: 2px;
+  background-position: -60px -50px;
+}
+.ui-widget-header .ui-state-disabled {
+  opacity: .35;
+  filter: alpha(opacity=35);
+  background-image: url(../images/gui_promocoes.png);
+}
+.ui-datepicker td span,
+.ui-datepicker td a {
+  color: #c2c2c2;
+}
+.ui-datepicker-calendar .ui-state-default {
+  background: #fdfdfd;
+}
+.ui-datepicker-unselectable .ui-state-default {
+  background: #f4f4f4;
+  color: #c2c2c2;
+}
+.ui-datepicker-calendar .ui-state-hover {
+  border: 1px solid #c2c2c2;
+  background: #d3d5d6;
+}
+.ui-datepicker-calendar .ui-state-active {
+  background: #d3d5d6;
+  color: #435676;
+  font-weight: 700;
+}
+/*****************************************************************/
 /***********************************
 *********************************************			INTERAÇÃO ENTRE PÁGINAS ******************************/
 .detail-page .comand-container {
@@ -1924,27 +2022,6 @@ form.search {
 .detail-page .viewport,
 .detail-page .table-container,
 .detail-page .bread-count {
-  display: none;
-}
-.filho .detail .info-box .info-list li {
-  width: 16.6%;
-}
-.filho .detail .info-box .info-list li .bcolor {
-  display: block;
-}
-.filho .detail .info-box .info-list li .bsku {
-  display: none;
-}
-.filho .detail .info-box .info-list li.lavado {
-  display: block;
-}
-.filho .detail .info-box .info-list li.ficha {
-  display: block;
-}
-.filho .search.search-result {
-  display: none;
-}
-.filho .showpai {
   display: none;
 }
 .edit {

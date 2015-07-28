@@ -32,6 +32,7 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       "header":"header",
       ".content":"contentEl",
       "#wrap .mask":"maskEl",
+      "#wrap .loader":"loader",
       //".form-control":"searchEl",
       //".right-list button":"viewBtn",
       //"button.close":"closeBtn",
@@ -46,7 +47,7 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
     events: {      
       "click .changeview button":"changeview",
       "click .tooltip.borderby .tooltip-item":"sortItems",
-      "click .bsel":"selectItems",
+      "click .bsel":"enableSelect",
       "click .btrash-big":'deleteNote',
       "click .bfav":'actionHeart',
       "click .bfisica":'actionFlag',
@@ -62,7 +63,12 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       "click .caption-downside a":"compChange",
       "click .edit-fair":"editFair",
       "click .fair-save":"saveFair",
-      "click .delete-fair":"deleteFair"
+      "click .delete-fair":"deleteFair",
+      "click .date-filter":"showPicker",
+      "click .save-date-filter":"submitDateFilter",
+      "click .justit":"SetItemAmos",
+      "click .bselection-edit":"selectItem",
+      "click .bselection":"selectItem"
       /*"submit .search":"submit",
       "click button.icon.go_back_default":"goBack",
       "click button.close":"getOut"*/
@@ -74,6 +80,7 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       this.data=[];
       this.fdata = [];
       this.loading=!1;
+      this.action_name="";
       this.callback=null;
       this.bfair;
       this.bforn; 
@@ -222,6 +229,30 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
             this.view = "images";
             $("body").removeAttr("class");
             context.createComponent(context.fair,context.bfair,'fair');
+            $( "input[name='initial_date']" ).datepicker({
+              defaultDate: "+1w",
+              changeMonth: true,
+              numberOfMonths: 2,
+              monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+              monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+              dayNamesMin: ['Dom','Seg','Ter','Qua','Qui','Sex','Sab'],
+              dateFormat:"yy-mm-dd",
+              onClose: function( selectedDate ) {
+                $( "input[name='end_date']" ).datepicker( "option", "minDate", selectedDate );
+              }
+            });
+            $( "input[name='end_date']" ).datepicker({
+              defaultDate: "+1w",
+              changeMonth: true,
+              numberOfMonths: 2,
+              monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+              monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+              dayNamesMin: ['Dom','Seg','Ter','Qua','Qui','Sex','Sab'],
+              dateFormat:"yy-mm-dd",
+              onClose: function( selectedDate ) {
+                $( "input[name='initial_date']").datepicker( "option", "maxDate", selectedDate );
+              }
+            });
             //context.callService("fornecedores",'<FORN_DESC></FORN_DESC>','<FEIR_COD></FEIR_COD>','<CREATE_DATE_I>1900-10-17</CREATE_DATE_I>','<CREATE_DATE_F>2020-10-17</CREATE_DATE_F>',20);
             break;
           case "fornecedores":
@@ -229,6 +260,30 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
             context.bforn=$(".forn");
             context.spotlight.el=$(".spotlight");
             context.createComponent(context.fair,context.bfair,'fair');
+            $( "input[name='initial_date']" ).datepicker({
+              defaultDate: "+1w",
+              changeMonth: true,
+              numberOfMonths: 2,
+              monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+              monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+              dayNamesMin: ['Dom','Seg','Ter','Qua','Qui','Sex','Sab'],
+              dateFormat:"yy-mm-dd",
+              onClose: function( selectedDate ) {
+                $( "input[name='end_date']" ).datepicker( "option", "minDate", selectedDate );
+              }
+            });
+            $( "input[name='end_date']" ).datepicker({
+              defaultDate: "+1w",
+              changeMonth: true,
+              numberOfMonths: 2,
+              monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+              monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+              dayNamesMin: ['Dom','Seg','Ter','Qua','Qui','Sex','Sab'],
+              dateFormat:"yy-mm-dd",
+              onClose: function( selectedDate ) {
+                $( "input[name='initial_date']").datepicker( "option", "maxDate", selectedDate );
+              }
+            });
             //console.dir(context.fair);
             break;
           case "local":
@@ -288,7 +343,7 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
           }
           else{
             html+="<FEIR_DESC>"+$(b).val()+"</FEIR_DESC>";
-          }
+          }9
         });
         //html+="<CREATE_DATE>"+new Date().toLocaleDateString().replace("/","-").replace("/","-")+"</CREATE_DATE>";
         html+="<CREATE_DATE>"+"2015-12-12"+"</CREATE_DATE>";
@@ -316,6 +371,92 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       var html="";
       html+="<FEIR_COD>"+parseInt(this.fairval.FEIR_COD)+"</FEIR_COD>"+"<CREATE_DATE>"+"2015-12-12"+"</CREATE_DATE>";
       this.callService("gravarLocal",html,"D");
+    },
+    showPicker:function(a){
+      if($(a.target).hasClass("sel")){
+        $(a.target).removeClass("sel");
+        return !1;
+      }
+      $(a.target).addClass("sel");
+    },
+    submitDateFilter:function(a){
+      if(!this.fairval){
+        alert("selecione pelo menos a feira!");
+        return !0;
+      }
+      this.initialTime=$("input[name='initial_date']").val() || (new Date().getFullYear())+"-01-01";
+      this.endTime=$("input[name='end_date']").val() || (new Date().getFullYear())+"-12-30";
+      switch (this.page){
+        case "fornecedores":
+          this.callService("fornecedores",'<FORN_DESC>'+this.fornval+'</FORN_DESC>','<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20'+'</LINHA_F>','<CREATE_DATE_I>'+this.initialTime+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTime+'</CREATE_DATE_F>');
+          break;
+        case "amostras":
+          this.callService("amostras",'<AMOS_DESC>'+this.amosval+'</AMOS_DESC>','<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20'+'</LINHA_F>','<CREATE_DATE_I>'+this.initialTime+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTime+'</CREATE_DATE_F>');
+          break;
+      }
+      $(".date-filter").removeClass("sel");
+    },
+    SetItemAmos:function(ev){
+      console.log("CLICOU EM UM JUSTIT");
+      var el=$(ev.target);
+      var item=[],result,pattern="",html="";
+      item=this.data.filter(function(a,b){
+        if(a.AMOS_ID == el.attr("name")){
+          return a;
+        }
+      });
+
+      if(el.hasClass("has")){
+        el.removeClass("has").addClass("nothas");
+      }
+      else{
+        el.removeClass("nothas").addClass("has");
+      }
+
+      switch (el.attr("title")){
+        case "Fisica":
+          result= el.hasClass("has") ? 1 : 0;
+          item[0].FLAG_FISICA=result;
+          html+="<FLAG_PRIORIDADE>"+item[0].FLAG_PRIORIDADE+"</FLAG_PRIORIDADE><AMOS_HOMOLOGAR>"+item[0].AMOS_HOMOLOGAR+"</AMOS_HOMOLOGAR><FLAG_FISICA>"+result+"</FLAG_FISICA>";
+          break;
+        case "Homologar":
+          result= el.hasClass("has") ? 1 : 0;
+          item[0].AMOS_HOMOLOGAR=result;
+          html+="<FLAG_PRIORIDADE>"+item[0].FLAG_PRIORIDADE+"</FLAG_PRIORIDADE><AMOS_HOMOLOGAR>"+result+"</AMOS_HOMOLOGAR><FLAG_FISICA>"+item[0].FLAG_FISICA+"</FLAG_FISICA>";
+          break;
+        case "Favoritar":
+          result= el.hasClass("has") ? 1 : 0;
+          item[0].FLAG_PRIORIDADE=result;
+          html+="<FLAG_PRIORIDADE>"+result+"</FLAG_PRIORIDADE><AMOS_HOMOLOGAR>"+item[0].AMOS_HOMOLOGAR+"</AMOS_HOMOLOGAR><FLAG_FISICA>"+item[0].FLAG_FISICA+"</FLAG_FISICA>";
+          break;
+        default:
+          console.log("ALGO DE ERRADO OCORREU!!!");
+      }
+      pattern="<AMOS_ID>"+item[0].AMOS_ID+"</AMOS_ID><FORN_ID>"+item[0].FORN_ID+"</FORN_ID><FEIR_COD>"+parseInt(item[0].FEIR_COD)+"</FEIR_COD><USU_COD>"+item[0].USU_COD+"</USU_COD><AMOS_DESC>"+item[0].AMOS_DESC+"</AMOS_DESC><AMOS_LARGURA_TOTAL>"+item[0].AMOS_LARGURA_TOTAL+"</AMOS_LARGURA_TOTAL><AMOS_LARGURA_UTIL>"+item[0].AMOS_LARGURA_UTIL+"</AMOS_LARGURA_UTIL><AMOS_GRAMATURA_M>"+item[0].AMOS_GRAMATURA_M+"</AMOS_GRAMATURA_M><AMOS_GRAMATURA_ML>"+item[0].AMOS_GRAMATURA_ML+"</AMOS_GRAMATURA_ML><AMOS_ONCAS>"+item[0].AMOS_ONCAS+"</AMOS_ONCAS><AMOS_COTACAO_M>"+item[0].AMOS_COTACAO_M+"</AMOS_COTACAO_M><AMOS_COTACAO_KG>"+item[0].AMOS_COTACAO_KG+"</AMOS_COTACAO_KG><AMOS_STATUS>"+item[0].AMOS_STATUS+"</AMOS_STATUS><AMOS_ENV_EMAIL>"+item[0].AMOS_ENV_EMAIL+"</AMOS_ENV_EMAIL><AMOS_PRECO_UM>"+item[0].AMOS_PRECO_UM+"</AMOS_PRECO_UM><AMOS_PRECO>"+item[0].AMOS_PRECO+"</AMOS_PRECO><TECI_COD>"+(item[0].TECI_COD || "")+"</TECI_COD><BASE_COD>"+(item[0].BASE_COD || "")+"</BASE_COD><GRUP_COD>"+(item[0].GRUP_COD || "")+"</GRUP_COD><SUBG_COD>"+(item[0].SUBG_COD || "")+"</SUBG_COD><SEGM_COD>"+item[0].SEGM_COD+"</SEGM_COD><CREATE_DATE>"+"2015-01-01"+"</CREATE_DATE>";
+      this.setloading(!0,!1);
+      this.callService("gravarAmostras",pattern,html,'U');
+    },
+    selectItem:function(a){
+      a.preventDefault();
+      
+      if($(a.target).hasClass("sel")){
+        this.select_items = this.select_items.filter(function(element,i){
+           return element !== $(a.target).attr("name");
+        });
+      }
+      else{
+        this.select_items.push($(a.target).attr("name"));
+      }
+      $(a.target).toggleClass("sel");
+
+
+      if($(a.target).hasClass("bselection-edit")){
+        this.action_name="edit";
+      }
+      else{
+        this.action_name="select";
+      }
+      console.dir(this.select_items);
     },
     setBreadcrumb : function(a, val){
       var loja, area, grupo, artigo, bread_text;
@@ -413,6 +554,13 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
             'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarRegioes xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+'</ListarRegioes></soap:Body></soap:Envelope>',
             callback:function(data,req){
               core.convertData(data,req,name);
+            }
+          },
+          {
+            'name':'gravarAmostras',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarAmostra xmlns="http://tempuri.org/"><sample>'+a+''+b+'</sample><action>'+c+'</action></GravarAmostra></soap:Body></soap:Envelope>',
+            'callback':function(){
+              core.setloading(!1);
             }
           },
           {
@@ -592,8 +740,9 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
         var f, m, g, n, v;      
         c = c || this.view;
         n = "images" === c ? "li" : "tr";
-        this.loading = !0; 
-        this.maskEl.fadeIn().find(".loader").show();
+        /*this.loading = !0; 
+        this.maskEl.fadeIn().find(".loader").show();*/
+        this.setloading(!0,!1);
         this.active = this.active || this.content;
         d = this.active.itens && !d ? this.active.itens.length : 0;
         m = 300 * (b + 1) < a.length ? 300 * (b + 1) : a.length;
@@ -604,7 +753,12 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
                 if (!h) {
 
                     clearInterval(f);
-                    e.endloading();
+                    //e.endloading();
+                    e.setloading(!1);
+                    if(c ==="list"){
+                      //$("#table").DataTable();
+                      console.dir($("#table"));
+                    }
                     return !1;
                 }
                 if ("images" === c && l > 0) {
@@ -663,12 +817,12 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
                         }), e.active.create(g.render()),l--, k++,!1;
                         //, $('.bread-box').find(".bread-load").text(k+1), l--, k++, !1*/
                     } else {
-                        clearInterval(f), e.endloading();
+                        clearInterval(f), e.setloading(!1);
                     }
                 }
             }, 300);
         } else {
-            return this.endloading(), !1;
+            return this.setloading(!1), !1;
         }  
     },  
     stage:function() {
@@ -726,13 +880,14 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
         this.createbox(temp.unique(), this.content.page);
       }
     },
-    selectItems : function(a){
+    enableSelect : function(a){
       if($(a.target).hasClass("sel")){
         //Reseta array
         this.select_items=[];
         $(a.target).removeClass("sel");
         $(".thumbnail .icon").attr("class","icon");
         $("html").attr("class","amostras");
+        this.action_name="";
       }
       else{
         //Inicia gravação

@@ -30,8 +30,7 @@ window.Spotlight = Spine.Controller.sub({
     }
 
     if(this.getPage() === "amostras"){
-      
-      this.callService("amostras",fair,name,"",'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20'+'</LINHA_F>','2010-01-01','2050-01-01');
+      this.callService("amostras",fair,name,"",'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20'+'</LINHA_F>','<CREATE_DATE_I>2010-01-01</CREATE_DATE_I>','<CREATE_DATE_F>2050-01-01</CREATE_DATE_F>');
       this.close();
     }
     else{
@@ -232,9 +231,9 @@ window.Box = Spine.Controller.sub({init:function() {
     email= a.AMOS_ENV_EMAIL? "sent":"disabled";
 
     //Creating result
-    result+="<a href='#detail/"+a.AMOS_ID+"'><div class='thumbnail'><button type='button' name='#"+a.AMOS_ID+"' class='icon'></button>"; //bselection
+    result+="<a href='#detail/"+a.AMOS_ID+"'><div class='thumbnail'><button type='button' name='"+a.AMOS_ID+"' class='icon'></button>"; //bselection
     result+="<div class='caption'><div class='caption-upside'><ul class='caption-icons'><li><button type='button' class='caption-icons-icon justit bstatus "+status+"'></button></li><li><button type='button' class='caption-icons-icon justit bemail "+email+"'></button></li>";
-    result+="<li><button type='button' class='caption-icons-icon justit bhomologado "+homologado+"'></button></li>"
+    result+="<li><button type='button' class='caption-icons-icon justit bhomologado "+homologado+"' name='"+a.AMOS_ID+"' title='Homologar'></button></li>"
     if(note){
       result+="<li class='tooltip tooltip-selectable'><button type='button' class='caption-icons-icon justit bnote'></button><ul class='tooltip-content notepad notepadmess rightless'><li class='tooltip-title'><p class='tooltip-item'>Anotações</p></li>";
       for(i=0;i<a.NOTES.length;i++){
@@ -242,7 +241,7 @@ window.Box = Spine.Controller.sub({init:function() {
       }
       result+="</ul></li>"
     }
-    result+="<li><button type='button' class='caption-icons-icon justit bfisica "+fisica+"'></button></li><li><button type='button' class='caption-icons-icon justit bfav "+fav+"'></button></li></ul>";
+    result+="<li><button type='button' class='caption-icons-icon justit bfisica "+fisica+"' name='"+a.AMOS_ID+"' title='Fisica'></button></li><li><button type='button' class='caption-icons-icon justit bfav "+fav+"' name='"+a.AMOS_ID+"' title='Favoritar'></button></li></ul>";
     result+="<div class='caption-desc'><p><span>Código da Amostra: </span><span>"+a.AMOS_ID+"</span></p><p><span>Fornecedor: </span><span>"+a.FORN_DESC+"</span></p><p><span>Data: </span><span>"+a.CREATE_DATE+"</span></p>";
     if(annex){
       result+="<button type='button' class='icon bannex'></button>";
@@ -331,7 +330,7 @@ window.Box = Spine.Controller.sub({init:function() {
         email= a.AMOS_ENV_EMAIL? "sent":"disabled";
 
         //Creating result
-        result+="<td><button type='button' name='"+a.AMOS_ID+"'' class='icon bselection' name='"+a.AMOS_ID+"''></button></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.FORN_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.AMOS_ID+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.CREATE_DATE+"</a></td><td><button type='button' class='caption-icons-icon justit bfisica "+fisica+"'></button></td><td>"+a.AMOS_PRECO+"</td><td>"+a.AMOS_COTACAO_KG+"</td><td><button type='button' class='caption-icons-icon justit bfav "+fav+"'></button></td><td><button type='button' class='caption-icons-icon justit bhomologado "+homologado+"'></button></td>";
+        result+="<td><button type='button' name='"+a.AMOS_ID+"'' class='icon bselection' name='"+a.AMOS_ID+"'></button></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.FORN_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.AMOS_ID+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.CREATE_DATE+"</a></td><td><button type='button' class='caption-icons-icon justit bfisica "+fisica+"' name='"+a.AMOS_ID+"' title='Fisica'></button></td><td>"+a.AMOS_PRECO+"</td><td>"+a.AMOS_COTACAO_KG+"</td><td><button type='button' class='caption-icons-icon justit bfav "+fav+"' name='"+a.AMOS_ID+"' title='Favoritar'></button></td><td><button type='button' class='caption-icons-icon justit bhomologado "+homologado+"' name='"+a.AMOS_ID+"' title='Homologar'></button></td>";
         if(note){
           result+="<td class='tooltip tooltip-selectable'><button type='button' class='caption-icons-icon justit bnote'></button><ul class='tooltip-content notepad notepadmess col-large'><li class='tooltip-title'><p class='tooltip-item'>Anotações</p></li>";
           for(i=0;i<a.NOTES.length;i++){

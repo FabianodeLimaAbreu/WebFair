@@ -167,7 +167,9 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       "click .caption-downside a":"compChange",
       "click .edit-fair":"editFair",
       "click .fair-save":"saveFair",
-      "click .delete-fair":"deleteFair"
+      "click .delete-fair":"deleteFair",
+      "click .date-filter":"showPicker",
+      "click .save-date-filter":"submitDateFilter"
       /*"submit .search":"submit",
       "click button.icon.go_back_default":"goBack",
       "click button.close":"getOut"*/
@@ -327,6 +329,30 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
             this.view = "images";
             $("body").removeAttr("class");
             context.createComponent(context.fair,context.bfair,'fair');
+            $( "input[name='initial_date']" ).datepicker({
+              defaultDate: "+1w",
+              changeMonth: true,
+              numberOfMonths: 2,
+              monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+              monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+              dayNamesMin: ['Dom','Seg','Ter','Qua','Qui','Sex','Sab'],
+              dateFormat:"yy-mm-dd",
+              onClose: function( selectedDate ) {
+                $( "input[name='end_date']" ).datepicker( "option", "minDate", selectedDate );
+              }
+            });
+            $( "input[name='end_date']" ).datepicker({
+              defaultDate: "+1w",
+              changeMonth: true,
+              numberOfMonths: 2,
+              monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+              monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+              dayNamesMin: ['Dom','Seg','Ter','Qua','Qui','Sex','Sab'],
+              dateFormat:"yy-mm-dd",
+              onClose: function( selectedDate ) {
+                $( "input[name='initial_date']").datepicker( "option", "maxDate", selectedDate );
+              }
+            });
             //context.callService("fornecedores",'&lt;FORN_DESC>&lt;/FORN_DESC>','&lt;FEIR_COD>&lt;/FEIR_COD>','&lt;CREATE_DATE_I>1900-10-17&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>2020-10-17&lt;/CREATE_DATE_F>',20);
             break;
           case "fornecedores":
@@ -334,6 +360,30 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
             context.bforn=$(".forn");
             context.spotlight.el=$(".spotlight");
             context.createComponent(context.fair,context.bfair,'fair');
+            $( "input[name='initial_date']" ).datepicker({
+              defaultDate: "+1w",
+              changeMonth: true,
+              numberOfMonths: 2,
+              monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+              monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+              dayNamesMin: ['Dom','Seg','Ter','Qua','Qui','Sex','Sab'],
+              dateFormat:"yy-mm-dd",
+              onClose: function( selectedDate ) {
+                $( "input[name='end_date']" ).datepicker( "option", "minDate", selectedDate );
+              }
+            });
+            $( "input[name='end_date']" ).datepicker({
+              defaultDate: "+1w",
+              changeMonth: true,
+              numberOfMonths: 2,
+              monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+              monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+              dayNamesMin: ['Dom','Seg','Ter','Qua','Qui','Sex','Sab'],
+              dateFormat:"yy-mm-dd",
+              onClose: function( selectedDate ) {
+                $( "input[name='initial_date']").datepicker( "option", "maxDate", selectedDate );
+              }
+            });
             //console.dir(context.fair);
             break;
           case "local":
@@ -393,7 +443,7 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
           }
           else{
             html+="&lt;FEIR_DESC>"+$(b).val()+"&lt;/FEIR_DESC>";
-          }
+          }9
         });
         //html+="&lt;CREATE_DATE>"+new Date().toLocaleDateString().replace("/","-").replace("/","-")+"&lt;/CREATE_DATE>";
         html+="&lt;CREATE_DATE>"+"2015-12-12"+"&lt;/CREATE_DATE>";
@@ -421,6 +471,30 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       var html="";
       html+="&lt;FEIR_COD>"+parseInt(this.fairval.FEIR_COD)+"&lt;/FEIR_COD>"+"&lt;CREATE_DATE>"+"2015-12-12"+"&lt;/CREATE_DATE>";
       this.callService("gravarLocal",html,"D");
+    },
+    showPicker:function(a){
+      if($(a.target).hasClass("sel")){
+        $(a.target).removeClass("sel");
+        return !1;
+      }
+      $(a.target).addClass("sel");
+    },
+    submitDateFilter:function(a){
+      if(!this.fairval){
+        alert("selecione pelo menos a feira!");
+        return !0;
+      }
+      this.initialTime=$("input[name='initial_date']").val() || (new Date().getFullYear())+"-01-01";
+      this.endTime=$("input[name='end_date']").val() || (new Date().getFullYear())+"-12-30";
+      switch (this.page){
+        case "fornecedores":
+          this.callService("fornecedores",'&lt;FORN_DESC>'+this.fornval+'&lt;/FORN_DESC>','&lt;FEIR_COD>'+this.fairval+'&lt;/FEIR_COD>','&lt;LINHA_I>'+'1'+'&lt;/LINHA_I>','&lt;LINHA_F>'+'20'+'&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+this.initialTime+'&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>'+this.endTime+'&lt;/CREATE_DATE_F>');
+          break;
+        case "amostras":
+          this.callService("amostras",'&lt;AMOS_DESC>'+this.amosval+'&lt;/AMOS_DESC>','&lt;FEIR_COD>'+this.fairval+'&lt;/FEIR_COD>','&lt;LINHA_I>'+'1'+'&lt;/LINHA_I>','&lt;LINHA_F>'+'20'+'&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+this.initialTime+'&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>'+this.endTime+'&lt;/CREATE_DATE_F>');
+          break;
+      }
+      $(".date-filter").removeClass("sel");
     },
     setBreadcrumb : function(a, val){
       var loja, area, grupo, artigo, bread_text;
@@ -710,6 +784,10 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
 
                     clearInterval(f);
                     e.endloading();
+                    if(c ==="list"){
+                      //$("#table").DataTable();
+                      console.dir($("#table"));
+                    }
                     return !1;
                 }
                 if ("images" === c &amp;&amp; l > 0) {
@@ -819,6 +897,7 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       $(a.target).addClass("sel");
       if(type !== "BIGPRICE"){
         length= this.data.length;
+        console.log(type);
         temp = this.data.sortBy(type).unique();
         this.createbox(temp, this.content.page);
       }
@@ -1082,7 +1161,7 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Mon Jul 27th 2015 using the <a
+		on Tue Jul 28th 2015 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>
