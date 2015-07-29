@@ -18,7 +18,7 @@ require.config({
     sp: "spine"
   }
 });
-require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
+require(["methods","jquery.elevatezoom","sp/min", "app/content"/*, "app/detail"*/], function() {
   /**
   * Main application class, responsible for all main funcionalities and call anothers classes constructors
   * @exports App
@@ -68,7 +68,8 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       "click .save-date-filter":"submitDateFilter",
       "click .justit":"SetItemAmos",
       "click .bselection-edit":"selectItem",
-      "click .bselection":"selectItem"
+      "click .bselection":"selectItem",
+      "click .tooltip-content.status button":"AmosByStatus"
       /*"submit .search":"submit",
       "click button.icon.go_back_default":"goBack",
       "click button.close":"getOut"*/
@@ -872,7 +873,7 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
         this.createbox(temp, this.content.page);
       }
       else{
-        temp = this.data.sortBy("PE").unique();
+        temp = this.data.sortBy("AMOS_PRECO").unique();
         length=this.data.length-1;
         for(i=length;i>=0;i--){
           temp.push(this.data[i]);
@@ -917,6 +918,29 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       //console.dir(this.fdata);
       this.content.page = 0;
       this.createbox(this.fdata, this.content.page, !0,"list");
+      //console.dir(typeof Boolean($(a.target).find("option:selected").val()));
+    },
+    AmosByStatus:function(ev){
+      var aux;
+      aux=this.data;
+      this.reset();
+      if($(ev.target).hasClass("sel")){
+        this.fdata=aux;
+        this.data=aux;
+      }
+      else{
+        $(".tooltip-content.status button").removeClass("sel");
+        this.fdata = aux.filter(function(a,b){
+          console.log(Boolean(a["AMOS_STATUS"])+" , "+$(ev.target).attr("name").bool()+" = "+(Boolean(a["AMOS_STATUS"]) === $(ev.target).attr("name").bool()));
+          if(Boolean(a["AMOS_STATUS"]) === $(ev.target).attr("name").bool()){
+            return a;
+          }
+        });
+        this.data=aux;
+      }
+      $(ev.target).toggleClass("sel");
+      this.content.page = 0;
+      this.createbox(this.fdata, this.content.page, !0);
       //console.dir(typeof Boolean($(a.target).find("option:selected").val()));
     },
     compChange:function(ev){

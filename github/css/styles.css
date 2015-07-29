@@ -635,12 +635,17 @@ header .logo-print {
 .tooltip-content.status .tooltip-item {
   cursor: pointer;
 }
-.tooltip-content.status .tooltip-item:hover {
+.tooltip-content.status .tooltip-item:hover,
+.tooltip-content.status .tooltip-item.sel {
   background: #414141;
   color: #fff;
 }
 .tooltip-content.price {
   right: -160px;
+}
+.tooltip-content.date {
+  right: -90px;
+  top: 41px;
 }
 .tooltip-content.refine {
   width: 900px;
@@ -1395,6 +1400,9 @@ form.search {
   padding-left: 5px;
   border-bottom: 1px solid #e3eaee;
   border-left: 1px solid #e3eaee;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 .aside-edit .category .sub_category li a .sub_category_counter {
   position: relative;
@@ -1925,7 +1933,8 @@ form.search {
 .ui-widget-header {
   color: #fff;
   font-weight: normal;
-  background: #435676;
+  border: 1px solid #fff;
+  background: #71abcc;
 }
 .ui-datepicker {
   -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
@@ -1948,37 +1957,6 @@ form.search {
   font-weight: normal;
   color: #212121;
 }
-.ui-datepicker .ui-datepicker-prev,
-.ui-datepicker .ui-datepicker-next {
-  position: absolute;
-  top: 2px;
-  width: 30px;
-  height: 30px;
-}
-.ui-datepicker-prev,
-.ui-datepicker-next {
-  display: inline-block;
-  width: 30px;
-  height: 30px;
-  text-align: center;
-  cursor: pointer;
-  background: url(../images/gui_promocoes.png) no-repeat;
-  overflow: hidden;
-}
-.ui-datepicker-prev {
-  background-position: 0 -80px;
-}
-.ui-datepicker .ui-datepicker-prev-hover {
-  left: 2px;
-  background-position: 0 -50px;
-}
-.ui-datepicker-next {
-  background-position: -60px -80px;
-}
-.ui-datepicker .ui-datepicker-next-hover {
-  right: 2px;
-  background-position: -60px -50px;
-}
 .ui-widget-header .ui-state-disabled {
   opacity: .35;
   filter: alpha(opacity=35);
@@ -1998,6 +1976,19 @@ form.search {
 .ui-datepicker-calendar .ui-state-hover {
   border: 1px solid #c2c2c2;
   background: #d3d5d6;
+}
+.ui-widget-header .ui-state-default {
+  border: 1px solid #fff;
+  background: #71abcc;
+  font-weight: normal;
+  color: #fff;
+}
+.ui-widget-header .ui-state-hover,
+.ui-widget-header .ui-state-focus {
+  border: 1px solid #fff;
+  background: #fff;
+  font-weight: normal;
+  color: #000;
 }
 .ui-datepicker-calendar .ui-state-active {
   background: #d3d5d6;
@@ -3145,6 +3136,7 @@ label {
 }
 .fake-form.last {
   margin-right: 0;
+  float: right;
 }
 .fake-form .fake-form-opt {
   position: absolute;

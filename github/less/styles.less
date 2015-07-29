@@ -625,7 +625,7 @@ header{
 		right: -80px;
 		.tooltip-item{
 			cursor: pointer;
-			&:hover{
+			&:hover,&.sel{
 				background: @dark-text;
 				color: #fff;
 			}
@@ -633,6 +633,10 @@ header{
 	}
 	&.price{
 		right: -160px;
+	}
+	&.date{
+		right: -90px;
+		top: 41px;
 	}
 	&.refine{
 		width:900px;
@@ -1429,6 +1433,9 @@ form.search{
 					padding-left: 5px;
 					border-bottom: 1px solid #e3eaee;
 					border-left: 1px solid #e3eaee;
+					text-overflow: ellipsis;
+				    overflow: hidden;
+				    white-space: nowrap;
 					.sub_category_counter{
 						position: relative;
 						float: right;
@@ -1963,7 +1970,8 @@ form.search{
 .ui-widget-header {
     color: #fff;
     font-weight: normal;
-    background: #435676;
+    border: 1px solid #fff;
+    background: #71abcc;
 }
 
 .ui-datepicker {  
@@ -1986,36 +1994,6 @@ form.search{
 
 }
 
-.ui-datepicker .ui-datepicker-prev, .ui-datepicker .ui-datepicker-next {
-    position: absolute;
-    top: 2px;
-    width: 30px;
-    height: 30px;
-}
-
-.ui-datepicker-prev, .ui-datepicker-next {  
-    display: inline-block;  
-    width: 30px;  
-    height: 30px;  
-    text-align: center;  
-    cursor: pointer;  
-    background: url(../images/gui_promocoes.png) no-repeat;   
-    overflow: hidden;   
-} 
-.ui-datepicker-prev {   
-    background-position: 0 -80px;  
-}
-.ui-datepicker .ui-datepicker-prev-hover {
-    left: 2px;
-    background-position: 0 -50px; 
-}
-.ui-datepicker-next {  
-    background-position: -60px -80px;  
-}
-.ui-datepicker .ui-datepicker-next-hover { 
-    right: 2px; 
-    background-position: -60px -50px;  
-}
 
 .ui-widget-header .ui-state-disabled {
     opacity: .35;
@@ -2037,6 +2015,18 @@ form.search{
     border:1px solid #c2c2c2;
     background: #d3d5d6;  
 }  
+.ui-widget-header .ui-state-default{
+	border: 1px solid #fff;
+	background: #71abcc;
+	font-weight: normal;
+	color: #fff;
+}
+.ui-widget-header .ui-state-hover, .ui-widget-header .ui-state-focus{
+    border: 1px solid #fff;
+    background: #fff;
+    font-weight: normal;
+    color: #000;
+}
 .ui-datepicker-calendar .ui-state-active {  
     background: #d3d5d6;
     color: #435676;  

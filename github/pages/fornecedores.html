@@ -31,7 +31,7 @@
         </div>-->
       </div>
       <div class="form-container">
-        <div class="fake-form medium">
+        <!--<div class="fake-form medium">
           <div class="form-group main_opt_item tooltip">
             <button type="button" class="main_opt_button date-filter">Data do Cadastro</button>
             <div class="tooltip-content price col-largest" style="right: -100px;top: 32px;">
@@ -48,8 +48,27 @@
               </form>
             </div>
           </div>
-        </div>
+        </div>-->
         <div class="fake-form medium">
+          <div class="form-group tooltip">
+            <button type="button" class=" bdefault s-four m-ten date-filter">Data do Cadastro</button>
+            <div class="tooltip-content date col-largest">
+              <form class="form-inline">
+                <div class="form-group">
+                  <label for="initial_date">Data Inicial</label>
+                  <input type="text" class="form-control" name="initial_date" autocomplete="off">
+                </div>
+                <div class="form-group">
+                  <label for="end_date">Data Final</label>
+                  <input type="text" class="form-control" name="end_date" autocomplete="off">
+                </div>
+                <button type="button" class="icon s-five floatLeft save-date-filter">Ok</button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!--<div class="fake-form medium">
           <div class="form-group styled-select">
             <select class="form-control bselect filter-data">
               <option value="">Status de Prioridade</option>
@@ -57,8 +76,8 @@
               <option value="false" name='FAVORITES'>Não Favoritos</option>
             </select>
           </div>
-        </div>
-        <div class="fake-form medium last">
+        </div>-->
+        <div class="fake-form medium last floatRight">
           <div class="form-group styled-select">
             <select class="form-control bselect filter-data">
               <option value="false">Status do Cadastro</option>

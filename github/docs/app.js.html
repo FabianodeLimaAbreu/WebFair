@@ -123,7 +123,7 @@ require.config({
     sp: "spine"
   }
 });
-require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
+require(["methods","jquery.elevatezoom","sp/min", "app/content"/*, "app/detail"*/], function() {
   /**
   * Main application class, responsible for all main funcionalities and call anothers classes constructors
   * @exports App
@@ -137,6 +137,7 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       "header":"header",
       ".content":"contentEl",
       "#wrap .mask":"maskEl",
+      "#wrap .loader":"loader",
       //".form-control":"searchEl",
       //".right-list button":"viewBtn",
       //"button.close":"closeBtn",
@@ -151,7 +152,7 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
     events: {      
       "click .changeview button":"changeview",
       "click .tooltip.borderby .tooltip-item":"sortItems",
-      "click .bsel":"selectItems",
+      "click .bsel":"enableSelect",
       "click .btrash-big":'deleteNote',
       "click .bfav":'actionHeart',
       "click .bfisica":'actionFlag',
@@ -169,7 +170,11 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       "click .fair-save":"saveFair",
       "click .delete-fair":"deleteFair",
       "click .date-filter":"showPicker",
-      "click .save-date-filter":"submitDateFilter"
+      "click .save-date-filter":"submitDateFilter",
+      "click .justit":"SetItemAmos",
+      "click .bselection-edit":"selectItem",
+      "click .bselection":"selectItem",
+      "click .tooltip-content.status button":"AmosByStatus"
       /*"submit .search":"submit",
       "click button.icon.go_back_default":"goBack",
       "click button.close":"getOut"*/
@@ -181,6 +186,7 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       this.data=[];
       this.fdata = [];
       this.loading=!1;
+      this.action_name="";
       this.callback=null;
       this.bfair;
       this.bforn; 
@@ -496,6 +502,68 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       }
       $(".date-filter").removeClass("sel");
     },
+    SetItemAmos:function(ev){
+      console.log("CLICOU EM UM JUSTIT");
+      var el=$(ev.target);
+      var item=[],result,pattern="",html="";
+      item=this.data.filter(function(a,b){
+        if(a.AMOS_ID == el.attr("name")){
+          return a;
+        }
+      });
+
+      if(el.hasClass("has")){
+        el.removeClass("has").addClass("nothas");
+      }
+      else{
+        el.removeClass("nothas").addClass("has");
+      }
+
+      switch (el.attr("title")){
+        case "Fisica":
+          result= el.hasClass("has") ? 1 : 0;
+          item[0].FLAG_FISICA=result;
+          html+="&lt;FLAG_PRIORIDADE>"+item[0].FLAG_PRIORIDADE+"&lt;/FLAG_PRIORIDADE>&lt;AMOS_HOMOLOGAR>"+item[0].AMOS_HOMOLOGAR+"&lt;/AMOS_HOMOLOGAR>&lt;FLAG_FISICA>"+result+"&lt;/FLAG_FISICA>";
+          break;
+        case "Homologar":
+          result= el.hasClass("has") ? 1 : 0;
+          item[0].AMOS_HOMOLOGAR=result;
+          html+="&lt;FLAG_PRIORIDADE>"+item[0].FLAG_PRIORIDADE+"&lt;/FLAG_PRIORIDADE>&lt;AMOS_HOMOLOGAR>"+result+"&lt;/AMOS_HOMOLOGAR>&lt;FLAG_FISICA>"+item[0].FLAG_FISICA+"&lt;/FLAG_FISICA>";
+          break;
+        case "Favoritar":
+          result= el.hasClass("has") ? 1 : 0;
+          item[0].FLAG_PRIORIDADE=result;
+          html+="&lt;FLAG_PRIORIDADE>"+result+"&lt;/FLAG_PRIORIDADE>&lt;AMOS_HOMOLOGAR>"+item[0].AMOS_HOMOLOGAR+"&lt;/AMOS_HOMOLOGAR>&lt;FLAG_FISICA>"+item[0].FLAG_FISICA+"&lt;/FLAG_FISICA>";
+          break;
+        default:
+          console.log("ALGO DE ERRADO OCORREU!!!");
+      }
+      pattern="&lt;AMOS_ID>"+item[0].AMOS_ID+"&lt;/AMOS_ID>&lt;FORN_ID>"+item[0].FORN_ID+"&lt;/FORN_ID>&lt;FEIR_COD>"+parseInt(item[0].FEIR_COD)+"&lt;/FEIR_COD>&lt;USU_COD>"+item[0].USU_COD+"&lt;/USU_COD>&lt;AMOS_DESC>"+item[0].AMOS_DESC+"&lt;/AMOS_DESC>&lt;AMOS_LARGURA_TOTAL>"+item[0].AMOS_LARGURA_TOTAL+"&lt;/AMOS_LARGURA_TOTAL>&lt;AMOS_LARGURA_UTIL>"+item[0].AMOS_LARGURA_UTIL+"&lt;/AMOS_LARGURA_UTIL>&lt;AMOS_GRAMATURA_M>"+item[0].AMOS_GRAMATURA_M+"&lt;/AMOS_GRAMATURA_M>&lt;AMOS_GRAMATURA_ML>"+item[0].AMOS_GRAMATURA_ML+"&lt;/AMOS_GRAMATURA_ML>&lt;AMOS_ONCAS>"+item[0].AMOS_ONCAS+"&lt;/AMOS_ONCAS>&lt;AMOS_COTACAO_M>"+item[0].AMOS_COTACAO_M+"&lt;/AMOS_COTACAO_M>&lt;AMOS_COTACAO_KG>"+item[0].AMOS_COTACAO_KG+"&lt;/AMOS_COTACAO_KG>&lt;AMOS_STATUS>"+item[0].AMOS_STATUS+"&lt;/AMOS_STATUS>&lt;AMOS_ENV_EMAIL>"+item[0].AMOS_ENV_EMAIL+"&lt;/AMOS_ENV_EMAIL>&lt;AMOS_PRECO_UM>"+item[0].AMOS_PRECO_UM+"&lt;/AMOS_PRECO_UM>&lt;AMOS_PRECO>"+item[0].AMOS_PRECO+"&lt;/AMOS_PRECO>&lt;TECI_COD>"+(item[0].TECI_COD || "")+"&lt;/TECI_COD>&lt;BASE_COD>"+(item[0].BASE_COD || "")+"&lt;/BASE_COD>&lt;GRUP_COD>"+(item[0].GRUP_COD || "")+"&lt;/GRUP_COD>&lt;SUBG_COD>"+(item[0].SUBG_COD || "")+"&lt;/SUBG_COD>&lt;SEGM_COD>"+item[0].SEGM_COD+"&lt;/SEGM_COD>&lt;CREATE_DATE>"+"2015-01-01"+"&lt;/CREATE_DATE>";
+      this.setloading(!0,!1);
+      this.callService("gravarAmostras",pattern,html,'U');
+    },
+    selectItem:function(a){
+      a.preventDefault();
+      
+      if($(a.target).hasClass("sel")){
+        this.select_items = this.select_items.filter(function(element,i){
+           return element !== $(a.target).attr("name");
+        });
+      }
+      else{
+        this.select_items.push($(a.target).attr("name"));
+      }
+      $(a.target).toggleClass("sel");
+
+
+      if($(a.target).hasClass("bselection-edit")){
+        this.action_name="edit";
+      }
+      else{
+        this.action_name="select";
+      }
+      console.dir(this.select_items);
+    },
     setBreadcrumb : function(a, val){
       var loja, area, grupo, artigo, bread_text;
         
@@ -592,6 +660,13 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
             'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;ListarRegioes xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+'&lt;/ListarRegioes>&lt;/soap:Body>&lt;/soap:Envelope>',
             callback:function(data,req){
               core.convertData(data,req,name);
+            }
+          },
+          {
+            'name':'gravarAmostras',
+            'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;GravarAmostra xmlns="http://tempuri.org/">&lt;sample>'+a+''+b+'&lt;/sample>&lt;action>'+c+'&lt;/action>&lt;/GravarAmostra>&lt;/soap:Body>&lt;/soap:Envelope>',
+            'callback':function(){
+              core.setloading(!1);
             }
           },
           {
@@ -771,8 +846,9 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
         var f, m, g, n, v;      
         c = c || this.view;
         n = "images" === c ? "li" : "tr";
-        this.loading = !0; 
-        this.maskEl.fadeIn().find(".loader").show();
+        /*this.loading = !0; 
+        this.maskEl.fadeIn().find(".loader").show();*/
+        this.setloading(!0,!1);
         this.active = this.active || this.content;
         d = this.active.itens &amp;&amp; !d ? this.active.itens.length : 0;
         m = 300 * (b + 1) &lt; a.length ? 300 * (b + 1) : a.length;
@@ -783,7 +859,8 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
                 if (!h) {
 
                     clearInterval(f);
-                    e.endloading();
+                    //e.endloading();
+                    e.setloading(!1);
                     if(c ==="list"){
                       //$("#table").DataTable();
                       console.dir($("#table"));
@@ -846,12 +923,12 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
                         }), e.active.create(g.render()),l--, k++,!1;
                         //, $('.bread-box').find(".bread-load").text(k+1), l--, k++, !1*/
                     } else {
-                        clearInterval(f), e.endloading();
+                        clearInterval(f), e.setloading(!1);
                     }
                 }
             }, 300);
         } else {
-            return this.endloading(), !1;
+            return this.setloading(!1), !1;
         }  
     },  
     stage:function() {
@@ -897,12 +974,11 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       $(a.target).addClass("sel");
       if(type !== "BIGPRICE"){
         length= this.data.length;
-        console.log(type);
         temp = this.data.sortBy(type).unique();
         this.createbox(temp, this.content.page);
       }
       else{
-        temp = this.data.sortBy("PE").unique();
+        temp = this.data.sortBy("AMOS_PRECO").unique();
         length=this.data.length-1;
         for(i=length;i>=0;i--){
           temp.push(this.data[i]);
@@ -910,13 +986,14 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
         this.createbox(temp.unique(), this.content.page);
       }
     },
-    selectItems : function(a){
+    enableSelect : function(a){
       if($(a.target).hasClass("sel")){
         //Reseta array
         this.select_items=[];
         $(a.target).removeClass("sel");
         $(".thumbnail .icon").attr("class","icon");
         $("html").attr("class","amostras");
+        this.action_name="";
       }
       else{
         //Inicia gravação
@@ -946,6 +1023,29 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
       //console.dir(this.fdata);
       this.content.page = 0;
       this.createbox(this.fdata, this.content.page, !0,"list");
+      //console.dir(typeof Boolean($(a.target).find("option:selected").val()));
+    },
+    AmosByStatus:function(ev){
+      var aux;
+      aux=this.data;
+      this.reset();
+      if($(ev.target).hasClass("sel")){
+        this.fdata=aux;
+        this.data=aux;
+      }
+      else{
+        $(".tooltip-content.status button").removeClass("sel");
+        this.fdata = aux.filter(function(a,b){
+          console.log(Boolean(a["AMOS_STATUS"])+" , "+$(ev.target).attr("name").bool()+" = "+(Boolean(a["AMOS_STATUS"]) === $(ev.target).attr("name").bool()));
+          if(Boolean(a["AMOS_STATUS"]) === $(ev.target).attr("name").bool()){
+            return a;
+          }
+        });
+        this.data=aux;
+      }
+      $(ev.target).toggleClass("sel");
+      this.content.page = 0;
+      this.createbox(this.fdata, this.content.page, !0);
       //console.dir(typeof Boolean($(a.target).find("option:selected").val()));
     },
     compChange:function(ev){
@@ -1161,7 +1261,7 @@ require(["methods","sp/min", "app/content"/*, "app/detail"*/], function() {
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Tue Jul 28th 2015 using the <a
+		on Wed Jul 29th 2015 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>
