@@ -123,7 +123,7 @@ require.config({
     sp: "spine"
   }
 });
-require(["methods","jquery.elevatezoom","sp/min", "app/content"/*, "app/detail"*/], function() {
+require(["methods","dataTables","jquery.elevatezoom","sp/min", "app/content"/*, "app/detail"*/], function() {
   /**
   * Main application class, responsible for all main funcionalities and call anothers classes constructors
   * @exports App
@@ -199,7 +199,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content"/*, "app/detail"*
       this.segm=[];
       this.select_items=[];
       this.fairval="";
-      this.fornval="";
+      this.fornval=""
+      ;
       this.amosval="";
       this.initialTime='2015-01-08';
       this.endTime='2015-10-10';
@@ -537,6 +538,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content"/*, "app/detail"*
           break;
         default:
           console.log("ALGO DE ERRADO OCORREU!!!");
+          return !1;
       }
       pattern="&lt;AMOS_ID>"+item[0].AMOS_ID+"&lt;/AMOS_ID>&lt;FORN_ID>"+item[0].FORN_ID+"&lt;/FORN_ID>&lt;FEIR_COD>"+parseInt(item[0].FEIR_COD)+"&lt;/FEIR_COD>&lt;USU_COD>"+item[0].USU_COD+"&lt;/USU_COD>&lt;AMOS_DESC>"+item[0].AMOS_DESC+"&lt;/AMOS_DESC>&lt;AMOS_LARGURA_TOTAL>"+item[0].AMOS_LARGURA_TOTAL+"&lt;/AMOS_LARGURA_TOTAL>&lt;AMOS_LARGURA_UTIL>"+item[0].AMOS_LARGURA_UTIL+"&lt;/AMOS_LARGURA_UTIL>&lt;AMOS_GRAMATURA_M>"+item[0].AMOS_GRAMATURA_M+"&lt;/AMOS_GRAMATURA_M>&lt;AMOS_GRAMATURA_ML>"+item[0].AMOS_GRAMATURA_ML+"&lt;/AMOS_GRAMATURA_ML>&lt;AMOS_ONCAS>"+item[0].AMOS_ONCAS+"&lt;/AMOS_ONCAS>&lt;AMOS_COTACAO_M>"+item[0].AMOS_COTACAO_M+"&lt;/AMOS_COTACAO_M>&lt;AMOS_COTACAO_KG>"+item[0].AMOS_COTACAO_KG+"&lt;/AMOS_COTACAO_KG>&lt;AMOS_STATUS>"+item[0].AMOS_STATUS+"&lt;/AMOS_STATUS>&lt;AMOS_ENV_EMAIL>"+item[0].AMOS_ENV_EMAIL+"&lt;/AMOS_ENV_EMAIL>&lt;AMOS_PRECO_UM>"+item[0].AMOS_PRECO_UM+"&lt;/AMOS_PRECO_UM>&lt;AMOS_PRECO>"+item[0].AMOS_PRECO+"&lt;/AMOS_PRECO>&lt;TECI_COD>"+(item[0].TECI_COD || "")+"&lt;/TECI_COD>&lt;BASE_COD>"+(item[0].BASE_COD || "")+"&lt;/BASE_COD>&lt;GRUP_COD>"+(item[0].GRUP_COD || "")+"&lt;/GRUP_COD>&lt;SUBG_COD>"+(item[0].SUBG_COD || "")+"&lt;/SUBG_COD>&lt;SEGM_COD>"+item[0].SEGM_COD+"&lt;/SEGM_COD>&lt;CREATE_DATE>"+"2015-01-01"+"&lt;/CREATE_DATE>";
       this.setloading(!0,!1);
@@ -544,7 +546,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content"/*, "app/detail"*
     },
     selectItem:function(a){
       a.preventDefault();
-      
       if($(a.target).hasClass("sel")){
         this.select_items = this.select_items.filter(function(element,i){
            return element !== $(a.target).attr("name");
@@ -862,7 +863,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content"/*, "app/detail"*
                     //e.endloading();
                     e.setloading(!1);
                     if(c ==="list"){
-                      //$("#table").DataTable();
+                      console.dir($("#table tbody"));
+                      $("#table").DataTable();
                       console.dir($("#table"));
                     }
                     return !1;
@@ -987,7 +989,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content"/*, "app/detail"*
       }
     },
     enableSelect : function(a){
-      if($(a.target).hasClass("sel")){
+      if($(a.target).hasClass("sel") &amp;&amp; this.view !== "list"){
         //Reseta array
         this.select_items=[];
         $(a.target).removeClass("sel");

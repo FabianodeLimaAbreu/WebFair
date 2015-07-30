@@ -222,6 +222,7 @@ window.Box = Spine.Controller.sub({init:function() {
   }, images:function(a) {
     var homologado,note,fisica,fav,email,annex,status,result="";
     this.el.addClass('col col-small col-large');
+    $(".bselect").removeClass("sel");
     homologado= a.AMOS_HOMOLOGAR ? "has":"nothas";
     note= a.NOTES.length   ? true:false;
     fisica= a.FLAG_FISICA ? "has":"nothas";
@@ -321,6 +322,7 @@ window.Box = Spine.Controller.sub({init:function() {
       case 'amostras':
         var homologado,note,fisica,fav,email,annex,status,result="",i;
         this.el.addClass('col col-small col-large');
+        $(".bselect").addClass("sel");
         homologado= a.AMOS_HOMOLOGAR ? "has":"nothas";
         note= a.NOTES.length   ? true:false;
         fisica= a.FLAG_FISICA ? "has":"nothas";

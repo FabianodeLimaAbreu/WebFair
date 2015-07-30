@@ -18,7 +18,7 @@ require.config({
     sp: "spine"
   }
 });
-require(["methods","jquery.elevatezoom","sp/min", "app/content"/*, "app/detail"*/], function() {
+require(["methods","dataTables","jquery.elevatezoom","sp/min", "app/content"/*, "app/detail"*/], function() {
   /**
   * Main application class, responsible for all main funcionalities and call anothers classes constructors
   * @exports App
@@ -94,7 +94,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content"/*, "app/detail"*
       this.segm=[];
       this.select_items=[];
       this.fairval="";
-      this.fornval="";
+      this.fornval=""
+      ;
       this.amosval="";
       this.initialTime='2015-01-08';
       this.endTime='2015-10-10';
@@ -432,6 +433,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content"/*, "app/detail"*
           break;
         default:
           console.log("ALGO DE ERRADO OCORREU!!!");
+          return !1;
       }
       pattern="<AMOS_ID>"+item[0].AMOS_ID+"</AMOS_ID><FORN_ID>"+item[0].FORN_ID+"</FORN_ID><FEIR_COD>"+parseInt(item[0].FEIR_COD)+"</FEIR_COD><USU_COD>"+item[0].USU_COD+"</USU_COD><AMOS_DESC>"+item[0].AMOS_DESC+"</AMOS_DESC><AMOS_LARGURA_TOTAL>"+item[0].AMOS_LARGURA_TOTAL+"</AMOS_LARGURA_TOTAL><AMOS_LARGURA_UTIL>"+item[0].AMOS_LARGURA_UTIL+"</AMOS_LARGURA_UTIL><AMOS_GRAMATURA_M>"+item[0].AMOS_GRAMATURA_M+"</AMOS_GRAMATURA_M><AMOS_GRAMATURA_ML>"+item[0].AMOS_GRAMATURA_ML+"</AMOS_GRAMATURA_ML><AMOS_ONCAS>"+item[0].AMOS_ONCAS+"</AMOS_ONCAS><AMOS_COTACAO_M>"+item[0].AMOS_COTACAO_M+"</AMOS_COTACAO_M><AMOS_COTACAO_KG>"+item[0].AMOS_COTACAO_KG+"</AMOS_COTACAO_KG><AMOS_STATUS>"+item[0].AMOS_STATUS+"</AMOS_STATUS><AMOS_ENV_EMAIL>"+item[0].AMOS_ENV_EMAIL+"</AMOS_ENV_EMAIL><AMOS_PRECO_UM>"+item[0].AMOS_PRECO_UM+"</AMOS_PRECO_UM><AMOS_PRECO>"+item[0].AMOS_PRECO+"</AMOS_PRECO><TECI_COD>"+(item[0].TECI_COD || "")+"</TECI_COD><BASE_COD>"+(item[0].BASE_COD || "")+"</BASE_COD><GRUP_COD>"+(item[0].GRUP_COD || "")+"</GRUP_COD><SUBG_COD>"+(item[0].SUBG_COD || "")+"</SUBG_COD><SEGM_COD>"+item[0].SEGM_COD+"</SEGM_COD><CREATE_DATE>"+"2015-01-01"+"</CREATE_DATE>";
       this.setloading(!0,!1);
@@ -439,7 +441,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content"/*, "app/detail"*
     },
     selectItem:function(a){
       a.preventDefault();
-      
       if($(a.target).hasClass("sel")){
         this.select_items = this.select_items.filter(function(element,i){
            return element !== $(a.target).attr("name");
@@ -757,7 +758,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content"/*, "app/detail"*
                     //e.endloading();
                     e.setloading(!1);
                     if(c ==="list"){
-                      //$("#table").DataTable();
+                      console.dir($("#table tbody"));
+                      $("#table").DataTable();
                       console.dir($("#table"));
                     }
                     return !1;
@@ -882,7 +884,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content"/*, "app/detail"*
       }
     },
     enableSelect : function(a){
-      if($(a.target).hasClass("sel")){
+      if($(a.target).hasClass("sel") && this.view !== "list"){
         //Reseta array
         this.select_items=[];
         $(a.target).removeClass("sel");
