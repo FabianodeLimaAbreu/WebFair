@@ -46,6 +46,10 @@ body {
   overflow-x: hidden;
   overflow-y: auto;
 }
+html#noscroll,
+body#noscroll {
+  overflow-y: hidden;
+}
 body {
   font-family: 'Open Sans', sans-serif;
   font-size: 12px;
@@ -79,9 +83,6 @@ body #wrap {
   top: 0;
   width: 100%;
   height: 100%;
-}
-body.noscroll {
-  overflow-y: hidden;
 }
 .mask {
   position: fixed;

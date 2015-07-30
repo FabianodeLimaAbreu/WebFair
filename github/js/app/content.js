@@ -187,13 +187,12 @@ window.Content = Spine.Controller.sub({
     /*this.table.hide();
     this.tbody.hide();*/
     //this.bread.fadeOut();
-    this.page = "";
+    this.page = 0;
     this.clean();
   }, init:function() {
     // (this.type !== "CLIENTE" && this.type !== "VISITANTE") ? this.table.addClass('cseven') : this.table.addClass('cfive');
     this.itens = $([]);
     this.page = 0;
-    this.tutpage = 1;
     // this.el.disableSelection && this.el.disableSelection();
   }
   });
