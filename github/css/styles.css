@@ -2032,7 +2032,7 @@ form.search {
 .edit .aside-edit {
   display: block;
 }
-.edit .new {
+.edit_fair .new {
   display: none;
 }
 .view_fair .fair-save {
@@ -2585,7 +2585,6 @@ form.search {
   clear: both;
   width: 100%;
   height: auto;
-  overflow-x: auto;
 }
 #table {
   width: 100%;

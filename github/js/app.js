@@ -85,6 +85,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
       this.callback=null;
       this.bfair;
       this.bforn; 
+      this.itens_by_page=20;
 
       //Var to storage the basic data
       this.fair=[];
@@ -329,12 +330,12 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
     },
     editFair:function(a){
       $(a.target).addClass("sel");
-      $("html").attr("class","local_cadastro edit");
+      $("html").attr("class","local_cadastro edit-fair");
       var elem=$(".form-control").removeAttr("disabled");
     },
     saveFair:function(){
       var elem=$(".form-control"),html="";
-      if($("html").hasClass("edit")){
+      if($("html").hasClass("edit-fair")){
         html+="<FEIR_COD>"+parseInt(this.fairval.FEIR_COD)+"</FEIR_COD>";
         elem.each(function(a,b){
           //console.log($(b).attr("class"));
@@ -596,10 +597,10 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
         this.reset();
       }
       if(this.page ===  "amostras"){
-        this.callService(this.page,a,b,c,'<LINHA_I>'+(this.content.page*20+1)+'</LINHA_I>','<LINHA_F>'+((this.content.page+1)*20)+'</LINHA_F>','<CREATE_DATE_I>2010-04-10</CREATE_DATE_I>',"<CREATE_DATE_F>2015-10-10</CREATE_DATE_F>");
+        this.callService(this.page,a,b,c,'<LINHA_I>'+(this.content.page*this.itens_by_page+1)+'</LINHA_I>','<LINHA_F>'+((this.content.page+1)*this.itens_by_page)+'</LINHA_F>','<CREATE_DATE_I>2010-04-10</CREATE_DATE_I>',"<CREATE_DATE_F>2015-10-10</CREATE_DATE_F>");
       }
       else{
-        this.callService(this.page,a,b,'<LINHA_I>'+(this.content.page*20+1)+'</LINHA_I>','<LINHA_F>'+((this.content.page+1)*20)+'</LINHA_F>','<CREATE_DATE_I>2010-04-10</CREATE_DATE_I>',"<CREATE_DATE_F>2015-10-10</CREATE_DATE_F>");
+        this.callService(this.page,a,b,'<LINHA_I>'+(this.content.page*this.itens_by_page+1)+'</LINHA_I>','<LINHA_F>'+((this.content.page+1)*this.itens_by_page)+'</LINHA_F>','<CREATE_DATE_I>2010-04-10</CREATE_DATE_I>',"<CREATE_DATE_F>2015-10-10</CREATE_DATE_F>");
       }
     },
     search:function(a){
@@ -694,10 +695,20 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
             break;
           case "fornecedores":
             if(notcombo){
-              this.data.push(jQuery.parseJSON($(req.responseXML).text()).sortBy('FORN_DESC').unique());
-              this.data=this.data[0];
-              this.setDate(this.data);
-              this.setdata(this.data,"fornecedores");
+              if(!this.data.length){
+                this.data=jQuery.parseJSON($(req.responseXML).text()).unique();
+                this.setDate(this.data);
+                this.setdata(this.data,"fornecedores");
+              }
+              else{
+                var temp=jQuery.parseJSON($(req.responseXML).text()).unique().sortBy('FORN_ID');
+                /*console.dir(temp);
+                console.dir(this.data);*/
+                this.setDate(temp);
+                this.data=this.data.concat(temp);
+                console.dir(this.data);
+                this.createbox(this.data, this.content.page, !0,"list");
+              }
             }
             else{
               this.spotlight.forn=[];
@@ -753,8 +764,8 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
         n = "images" === c ? "li" : "tr";
         this.setloading(!0,!1);
         this.active = this.active || this.content;
-        m=((this.content.page+1)*20);
-        var p, h, q, k = (this.content.page*20), l = 20, e = this;
+        m=((this.content.page+1)*this.itens_by_page);
+        var p, h, q, k = (this.content.page*this.itens_by_page), l = this.itens_by_page, e = this;
 
         /*d = this.content.itens && !d ? this.content.itens.length : 0;
         m = 40 * (b + 1) < a.length ? 40 * (b + 1) : a.length;
@@ -770,7 +781,6 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
         console.log("l: "+l);
         console.log("k: "+k);
         if (a[k]) {
-            console.dir("DENTRO DO K");
             f = setInterval(function() {
                 h = a[k];   
                 if (!h) {
@@ -785,6 +795,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
                 }
 
                 if ("images" === c && l > 0) {
+                  console.log("images");
 
                     if (h && v === h.AMOS_ID)
                       return !1;
@@ -822,11 +833,14 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
                             url : a
                         });
                         e.active.create(g.render());
+                        l--;
+                        k++;
                     }).attr("src", q);
 
                     // Mostrando (box sendo carregados)
                     $('.bread-search').find(".spec").text(k+1+" Amostras");
                 } else {
+                  console.log("list");
                     if (l > 0) {
                         return g = new Box({
                             item : h,
@@ -835,7 +849,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
                             detail : e.detail,
                             modal : e.modal,
                             page: e.page
-                        }), e.active.create(g.render()),l--, k++,!1;
+                        }), e.active.create(g.render()),$('.bread-search').find(".spec").text(k+1+" Amostras"),l--, k++,!1;
                         //, $('.bread-box').find(".bread-load").text(k+1), l--, k++, !1*/
                     } else {
                         clearInterval(f), e.setloading(!1);
@@ -885,10 +899,12 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
       }
       type=$(a.target).attr("name");
       $("html").attr("class","amostras");
-      this.content.reset();
+      this.content.clean();
       this.order_box.find("button").removeClass("sel");
       $(a.target).addClass("sel");
       if(type !== "BIGPRICE"){
+        console.dir(this.data);
+        console.log(this.content.page);
         length= this.data.length;
         temp = this.data.sortBy(type).unique();
         this.createbox(temp, this.content.page);
@@ -919,7 +935,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
         $(a.target).addClass("sel");
         $(".thumbnail .icon").attr("class","icon").addClass($(a.target).attr("name"));
         $("html").attr("class","amostras").addClass("select");
-        if($(a.target).hasClass("bedit")){
+        if($(a.target).hasClass("bedit") && !$(a.target).hasClass('unable')){
           $("html").addClass("edit");
         }
       }
@@ -1143,7 +1159,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
       return this.data;
     },
     scroll:function(z) {
-      var b, c, f, clone,e = this,teste=document.window;
+      var b, c, f, clone,e = this;
       z = z || $(window);
       $.hasData(z[0]) && z.unbind("scroll");
       //console.dir(e.content.itens);
@@ -1155,18 +1171,35 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
           return!1;
         }
         //console.dir(e.content.itens);
-        d = z.scrollTop()+650;
+        d = z.scrollTop();
         b = e.content.itens.length;
-        c =  20* e.itens.length;
-        f= $(".container").height();
+        //c =  20* e.itens.length;        
 
-        //console.log(d+" , "+f);
-        if (d >= f) {
-            //scope.loadPage();
-            console.log("chegou");
-            e.content.page++;
-            e.setloading(!0,!1);
-            e.submit("<FEIR_COD>"+(e.fairval || "")+"</FEIR_COD>","<FORN_DESC>"+(e.forn_desc || "")+"</FORN_DESC>",(e.amosval || ""),!0);
+        switch (e.page){
+          case "amostras":
+            d=d+850;
+            f= $(".container").height();
+            //console.log(d+" , "+f);
+            if (d >= f && b) {
+              //scope.loadPage();
+              console.log("chegou");
+              e.content.page++;
+              e.setloading(!0,!1);
+              e.submit("<FEIR_COD>"+(e.fairval || "")+"</FEIR_COD>","<FORN_DESC>"+(e.fornval || "")+"</FORN_DESC>",(e.amosval || ""),!0);
+            }
+            break;
+          case "fornecedores":
+            d=d+480;
+            f= $("table").height();
+            //console.log(d+" , "+f);
+            if (d >= f && b) {
+              //scope.loadPage();
+              console.log("chegou");
+              e.content.page++;
+              e.setloading(!0,!1);
+              e.submit("<FEIR_COD>"+(e.fairval || "")+"</FEIR_COD>","<FORN_DESC>"+(e.fornval || "")+"</FORN_DESC>",(e.amosval || ""),!0);
+            }
+            break;
         }
         /*f.modal.close();
         b = z.scrollTop();
@@ -1178,11 +1211,13 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
       /* Act on the event */
     },
     reset:function(){
+      console.log("resetou APP");
       this.data = [];
       this.fdata = [];
       this.itens = $([]);
       this.itens.remove();
       this.content.reset();
+      this.itens_by_page=20;
     },
     restartValues:function(){
       //Var to storage the basic data
