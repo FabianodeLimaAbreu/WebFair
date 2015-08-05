@@ -75,6 +75,7 @@ var App={
 					if (status == "success") {
 						$(".mask").fadeOut();
 						var result=jQuery.parseJSON($(req.responseXML).text());
+						console.log(result);
 				        if(result.USU_LOGIN !== null){
 				        	return $.cookie.json = !0, $.cookie("webfair", result, {expires:7, path:"/"}), window.location.href = "./index.html", !1;
 				        }

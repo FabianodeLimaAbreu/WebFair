@@ -13,7 +13,7 @@
                   var wsUrl = "../../WebService.asmx?op=GravarAmostraComposicao ";
 
                   //O SERVIÇO MESMO JA EXCLUI E INSERI
-                  var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarAmostraComposicao xmlns="http://tempuri.org/"><AMOS_ID>134002306</AMOS_ID><compositions><string>JN</string><string>CJ</string></compositions></GravarAmostraComposicao></soap:Body></soap:Envelope>';
+                  var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarAmostraComposicao xmlns="http://tempuri.org/"><AMOS_ID>200000101</AMOS_ID><compositions><string>CA</string><string>CJ</string></compositions></GravarAmostraComposicao></soap:Body></soap:Envelope>';
 
                   $.support.cors=true;
                   $.ajax({

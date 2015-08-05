@@ -1,68 +1,11 @@
 /**
-*@fileOverview Detail and Menu's class.
-* @module Menu
-* @module Detail
-*
-*/
-
-/**
-* Menu's class and actions
-* @exports Menu
-* @constructor
-*/
-window.Menu = Spine.Controller.sub({elements:{"li a":"buttons"}, events:{"click a":"action"}, action:function(a) {
-  if("object" === typeof a) {
-    a.preventDefault();
-  }else {
-    return!1;
-  }
-  var b = $(a.target).attr("href") || $(a.target).parent().attr("href");  
-  b = b.split("#")[1];
-  switch(b) {
-    case "tutorial":
-      this.opentutorial();
-      break;
-    case "logout":
-      this.logout();
-      break;
-    default:
-      alert(b);
-  }
-  this.close();
-}, 
-
-/**
-* `OK Set thed loading state`
-* @memberOf Menu#
-* @param {Boolean} a. If true show mask, else hide mask.
-*/  
-close:function(a) {
-  if(a && (a.preventDefault(), a = $(a.target), this.el.find(a).length)) {
-    return!1;
-  }
-  this.el.offset({top:0, left:0});
-  this.doc.unbind("click");
-  this.el.hide();
-  
-  
-        
-  return!1;
-}, open:function(a) {
-  this.el.offset({top:a.pageY, left:a.pageX}).show();
-  this.doc.unbind("click").bind("click", this.proxy(this.close));
-}, init:function() {  
-  this.doc = $(document);  
-  // this.el.disableSelection && this.el.disableSelection();
-}});
-
-/**
 * Details's class and actions
 * @exports Detail
 * @constructor
 */
 window.Detail = Spine.Controller.sub({
 elements:{
-  ".title":"title",
+  /*".title":"title",
   ".info-text dd":"toplist",
   ".info-back":"infoback",
   ".info-box":"infobox",
@@ -82,46 +25,47 @@ elements:{
   ".warn":"warn",
   ".similar":"similar",
   ".date":"date",
-  ".close-bar span":"closebar"
+  ".close-bar span":"closebar"*/
   //".color-list":"colorlist"
 }, events:{
-   "click .bsku":"sku",
+  "click button.bgoselect":"close"
+   /*"click .bsku":"sku",
    //"click .bcolor":"color",
    "click .brapport":"rapport",
    "click .bformas":"formas",
    "click .color-thumb":"reload",
    "click .go_back":"close",
    "click .benviar":"enviar",
-   "click .close-bar":"openbar"
-},close:function(a) {
-  this.el.hide();
-  
-  "object" === typeof a && a.preventDefault();
+   "click .close-bar":"openbar"*/
+},close:function() {
+  //this.el.hide();
   this.on = !1;
-  this.colors=[];
-  this.el.fadeOut();
-  if(this.father){
-    this.navigate && this.navigate("artigos-pai", this.item.STORE,this.item.TYPE_MAT,this.item.GRUPO,!0);
-    // window.location.hash = "artigos-pai/"+this.item.STORE+"/"+this.item.TYPE_MAT+"/"+this.item.GRUPO;
-  }
-  else{
-    window.history.go(-1);
-  }
-  $(window).scrollTop(this.scrollp);
-  this.infobox.css({right:-520}); //Return the bar to its initial position
-  // $('.content .viewport').show();
-  return!1;
+  window.history.go(-1);
+  //$(window).scrollTop(this.scrollp);
 }, 
 /**
 * `OK Set thed loading state`
 * @memberOf Detail#
-* @param {Boolean} a. If true show mask, else hide mask.
+* @param {Bothoolean} a. If true show mask, else hide mask.
 */
+callerEvents:function(){
+  var context=this;
+  $("button.bgoselect").bind("click",function(){context.close();});  //close
+},
 open: function(a){
-  
   "use strict";
+  var context=this;
+  this.item = a;
+  if(!this.item){
+    return !1;
+  }
+  this.callerEvents();
+  console.dir(a);
+  this.populateDetail();
+  this.setloading(!1);
+
   // console.log("ENTROU DETALHE");
-  $(".view-form").load("slider_template.html");
+  /*$(".view-form").load("slider_template.html");
   // $(".table-container").fadeOut();
   // $(".viewport").fadeOut();
   $(".table-container").hide();
@@ -163,9 +107,9 @@ open: function(a){
 // alert(this.item.ETIQUETA)  
   if(this.father){
     this.body.addClass("pai").addClass("detail-page");
-    data = [this.item.MATERIAL_REF, this.cmplist(), this.item.GRAMATURA_M + " g/m² ", this.item.GRAMATURA_ML + " g/m ",parseFloat(this.item.LARGURA_UTIL) + "m ", parseFloat(this.item.LARGURA_TOTAL) + "m ",this.item.ELASTICIDADE, pilling, rendimento + " m/Kg ", this.item.GRUPO, this.item.SGRUPO, this.item.EBOOK_CODE + " / " + this.item.EBOOK_PAGE,this.item.UNIDADE_MEDIDA,  this.item.UNIDADE_MEDIDA /*PE*/, " " + this.item.UNIDADE_MEDIDA /*atc*/, "DATA","PREÇO",this.item.TextoSD,this.item.ETIQUETA, this.item.UTILIZACAO,this.item.ATRIBUTOS.initialCaps(), char];
+    data = [this.item.MATERIAL_REF, this.cmplist(), this.item.GRAMATURA_M + " g/m² ", this.item.GRAMATURA_ML + " g/m ",parseFloat(this.item.LARGURA_UTIL) + "m ", parseFloat(this.item.LARGURA_TOTAL) + "m ",this.item.ELASTICIDADE, pilling, rendimento + " m/Kg ", this.item.GRUPO, this.item.SGRUPO, this.item.EBOOK_CODE + " / " + this.item.EBOOK_PAGE,this.item.UNIDADE_MEDIDA,  this.item.UNIDADE_MEDIDA /*PE*//*, " " + this.item.UNIDADE_MEDIDA /*atc*//*, "DATA","PREÇO",this.item.TextoSD,this.item.ETIQUETA, this.item.UTILIZACAO,this.item.ATRIBUTOS.initialCaps(), char];
     //this.rapportlist(this.item.MATERIAL_REF);
-  }
+  /*}
   else{
     this.body.addClass("filho").addClass("detail-page");
     data = [this.item.MATERIAL_REF, this.cmplist(), this.item.GRAMATURA_M + " g/m² ", this.item.GRAMATURA_ML + " g/m ",parseFloat(this.item.LARGURA_UTIL) + "m ", parseFloat(this.item.LARGURA_TOTAL) + "m ", this.item.ELASTICIDADE, pilling , rendimento + " m/Kg ", this.item.GRUPO, this.item.SGRUPO, this.item.EBOOK_CODE + " / " + this.item.EBOOK_PAGE,this.item.UNIDADE_MEDIDA,  " " +parseInt(this.item.PE), " " + parseInt(this.item.ATC), this.item.DATA_CHEGADA,"R$ "+numDecimal(this.item.PRECO.toString().replace(".",","))+" | $ "+numDecimal(this.item.PRECO_DOLAR.toString().replace(".",",")),this.item.TextoSD,this.item.ETIQUETA, this.item.UTILIZACAO,this.item.ATRIBUTOS.initialCaps(), char];
@@ -203,12 +147,166 @@ open: function(a){
       }).attr("src", q);
   });
   /*-1 !== this.item.SGRUPO.indexOf("Estampado") && (this.colorbt.addClass("disable"), this.el.find('.info-color').hide());*/
-  if(this.on){
+  /*if(this.on){
     //this.colorbt.removeClass("sel");
   }
   //this.on || this.colorbt.removeClass("sel");
-  this.el.fadeIn();
-}, writebread:function(){
+  this.el.fadeIn();*/
+}, populateDetail:function(){
+  var i,context=this,item=this.item,name;
+
+  var homologado,note,fisica,fav,email,annex,status,result="";
+  homologado= item.AMOS_HOMOLOGAR ? "has":"nothas";
+  note= item.NOTES.length   ? true:false;
+  fisica= item.FLAG_FISICA ? "has":"nothas";
+  fav= item.FLAG_PRIORIDADE ? "has":"nothas";
+  annex= item.AMOS_HOMOLOGAR ? true:false;
+  status= item.AMOS_STATUS ? "complet":"incomplet";
+  email= item.AMOS_ENV_EMAIL? "sent":"disabled";
+
+  //STATUS
+  if(item.AMOS_STATUS){
+    $(".detail-status").html('<p class="caption-icons-icon bstatus complet">Cadastro Completo</p>');
+  }
+  else{
+    $(".detail-status").html('<p class="caption-icons-icon bstatus incomplet">Completar Cadastro</p>');
+  }
+  
+  //CARREGAMENTO DE IMAGENS
+  var imgs=[
+    {
+      'name':"IMG_PATH_SAMPLE",
+      'elem':$('.detail-sample-hasimg')
+    },
+    {
+      'name':"IMG_PATH_TICKET",
+      'elem':$('.detail-sample-hasticket')
+    }
+  ];
+
+  for(i=0;i<imgs.length;i++){
+    name=imgs[i].name;
+    if(item[name]){
+      imgs[i].elem.append('<img id="zoom_0'+i+'" src="//bdb/ifair_img/'+item[name].replace("thumb","large")+'" data-zoom-image="//bdb/ifair_img/'+item[name].replace("thumb","large")+'"/>');
+    }
+    else{
+      imgs[i].elem.append('<img id="zoom_0'+i+'" src="http://189.126.197.169/img/large/large_NONE.jpg" data-zoom-image="http://189.126.197.169/img/large/large_NONE.jpg"/>');
+    }
+  }
+
+  //TOP DO DETALHE, NOS BOTOES
+  result+='<li class="first"><a href="#'+item.AMOS_ID+'" class="caption-icons-icon bfav '+fav+'">Favorita</a></li>';
+  result+='<li><a href="#'+item.AMOS_ID+'" class="caption-icons-icon oneline bfisica '+fisica+'">Amostra<br/>Fisica</a></li>';
+  result+='<li><a href="#'+item.AMOS_ID+'" class="caption-icons-icon bhomologado '+homologado+'">Homologar</a></li>';
+  result+='<li><a href="#fav" class="caption-icons-icon oneline bfisica nothas">Anexar<br/> Arquivo</a></li>';
+  result+='<li><a href="#fav" class="caption-icons-icon oneline bfisica nothas">Arquivos<br/> Anexos</a></li>';
+  $(".description-overview.description-top ul").html(result);
+  
+
+  //TOP DO DETALHE, LISTA DE VALORES
+  var list=["AMOS_ID","FEIR_DESC","FORN_DESC","CREATE_DATE","AMOS_PRECO_UM","AMOS_PRECO"];
+  var list_item=$(".description-top").find("dd");
+  for(i=0;i<list.length;i++){
+    name=list[i];
+    if(item[name] !== ""){
+      list_item.eq(i).text(item[name]);
+    }
+  }
+
+  //TAB COMPOSICOES
+  var elm=$("table tbody");
+  result="<tr>";
+  if(item.TECI_DESC){
+    result+="<td>";
+    for(i=0;i<item.COMPOSITIONS.length;i++){
+      result+=""+item.COMPOSITIONS[i].COMP_DESC+"<br/>";
+    }
+    result+="</td>";
+  }
+  else{
+    result+="<td> - </td>";
+  }
+  
+  if(item.TECI_DESC){
+    result+="<td>";
+    for(i=0;i<item.COMPOSITIONS.length;i++){
+      result+=""+item.COMPOSITIONS[i].COMP_DESC+"<br/>";
+    }
+    result+="</td>";
+  }
+  else{
+    result+="<td> - </td>";
+  }
+  if(item.TECI_DESC){
+    result+="<td>";
+    for(i=0;i<item.COMPOSITIONS.length;i++){
+      result+=""+item.COMPOSITIONS[i].COMP_DESC+"<br/>";
+    }
+    result+="</td>";
+  }
+  else{
+    result+="<td> - </td>";
+  }
+  if(item.TECI_DESC){
+    result+="<td>";
+    for(i=0;i<item.COMPOSITIONS.length;i++){
+      result+=""+item.COMPOSITIONS[i].COMP_DESC+"<br/>";
+    }
+    result+="</td>";
+  }
+  else{
+    result+="<td> - </td>";
+  }
+
+  if(item.COMPOSITIONS.length){
+    result+="<td>";
+    for(i=0;i<item.COMPOSITIONS.length;i++){
+      result+=""+item.COMPOSITIONS[i].COMP_DESC+"<br/>";
+    }
+    result+="</td>";
+  }
+  else{
+    result+="<td> - </td>";
+  }
+  result+="<tr>fdsfdssfd</tr>";
+  elm.html(result);
+
+  //DESCRIÇÃO COMPLETA INPUTS
+  $(".description-entirely").find("input").each(function(a,b){
+    $(b).val(item[$(b).attr("name")]);
+  });
+
+
+  //ANOTAÇÕES
+  if(note){
+    result="";
+    result+='<div class="supplier-form-container note contact actived"><ul class="notepad supplier-note-side">';
+    for(i=0;i<item.NOTES.length;i++){
+      result+="<li><article><div class='notepad-note blockquote'><p>"+item.NOTES[i].CREATE_DATE+" | "+ item.NOTES[i].USU_NOME+" | "+item.NOTES[i].OBJ_ID+"</p><p>"+item.NOTES[i].SEGM_DESC+" - Assunto:</p><p>"+item.NOTES[i].NOTA_DESC+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+item.NOTES[i].NOTA_ID+"' name='"+item.NOTES[i].USU_COD+"'></button></div></article></li>"
+    }
+    result+="</ul></div>"
+  }
+  else{
+    result="";
+  }
+  console.log(result);
+  $(".description-noteside").append(result);
+
+  //EVENTOS
+  $('#zoom_00').elevateZoom({
+    zoomType: "inner",
+    cursor: "crosshair",
+    zoomWindowFadeIn: 500,
+    zoomWindowFadeOut: 750
+  }); 
+  $('#zoom_01').elevateZoom({
+    zoomType: "inner",
+    cursor: "crosshair",
+    zoomWindowFadeIn: 500,
+    zoomWindowFadeOut: 750
+  }); 
+},
+writebread:function(){
   var href,text;
   if(this.breadEl.find(".bread-colec a").text()){
      this.breadEl.find(".bread-colec a").removeClass("active").attr("href","javascript:history.go(-1)");
@@ -595,9 +693,19 @@ rapportlist:function(c) {
       b.length && (this.rapportbt.removeClass("disable"), this.el.find('.info-rapport img').attr('src','http://189.126.197.169/img/rapport/raprt_' + b[0].MATNR + ".jpg"));
       
   }));
-}, reload:function(event,loja,tipo,material) {
+}, reload:function(fair,code) {
   "use strict";
-  var a,obj,context=this;
+  var result;
+  this.setloading(!0,!1);
+  result=this.getdata(code);
+  if(result.length){
+    this.open(result[0]);
+  }
+  else{
+    //this.open(jQuery.parseJSON('{"AMOS_COD":null,"AMOS_COTACAO_KG":0,"AMOS_COTACAO_M":0,"AMOS_DESC":"TESTE NACIONAL","AMOS_ENV_EMAIL":0,"AMOS_GRAMATURA_M":0,"AMOS_GRAMATURA_ML":0,"AMOS_HOMOLOGAR":0,"AMOS_ID":200000101,"AMOS_LARGURA_TOTAL":0,"AMOS_LARGURA_UTIL":0,"AMOS_ONCAS":0,"AMOS_PRECO":0,"AMOS_PRECO_UM":"","AMOS_STATUS":0,"BASE_COD":null,"BASE_DESC":"","COMPOSITIONS":[{"COMP_COD":"CJ ","COMP_DESC":"JUTE","TP_COMP_ID":0},{"COMP_COD":"CJ ","COMP_DESC":"JUTE","TP_COMP_ID":0}],"CREATE_DATE":"\/Date(1339642800000-0300)\/","FEIR_COD":"1 ","FEIR_DESC":"FOCUS TEXTIL - Sao Paulo\/Brazil","FLAG_FISICA":0,"FLAG_PRIORIDADE":0,"FORN_DESC":"TESTE FORNECEDOR IMPORTADORNECEDOR","FORN_ID":4200083,"GRUP_COD":null,"GRUP_DESC":"","IMG_PATH_SAMPLE":"","IMG_PATH_TICKET":"","NOTES":[],"SEGM_COD":"ML","SEGM_DESC":null,"SUBG_COD":null,"SUBG_DESC":"","TECI_COD":null,"TECI_DESC":"","USU_COD":36}'));
+    this.open(jQuery.parseJSON('{"AMOS_COD":null,"AMOS_COTACAO_KG":0,"AMOS_COTACAO_M":0,"AMOS_DESC":"TESTE NACIONAL","AMOS_ENV_EMAIL":0,"AMOS_GRAMATURA_M":0,"AMOS_GRAMATURA_ML":0,"AMOS_HOMOLOGAR":0,"AMOS_ID":200000101,"AMOS_LARGURA_TOTAL":0,"AMOS_LARGURA_UTIL":0,"AMOS_ONCAS":0,"AMOS_PRECO":0,"AMOS_PRECO_UM":"","AMOS_STATUS":0,"BASE_COD":null,"BASE_DESC":"","COMPOSITIONS":[{"COMP_COD":"CA ","COMP_DESC":"ACETATE","TP_COMP_ID":0},{"COMP_COD":"CJ ","COMP_DESC":"JUTE","TP_COMP_ID":0}],"CREATE_DATE":"\/Date(1339642800000-0300)\/","FEIR_COD":"1 ","FEIR_DESC":"FOCUS TEXTIL - Sao Paulo\/Brazil","FLAG_FISICA":0,"FLAG_PRIORIDADE":0,"FORN_DESC":"TESTE FORNECEDOR IMPORTADORNECEDOR","FORN_ID":4200083,"GRUP_COD":null,"GRUP_DESC":"","IMG_PATH_SAMPLE":"","IMG_PATH_TICKET":"","NOTES":[{"CREATE_DATE":"\/Date(1436508000000-0300)\/","NOTA_DESC":"Teste de Anotação2","NOTA_ID":339,"OBJ_ID":200000101,"PLAT_ID":0,"SEGM_DESC":"Todos ","TP_NOTA_ID":2,"USU_COD":36,"USU_NOME":"JACQUES STERN"}],"SEGM_COD":"ML","SEGM_DESC":null,"SUBG_COD":null,"SUBG_DESC":"","TECI_COD":null,"TECI_DESC":"","USU_COD":36}'));
+  }
+  /*var a,obj,context=this;
 
   
   $('#toggle-menu a').each(function(a,b){
@@ -657,11 +765,8 @@ rapportlist:function(c) {
 
       // $.getJSON("http://was-dev/Focus24/Services/SearchMaterial.svc/Briefing/"+loja+"/"+tipo+"/"+material+"?callback=?",this.proxy(this.open));
     }
-  }
+  }*/
 },init:function() {
-  this.father=!0; //true if is father code, false if isn't.
   this.item = null;
   this.on=!1;
-  this.tipo="";
-  this.colors=[];
 }});

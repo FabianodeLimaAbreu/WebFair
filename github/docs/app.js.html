@@ -36,10 +36,6 @@
 						</li>
 						
 						<li>
-							<a href="module-Detail.html">Detail</a>
-						</li>
-						
-						<li>
 							<a href="module-Login.html">Login</a>
 						</li>
 						
@@ -71,10 +67,6 @@
 						
 						<li>
 							<a href="Login.html">Login</a>
-						</li>
-						
-						<li>
-							<a href="Menu.html">Menu</a>
 						</li>
 						
 						<li>
@@ -123,7 +115,7 @@ require.config({
     sp: "spine"
   }
 });
-require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/*, "app/detail"*/], function() {
+require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content", "app/detail"], function() {
   /**
   * Main application class, responsible for all main funcionalities and call anothers classes constructors
   * @exports App
@@ -191,6 +183,10 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
       this.bfair;
       this.bforn; 
       this.itens_by_page=20;
+      this.itens_page_default=this.itens_by_page;
+      this.ajaxrequest=!1;
+      this.scroller=0;
+      this.cookiefair={};
 
       //Var to storage the basic data
       this.fair=[];
@@ -214,7 +210,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
       this.searchname="";*/
       this.breadarr = [];
       //this.modal = new Modal({el:this.modalEl});
-      //this.detail = new Detail({el:this.detailEl, breadEl:this.breadEl,getloading:this.proxy(this.getloading), setloading:this.proxy(this.setloading),stage:this.proxy(this.stage), body:this.el,getdata:this.proxy(this.getdata)});
+      this.detail = new Detail({getloading:this.proxy(this.getloading), setloading:this.proxy(this.setloading),body:this.el,getdata:this.proxy(this.getdata)});
 
       this.header.addClass("goDown");
       this.usr = jQuery.parseJSON($.cookie("webfair"));
@@ -232,6 +228,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
         setFornVal:this.proxy(this.setFornVal),
         getFairVal:this.proxy(this.getFairVal),
         setFairVal:this.proxy(this.setFairVal),
+        getAmosVal:this.proxy(this.getAmosVal),
         getNotCombo:this.proxy(this.getNotCombo),
         setNotCombo:this.proxy(this.setNotCombo),
         getPage:this.proxy(this.getPage)
@@ -254,13 +251,54 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
           $("html").attr("class","").addClass(this.page);
           this.writePage(this.page);
         },
-        /*"amostras/*fairval":function(fairval){
+        "amostras/*fairval/*fornval/*amosval":function(res){
+          var a,b,c;
+          //cookiefair=jQuery.parseJSON($.cookie("posscroll"));
+          this.cookiefair=jQuery.parseJSON($.cookie("posscroll"));
+          a=res.fairval !== "padrao" ? parseInt(res.fairval) : ""; 
+          b=res.fornval !== "padrao" ? res.fornval.replace("_"," ") : "";
+          c=res.amosval !== "padrao" ? res.amosval.replace("_"," ") : ""; 
+          if(this.cookiefair){
+            console.log(a+" , "+this.cookiefair.fairval+" / "+(a == this.cookiefair.fairval));
+            if(a == this.cookiefair.fairval &amp;&amp; b === this.cookiefair.fornval  &amp;&amp; c === this.cookiefair.amosval ){
+              this.initialTime=this.cookiefair.initialTime;
+              this.endTime=this.cookiefair.endTime;
+              this.scroller=this.cookiefair.posscroll;
+            }
+            else{
+              this.cookiefair={};
+              $.removeCookie('posscroll', { path: '/' });
+            }
+          } 
+          if(parseInt(b)){
+            b="&lt;FORN_ID>"+b+"&lt;/FORN_ID>";
+          }
+          else{
+            if(b){
+              b="&lt;FORN_DESC>"+b+"&lt;/FORN_DESC>";
+            }
+            else{
+              b="";
+            }
+          }
+          if(parseInt(c)){
+            c="&lt;AMOS_ID>"+c+"&lt;/AMOS_ID>";
+          }
+          else{
+            if(c){
+              c="&lt;AMOS_DESC>"+c+"&lt;/AMOS_DESC>";
+            }
+            else{
+              c="";
+            }
+          }
+          a="&lt;FEIR_COD>"+a+"&lt;/FEIR_COD>";
           var context=this;
           this.page ="amostras";
           $("html").attr("class","").addClass(this.page);
-          //this.writePage(this.page);
-
-        },*/
+          this.writePage(this.page);
+          this.submit(a,b,c,!1);
+        },
         "fornecedores":function(){
           var context=this;
           this.page ="fornecedores";
@@ -306,9 +344,12 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
           this.page ="gestao";
           this.writePage(this.page);
         },
-        "detail/*code" : function(a) {
-          alert(a.code);
-          //this.detail.reload(a.code);
+        "detail/*fair/*code" : function(a) {
+          //alert(a.code);
+          this.page ="detail";
+          this.writePage(this.page);
+          this.fairval=a.fair;
+          this.amosval=a.code;
         }
       });
     },
@@ -328,10 +369,12 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
       }       
 
     },
-    writePage:function(hash,val){
-      var context=this;
-      context.reset();
-      context.restartValues();
+    writePage:function(hash){
+      var context=this;  
+      if(this.page !== "detail"){
+        context.reset();
+        context.restartValues();
+      }
       this.container.load("pages/"+hash+".html",function( response, status, xhr){
         switch(context.page){
           case "amostras":
@@ -342,7 +385,18 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
             context.spotlight.el=$(".spotlight");
             this.view = "images";
             $("body").removeAttr("class");
-            context.createComponent(context.fair,context.bfair,'fair');
+            if(!context.fair.length){
+              status=setInterval(function(){
+                if(context.fair.length){
+                  context.ajaxrequest=!1;
+                  context.createComponent(context.fair,context.bfair,'fair');
+                  clearInterval(status);
+                }
+              },100);
+            }
+            else{
+              context.createComponent(context.fair,context.bfair,'fair');
+            }
             $( "input[name='initial_date']" ).datepicker({
               defaultDate: "+1w",
               changeMonth: true,
@@ -366,7 +420,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
               onClose: function( selectedDate ) {
                 $( "input[name='initial_date']").datepicker( "option", "maxDate", selectedDate );
               }
-            });
+            }); 
             //context.callService("fornecedores",'&lt;FORN_DESC>&lt;/FORN_DESC>','&lt;FEIR_COD>&lt;/FEIR_COD>','&lt;CREATE_DATE_I>1900-10-17&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>2020-10-17&lt;/CREATE_DATE_F>',20);
             break;
           case "fornecedores":
@@ -418,6 +472,10 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
               //Mandar para pagina anterior
             }
             //context.callService(context.page,"&lt;FEIR_COD>&lt;/FEIR_COD>","&lt;PAIS_COD>BR&lt;/PAIS_COD>","&lt;REGI_COD>SP&lt;/REGI_COD>");
+            break;
+          case "detail":
+            $("html").attr("class","").addClass(context.page);
+            context.detail.reload(context.fairval,context.amosval);
             break;
           case "fornecedor_cadastro":
             console.log("fornecedor cadastro");
@@ -687,8 +745,9 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
         $.support.cors=true;
         soapRequest.filter(function(a,b){
           if(a['name'] === name){
-            //console.log(a['code']);
+            console.log(a['code']);
             core.callback=a['callback'];
+            core.ajaxrequest=!0;
             $.ajax({
                 type: "POST",
                 url: nodePath,
@@ -704,21 +763,34 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
         });
     },
     submit:function(a,b,c,d){
+      var status,core=this;
       var b=b || "";
       var c=c || "";
-      if(!d){
-        this.reset();
-      }
-      if(this.page ===  "amostras"){
-        this.callService(this.page,a,b,c,'&lt;LINHA_I>'+(this.content.page*this.itens_by_page+1)+'&lt;/LINHA_I>','&lt;LINHA_F>'+((this.content.page+1)*this.itens_by_page)+'&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+this.initialTime+'&lt;/CREATE_DATE_I>',"&lt;CREATE_DATE_F>"+this.endTime+"&lt;/CREATE_DATE_F>");
-      }
-      else{
-        this.callService(this.page,a,b,'&lt;LINHA_I>'+(this.content.page*this.itens_by_page+1)+'&lt;/LINHA_I>','&lt;LINHA_F>'+((this.content.page+1)*this.itens_by_page)+'&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+this.initialTime+'&lt;/CREATE_DATE_I>',"&lt;CREATE_DATE_F>"+this.endTime+"&lt;/CREATE_DATE_F>");
-      }
+      status=setInterval(function(){
+        if(!core.ajaxrequest){
+          //console.log("STATUS: "+core.ajaxrequest);
+
+          core.ajaxrequest=!1;
+          clearInterval(status);
+          if(!d){
+            core.reset();
+          }
+          if(core.page ===  "amostras"){
+            core.callService(core.page,a,b,c,'&lt;LINHA_I>'+(core.content.page*core.itens_by_page+1)+'&lt;/LINHA_I>','&lt;LINHA_F>'+((core.content.page+1)*core.itens_by_page)+'&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+core.initialTime+'&lt;/CREATE_DATE_I>',"&lt;CREATE_DATE_F>"+core.endTime+"&lt;/CREATE_DATE_F>");
+          }
+          else{
+            core.callService(core.page,a,b,'&lt;LINHA_I>'+(core.content.page*core.itens_by_page+1)+'&lt;/LINHA_I>','&lt;LINHA_F>'+((core.content.page+1)*core.itens_by_page)+'&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+core.initialTime+'&lt;/CREATE_DATE_I>',"&lt;CREATE_DATE_F>"+core.endTime+"&lt;/CREATE_DATE_F>");
+          }
+        }
+      },100);
     },
     search:function(a){
+      this.initialTime='2015-01-08';
+      this.endTime='2015-10-10';
       var search;
       var forn_desc=this.fornval || "";
+      this.itens_by_page=this.itens_page_default;
+      //this.scroller=0;
       if(isNaN(forn_desc)){
         forn_desc="&lt;FORN_DESC>"+forn_desc+"&lt;/FORN_DESC>";
       }
@@ -734,11 +806,14 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
           search="&lt;AMOS_ID>"+$(a.target).val()+"&lt;/AMOS_ID>";
         }
         this.amosval=search;
+        this.mode="amostras/"+(this.fairval.replace(" ","_") || "padrao")+"/"+(this.fornval.replace(" ","_") || "padrao")+"/"+($(a.target).val().replace(" ","_") || "padrao");
+        this.navigate(this.mode, !1);
         this.submit("&lt;FEIR_COD>"+fair_id+"&lt;/FEIR_COD>",forn_desc,this.amosval);
       }
     },
     processError:function(data, status, req){
       console.log("DEU ERRO");
+      this.ajaxrequest=!1;
     },
     setdata:function(a,b){  
       var i,length;
@@ -786,6 +861,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
             
     },
     callRequest:function(data, status, req){
+        this.ajaxrequest=!1;
         if (status == "success") {
           if(this.callback &amp;&amp; "function" === typeof this.callback){
             this.callback(data,req);
@@ -804,7 +880,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
               var temp=jQuery.parseJSON($(req.responseXML).text()).unique().sortBy("AMOS_ID");
               this.setDate(temp);
               this.data=this.data.concat(temp);
-              console.dir(this.data);
+              //console.dir(this.data);
               this.createbox(this.data, this.content.page, !0);
             }
             break;
@@ -825,7 +901,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
                 console.dir(this.data);*/
                 this.setDate(temp);
                 this.data=this.data.concat(temp);
-                console.dir(this.data);
+                //console.dir(this.data);
                 this.createbox(this.data, this.content.page, !0,"list");
               }
             }
@@ -853,29 +929,29 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
       }
     },
     createComponent:function(data,comp,what){
-        var i,html="";
-        switch (what){
-          case "fair":
-            html+="&lt;option value=''>Local de Coleta: &lt;/option>";
-            for(i=0;i&lt;data.length;i++){
-              html+="&lt;option value='"+data[i].FEIR_COD.replace("         ","").replace("        ","")+"'>"+data[i].FEIR_DESC+" - "+data[i].PAIS_COD+"&lt;/option>";
-            }
-            break;
-          case "fornecedores":
-            html+="&lt;option value=''>Fornecedores: &lt;/option>";
-            for(i=0;i&lt;data.length;i++){
-              html+="&lt;option value='"+data[i].FORN_ID+"'>"+data[i].FORN_DESC+"&lt;/option>";
-            }
-            break;
-          case "cities":
-            comp.empty();
-            html+="&lt;option value=''>Cidades: &lt;/option>";
-            for(i=0;i&lt;data.length;i++){
-              html+="&lt;option value='"+data[i].REGI_COD+"'>"+data[i].REGI_DESC+"&lt;/option>";
-            }
-            break;
-        }
-        comp.html(html);
+      var i,html="";
+      switch (what){
+        case "fair":
+          html+="&lt;option value=''>Local de Coleta: &lt;/option>";
+          for(i=0;i&lt;data.length;i++){
+            html+="&lt;option value='"+data[i].FEIR_COD.replace("         ","").replace("        ","")+"'>"+data[i].FEIR_DESC+" - "+data[i].PAIS_COD+"&lt;/option>";
+          }
+          break;
+        case "fornecedores":
+          html+="&lt;option value=''>Fornecedores: &lt;/option>";
+          for(i=0;i&lt;data.length;i++){
+            html+="&lt;option value='"+data[i].FORN_ID+"'>"+data[i].FORN_DESC+"&lt;/option>";
+          }
+          break;
+        case "cities":
+          comp.empty();
+          html+="&lt;option value=''>Cidades: &lt;/option>";
+          for(i=0;i&lt;data.length;i++){
+            html+="&lt;option value='"+data[i].REGI_COD+"'>"+data[i].REGI_DESC+"&lt;/option>";
+          }
+          break;
+      }
+      comp.html(html);
     },
     createbox : function(a, b, d, c,length) {  
         var f, g, n, m,v;      
@@ -901,7 +977,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
 
         if(length){
           var i;
-          console.log("ENTROU PARA SORTBY");
+          //console.log("ENTROU PARA SORTBY");
           m=((0+1)*length);
           var p, h, q, k = (0*length), l = length, e = this;
           if (a[k]) {
@@ -995,6 +1071,11 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
 
                     clearInterval(f);
                     e.setloading(!1);
+                    //$(window).scrollTop(e.scroller);
+                    if(e.scroller){
+                      console.log("scroll");
+                      $(window).scrollTop(e.scroller);
+                    }
                     if(c ==="list"){
                       /*console.dir($("#table tbody"));
                       $("#table").DataTable();
@@ -1069,7 +1150,6 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
             return this.setloading(!1), !1;
           } 
         }
-         
     },  
     stage:function() {
       var a, c;
@@ -1228,11 +1308,18 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
       }
     },
     changeFair:function(a){
+      this.initialTime='2015-01-08';
+      this.endTime='2015-10-10';
+      this.cookiefair={};
+      $("input[name='initial_date']").val("");
+      $("input[name='end_date']").val("");
+      this.itens_by_page=this.itens_page_default;
+      //this.scroller=0;
       this.bforn.val("");
       $(".form-control-search").val("");
       this.fairval=$(a.target).find("option:selected").val();
       this.notcombo=!0;
-      this.mode="amostras/"+this.fairval;
+      this.mode="amostras/"+(this.fairval.replace(" ","_") || "padrao")+"/"+(this.fornval.replace(" ","_") || "padrao")+"/"+(this.amosval.replace(" ","_") || "padrao");
       this.navigate(this.mode, !1);
       this.submit("&lt;FEIR_COD>"+this.fairval+"&lt;/FEIR_COD>");
     },
@@ -1283,12 +1370,12 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
                 this.notcombo=!1;
                 this.callService("fornecedores",'&lt;FORN_DESC>'+a.target.value+'&lt;/FORN_DESC>','&lt;FEIR_COD>'+this.fairval+'&lt;/FEIR_COD>','&lt;LINHA_I>'+'1'+'&lt;/LINHA_I>','&lt;LINHA_F>'+'60'+'&lt;/LINHA_F>','&lt;CREATE_DATE_I>1900-10-17&lt;/CREATE_DATE_I>','');
               }
-              else{
-                if(40 === a.keyCode || 38 === a.keyCode) {
-                  return this.spotlight.arrow(a), !1;
-                  //return this.arrow(a), !1;
-                }
-              }
+          else{
+            if(40 === a.keyCode || 38 === a.keyCode) {
+              return this.spotlight.arrow(a), !1;
+              //return this.arrow(a), !1;
+            }
+          }
         }
         else{
           this.spotlight.close();
@@ -1307,6 +1394,12 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
     },
     setFornVal:function(a){
       this.fornval=a;
+    },
+    getAmosVal:function(){
+      return this.amosval;
+    },
+    setAmosVal:function(a){
+      this.amosval=a;
     },
     getNotCombo:function(){
       return this.notcombo;
@@ -1364,8 +1457,17 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
       return this.loading;
     },
 
-    getdata:function(){
-      return this.data;
+    getdata:function(filter){
+      if(filter){
+        return this.data.filter(function(a,b){
+          if(a.AMOS_ID == filter){
+            return a;
+          }
+        });
+      }
+      else{
+        return this.data;
+      }
     },
     scroll:function(z) {
       var b, c, f, clone,e = this;
@@ -1389,12 +1491,14 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
           amosval:""+e.amosval,
           initialTime:""+e.initialTime,
           endTime:""+e.endTime,
+          view:""+e.view,
           posscroll:d,
           total:b
         };
+        //console.dir(scroll);
+        $.cookie.json = !0
         $.cookie("posscroll", scroll, {expires:7, path:"/"})
 
-        console.dir(scroll);
 
         switch (e.page){
           case "amostras":
@@ -1402,8 +1506,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
             f= $(".container").height();
             //console.log(d+" , "+f);
             if (d >= f &amp;&amp; b) {
-              //scope.loadPage();
-              console.log("chegou");
+              //console.log("chegou");
               e.content.page++;
               e.setloading(!0,!1);
               e.submit("&lt;FEIR_COD>"+(e.fairval || "")+"&lt;/FEIR_COD>","&lt;FORN_DESC>"+(e.fornval || "")+"&lt;/FORN_DESC>",(e.amosval || ""),!0);
@@ -1414,8 +1517,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
             f= $("table").height();
             //console.log(d+" , "+f);
             if (d >= f &amp;&amp; b) {
-              //scope.loadPage();
-              console.log("chegou");
+              //console.log("chegou");
               e.content.page++;
               e.setloading(!0,!1);
               e.submit("&lt;FEIR_COD>"+(e.fairval || "")+"&lt;/FEIR_COD>","&lt;FORN_DESC>"+(e.fornval || "")+"&lt;/FORN_DESC>",(e.amosval || ""),!0);
@@ -1438,15 +1540,14 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
       this.itens = $([]);
       this.itens.remove();
       this.content.reset();
-      this.itens_by_page=20;
     },
     restartValues:function(){
       //Var to storage the basic data
       this.fairval="";
       this.fornval="";
       this.amosval="";
-      this.initialTime='2015-01-08';
-      this.endTime='2015-10-10';
+      /*this.initialTime='2015-01-08';
+      this.endTime='2015-10-10';*/
       this.notcombo=0;
     }
   });
@@ -1473,7 +1574,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Mon Aug 3rd 2015 using the <a
+		on Wed Aug 5th 2015 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>

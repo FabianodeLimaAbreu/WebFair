@@ -18,7 +18,7 @@ require.config({
     sp: "spine"
   }
 });
-require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/*, "app/detail"*/], function() {
+require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content", "app/detail"], function() {
   /**
   * Main application class, responsible for all main funcionalities and call anothers classes constructors
   * @exports App
@@ -86,7 +86,10 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
       this.bfair;
       this.bforn; 
       this.itens_by_page=20;
+      this.itens_page_default=this.itens_by_page;
       this.ajaxrequest=!1;
+      this.scroller=0;
+      this.cookiefair={};
 
       //Var to storage the basic data
       this.fair=[];
@@ -110,7 +113,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
       this.searchname="";*/
       this.breadarr = [];
       //this.modal = new Modal({el:this.modalEl});
-      //this.detail = new Detail({el:this.detailEl, breadEl:this.breadEl,getloading:this.proxy(this.getloading), setloading:this.proxy(this.setloading),stage:this.proxy(this.stage), body:this.el,getdata:this.proxy(this.getdata)});
+      this.detail = new Detail({getloading:this.proxy(this.getloading), setloading:this.proxy(this.setloading),body:this.el,getdata:this.proxy(this.getdata)});
 
       this.header.addClass("goDown");
       this.usr = jQuery.parseJSON($.cookie("webfair"));
@@ -149,44 +152,60 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
           var context=this;
           this.page ="amostras";
           $("html").attr("class","").addClass(this.page);
+          $(".zoomContainer").remove();
           this.writePage(this.page);
         },
         "amostras/*fairval/*fornval/*amosval":function(res){
-          if(!this.itens.length){
-            var a,b,c;
-
-            a=res.fairval !== "padrao" ? "<FEIR_COD>"+parseInt(res.fairval)+"</FEIR_COD>" : ""; 
-            b=res.fornval !== "padrao" ? res.fornval.replace("_"," ") : ""; 
-            c=res.amosval !== "padrao" ? res.amosval.replace("_"," ") : ""; 
-            if(parseInt(b)){
-              b="<FORN_ID>"+b+"</FORN_ID>";
+          var a,b,c;
+          $(".zoomContainer").remove();
+          //cookiefair=jQuery.parseJSON($.cookie("posscroll"));
+          this.cookiefair=jQuery.parseJSON($.cookie("posscroll"));
+          console.dir($.cookie("posscroll"));
+          console.dir(this.scroller)
+          console.dir(jQuery.parseJSON($.cookie("posscroll")));
+          a=res.fairval !== "padrao" ? parseInt(res.fairval) : ""; 
+          b=res.fornval !== "padrao" ? res.fornval.replace("_"," ") : "";
+          c=res.amosval !== "padrao" ? res.amosval.replace("_"," ") : ""; 
+          if(this.cookiefair){
+            console.log(a+" , "+this.cookiefair.fairval+" / "+(a == this.cookiefair.fairval));
+            if(a == this.cookiefair.fairval && b === this.cookiefair.fornval  && c === this.cookiefair.amosval ){
+              this.initialTime=this.cookiefair.initialTime;
+              this.endTime=this.cookiefair.endTime;
+              this.scroller=this.cookiefair.posscroll;
             }
             else{
-              if(b){
-                b="<FORN_DESC>"+b+"</FORN_DESC>";
-              }
-              else{
-                b="";
-              }
+              this.cookiefair={};
+              //$.removeCookie('posscroll', { path: '/' });
             }
-            if(parseInt(c)){
-              c="<AMOS_ID>"+c+"</AMOS_ID>";
-            }
-            else{
-              if(c){
-                c="<AMOS_DESC>"+c+"</AMOS_DESC>";
-              }
-              else{
-                c="";
-              }
-            }
-            console.log("NAO TEM NADA NA TELA: "+a);
-            var context=this;
-            this.page ="amostras";
-            $("html").attr("class","").addClass(this.page);
-            this.writePage(this.page);
-            this.submit(a,b,c,!1);
+          } 
+          if(parseInt(b)){
+            b="<FORN_ID>"+b+"</FORN_ID>";
           }
+          else{
+            if(b){
+              b="<FORN_DESC>"+b+"</FORN_DESC>";
+            }
+            else{
+              b="";
+            }
+          }
+          if(parseInt(c)){
+            c="<AMOS_ID>"+c+"</AMOS_ID>";
+          }
+          else{
+            if(c){
+              c="<AMOS_DESC>"+c+"</AMOS_DESC>";
+            }
+            else{
+              c="";
+            }
+          }
+          a="<FEIR_COD>"+a+"</FEIR_COD>";
+          var context=this;
+          this.page ="amostras";
+          $("html").attr("class","").addClass(this.page);
+          this.writePage(this.page);
+          this.submit(a,b,c,!1);
         },
         "fornecedores":function(){
           var context=this;
@@ -233,9 +252,12 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
           this.page ="gestao";
           this.writePage(this.page);
         },
-        "detail/*code" : function(a) {
-          alert(a.code);
-          //this.detail.reload(a.code);
+        "detail/*fair/*code" : function(a) {
+          //alert(a.code);
+          this.page ="detail";
+          this.writePage(this.page);
+          this.fairval=a.fair;
+          this.amosval=a.code;
         }
       });
     },
@@ -255,10 +277,12 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
       }       
 
     },
-    writePage:function(hash,val){
-      var context=this;
-      context.reset();
-      context.restartValues();
+    writePage:function(hash){
+      var context=this;  
+      if(this.page !== "detail"){
+        context.reset();
+        context.restartValues();
+      }
       this.container.load("pages/"+hash+".html",function( response, status, xhr){
         switch(context.page){
           case "amostras":
@@ -269,7 +293,18 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
             context.spotlight.el=$(".spotlight");
             this.view = "images";
             $("body").removeAttr("class");
-            context.createComponent(context.fair,context.bfair,'fair');
+            if(!context.fair.length){
+              status=setInterval(function(){
+                if(context.fair.length){
+                  context.ajaxrequest=!1;
+                  context.createComponent(context.fair,context.bfair,'fair');
+                  clearInterval(status);
+                }
+              },100);
+            }
+            else{
+              context.createComponent(context.fair,context.bfair,'fair');
+            }
             $( "input[name='initial_date']" ).datepicker({
               defaultDate: "+1w",
               changeMonth: true,
@@ -293,7 +328,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
               onClose: function( selectedDate ) {
                 $( "input[name='initial_date']").datepicker( "option", "maxDate", selectedDate );
               }
-            });
+            }); 
             //context.callService("fornecedores",'<FORN_DESC></FORN_DESC>','<FEIR_COD></FEIR_COD>','<CREATE_DATE_I>1900-10-17</CREATE_DATE_I>','<CREATE_DATE_F>2020-10-17</CREATE_DATE_F>',20);
             break;
           case "fornecedores":
@@ -345,6 +380,10 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
               //Mandar para pagina anterior
             }
             //context.callService(context.page,"<FEIR_COD></FEIR_COD>","<PAIS_COD>BR</PAIS_COD>","<REGI_COD>SP</REGI_COD>");
+            break;
+          case "detail":
+            $("html").attr("class","").addClass(context.page);
+            context.detail.reload(context.fairval,context.amosval);
             break;
           case "fornecedor_cadastro":
             console.log("fornecedor cadastro");
@@ -637,7 +676,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
       var c=c || "";
       status=setInterval(function(){
         if(!core.ajaxrequest){
-                console.log("STATUS: "+core.ajaxrequest);
+          //console.log("STATUS: "+core.ajaxrequest);
 
           core.ajaxrequest=!1;
           clearInterval(status);
@@ -654,13 +693,19 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
       },100);
     },
     search:function(a){
+      this.initialTime='2015-01-08';
+      this.endTime='2015-10-10';
       var search;
       var forn_desc=this.fornval || "";
+      this.itens_by_page=this.itens_page_default;
+      //this.scroller=0;
       if(isNaN(forn_desc)){
         forn_desc="<FORN_DESC>"+forn_desc+"</FORN_DESC>";
       }
       else{
-        forn_desc="<FORN_ID>"+forn_desc+"</FORN_ID>";
+        if(forn_desc.length){
+          forn_desc="<FORN_ID>"+forn_desc+"</FORN_ID>";
+        }
       }
       var fair_id=this.fairval || "";
       if(13 === a.keyCode){
@@ -670,10 +715,10 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
         else{
           search="<AMOS_ID>"+$(a.target).val()+"</AMOS_ID>";
         }
-        this.amosval=search;
+        this.amosval=$(a.target).val();
         this.mode="amostras/"+(this.fairval.replace(" ","_") || "padrao")+"/"+(this.fornval.replace(" ","_") || "padrao")+"/"+($(a.target).val().replace(" ","_") || "padrao");
         this.navigate(this.mode, !1);
-        this.submit("<FEIR_COD>"+fair_id+"</FEIR_COD>",forn_desc,this.amosval);
+        this.submit("<FEIR_COD>"+fair_id+"</FEIR_COD>",forn_desc,search);
       }
     },
     processError:function(data, status, req){
@@ -745,7 +790,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
               var temp=jQuery.parseJSON($(req.responseXML).text()).unique().sortBy("AMOS_ID");
               this.setDate(temp);
               this.data=this.data.concat(temp);
-              console.dir(this.data);
+              //console.dir(this.data);
               this.createbox(this.data, this.content.page, !0);
             }
             break;
@@ -766,7 +811,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
                 console.dir(this.data);*/
                 this.setDate(temp);
                 this.data=this.data.concat(temp);
-                console.dir(this.data);
+                //console.dir(this.data);
                 this.createbox(this.data, this.content.page, !0,"list");
               }
             }
@@ -794,29 +839,29 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
       }
     },
     createComponent:function(data,comp,what){
-        var i,html="";
-        switch (what){
-          case "fair":
-            html+="<option value=''>Local de Coleta: </option>";
-            for(i=0;i<data.length;i++){
-              html+="<option value='"+data[i].FEIR_COD.replace("         ","").replace("        ","")+"'>"+data[i].FEIR_DESC+" - "+data[i].PAIS_COD+"</option>";
-            }
-            break;
-          case "fornecedores":
-            html+="<option value=''>Fornecedores: </option>";
-            for(i=0;i<data.length;i++){
-              html+="<option value='"+data[i].FORN_ID+"'>"+data[i].FORN_DESC+"</option>";
-            }
-            break;
-          case "cities":
-            comp.empty();
-            html+="<option value=''>Cidades: </option>";
-            for(i=0;i<data.length;i++){
-              html+="<option value='"+data[i].REGI_COD+"'>"+data[i].REGI_DESC+"</option>";
-            }
-            break;
-        }
-        comp.html(html);
+      var i,html="";
+      switch (what){
+        case "fair":
+          html+="<option value=''>Local de Coleta: </option>";
+          for(i=0;i<data.length;i++){
+            html+="<option value='"+data[i].FEIR_COD.replace("         ","").replace("        ","")+"'>"+data[i].FEIR_DESC+" - "+data[i].PAIS_COD+"</option>";
+          }
+          break;
+        case "fornecedores":
+          html+="<option value=''>Fornecedores: </option>";
+          for(i=0;i<data.length;i++){
+            html+="<option value='"+data[i].FORN_ID+"'>"+data[i].FORN_DESC+"</option>";
+          }
+          break;
+        case "cities":
+          comp.empty();
+          html+="<option value=''>Cidades: </option>";
+          for(i=0;i<data.length;i++){
+            html+="<option value='"+data[i].REGI_COD+"'>"+data[i].REGI_DESC+"</option>";
+          }
+          break;
+      }
+      comp.html(html);
     },
     createbox : function(a, b, d, c,length) {  
         var f, g, n, m,v;      
@@ -842,7 +887,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
 
         if(length){
           var i;
-          console.log("ENTROU PARA SORTBY");
+          //console.log("ENTROU PARA SORTBY");
           m=((0+1)*length);
           var p, h, q, k = (0*length), l = length, e = this;
           if (a[k]) {
@@ -936,6 +981,11 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
 
                     clearInterval(f);
                     e.setloading(!1);
+                    //$(window).scrollTop(e.scroller);
+                    if(e.scroller){
+                      console.log("scroll");
+                      $(window).scrollTop(e.scroller);
+                    }
                     if(c ==="list"){
                       /*console.dir($("#table tbody"));
                       $("#table").DataTable();
@@ -1010,7 +1060,6 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
             return this.setloading(!1), !1;
           } 
         }
-         
     },  
     stage:function() {
       var a, c;
@@ -1169,6 +1218,13 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
       }
     },
     changeFair:function(a){
+      this.initialTime='2015-01-08';
+      this.endTime='2015-10-10';
+      this.cookiefair={};
+      $("input[name='initial_date']").val("");
+      $("input[name='end_date']").val("");
+      this.itens_by_page=this.itens_page_default;
+      //this.scroller=0;
       this.bforn.val("");
       $(".form-control-search").val("");
       this.fairval=$(a.target).find("option:selected").val();
@@ -1232,6 +1288,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
           }
         }
         else{
+          this.fornval=a.target.value;
           this.spotlight.close();
         }
       }
@@ -1311,8 +1368,17 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
       return this.loading;
     },
 
-    getdata:function(){
-      return this.data;
+    getdata:function(filter){
+      if(filter){
+        return this.data.filter(function(a,b){
+          if(a.AMOS_ID == filter){
+            return a;
+          }
+        });
+      }
+      else{
+        return this.data;
+      }
     },
     scroll:function(z) {
       var b, c, f, clone,e = this;
@@ -1336,12 +1402,14 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
           amosval:""+e.amosval,
           initialTime:""+e.initialTime,
           endTime:""+e.endTime,
+          view:""+e.view,
           posscroll:d,
           total:b
         };
+        //console.dir(scroll);
+        $.cookie.json = !0
         $.cookie("posscroll", scroll, {expires:7, path:"/"})
 
-        console.dir(scroll);
 
         switch (e.page){
           case "amostras":
@@ -1349,8 +1417,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
             f= $(".container").height();
             //console.log(d+" , "+f);
             if (d >= f && b) {
-              //scope.loadPage();
-              console.log("chegou");
+              //console.log("chegou");
               e.content.page++;
               e.setloading(!0,!1);
               e.submit("<FEIR_COD>"+(e.fairval || "")+"</FEIR_COD>","<FORN_DESC>"+(e.fornval || "")+"</FORN_DESC>",(e.amosval || ""),!0);
@@ -1361,8 +1428,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
             f= $("table").height();
             //console.log(d+" , "+f);
             if (d >= f && b) {
-              //scope.loadPage();
-              console.log("chegou");
+              //console.log("chegou");
               e.content.page++;
               e.setloading(!0,!1);
               e.submit("<FEIR_COD>"+(e.fairval || "")+"</FEIR_COD>","<FORN_DESC>"+(e.fornval || "")+"</FORN_DESC>",(e.amosval || ""),!0);
@@ -1385,15 +1451,14 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content"/
       this.itens = $([]);
       this.itens.remove();
       this.content.reset();
-      this.itens_by_page=20;
     },
     restartValues:function(){
       //Var to storage the basic data
       this.fairval="";
       this.fornval="";
       this.amosval="";
-      this.initialTime='2015-01-08';
-      this.endTime='2015-10-10';
+      /*this.initialTime='2015-01-08';
+      this.endTime='2015-10-10';*/
       this.notcombo=0;
     }
   });

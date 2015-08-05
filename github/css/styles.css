@@ -1733,6 +1733,7 @@ form.search {
 }
 .detail .description-top .table {
   border: none;
+  width: 100%;
 }
 .detail .description-top th {
   font-size: 1em;
