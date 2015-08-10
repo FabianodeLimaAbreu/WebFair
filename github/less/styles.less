@@ -29,6 +29,7 @@
 .s-eight{width: 180px;}
 .s-five{width: 50px}
 .s-eight-five{width: 85px;}
+.top-ten{margin-top: 10px;}
 .m-ten{margin-bottom: 10px;}
 .m-right{margin-right: 10px;}
 .m-left{margin-left: 10px}
@@ -1939,8 +1940,11 @@ form.search{
 	width: 100%;
 	height: 190px;
 	overflow-y: auto;
-	background-color: #c6c6c6;
-	display: none;
+	background-color: #fff;
+    display: none;
+    border: 1px solid #c3c3c3;
+    border-right: 0;
+    border-radius: 0 0 10px 10px;
 	button{
 		position: relative;
 		float: left;
@@ -1952,7 +1956,7 @@ form.search{
 		line-height: 30px;
 		cursor: pointer;
 		&:hover,&.sel{
-			background-color: red;
+			background-color: #c3c3c3;
 		}
 	}
 }

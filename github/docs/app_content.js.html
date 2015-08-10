@@ -128,7 +128,7 @@
 
     $(window).scrollTop(0);
     if(this.getPage() === "amostras"){
-      this.mode="amostras/"+(this.getFairVal().replace(" ","_") || "padrao")+"/"+(this.getFornVal().replace(" ","_") || "padrao")+"/"+(this.getAmosVal().replace(" ","_") || "padrao");
+      this.mode="amostras/"+(this.getFairVal().replace(" ","_") || "padrao")+"/"+(this.getFornVal().replace(" ","_") || "padrao")+"/"+"padrao";
       this.navigate(this.mode, !1);
       this.callService("amostras",fair,name,"",'&lt;LINHA_I>'+'1'+'&lt;/LINHA_I>','&lt;LINHA_F>'+'20'+'&lt;/LINHA_F>','&lt;CREATE_DATE_I>2010-01-01&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>2050-01-01&lt;/CREATE_DATE_F>');
       this.close();
@@ -320,6 +320,13 @@ window.Box = Spine.Controller.sub({init:function() {
     this.html(this.template(this.item));
     "images" === this.view &amp;&amp; this.el.find(".thumbnail").prepend(this.url);  
     return this;
+  },setDate:function(list){
+    var i,length;
+    length=list.length;
+    //console.dir(list);
+    for(i=0;i&lt;length;i++){
+      list[i].CREATE_DATE=parseJsonDate(list[i].CREATE_DATE).toLocaleDateString();
+    }
   }, images:function(a) {
     var homologado,note,fisica,fav,email,annex,status,result="";
     this.el.addClass('col col-small col-large');
@@ -335,15 +342,16 @@ window.Box = Spine.Controller.sub({init:function() {
     //Creating result
     result+="&lt;a href='#detail/"+parseInt(a.FEIR_COD)+"/"+a.AMOS_ID+"'>&lt;div class='thumbnail'>&lt;button type='button' name='"+a.AMOS_ID+"' class='icon'>&lt;/button>"; //bselection
     result+="&lt;div class='caption'>&lt;div class='caption-upside'>&lt;ul class='caption-icons'>&lt;li>&lt;button type='button' class='caption-icons-icon justit bstatus "+status+"'>&lt;/button>&lt;/li>&lt;li>&lt;button type='button' class='caption-icons-icon justit bemail "+email+"'>&lt;/button>&lt;/li>";
-    result+="&lt;li>&lt;button type='button' class='caption-icons-icon justit bhomologado "+homologado+"' name='"+a.AMOS_ID+"' title='Homologar'>&lt;/button>&lt;/li>"
+    result+="&lt;li>&lt;button type='button' class='caption-icons-icon justit setitem bhomologado "+homologado+"' name='"+a.AMOS_ID+"' title='Homologar'>&lt;/button>&lt;/li>"
     if(note){
+      this.setDate(a.NOTES);
       result+="&lt;li class='tooltip tooltip-selectable'>&lt;button type='button' class='caption-icons-icon justit bnote'>&lt;/button>&lt;ul class='tooltip-content notepad notepadmess rightless'>&lt;li class='tooltip-title'>&lt;p class='tooltip-item'>Anotações&lt;/p>&lt;/li>";
       for(i=0;i&lt;a.NOTES.length;i++){
         result+="&lt;li>&lt;article>&lt;div class='notepad-note blockquote'>&lt;p>"+a.NOTES[i].CREATE_DATE+/*a.NOTES[i].CREATE_DATE*/" | "+ a.NOTES[i].USU_NOME+" | "+a.NOTES[i].OBJ_ID+"&lt;/p>&lt;p>"+a.NOTES[i].SEGM_DESC+" - Assunto:&lt;/p>&lt;p>"+a.NOTES[i].NOTA_DESC+"&lt;/p>&lt;/div>&lt;div class='blockquote'>&lt;button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+a.NOTES[i].NOTA_ID+"' name='"+a.NOTES[i].USU_COD+"'>&lt;/button>&lt;/div>&lt;/article>&lt;/li>"
       }
-      result+="&lt;/ul>&lt;/li>"
+      result+="&lt;/ul>&lt;/li>";
     }
-    result+="&lt;li>&lt;button type='button' class='caption-icons-icon justit bfisica "+fisica+"' name='"+a.AMOS_ID+"' title='Fisica'>&lt;/button>&lt;/li>&lt;li>&lt;button type='button' class='caption-icons-icon justit bfav "+fav+"' name='"+a.AMOS_ID+"' title='Favoritar'>&lt;/button>&lt;/li>&lt;/ul>";
+    result+="&lt;li>&lt;button type='button' class='caption-icons-icon justit setitem bfisica "+fisica+"' name='"+a.AMOS_ID+"' title='Fisica'>&lt;/button>&lt;/li>&lt;li>&lt;button type='button' class='caption-icons-icon justit setitem bfav "+fav+"' name='"+a.AMOS_ID+"' title='Favoritar'>&lt;/button>&lt;/li>&lt;/ul>";
     result+="&lt;div class='caption-desc'>&lt;p>&lt;span>Código da Amostra: &lt;/span>&lt;span>"+a.AMOS_ID+"&lt;/span>&lt;/p>&lt;p>&lt;span>Fornecedor: &lt;/span>&lt;span>"+a.FORN_DESC+"&lt;/span>&lt;/p>&lt;p>&lt;span>Data: &lt;/span>&lt;span>"+a.CREATE_DATE+"&lt;/span>&lt;/p>";
     if(annex){
       result+="&lt;button type='button' class='icon bannex'>&lt;/button>";
@@ -408,6 +416,7 @@ window.Box = Spine.Controller.sub({init:function() {
         }
 
         if(a.NOTES.length){
+          this.setDate(a.NOTES);
           result+="&lt;td class='tooltip tooltip-selectable'>&lt;button type='button' class='caption-icons-icon justit bnote'>&lt;/button>&lt;ul class='tooltip-content notepad notepadmess col-large'>&lt;li class='tooltip-title'>&lt;p class='tooltip-item'>Anotações&lt;/p>&lt;/li>";
           for(i=0;i&lt;a.NOTES.length;i++){
             result+="&lt;li>&lt;article>&lt;div class='notepad-note blockquote'>&lt;p>"+a.NOTES[i].CREATE_DATE+" | "+ a.NOTES[i].USU_NOME+" | "+a.NOTES[i].OBJ_ID+"&lt;/p>&lt;p>"+a.NOTES[i].SEGM_DESC+" - Assunto:&lt;/p>&lt;p>"+a.NOTES[i].NOTA_DESC+"&lt;/p>&lt;/div>&lt;div class='blockquote'>&lt;button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+a.NOTES[i].NOTA_ID+"' name='"+a.NOTES[i].USU_COD+"'>&lt;/button>&lt;/div>&lt;/article>&lt;/li>"
@@ -433,7 +442,7 @@ window.Box = Spine.Controller.sub({init:function() {
         email= a.AMOS_ENV_EMAIL? "sent":"disabled";
 
         //Creating result
-        result+="&lt;td>&lt;button type='button' name='"+a.AMOS_ID+"'' class='icon bselection' name='"+a.AMOS_ID+"'>&lt;/button>&lt;/td>&lt;td>&lt;a href='#detail/"+a.AMOS_ID+"'>"+a.FORN_DESC+"&lt;/a>&lt;/td>&lt;td>&lt;a href='#detail/"+a.AMOS_ID+"'>"+a.AMOS_ID+"&lt;/a>&lt;/td>&lt;td>&lt;a href='#detail/"+a.AMOS_ID+"'>"+a.CREATE_DATE+"&lt;/a>&lt;/td>&lt;td>&lt;button type='button' class='caption-icons-icon justit bfisica "+fisica+"' name='"+a.AMOS_ID+"' title='Fisica'>&lt;/button>&lt;/td>&lt;td>"+a.AMOS_PRECO+"&lt;/td>&lt;td>"+a.AMOS_COTACAO_KG+"&lt;/td>&lt;td>&lt;button type='button' class='caption-icons-icon justit bfav "+fav+"' name='"+a.AMOS_ID+"' title='Favoritar'>&lt;/button>&lt;/td>&lt;td>&lt;button type='button' class='caption-icons-icon justit bhomologado "+homologado+"' name='"+a.AMOS_ID+"' title='Homologar'>&lt;/button>&lt;/td>";
+        result+="&lt;td>&lt;button type='button' name='"+a.AMOS_ID+"'' class='icon bselection' name='"+a.AMOS_ID+"'>&lt;/button>&lt;/td>&lt;td>&lt;a href='#detail/"+parseInt(a.FEIR_COD)+"/"+a.AMOS_ID+"'>"+a.FORN_DESC+"&lt;/a>&lt;/td>&lt;td>&lt;a href='#detail/"+a.AMOS_ID+"'>"+a.AMOS_ID+"&lt;/a>&lt;/td>&lt;td>&lt;a href='#detail/"+a.AMOS_ID+"'>"+a.CREATE_DATE+"&lt;/a>&lt;/td>&lt;td>&lt;button type='button' class='caption-icons-icon justit setitem bfisica "+fisica+"' name='"+a.AMOS_ID+"' title='Fisica'>&lt;/button>&lt;/td>&lt;td>"+a.AMOS_PRECO+"&lt;/td>&lt;td>"+a.AMOS_COTACAO_KG+"&lt;/td>&lt;td>&lt;button type='button' class='caption-icons-icon justit setitem bfav "+fav+"' name='"+a.AMOS_ID+"' title='Favoritar'>&lt;/button>&lt;/td>&lt;td>&lt;button type='button' class='caption-icons-icon justit setitem bhomologado "+homologado+"' name='"+a.AMOS_ID+"' title='Homologar'>&lt;/button>&lt;/td>";
         if(note){
           result+="&lt;td class='tooltip tooltip-selectable'>&lt;button type='button' class='caption-icons-icon justit bnote'>&lt;/button>&lt;ul class='tooltip-content notepad notepadmess col-large'>&lt;li class='tooltip-title'>&lt;p class='tooltip-item'>Anotações&lt;/p>&lt;/li>";
           for(i=0;i&lt;a.NOTES.length;i++){
@@ -491,7 +500,7 @@ window.Box = Spine.Controller.sub({init:function() {
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Wed Aug 5th 2015 using the <a
+		on Mon Aug 10th 2015 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>

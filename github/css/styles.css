@@ -31,6 +31,9 @@
 .s-eight-five {
   width: 85px;
 }
+.top-ten {
+  margin-top: 10px;
+}
 .m-ten {
   margin-bottom: 10px;
 }
@@ -1905,8 +1908,11 @@ form.search {
   width: 100%;
   height: 190px;
   overflow-y: auto;
-  background-color: #c6c6c6;
+  background-color: #fff;
   display: none;
+  border: 1px solid #c3c3c3;
+  border-right: 0;
+  border-radius: 0 0 10px 10px;
 }
 .spotlight button {
   position: relative;
@@ -1921,7 +1927,7 @@ form.search {
 }
 .spotlight button:hover,
 .spotlight button.sel {
-  background-color: red;
+  background-color: #c3c3c3;
 }
 /*Datepicker*/
 .ui-widget {

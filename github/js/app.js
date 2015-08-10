@@ -66,10 +66,12 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
       "click .delete-fair":"deleteFair",
       "click .date-filter":"showPicker",
       "click .save-date-filter":"submitDateFilter",
-      "click .justit":"SetItemAmos",
+      "click .setitem":"SetItemAmos",
       "click .bselection-edit":"selectItem",
       "click .bselection":"selectItem",
-      "click .tooltip-content.status button":"AmosByStatus"
+      "click .tooltip-content.status button":"AmosByStatus",
+      "click .thumbnail img":"goDetail",
+      "click .main_opt_button.bemail":"sendEmail"
       /*"submit .search":"submit",
       "click button.icon.go_back_default":"goBack",
       "click button.close":"getOut"*/
@@ -88,7 +90,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
       this.itens_by_page=20;
       this.itens_page_default=this.itens_by_page;
       this.ajaxrequest=!1;
-      this.scroller=0;
+      console.log("INIT DA APP");
       this.cookiefair={};
 
       //Var to storage the basic data
@@ -101,7 +103,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
       this.fairval="";
       this.fornval="";
       this.amosval="";
-      this.initialTime='2015-01-08';
+      this.initialTime='2011-01-08';
       this.endTime='2015-10-10';
       this.notcombo=0;
 
@@ -113,7 +115,17 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
       this.searchname="";*/
       this.breadarr = [];
       //this.modal = new Modal({el:this.modalEl});
-      this.detail = new Detail({getloading:this.proxy(this.getloading), setloading:this.proxy(this.setloading),body:this.el,getdata:this.proxy(this.getdata)});
+      this.detail = new Detail({
+        getloading:this.proxy(this.getloading),
+        setloading:this.proxy(this.setloading),
+        body:this.el,
+        getdata:this.proxy(this.getdata),
+        actionHeart:this.proxy(this.actionHeart),
+        actionFlag:this.proxy(this.actionFlag),
+        actionHomolog:this.proxy(this.actionHomolog),
+        SetItemAmos:this.proxy(this.SetItemAmos),
+        callService:this.proxy(this.callService)
+      });
 
       this.header.addClass("goDown");
       this.usr = jQuery.parseJSON($.cookie("webfair"));
@@ -123,7 +135,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
       
       this.el.find("#wrap").removeClass("hide");
 
-      this.content = new Content({el:this.contentEl,usr_segm:this.usr.SEGM_COD,/*bread:this.breadEl, type:this.usr.TIPO*/});
+      this.content = new Content({el:this.contentEl,usr_segm:this.usr.SEGM_COD/*bread:this.breadEl, type:this.usr.TIPO*/});
       this.spotlight = new Spotlight({
         callService:this.proxy(this.callService),
         reset:this.proxy(this.reset),
@@ -140,10 +152,6 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
       if(!this.fair.length){
         this.callService("local",'<FEIR_COD></FEIR_COD>','<PAIS_COD></PAIS_COD>','<REGI_COD></REGI_COD>');
       }
-      /*if(!this.forn.length){
-        this.callService("fornecedores",'<FEIR_COD></FEIR_COD>','<PAIS_COD></PAIS_COD>','<REGI_COD></REGI_COD>');
-      }*/
-      // this.spotlight = new Spotlight({el:this.spotEl});
       this.routes({
         "":function() {
           this.menuopt.eq(3)[0].click();
@@ -151,29 +159,30 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
         "amostras":function(){
           var context=this;
           this.page ="amostras";
+          console.log("AMOSTRAS NORMAL");
           $("html").attr("class","").addClass(this.page);
           $(".zoomContainer").remove();
           this.writePage(this.page);
         },
         "amostras/*fairval/*fornval/*amosval":function(res){
           var a,b,c;
+          console.log("ok");
           $(".zoomContainer").remove();
           //cookiefair=jQuery.parseJSON($.cookie("posscroll"));
+
           this.cookiefair=jQuery.parseJSON($.cookie("posscroll"));
-          console.dir($.cookie("posscroll"));
-          console.dir(this.scroller)
-          console.dir(jQuery.parseJSON($.cookie("posscroll")));
-          a=res.fairval !== "padrao" ? parseInt(res.fairval) : ""; 
-          b=res.fornval !== "padrao" ? res.fornval.replace("_"," ") : "";
-          c=res.amosval !== "padrao" ? res.amosval.replace("_"," ") : ""; 
+          this.fairval = a=res.fairval !== "padrao" ? parseInt(res.fairval) : ""; 
+          this.fornval = b=res.fornval !== "padrao" ? res.fornval.replace("_"," ") : "";
+          this.amosval = c=res.amosval !== "padrao" ? res.amosval.replace("_"," ") : ""; 
           if(this.cookiefair){
             console.log(a+" , "+this.cookiefair.fairval+" / "+(a == this.cookiefair.fairval));
             if(a == this.cookiefair.fairval && b === this.cookiefair.fornval  && c === this.cookiefair.amosval ){
+              console.log("bateu parametros do cookie");
               this.initialTime=this.cookiefair.initialTime;
               this.endTime=this.cookiefair.endTime;
-              this.scroller=this.cookiefair.posscroll;
             }
             else{
+              console.log("NÃO bateu parametros do cookie");
               this.cookiefair={};
               //$.removeCookie('posscroll', { path: '/' });
             }
@@ -254,6 +263,8 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
         },
         "detail/*fair/*code" : function(a) {
           //alert(a.code);
+          /*this.cookiefair=jQuery.parseJSON($.cookie("posscroll"));
+          console.dir(this.cookiefair);*/
           this.page ="detail";
           this.writePage(this.page);
           this.fairval=a.fair;
@@ -277,12 +288,14 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
       }       
 
     },
-    writePage:function(hash){
+    writePage:function(hash,val){
       var context=this;  
       if(this.page !== "detail"){
         context.reset();
-        context.restartValues();
       }
+      /*if(this.page !== "detail" && !this.scroller){
+        //context.restartValues();
+      }*/
       this.container.load("pages/"+hash+".html",function( response, status, xhr){
         switch(context.page){
           case "amostras":
@@ -427,10 +440,11 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
         });
         //html+="<CREATE_DATE>"+new Date().toLocaleDateString().replace("/","-").replace("/","-")+"</CREATE_DATE>";
         html+="<CREATE_DATE>"+"2015-12-12"+"</CREATE_DATE>";
+        console.dir(html);
         this.callService("gravarLocal",html,"U");
       }
       else{
-        html+="<FEIR_COD>24</FEIR_COD>";
+        html+="<FEIR_COD></FEIR_COD>";
         elem.each(function(a,b){
           //console.log($(b).attr("class"));
           if($(b).hasClass("bselect")){
@@ -480,12 +494,17 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
       console.log("CLICOU EM UM JUSTIT");
       var el=$(ev.target);
       var item=[],result,pattern="",html="";
-      item=this.data.filter(function(a,b){
-        if(a.AMOS_ID == el.attr("name")){
-          return a;
-        }
-      });
-
+      if(this.page === "amostras"){
+        item=this.data.filter(function(a,b){
+          if(a.AMOS_ID == el.attr("name")){
+            return a;
+          }
+        });
+        item=item[0];
+      }
+      else{
+        item=this.detail.item;
+      }
       if(el.hasClass("has")){
         el.removeClass("has").addClass("nothas");
       }
@@ -496,24 +515,24 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
       switch (el.attr("title")){
         case "Fisica":
           result= el.hasClass("has") ? 1 : 0;
-          item[0].FLAG_FISICA=result;
-          html+="<FLAG_PRIORIDADE>"+item[0].FLAG_PRIORIDADE+"</FLAG_PRIORIDADE><AMOS_HOMOLOGAR>"+item[0].AMOS_HOMOLOGAR+"</AMOS_HOMOLOGAR><FLAG_FISICA>"+result+"</FLAG_FISICA>";
+          item.FLAG_FISICA=result;
+          html+="<FLAG_PRIORIDADE>"+item.FLAG_PRIORIDADE+"</FLAG_PRIORIDADE><AMOS_HOMOLOGAR>"+item.AMOS_HOMOLOGAR+"</AMOS_HOMOLOGAR><FLAG_FISICA>"+result+"</FLAG_FISICA>";
           break;
         case "Homologar":
           result= el.hasClass("has") ? 1 : 0;
-          item[0].AMOS_HOMOLOGAR=result;
-          html+="<FLAG_PRIORIDADE>"+item[0].FLAG_PRIORIDADE+"</FLAG_PRIORIDADE><AMOS_HOMOLOGAR>"+result+"</AMOS_HOMOLOGAR><FLAG_FISICA>"+item[0].FLAG_FISICA+"</FLAG_FISICA>";
+          item.AMOS_HOMOLOGAR=result;
+          html+="<FLAG_PRIORIDADE>"+item.FLAG_PRIORIDADE+"</FLAG_PRIORIDADE><AMOS_HOMOLOGAR>"+result+"</AMOS_HOMOLOGAR><FLAG_FISICA>"+item.FLAG_FISICA+"</FLAG_FISICA>";
           break;
         case "Favoritar":
           result= el.hasClass("has") ? 1 : 0;
-          item[0].FLAG_PRIORIDADE=result;
-          html+="<FLAG_PRIORIDADE>"+result+"</FLAG_PRIORIDADE><AMOS_HOMOLOGAR>"+item[0].AMOS_HOMOLOGAR+"</AMOS_HOMOLOGAR><FLAG_FISICA>"+item[0].FLAG_FISICA+"</FLAG_FISICA>";
+          item.FLAG_PRIORIDADE=result;
+          html+="<FLAG_PRIORIDADE>"+result+"</FLAG_PRIORIDADE><AMOS_HOMOLOGAR>"+item.AMOS_HOMOLOGAR+"</AMOS_HOMOLOGAR><FLAG_FISICA>"+item.FLAG_FISICA+"</FLAG_FISICA>";
           break;
         default:
           console.log("ALGO DE ERRADO OCORREU!!!");
           return !1;
       }
-      pattern="<AMOS_ID>"+item[0].AMOS_ID+"</AMOS_ID><FORN_ID>"+item[0].FORN_ID+"</FORN_ID><FEIR_COD>"+parseInt(item[0].FEIR_COD)+"</FEIR_COD><USU_COD>"+item[0].USU_COD+"</USU_COD><AMOS_DESC>"+item[0].AMOS_DESC+"</AMOS_DESC><AMOS_LARGURA_TOTAL>"+item[0].AMOS_LARGURA_TOTAL+"</AMOS_LARGURA_TOTAL><AMOS_LARGURA_UTIL>"+item[0].AMOS_LARGURA_UTIL+"</AMOS_LARGURA_UTIL><AMOS_GRAMATURA_M>"+item[0].AMOS_GRAMATURA_M+"</AMOS_GRAMATURA_M><AMOS_GRAMATURA_ML>"+item[0].AMOS_GRAMATURA_ML+"</AMOS_GRAMATURA_ML><AMOS_ONCAS>"+item[0].AMOS_ONCAS+"</AMOS_ONCAS><AMOS_COTACAO_M>"+item[0].AMOS_COTACAO_M+"</AMOS_COTACAO_M><AMOS_COTACAO_KG>"+item[0].AMOS_COTACAO_KG+"</AMOS_COTACAO_KG><AMOS_STATUS>"+item[0].AMOS_STATUS+"</AMOS_STATUS><AMOS_ENV_EMAIL>"+item[0].AMOS_ENV_EMAIL+"</AMOS_ENV_EMAIL><AMOS_PRECO_UM>"+item[0].AMOS_PRECO_UM+"</AMOS_PRECO_UM><AMOS_PRECO>"+item[0].AMOS_PRECO+"</AMOS_PRECO><TECI_COD>"+(item[0].TECI_COD || "")+"</TECI_COD><BASE_COD>"+(item[0].BASE_COD || "")+"</BASE_COD><GRUP_COD>"+(item[0].GRUP_COD || "")+"</GRUP_COD><SUBG_COD>"+(item[0].SUBG_COD || "")+"</SUBG_COD><SEGM_COD>"+item[0].SEGM_COD+"</SEGM_COD><CREATE_DATE>"+"2015-01-01"+"</CREATE_DATE>";
+      pattern="<AMOS_ID>"+item.AMOS_ID+"</AMOS_ID><FORN_ID>"+item.FORN_ID+"</FORN_ID><FEIR_COD>"+parseInt(item.FEIR_COD)+"</FEIR_COD><USU_COD>"+item.USU_COD+"</USU_COD><AMOS_DESC>"+item.AMOS_DESC+"</AMOS_DESC><AMOS_LARGURA_TOTAL>"+item.AMOS_LARGURA_TOTAL+"</AMOS_LARGURA_TOTAL><AMOS_LARGURA_UTIL>"+item.AMOS_LARGURA_UTIL+"</AMOS_LARGURA_UTIL><AMOS_GRAMATURA_M>"+item.AMOS_GRAMATURA_M+"</AMOS_GRAMATURA_M><AMOS_GRAMATURA_ML>"+item.AMOS_GRAMATURA_ML+"</AMOS_GRAMATURA_ML><AMOS_ONCAS>"+item.AMOS_ONCAS+"</AMOS_ONCAS><AMOS_COTACAO_M>"+item.AMOS_COTACAO_M+"</AMOS_COTACAO_M><AMOS_COTACAO_KG>"+item.AMOS_COTACAO_KG+"</AMOS_COTACAO_KG><AMOS_STATUS>"+item.AMOS_STATUS+"</AMOS_STATUS><AMOS_ENV_EMAIL>"+item.AMOS_ENV_EMAIL+"</AMOS_ENV_EMAIL><AMOS_PRECO_UM>"+item.AMOS_PRECO_UM+"</AMOS_PRECO_UM><AMOS_PRECO>"+item.AMOS_PRECO+"</AMOS_PRECO><TECI_COD>"+(item.TECI_COD || "")+"</TECI_COD><BASE_COD>"+(item.BASE_COD || "")+"</BASE_COD><GRUP_COD>"+(item.GRUP_COD || "")+"</GRUP_COD><SUBG_COD>"+(item.SUBG_COD || "")+"</SUBG_COD><SEGM_COD>"+item.SEGM_COD+"</SEGM_COD><CREATE_DATE>"+"2015-01-01"+"</CREATE_DATE>";
       this.setloading(!0,!1);
       this.callService("gravarAmostras",pattern,html,'U');
     },
@@ -536,7 +555,6 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
       else{
         this.action_name="select";
       }
-      console.dir(this.select_items);
     },
     setBreadcrumb : function(a, val){
       var loja, area, grupo, artigo, bread_text;
@@ -693,8 +711,8 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
       },100);
     },
     search:function(a){
-      this.initialTime='2015-01-08';
-      this.endTime='2015-10-10';
+      /*this.initialTime='2015-01-08';
+      this.endTime='2015-10-10';*/
       var search;
       var forn_desc=this.fornval || "";
       this.itens_by_page=this.itens_page_default;
@@ -706,8 +724,11 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
         if(forn_desc.length){
           forn_desc="<FORN_ID>"+forn_desc+"</FORN_ID>";
         }
+        else{
+          forn_desc="";
+        }
       }
-      var fair_id=this.fairval || "";
+      var fair_id="<FEIR_COD>"+this.fairval+"</FEIR_COD>";
       if(13 === a.keyCode){
         if(isNaN($(a.target).val())){
           search="<AMOS_DESC>"+$(a.target).val()+"</AMOS_DESC>";
@@ -716,9 +737,9 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
           search="<AMOS_ID>"+$(a.target).val()+"</AMOS_ID>";
         }
         this.amosval=$(a.target).val();
-        this.mode="amostras/"+(this.fairval.replace(" ","_") || "padrao")+"/"+(this.fornval.replace(" ","_") || "padrao")+"/"+($(a.target).val().replace(" ","_") || "padrao");
+        this.mode="amostras/"+((""+this.fairval).replace(" ","_") || "padrao")+"/"+(this.fornval.replace(" ","_") || "padrao")+"/"+($(a.target).val().replace(" ","_") || "padrao");
         this.navigate(this.mode, !1);
-        this.submit("<FEIR_COD>"+fair_id+"</FEIR_COD>",forn_desc,search);
+        this.submit(fair_id,forn_desc,search);
       }
     },
     processError:function(data, status, req){
@@ -887,7 +908,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
 
         if(length){
           var i;
-          //console.log("ENTROU PARA SORTBY");
+          console.log("ENTROU PARA SORTBY");
           m=((0+1)*length);
           var p, h, q, k = (0*length), l = length, e = this;
           if (a[k]) {
@@ -897,6 +918,10 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
 
                     clearInterval(f);
                     e.setloading(!1);
+                    if(e.cookiefair){
+                      console.log("scroll: "+e.cookiefair.posscroll);
+                      $(window).scrollTop(e.cookiefair.posscroll);
+                    }
                     if(c ==="list"){
                       /*console.dir($("#table tbody"));
                       $("#table").DataTable();
@@ -914,8 +939,9 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
                     //Usando por enquanto o caminho para a imagem large, pois as amostras antigas eram salvas em tamanho muito pequeno
                     p = new Image, q = "http://bdb/ifair_img/"+h.IMG_PATH_SAMPLE.replace("thumb","large"), $(p).load(function() {
                         if (!l > 0)
-                            return !1;
+                          return !1;
 
+                        p.name=parseInt(h.FEIR_COD)+"/"+h.AMOS_ID;
                         g = new Box({
                             item : h,
                             view : c,
@@ -932,6 +958,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
                         if (!l > 0)
                             return !1;
                         var a = new Image;
+                        a.name=parseInt(h.FEIR_COD)+"/"+h.AMOS_ID;
                         a.src = "http://189.126.197.169/img/small/small_NONE.jpg";
 
                         g = new Box({
@@ -972,6 +999,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
           }
         }
         else{
+          console.log("ESCREVENDO SEM SORTBY");
           m=((this.content.page+1)*this.itens_by_page);
           var p, h, q, k = (this.content.page*this.itens_by_page), l = this.itens_by_page, e = this;
           if (a[k]) {
@@ -981,11 +1009,11 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
 
                     clearInterval(f);
                     e.setloading(!1);
-                    //$(window).scrollTop(e.scroller);
-                    if(e.scroller){
-                      console.log("scroll");
-                      $(window).scrollTop(e.scroller);
+                    if(e.cookiefair){
+                      console.log("scroll: "+e.cookiefair.posscroll);
+                      $(window).scrollTop(e.cookiefair.posscroll);
                     }
+
                     if(c ==="list"){
                       /*console.dir($("#table tbody"));
                       $("#table").DataTable();
@@ -1005,6 +1033,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
                         if (!l > 0)
                             return !1;
 
+                        p.name=parseInt(h.FEIR_COD)+"/"+h.AMOS_ID;
                         g = new Box({
                             item : h,
                             view : c,
@@ -1020,7 +1049,9 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
 
                         if (!l > 0)
                             return !1;
+
                         var a = new Image;
+                        a.name=parseInt(h.FEIR_COD)+"/"+h.AMOS_ID;
                         a.src = "http://189.126.197.169/img/small/small_NONE.jpg";
 
                         g = new Box({
@@ -1177,6 +1208,15 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
       //this.content.page = 0;
       this.createbox(this.fdata, this.content.page, !0);
       //console.dir(typeof Boolean($(a.target).find("option:selected").val()));
+    },goDetail:function(a){
+      this.navigate("detail/"+$(a.target).attr("name"), !0);
+    },
+    sendEmail:function(){
+      if(!this.select_items.length){
+        alert("Selecione ao menos um item");
+        return !1;
+      }
+      alert("Enviar email para: "+this.select_items.join(" , "));
     },
     compChange:function(ev){
       ev.preventDefault();
@@ -1229,7 +1269,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
       $(".form-control-search").val("");
       this.fairval=$(a.target).find("option:selected").val();
       this.notcombo=!0;
-      this.mode="amostras/"+(this.fairval.replace(" ","_") || "padrao")+"/"+(this.fornval.replace(" ","_") || "padrao")+"/"+(this.amosval.replace(" ","_") || "padrao");
+      this.mode="amostras/"+(this.fairval.replace(" ","_") || "padrao")+"/"+"padrao"+"/"+"padrao";
       this.navigate(this.mode, !1);
       this.submit("<FEIR_COD>"+this.fairval+"</FEIR_COD>");
     },
@@ -1370,11 +1410,15 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
 
     getdata:function(filter){
       if(filter){
-        return this.data.filter(function(a,b){
+        var context=this,itens=[];
+        this.data.filter(function(a,b){
           if(a.AMOS_ID == filter){
-            return a;
+            itens.push(a);
+            itens.push(context.data[b+1]);
+            return itens;
           }
         });
+        return itens;
       }
       else{
         return this.data;
@@ -1389,13 +1433,14 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
         return !1;
       }
       z.scroll(function() {
-        if (e.loading) {
+        if (e.loading || e.page === "detail") {
           return!1;
         }
-        //console.dir(e.content.itens);
         d = z.scrollTop();
         b = e.content.itens.length;
-        //c =  20* e.itens.length;     
+        //console.dir(e.content.itens);
+        //c =  20* e.itens.length;  
+        console.log("SCROLLED"); 
         var scroll={
           fornval:''+e.fornval,
           fairval:''+e.fairval,
@@ -1406,10 +1451,9 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
           posscroll:d,
           total:b
         };
-        //console.dir(scroll);
-        $.cookie.json = !0
+        console.dir(scroll);
+        $.cookie.json = !0;
         $.cookie("posscroll", scroll, {expires:7, path:"/"})
-
 
         switch (e.page){
           case "amostras":
@@ -1454,6 +1498,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
     },
     restartValues:function(){
       //Var to storage the basic data
+      console.log("restartValues");
       this.fairval="";
       this.fornval="";
       this.amosval="";

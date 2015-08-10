@@ -15,20 +15,16 @@
             <div class="sample-buttons">
               <ul>
                 <li class="first">
-                  <button type="button" class="bsample">Amostra</button></li>
+                  <button type="button" class="bsample" name="IMG_PATH_SAMPLE">Amostra</button></li>
                 <li>
-                  <button type="button" class="btag">Etiqueta</button>
+                  <button type="button" class="btag" name="IMG_PATH_TICKET">Etiqueta</button>
                 </li>
               </ul>
             </div>
             <div class="stripe"></div>
-            <div class="detail-sample-hasimg">
-              <button class="icon bzoom"></button>
+            <div class="detail-sample-image">
+              <!--<button class="icon bzoom"></button>-->
               <!--<img id="zoom_05" src="//bdb/ifair_img/4200073/8/2015/3/samples/large/127004318.png" data-zoom-image="//bdb/ifair_img/4200073/8/2015/3/samples/large/127004318.png"/>-->
-            </div>
-            <div class="detail-sample-hasticket hide">
-              <button class="icon bzoom"></button>
-              <!--<img id="zoom_06" src="//bdb/ifair_img/4200073/8/2015/3/samples/large/127004318.png" data-zoom-image="//bdb/ifair_img/4200073/8/2015/3/samples/large/127004318.png"/>-->
             </div>
           </div>
         </div>
@@ -60,10 +56,23 @@
                 <dl>
                   <dt>Data:</dt>
                     <dd>-</dd>
-                  <dt>Unidade de Medida:</dt>
-                    <dd>-</dd>
-                  <dt>Preço Inicial:</dt>
-                    <dd>-</dd>
+                  <!--<div class="form-group m-ten">
+                    <label for="AMOS_PRECO_UM">Unidade de Medida:</label>
+                    <input type="text" class="form-control floatRight" name="AMOS_PRECO_UM">
+                  </div>-->
+                  <div class="fake-form m-ten top-ten">
+                    <div class="form-group styled-select">
+                      <select class="form-control bselect AMOS_PRECO_UM">
+                        <option value="">Unidade de medida</option>
+                        <option value="kg">Kilo</option>
+                        <option value="mt">Metros</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group m-ten">
+                    <label for="AMOS_PRECO">Preço Inicial:</label>
+                    <input type="text" class="form-control floatRight" name="AMOS_PRECO">
+                  </div>
                 </dl>
               </div>
               <table class="table table-striped">
@@ -110,7 +119,7 @@
                     <label for="AMOS_ONCAS">Onças :</label>
                     <input type="text" class="form-control floatRight" name="AMOS_ONCAS">
                   </div>
-                  <button class="icon floatRight s-eight-five">Salvar</button>
+                  <button type="button" class="icon floatRight s-eight-five submit-detail">Salvar</button>
                 </div>
               </form>
             </div>
@@ -138,9 +147,9 @@
           </div>
         </div>
       </div>
-      <div class="detail-deletebar container-fullsize">
+      <!--<div class="detail-deletebar container-fullsize">
         <button class="icon delete s-eight">Excluir Amostras</button>
-      </div>
+      </div>-->
     </div>
   </div>
 </div>
