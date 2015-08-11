@@ -1,4 +1,4 @@
-var nodePath = "../WebService.asmx?op=ListSamples", scrollTop = document.documentElement ? document.documentElement.scrollTop : document.body.scrollTop;
+var nodePath = "../WebService.asmx?op=", scrollTop = document.documentElement ? document.documentElement.scrollTop : document.body.scrollTop;
 window.console = window.console || {log:function() {
 }};
 window.intervalList = [];

@@ -70,6 +70,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
       "click .bselection-edit":"selectItem",
       "click .bselection":"selectItem",
       "click .tooltip-content.status button":"AmosByStatus",
+      "click .filter-price":"AmosByPrice",
       "click .thumbnail img":"goDetail",
       "click .main_opt_button.bemail":"sendEmail"
       /*"submit .search":"submit",
@@ -124,7 +125,8 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
         actionFlag:this.proxy(this.actionFlag),
         actionHomolog:this.proxy(this.actionHomolog),
         SetItemAmos:this.proxy(this.SetItemAmos),
-        callService:this.proxy(this.callService)
+        callService:this.proxy(this.callService),
+        deleteNote:this.proxy(this.deleteNote)
       });
 
       this.header.addClass("goDown");
@@ -162,6 +164,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
           console.log("AMOSTRAS NORMAL");
           $("html").attr("class","").addClass(this.page);
           $(".zoomContainer").remove();
+          this.restartValues();
           this.writePage(this.page);
         },
         "amostras/*fairval/*fornval/*amosval":function(res){
@@ -172,10 +175,10 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
 
           this.cookiefair=jQuery.parseJSON($.cookie("posscroll"));
           this.fairval = a=res.fairval !== "padrao" ? parseInt(res.fairval) : ""; 
-          this.fornval = b=res.fornval !== "padrao" ? res.fornval.replace("_"," ") : "";
-          this.amosval = c=res.amosval !== "padrao" ? res.amosval.replace("_"," ") : ""; 
+          this.fornval = b=res.fornval !== "padrao" ? res.fornval.replace("_"," ").replace("_"," ").replace("_"," ") : "";
+          this.amosval = c=res.amosval !== "padrao" ? res.amosval.replace("_"," ").replace("_"," ").replace("_"," ") : ""; 
           if(this.cookiefair){
-            console.log(a+" , "+this.cookiefair.fairval+" / "+(a == this.cookiefair.fairval));
+            //console.log(a+" , "+this.cookiefair.fairval+" / "+(a == this.cookiefair.fairval));
             if(a == this.cookiefair.fairval && b === this.cookiefair.fornval  && c === this.cookiefair.amosval ){
               console.log("bateu parametros do cookie");
               this.initialTime=this.cookiefair.initialTime;
@@ -184,7 +187,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
             else{
               console.log("NÃO bateu parametros do cookie");
               this.cookiefair={};
-              //$.removeCookie('posscroll', { path: '/' });
+              $.removeCookie('posscroll', { path: '/' });
             }
           } 
           if(parseInt(b)){
@@ -299,6 +302,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
       this.container.load("pages/"+hash+".html",function( response, status, xhr){
         switch(context.page){
           case "amostras":
+            console.log(context.fairval);
             context.viewBtn=$(".changeview button");
             context.order_box=$(".tooltip.borderby");
             context.bfair=$(".fair");
@@ -317,6 +321,19 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
             }
             else{
               context.createComponent(context.fair,context.bfair,'fair');
+            }
+            if(context.fairval){
+              $(".fair option").each(function(a,b){
+                if(parseInt($(b).attr("value")) ==  parseInt(context.fairval)){
+                  $(b).attr("selected","selected");
+                }
+              });
+            }
+            if(context.fornval){
+              context.bforn.val(context.fornval);
+            }
+            if(context.amosval){
+              $(".form-control-search").val(context.amosval);
             }
             $( "input[name='initial_date']" ).datepicker({
               defaultDate: "+1w",
@@ -611,6 +628,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
           {
             //FEIR_COD e FORN_ID are optional fields
             'name':'amostras',
+            'serviceName':'ListarAmostras',
             'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarAmostras xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+''+e+''+f+''+g+'</ListarAmostras></soap:Body></soap:Envelope>',
             callback:function(data,req){
               core.convertData(data,req,name);
@@ -618,11 +636,13 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
           },
           {
             'name':'delete',
+            'serviceName':'GravarAnotacao',
             'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarAnotacao xmlns="http://tempuri.org/"><note><NOTA_ID>'+a+'</NOTA_ID><USU_COD>'+b+'</USU_COD><PLAT_ID>2</PLAT_ID><CREATE_DATE>2016-07-08</CREATE_DATE></note><action>D</action></GravarAnotacao></soap:Body></soap:Envelope>',
             'callback':null
           },
           {
             'name':'local',
+            'serviceName':'ListarFeiras',
             'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFeiras xmlns="http://tempuri.org/">'+a+''+b+''+c+'</ListarFeiras></soap:Body></soap:Envelope>',
             callback:function(data,req){
               core.convertData(data,req,name);
@@ -630,6 +650,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
           },
           {
             'name':'gravarLocal',
+            'serviceName':'GravarFeira',
             'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFeira xmlns="http://tempuri.org/"><fair>'+a+'</fair><action>'+b+'</action></GravarFeira></soap:Body></soap:Envelope>',
             callback:function(data,req){
               alert("gravou no banco");
@@ -639,6 +660,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
           },
           {
             'name':'fornecedores',
+            'serviceName':'ListarFornecedores',
             'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedores xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+''+e+''+f+'</ListarFornecedores></soap:Body></soap:Envelope>',
             callback:function(data,req){
               if(core.notcombo){
@@ -649,6 +671,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
           },
           {
             'name':'cities',
+            'serviceName':'ListarRegioes',
             'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarRegioes xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+'</ListarRegioes></soap:Body></soap:Envelope>',
             callback:function(data,req){
               core.convertData(data,req,name);
@@ -656,13 +679,21 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
           },
           {
             'name':'gravarAmostras',
+            'serviceName':'GravarAmostra',
             'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarAmostra xmlns="http://tempuri.org/"><sample>'+a+''+b+'</sample><action>'+c+'</action></GravarAmostra></soap:Body></soap:Envelope>',
             'callback':function(){
               core.setloading(!1);
             }
           },
           {
+            'name':'gravarNotes',
+            'serviceName':'GravarAnotacao',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarAnotacao xmlns="http://tempuri.org/"><note><NOTA_ID>0</NOTA_ID><OBJ_ID>200000101</OBJ_ID><TP_NOTA_ID>2</TP_NOTA_ID><USU_COD>37</USU_COD><PLAT_ID>2</PLAT_ID><NOTA_DESC>Teste de Anotação2</NOTA_DESC><CREATE_DATE>2015-07-10</CREATE_DATE></note><action>I</action></GravarAnotacao></soap:Body></soap:Envelope>',
+            'callback':null
+          },
+          {
             'name':'gravarAmostraComposicao',
+            'serviceName':'GravarAmostraComposicao',
             'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarAmostraComposicao xmlns="http://tempuri.org/"><AMOS_ID>'+a+'</AMOS_ID><compositions>'+b+'</compositions></GravarAmostraComposicao></soap:Body></soap:Envelope>',
             'callback':null
           },
@@ -671,12 +702,12 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
         $.support.cors=true;
         soapRequest.filter(function(a,b){
           if(a['name'] === name){
-            console.log(a['code']);
+            //console.log(a['code']);
             core.callback=a['callback'];
-            core.ajaxrequest=!0;
+            core.ajaxrequest=!0;                                                                        
             $.ajax({
                 type: "POST",
-                url: nodePath,
+                url: nodePath+a['serviceName'],
                 contentType: "text/xml; charset=utf-8",
                 dataType: "xml",
                 crossDomain: true,
@@ -755,7 +786,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
       
 
       if (!this.data.length && b !="local") {        
-        return alert("NENHUMA AMOSTRA***"), $('.bread-search').find(".spec").text("0 Amostras");
+        return alert("NENHUMA AMOSTRA***"), $('.bread-search').find(".spec").text("0 Resultados");
         //return this.modal.open(),this.breadEl.find('.bread-colec a').text("").removeClass('active'),this.setloading(!1), this.searchEl.find('input').blur();
       }  
       switch(b){
@@ -908,7 +939,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
 
         if(length){
           var i;
-          console.log("ENTROU PARA SORTBY");
+          //console.log("ENTROU PARA SORTBY");
           m=((0+1)*length);
           var p, h, q, k = (0*length), l = length, e = this;
           if (a[k]) {
@@ -919,7 +950,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
                     clearInterval(f);
                     e.setloading(!1);
                     if(e.cookiefair){
-                      console.log("scroll: "+e.cookiefair.posscroll);
+                      //console.log("scroll: "+e.cookiefair.posscroll);
                       $(window).scrollTop(e.cookiefair.posscroll);
                     }
                     if(c ==="list"){
@@ -975,7 +1006,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
                     }).attr("src", q);
 
                     // Mostrando (box sendo carregados)
-                    $('.bread-search').find(".spec").text(k+1+" Amostras");
+                    $('.bread-search').find(".spec").text(k+1+" Resultados");
                 } else {
                   //console.log("list");
                     if (l > 0) {
@@ -986,7 +1017,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
                             detail : e.detail,
                             modal : e.modal,
                             page: e.page
-                        }), e.active.create(g.render()),$('.bread-search').find(".spec").text(k+1+" Amostras"),l--, k++,!1;
+                        }), e.active.create(g.render()),$('.bread-search').find(".spec").text(k+1+" Resultados"),l--, k++,!1;
                         //, $('.bread-box').find(".bread-load").text(k+1), l--, k++, !1*/
                     } else {
                         clearInterval(f), e.setloading(!1);
@@ -999,7 +1030,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
           }
         }
         else{
-          console.log("ESCREVENDO SEM SORTBY");
+          //console.log("ESCREVENDO SEM SORTBY");
           m=((this.content.page+1)*this.itens_by_page);
           var p, h, q, k = (this.content.page*this.itens_by_page), l = this.itens_by_page, e = this;
           if (a[k]) {
@@ -1010,7 +1041,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
                     clearInterval(f);
                     e.setloading(!1);
                     if(e.cookiefair){
-                      console.log("scroll: "+e.cookiefair.posscroll);
+                      //console.log("scroll: "+e.cookiefair.posscroll);
                       $(window).scrollTop(e.cookiefair.posscroll);
                     }
 
@@ -1068,7 +1099,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
                     }).attr("src", q);
 
                     // Mostrando (box sendo carregados)
-                    $('.bread-search').find(".spec").text(k+1+" Amostras");
+                    $('.bread-search').find(".spec").text(k+1+" Resultados");
                 } else {
                   //console.log("list");
                     if (l > 0) {
@@ -1079,7 +1110,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
                             detail : e.detail,
                             modal : e.modal,
                             page: e.page
-                        }), e.active.create(g.render()),$('.bread-search').find(".spec").text(k+1+" Amostras"),l--, k++,!1;
+                        }), e.active.create(g.render()),$('.bread-search').find(".spec").text(k+1+" Resultados"),l--, k++,!1;
                         //, $('.bread-box').find(".bread-load").text(k+1), l--, k++, !1*/
                     } else {
                         clearInterval(f), e.setloading(!1);
@@ -1206,9 +1237,34 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
       }
       $(ev.target).toggleClass("sel");
       //this.content.page = 0;
+      if(!this.fdata.length){
+        alert("NENHUM ITEM !!!");
+        $('.bread-search').find(".spec").text("0 Resultados");
+        return !1;
+      }
       this.createbox(this.fdata, this.content.page, !0);
       //console.dir(typeof Boolean($(a.target).find("option:selected").val()));
-    },goDetail:function(a){
+    },AmosByPrice:function(){
+      //AMOS_PRECO
+      var aux,initial,end;
+      aux=this.data;
+      initial=$("input[name='initial_price']").val();
+      end=$("input[name='end_price']").val();
+      this.reset();
+      this.fdata = aux.filter(function(a,b){
+        if(parseInt(a["AMOS_PRECO"]) > parseInt(initial) && parseInt(a["AMOS_PRECO"]) < parseInt(end)){
+          return a;
+        }
+      });
+      this.data=aux;
+      if(!this.fdata.length){
+        alert("NENHUM ITEM !!!");
+        $('.bread-search').find(".spec").text("0 Resultados");
+        return !1;
+      }
+      this.createbox(this.fdata, this.content.page, !0);
+    },
+    goDetail:function(a){
       this.navigate("detail/"+$(a.target).attr("name"), !0);
     },
     sendEmail:function(){
@@ -1269,7 +1325,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
       $(".form-control-search").val("");
       this.fairval=$(a.target).find("option:selected").val();
       this.notcombo=!0;
-      this.mode="amostras/"+(this.fairval.replace(" ","_") || "padrao")+"/"+"padrao"+"/"+"padrao";
+      this.mode=this.page+"/"+(this.fairval.replace(" ","_") || "padrao")+"/"+"padrao"+"/"+"padrao";
       this.navigate(this.mode, !1);
       this.submit("<FEIR_COD>"+this.fairval+"</FEIR_COD>");
     },

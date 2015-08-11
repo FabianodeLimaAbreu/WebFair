@@ -167,6 +167,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
       "click .bselection-edit":"selectItem",
       "click .bselection":"selectItem",
       "click .tooltip-content.status button":"AmosByStatus",
+      "click .filter-price":"AmosByPrice",
       "click .thumbnail img":"goDetail",
       "click .main_opt_button.bemail":"sendEmail"
       /*"submit .search":"submit",
@@ -221,7 +222,8 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
         actionFlag:this.proxy(this.actionFlag),
         actionHomolog:this.proxy(this.actionHomolog),
         SetItemAmos:this.proxy(this.SetItemAmos),
-        callService:this.proxy(this.callService)
+        callService:this.proxy(this.callService),
+        deleteNote:this.proxy(this.deleteNote)
       });
 
       this.header.addClass("goDown");
@@ -259,6 +261,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
           console.log("AMOSTRAS NORMAL");
           $("html").attr("class","").addClass(this.page);
           $(".zoomContainer").remove();
+          this.restartValues();
           this.writePage(this.page);
         },
         "amostras/*fairval/*fornval/*amosval":function(res){
@@ -269,10 +272,10 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
 
           this.cookiefair=jQuery.parseJSON($.cookie("posscroll"));
           this.fairval = a=res.fairval !== "padrao" ? parseInt(res.fairval) : ""; 
-          this.fornval = b=res.fornval !== "padrao" ? res.fornval.replace("_"," ") : "";
-          this.amosval = c=res.amosval !== "padrao" ? res.amosval.replace("_"," ") : ""; 
+          this.fornval = b=res.fornval !== "padrao" ? res.fornval.replace("_"," ").replace("_"," ").replace("_"," ") : "";
+          this.amosval = c=res.amosval !== "padrao" ? res.amosval.replace("_"," ").replace("_"," ").replace("_"," ") : ""; 
           if(this.cookiefair){
-            console.log(a+" , "+this.cookiefair.fairval+" / "+(a == this.cookiefair.fairval));
+            //console.log(a+" , "+this.cookiefair.fairval+" / "+(a == this.cookiefair.fairval));
             if(a == this.cookiefair.fairval &amp;&amp; b === this.cookiefair.fornval  &amp;&amp; c === this.cookiefair.amosval ){
               console.log("bateu parametros do cookie");
               this.initialTime=this.cookiefair.initialTime;
@@ -281,7 +284,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
             else{
               console.log("NÃO bateu parametros do cookie");
               this.cookiefair={};
-              //$.removeCookie('posscroll', { path: '/' });
+              $.removeCookie('posscroll', { path: '/' });
             }
           } 
           if(parseInt(b)){
@@ -396,6 +399,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
       this.container.load("pages/"+hash+".html",function( response, status, xhr){
         switch(context.page){
           case "amostras":
+            console.log(context.fairval);
             context.viewBtn=$(".changeview button");
             context.order_box=$(".tooltip.borderby");
             context.bfair=$(".fair");
@@ -414,6 +418,19 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
             }
             else{
               context.createComponent(context.fair,context.bfair,'fair');
+            }
+            if(context.fairval){
+              $(".fair option").each(function(a,b){
+                if(parseInt($(b).attr("value")) ==  parseInt(context.fairval)){
+                  $(b).attr("selected","selected");
+                }
+              });
+            }
+            if(context.fornval){
+              context.bforn.val(context.fornval);
+            }
+            if(context.amosval){
+              $(".form-control-search").val(context.amosval);
             }
             $( "input[name='initial_date']" ).datepicker({
               defaultDate: "+1w",
@@ -708,6 +725,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
           {
             //FEIR_COD e FORN_ID are optional fields
             'name':'amostras',
+            'serviceName':'ListarAmostras',
             'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;ListarAmostras xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+''+e+''+f+''+g+'&lt;/ListarAmostras>&lt;/soap:Body>&lt;/soap:Envelope>',
             callback:function(data,req){
               core.convertData(data,req,name);
@@ -715,11 +733,13 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
           },
           {
             'name':'delete',
+            'serviceName':'GravarAnotacao',
             'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;GravarAnotacao xmlns="http://tempuri.org/">&lt;note>&lt;NOTA_ID>'+a+'&lt;/NOTA_ID>&lt;USU_COD>'+b+'&lt;/USU_COD>&lt;PLAT_ID>2&lt;/PLAT_ID>&lt;CREATE_DATE>2016-07-08&lt;/CREATE_DATE>&lt;/note>&lt;action>D&lt;/action>&lt;/GravarAnotacao>&lt;/soap:Body>&lt;/soap:Envelope>',
             'callback':null
           },
           {
             'name':'local',
+            'serviceName':'ListarFeiras',
             'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;ListarFeiras xmlns="http://tempuri.org/">'+a+''+b+''+c+'&lt;/ListarFeiras>&lt;/soap:Body>&lt;/soap:Envelope>',
             callback:function(data,req){
               core.convertData(data,req,name);
@@ -727,6 +747,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
           },
           {
             'name':'gravarLocal',
+            'serviceName':'GravarFeira',
             'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;GravarFeira xmlns="http://tempuri.org/">&lt;fair>'+a+'&lt;/fair>&lt;action>'+b+'&lt;/action>&lt;/GravarFeira>&lt;/soap:Body>&lt;/soap:Envelope>',
             callback:function(data,req){
               alert("gravou no banco");
@@ -736,6 +757,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
           },
           {
             'name':'fornecedores',
+            'serviceName':'ListarFornecedores',
             'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;ListarFornecedores xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+''+e+''+f+'&lt;/ListarFornecedores>&lt;/soap:Body>&lt;/soap:Envelope>',
             callback:function(data,req){
               if(core.notcombo){
@@ -746,6 +768,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
           },
           {
             'name':'cities',
+            'serviceName':'ListarRegioes',
             'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;ListarRegioes xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+'&lt;/ListarRegioes>&lt;/soap:Body>&lt;/soap:Envelope>',
             callback:function(data,req){
               core.convertData(data,req,name);
@@ -753,13 +776,21 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
           },
           {
             'name':'gravarAmostras',
+            'serviceName':'GravarAmostra',
             'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;GravarAmostra xmlns="http://tempuri.org/">&lt;sample>'+a+''+b+'&lt;/sample>&lt;action>'+c+'&lt;/action>&lt;/GravarAmostra>&lt;/soap:Body>&lt;/soap:Envelope>',
             'callback':function(){
               core.setloading(!1);
             }
           },
           {
+            'name':'gravarNotes',
+            'serviceName':'GravarAnotacao',
+            'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;GravarAnotacao xmlns="http://tempuri.org/">&lt;note>&lt;NOTA_ID>0&lt;/NOTA_ID>&lt;OBJ_ID>200000101&lt;/OBJ_ID>&lt;TP_NOTA_ID>2&lt;/TP_NOTA_ID>&lt;USU_COD>37&lt;/USU_COD>&lt;PLAT_ID>2&lt;/PLAT_ID>&lt;NOTA_DESC>Teste de Anotação2&lt;/NOTA_DESC>&lt;CREATE_DATE>2015-07-10&lt;/CREATE_DATE>&lt;/note>&lt;action>I&lt;/action>&lt;/GravarAnotacao>&lt;/soap:Body>&lt;/soap:Envelope>',
+            'callback':null
+          },
+          {
             'name':'gravarAmostraComposicao',
+            'serviceName':'GravarAmostraComposicao',
             'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;GravarAmostraComposicao xmlns="http://tempuri.org/">&lt;AMOS_ID>'+a+'&lt;/AMOS_ID>&lt;compositions>'+b+'&lt;/compositions>&lt;/GravarAmostraComposicao>&lt;/soap:Body>&lt;/soap:Envelope>',
             'callback':null
           },
@@ -768,12 +799,12 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
         $.support.cors=true;
         soapRequest.filter(function(a,b){
           if(a['name'] === name){
-            console.log(a['code']);
+            //console.log(a['code']);
             core.callback=a['callback'];
-            core.ajaxrequest=!0;
+            core.ajaxrequest=!0;                                                                        
             $.ajax({
                 type: "POST",
-                url: nodePath,
+                url: nodePath+a['serviceName'],
                 contentType: "text/xml; charset=utf-8",
                 dataType: "xml",
                 crossDomain: true,
@@ -852,7 +883,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
       
 
       if (!this.data.length &amp;&amp; b !="local") {        
-        return alert("NENHUMA AMOSTRA***"), $('.bread-search').find(".spec").text("0 Amostras");
+        return alert("NENHUMA AMOSTRA***"), $('.bread-search').find(".spec").text("0 Resultados");
         //return this.modal.open(),this.breadEl.find('.bread-colec a').text("").removeClass('active'),this.setloading(!1), this.searchEl.find('input').blur();
       }  
       switch(b){
@@ -1005,7 +1036,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
 
         if(length){
           var i;
-          console.log("ENTROU PARA SORTBY");
+          //console.log("ENTROU PARA SORTBY");
           m=((0+1)*length);
           var p, h, q, k = (0*length), l = length, e = this;
           if (a[k]) {
@@ -1016,7 +1047,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
                     clearInterval(f);
                     e.setloading(!1);
                     if(e.cookiefair){
-                      console.log("scroll: "+e.cookiefair.posscroll);
+                      //console.log("scroll: "+e.cookiefair.posscroll);
                       $(window).scrollTop(e.cookiefair.posscroll);
                     }
                     if(c ==="list"){
@@ -1072,7 +1103,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
                     }).attr("src", q);
 
                     // Mostrando (box sendo carregados)
-                    $('.bread-search').find(".spec").text(k+1+" Amostras");
+                    $('.bread-search').find(".spec").text(k+1+" Resultados");
                 } else {
                   //console.log("list");
                     if (l > 0) {
@@ -1083,7 +1114,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
                             detail : e.detail,
                             modal : e.modal,
                             page: e.page
-                        }), e.active.create(g.render()),$('.bread-search').find(".spec").text(k+1+" Amostras"),l--, k++,!1;
+                        }), e.active.create(g.render()),$('.bread-search').find(".spec").text(k+1+" Resultados"),l--, k++,!1;
                         //, $('.bread-box').find(".bread-load").text(k+1), l--, k++, !1*/
                     } else {
                         clearInterval(f), e.setloading(!1);
@@ -1096,7 +1127,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
           }
         }
         else{
-          console.log("ESCREVENDO SEM SORTBY");
+          //console.log("ESCREVENDO SEM SORTBY");
           m=((this.content.page+1)*this.itens_by_page);
           var p, h, q, k = (this.content.page*this.itens_by_page), l = this.itens_by_page, e = this;
           if (a[k]) {
@@ -1107,7 +1138,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
                     clearInterval(f);
                     e.setloading(!1);
                     if(e.cookiefair){
-                      console.log("scroll: "+e.cookiefair.posscroll);
+                      //console.log("scroll: "+e.cookiefair.posscroll);
                       $(window).scrollTop(e.cookiefair.posscroll);
                     }
 
@@ -1165,7 +1196,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
                     }).attr("src", q);
 
                     // Mostrando (box sendo carregados)
-                    $('.bread-search').find(".spec").text(k+1+" Amostras");
+                    $('.bread-search').find(".spec").text(k+1+" Resultados");
                 } else {
                   //console.log("list");
                     if (l > 0) {
@@ -1176,7 +1207,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
                             detail : e.detail,
                             modal : e.modal,
                             page: e.page
-                        }), e.active.create(g.render()),$('.bread-search').find(".spec").text(k+1+" Amostras"),l--, k++,!1;
+                        }), e.active.create(g.render()),$('.bread-search').find(".spec").text(k+1+" Resultados"),l--, k++,!1;
                         //, $('.bread-box').find(".bread-load").text(k+1), l--, k++, !1*/
                     } else {
                         clearInterval(f), e.setloading(!1);
@@ -1303,9 +1334,34 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
       }
       $(ev.target).toggleClass("sel");
       //this.content.page = 0;
+      if(!this.fdata.length){
+        alert("NENHUM ITEM !!!");
+        $('.bread-search').find(".spec").text("0 Resultados");
+        return !1;
+      }
       this.createbox(this.fdata, this.content.page, !0);
       //console.dir(typeof Boolean($(a.target).find("option:selected").val()));
-    },goDetail:function(a){
+    },AmosByPrice:function(){
+      //AMOS_PRECO
+      var aux,initial,end;
+      aux=this.data;
+      initial=$("input[name='initial_price']").val();
+      end=$("input[name='end_price']").val();
+      this.reset();
+      this.fdata = aux.filter(function(a,b){
+        if(parseInt(a["AMOS_PRECO"]) > parseInt(initial) &amp;&amp; parseInt(a["AMOS_PRECO"]) &lt; parseInt(end)){
+          return a;
+        }
+      });
+      this.data=aux;
+      if(!this.fdata.length){
+        alert("NENHUM ITEM !!!");
+        $('.bread-search').find(".spec").text("0 Resultados");
+        return !1;
+      }
+      this.createbox(this.fdata, this.content.page, !0);
+    },
+    goDetail:function(a){
       this.navigate("detail/"+$(a.target).attr("name"), !0);
     },
     sendEmail:function(){
@@ -1366,7 +1422,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
       $(".form-control-search").val("");
       this.fairval=$(a.target).find("option:selected").val();
       this.notcombo=!0;
-      this.mode="amostras/"+(this.fairval.replace(" ","_") || "padrao")+"/"+"padrao"+"/"+"padrao";
+      this.mode=this.page+"/"+(this.fairval.replace(" ","_") || "padrao")+"/"+"padrao"+"/"+"padrao";
       this.navigate(this.mode, !1);
       this.submit("&lt;FEIR_COD>"+this.fairval+"&lt;/FEIR_COD>");
     },
@@ -1627,7 +1683,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Mon Aug 10th 2015 using the <a
+		on Tue Aug 11th 2015 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>

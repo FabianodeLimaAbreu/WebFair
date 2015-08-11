@@ -362,7 +362,7 @@ header{
 .container{
 	.fleft;
 	width:100%;
-	height:auto;
+	height:100%;
 	min-height:300px;
 	top: 145px;
 	margin-bottom: 0;
@@ -555,11 +555,15 @@ header{
 		}
 	}
 }
-
+// .tooltip-content-note{
+// 	&:before{
+// 		margin-left: 300px;
+// 	}
+// }
 .tooltip-content{
 	position: absolute;
-	top: 35px;
-  	right: -6px;
+	top: 50px;
+  	right: -40px;
 	background: #fdfdfd;
 	border: 1px solid #e6ebf0;
 	width: auto;
@@ -579,7 +583,7 @@ header{
 		  width: 26px;
 		  height: 12px;
 		  top: -12px;
-		  margin: 0 auto;
+		  margin: auto;
 	}
 	li{
 		position: relative;
@@ -601,10 +605,13 @@ header{
 	&.notepad{
 		width: 405px;
 		right: -100px;
+		&:before{
+			margin-left: 230px;
+		}
 	}
 	&.notepadmess{
-		top:45px;
-		right: -180px;
+		top:50px;
+		right: -93px;
 	}
 	&.rightless{
 		top: 32px;
@@ -637,6 +644,7 @@ header{
 	&.date{
 		right: -90px;
 		top: 41px;
+		height:45px;
 	}
 	&.refine{
 		width:900px;
@@ -1016,8 +1024,8 @@ form.search{
 	position: relative;
 	height: 100%;
 	width: 95%;
-	overflow-x: hidden;
-	overflow-y: hidden;
+	//overflow-x: hidden;
+	//overflow-y: hidden;
 	margin: 0 auto 50px;
 	padding-bottom: 115px;
 }

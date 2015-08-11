@@ -61,6 +61,14 @@ callerEvents:function(){
     context.nextSample();
     return !1;
   });
+  $(".btrash-big").bind("click",function(){
+    context.deleteNote();
+    return !1;
+  });
+  $(".bplus-big").bind("click",function(){
+    context.plusNote();
+    return !1;
+  });
 },
 open: function(a){
   "use strict";
@@ -97,8 +105,8 @@ open: function(a){
   result+='<li class="first"><a href="#'+item.AMOS_ID+'" class="caption-icons-icon setitem bfav '+fav+'" title="Favoritar">Favorita</a></li>';
   result+='<li><a href="#'+item.AMOS_ID+'" class="caption-icons-icon setitem oneline bfisica '+fisica+'" title="Fisica">Amostra<br/>Fisica</a></li>';
   result+='<li><a href="#'+item.AMOS_ID+'" class="caption-icons-icon setitem bhomologado '+homologado+'" title="Homologar">Homologar</a></li>';
-  result+='<li><a href="#fav" class="caption-icons-icon setitem oneline bfisica nothas">Anexar<br/> Arquivo</a></li>';
-  result+='<li><a href="#fav" class="caption-icons-icon setitem oneline bfisica nothas">Arquivos<br/> Anexos</a></li>';
+  result+='<li><a href="#bannex_file" class="caption-icons-icon oneline bannex_file has">Anexar<br/> Arquivo</a><input type="file" name="pic" class="hide"></li>';
+  result+='<li><a href="#bannex" class="caption-icons-icon oneline bannex has">Arquivos<br/> Anexos</a></li>';
   $(".description-overview.description-top ul").html(result);
   
 
@@ -193,8 +201,15 @@ open: function(a){
   else{
     result="";
   }
-  console.log(result);
   $(".description-noteside").append(result);
+  $(".bannex_file").bind("click",function(a){
+    a.preventDefault();
+    $(a.target).parent().find("input").trigger('click');
+  });
+  $(".bannex").bind("click",function(a){
+    a.preventDefault();
+    alert("LISTA ANEXO");
+  });
 
 },showImage:function(a){
   var html="",item=this.item,name=$(a.target).attr("name");
@@ -238,6 +253,8 @@ open: function(a){
     return !1;
   }
   this.reload(this.nextsample.FEIR_COD,this.nextsample.AMOS_ID);
+},plusNote:function(){
+  this.callService("gravarNotes");
 },reload:function(fair,code) {
   "use strict";
   var result;

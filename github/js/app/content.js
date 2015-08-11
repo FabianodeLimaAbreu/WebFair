@@ -31,7 +31,8 @@ window.Spotlight = Spine.Controller.sub({
 
     $(window).scrollTop(0);
     if(this.getPage() === "amostras"){
-      this.mode="amostras/"+(this.getFairVal().replace(" ","_") || "padrao")+"/"+(this.getFornVal().replace(" ","_") || "padrao")+"/"+"padrao";
+      console.log(this.getFairVal());
+      this.mode="amostras/"+((""+this.getFairVal()).replace(" ","_") || "padrao")+"/"+((""+this.getFornVal()).replace(" ","_") || "padrao")+"/"+"padrao";
       this.navigate(this.mode, !1);
       this.callService("amostras",fair,name,"",'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20'+'</LINHA_F>','<CREATE_DATE_I>2010-01-01</CREATE_DATE_I>','<CREATE_DATE_F>2050-01-01</CREATE_DATE_F>');
       this.close();
