@@ -39,6 +39,8 @@ window.Spotlight = Spine.Controller.sub({
     }
     else{
       this.setNotCombo(!0);
+      this.mode="fornecedores/"+((""+this.getFairVal()).replace(" ","_") || "padrao")+"/"+((""+this.getFornVal()).replace(" ","_") || "padrao")+"/"+"padrao";
+      this.navigate(this.mode, !1);
       this.callService("fornecedores",fair,name,'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20'+'</LINHA_F>','<CREATE_DATE_I>2010-04-10</CREATE_DATE_I>','<CREATE_DATE_F>2050-04-10</CREATE_DATE_F>');
       this.close();
     }
@@ -282,9 +284,9 @@ window.Box = Spine.Controller.sub({init:function() {
       case "fornecedores":
         var result="",i,status,nome_contato,segmento=[];
         status= a.FORN_STATUS ? "complet":"incomplet";
-        result+="<td><a href='#fornecedores/"+a.FEIR_COD+"'>"+a.FORN_DESC+"</a></td>"+"<td><a href='#fornecedores/"+a.FEIR_COD+"'>"+a.FEIR_DESC+"</a></td>"+"<td><a href='#fornecedores/"+a.FEIR_COD+"'>"+a.CREATE_DATE+"</a></td>";
+        result+="<td><a href='#fornecedores/edit/"+a.FEIR_COD+"'>"+a.FORN_DESC+"</a></td>"+"<td><a href='#fornecedores/edit/"+a.FEIR_COD+"'>"+a.FEIR_DESC+"</a></td>"+"<td><a href='#fornecedores/edit/"+a.FEIR_COD+"'>"+a.CREATE_DATE+"</a></td>";
         if(a.CONTACTS.length){
-          result+="<td><a href='#fornecedores/"+a.FEIR_COD+"'>";
+          result+="<td><a href='#fornecedores/edit/"+a.FEIR_COD+"'>";
           for(i=0;i<a.CONTACTS.length;i++){
             if(a.CONTACTS[i].CONT_NOME.length){
               nome_contato=a.CONTACTS[i].CONT_NOME;
@@ -298,14 +300,14 @@ window.Box = Spine.Controller.sub({init:function() {
           result+="</a></td>";
         }
         else{
-          result+="<td><a href='#fornecedores/"+a.FEIR_COD+"'></a></td>";
+          result+="<td><a href='#fornecedores/edit/"+a.FEIR_COD+"'></a></td>";
         }
 
         if(segmento.length){
-          result+="<td><a href='#fornecedores/"+a.FEIR_COD+"'>"+segmento.join("<br/>")+"</a></td>";
+          result+="<td><a href='#fornecedores/edit/"+a.FEIR_COD+"'>"+segmento.join("<br/>")+"</a></td>";
         }
         else{
-          result+="<td><a href='#fornecedores/"+a.FEIR_COD+"'></td>";
+          result+="<td><a href='#fornecedores/edit/"+a.FEIR_COD+"'></td>";
         }
 
         if(a.FAVORITES.length){

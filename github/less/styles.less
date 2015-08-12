@@ -561,6 +561,8 @@ header{
 // 	}
 // }
 .tooltip-content{
+	float: left;
+	margin-top: -10px;
 	position: absolute;
 	top: 50px;
   	right: -40px;
@@ -589,7 +591,7 @@ header{
 		position: relative;
 		float: left;
 		width: auto;
-		min-height: 40px;
+		min-height: 30px;
 		min-width: 200px;
 		border-top: 1px solid #e6ebf0;
 		&:nth-child(odd){
@@ -614,9 +616,9 @@ header{
 		right: -93px;
 	}
 	&.rightless{
-		top: 32px;
+		top: 40px;
 		&:before{
-			right: 70px;
+			right: 25px;
 		}
 	}
 	&.legend{
@@ -638,12 +640,43 @@ header{
 			}
 		}
 	}
+	&.filter{
+		float: left;
+		right: -150px;
+		height:100px;
+		li{
+			a{
+				&:before{
+					.sprite;
+					.other_square_notdot;
+					content:"";
+					width:20px;
+					height:20px;
+					// border:solid 1px purple;
+					display: block;
+					float:left;
+				}
+			}
+			border: solid 0px;
+		}
+		.filterlist{
+			border:solid 1px purple;
+			width: 120px;
+			float: left;
+		}
+	}
 	&.price{
 		right: -160px;
+		height:45px;
 	}
 	&.date{
-		right: -90px;
-		top: 41px;
+		right: -110px;
+		top: 55px;
+		height:45px;
+	}
+	&.date2{
+		right: -150px;
+		top: 50px;
 		height:45px;
 	}
 	&.refine{
@@ -662,7 +695,7 @@ header{
 		max-width: 405px;
 	}
 	&.col-largest{
-		width: 500px;
+		width: 550px;
 		li{
 			min-width: 244px;
 		}
@@ -697,7 +730,11 @@ header{
 		display: block;
 	}
 }
-
+.tooltip-filter:hover{
+	.tooltip-content {
+		display: block;
+	}
+}
 .notepad{
 	li{
 		min-width: 100%;
@@ -1029,7 +1066,7 @@ form.search{
 	margin: 0 auto 50px;
 	padding-bottom: 115px;
 }
-.supplier{
+.supplier,.fornecedor_cadastro{
 	overflow-y: hidden;
 	.content{
 		width: 100%;
@@ -1109,7 +1146,7 @@ form.search{
 		position: relative;
 		float: left;
 		width: 100%;
-		margin-bottom: 10px;
+		margin-bottom:10px;
 		min-height: 30px;
 	}
 	.fake-form-supplier-equal.divisor{

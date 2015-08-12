@@ -115,7 +115,7 @@ require.config({
     sp: "spine"
   }
 });
-require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content", "app/detail"], function() {
+require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], function() {
   /**
   * Main application class, responsible for all main funcionalities and call anothers classes constructors
   * @exports App
@@ -235,6 +235,8 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
       this.el.find("#wrap").removeClass("hide");
 
       this.content = new Content({el:this.contentEl,usr_segm:this.usr.SEGM_COD/*bread:this.breadEl, type:this.usr.TIPO*/});
+      this.fornecedores = new Fornecedores();
+
       this.spotlight = new Spotlight({
         callService:this.proxy(this.callService),
         reset:this.proxy(this.reset),
@@ -322,10 +324,71 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
           $("html").attr("class","").addClass(this.page);
           this.writePage(this.page);
         },
-        "fornecedores/*code":function(a){
+        "fornecedores/*fairval/*fornval/*amosval":function(res){
+          var a,b,c;
+          $(".zoomContainer").remove();
+          //cookiefair=jQuery.parseJSON($.cookie("posscroll"));
+
+          this.cookiefair=jQuery.parseJSON($.cookie("posscroll"));
+          this.fairval = a=res.fairval !== "padrao" ? parseInt(res.fairval) : ""; 
+          this.fornval = b=res.fornval !== "padrao" ? res.fornval.replace("_"," ").replace("_"," ").replace("_"," ") : "";
+          this.amosval = c=res.amosval !== "padrao" ? res.amosval.replace("_"," ").replace("_"," ").replace("_"," ") : ""; 
+          if(this.cookiefair){
+            //console.log(a+" , "+this.cookiefair.fairval+" / "+(a == this.cookiefair.fairval));
+            if(a == this.cookiefair.fairval &amp;&amp; b === this.cookiefair.fornval  &amp;&amp; c === this.cookiefair.amosval ){
+              console.log("bateu parametros do cookie");
+              this.initialTime=this.cookiefair.initialTime;
+              this.endTime=this.cookiefair.endTime;
+            }
+            else{
+              console.log("NÃO bateu parametros do cookie");
+              this.cookiefair={};
+              $.removeCookie('posscroll', { path: '/' });
+            }
+          } 
+          if(parseInt(b)){
+            b="&lt;FORN_ID>"+b+"&lt;/FORN_ID>";
+          }
+          else{
+            if(b){
+              b="&lt;FORN_DESC>"+b+"&lt;/FORN_DESC>";
+            }
+            else{
+              b="";
+            }
+          }
+          if(parseInt(c)){
+            c="&lt;AMOS_ID>"+c+"&lt;/AMOS_ID>";
+          }
+          else{
+            if(c){
+              c="&lt;AMOS_DESC>"+c+"&lt;/AMOS_DESC>";
+            }
+            else{
+              c="";
+            }
+          }
+          a="&lt;FEIR_COD>"+a+"&lt;/FEIR_COD>";
+          var context=this;
+          this.page ="fornecedores";
+          $("html").attr("class","").addClass(this.page);
+          this.notcombo=!0;
+          this.writePage(this.page);
+          this.submit(a,b,c,!1);
+        },
+        "fornecedores/*func/*code":function(a){
           var context=this;
           this.page ="fornecedor_cadastro";
           $("html").attr("class","").addClass(this.page);
+          $(".zoomContainer").remove();
+          this.writePage(this.page);
+        },
+        "fornecedores/*func":function(a){
+          var context=this;
+          console.log("criar novo fornecedor");
+          this.page ="fornecedor_cadastro";
+          $("html").attr("class","fornecedor_cadastro add_forn");
+          $(".zoomContainer").remove();
           this.writePage(this.page);
         },
         "relatorio":function(){
@@ -462,7 +525,30 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
             context.bfair=$(".fair");
             context.bforn=$(".forn");
             context.spotlight.el=$(".spotlight");
-            context.createComponent(context.fair,context.bfair,'fair');
+            if(!context.fair.length){
+              status=setInterval(function(){
+                if(context.fair.length){
+                  context.ajaxrequest=!1;
+                  context.createComponent(context.fair,context.bfair,'fair');
+                  clearInterval(status);
+                }
+              },100);
+            }
+            else{
+              context.createComponent(context.fair,context.bfair,'fair');
+            }
+
+            if(context.fairval){
+              $(".fair option").each(function(a,b){
+                if(parseInt($(b).attr("value")) ==  parseInt(context.fairval)){
+                  $(b).attr("selected","selected");
+                }
+              });
+            }
+            if(context.fornval){
+              context.bforn.val(context.fornval);
+            }
+
             $( "input[name='initial_date']" ).datepicker({
               defaultDate: "+1w",
               changeMonth: true,
@@ -513,13 +599,22 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
             context.detail.reload(context.fairval,context.amosval);
             break;
           case "fornecedor_cadastro":
+            context.bfair=$(".fair");
+            context.bcity=$(".city");
             console.log("fornecedor cadastro");
-            /*$('body').scrollspy({ target: '.ScrollSpy' });
-            $('ul.nav-list li a').bind('click', function(e) {
-              console.dir($(this.hash));
-              e.preventDefault();
-              $('.supplier-scroller').animate({scrollTop: $(this.hash).position().top});
-            });*/
+            $.getScript("js/lib/external-script.js");
+            if(!context.fair.length){
+              status=setInterval(function(){
+                if(context.fair.length){
+                  context.ajaxrequest=!1;
+                  context.createComponent(context.fair,context.bfair,'fair');
+                  clearInterval(status);
+                }
+              },100);
+            }
+            else{
+              context.createComponent(context.fair,context.bfair,'fair');
+            }
             break;
           default:
             alert("dssda");
@@ -799,7 +894,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
         $.support.cors=true;
         soapRequest.filter(function(a,b){
           if(a['name'] === name){
-            //console.log(a['code']);
+            console.log(a['code']);
             core.callback=a['callback'];
             core.ajaxrequest=!0;                                                                        
             $.ajax({
@@ -952,6 +1047,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
               if(!this.data.length){
                 this.data=jQuery.parseJSON($(req.responseXML).text()).unique();
                 this.setDate(this.data);
+                console.dir(this.data);
                 this.setdata(this.data,"fornecedores");
               }
               else{
@@ -1395,7 +1491,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
       country=$(".countries").find("option:selected").val();
       city=$(".city").find("option:selected").val();
       this.ffair=[];
-      if(this.page !== "local_cadastro"){
+      if(this.page !== "local_cadastro" &amp;&amp; this.page !== "fornecedor_cadastro"){
         if(this.fair.length){
           arr.push(this.fair.filter(function(a,b){
             if(a.PAIS_COD === country &amp;&amp; a.REGI_COD === city){
@@ -1420,6 +1516,12 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
       //this.scroller=0;
       this.bforn.val("");
       $(".form-control-search").val("");
+      if(this.page === "fornecedor_cadastro"){
+        this.fornecedores.setfair=$(a.target).find("option:selected").val();
+        this.notcombo=!1;
+        this.submit("&lt;FEIR_COD>"+this.fairval+"&lt;/FEIR_COD>",!1,!1,!0);
+        return !1;
+      }
       this.fairval=$(a.target).find("option:selected").val();
       this.notcombo=!0;
       this.mode=this.page+"/"+(this.fairval.replace(" ","_") || "padrao")+"/"+"padrao"+"/"+"padrao";
@@ -1589,30 +1691,31 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
         if (e.loading || e.page === "detail") {
           return!1;
         }
-        d = z.scrollTop();
-        b = e.content.itens.length;
-        //console.dir(e.content.itens);
-        //c =  20* e.itens.length;  
-        console.log("SCROLLED"); 
-        var scroll={
-          fornval:''+e.fornval,
-          fairval:''+e.fairval,
-          amosval:""+e.amosval,
-          initialTime:""+e.initialTime,
-          endTime:""+e.endTime,
-          view:""+e.view,
-          posscroll:d,
-          total:b
-        };
-        console.dir(scroll);
-        $.cookie.json = !0;
-        $.cookie("posscroll", scroll, {expires:7, path:"/"})
 
         switch (e.page){
           case "amostras":
-            d=d+850;
+            d = z.scrollTop();
+            b = e.content.itens.length;
+            //console.dir(e.content.itens);
+            //c =  20* e.itens.length;  
+            console.log("SCROLLED"); 
+            var scroll={
+              fornval:''+e.fornval,
+              fairval:''+e.fairval,
+              amosval:""+e.amosval,
+              initialTime:""+e.initialTime,
+              endTime:""+e.endTime,
+              view:""+e.view,
+              posscroll:d,
+              total:b
+            };
+            console.dir(scroll);
+            $.cookie.json = !0;
+            $.cookie("posscroll", scroll, {expires:7, path:"/"});
+
+            d=d+200;
             f= $(".container").height();
-            //console.log(d+" , "+f);
+            console.log(d+" , "+f);
             if (d >= f &amp;&amp; b) {
               //console.log("chegou");
               e.content.page++;
@@ -1621,15 +1724,37 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
             }
             break;
           case "fornecedores":
-            d=d+480;
+            d = z.scrollTop();
+            b = e.content.itens.length;
+            //console.dir(e.content.itens);
+            //c =  20* e.itens.length;  
+            console.log("SCROLLED"); 
+            var scroll={
+              fornval:''+e.fornval,
+              fairval:''+e.fairval,
+              amosval:""+e.amosval,
+              initialTime:""+e.initialTime,
+              endTime:""+e.endTime,
+              view:""+e.view,
+              posscroll:d,
+              total:b
+            };
+            console.dir(scroll);
+            $.cookie.json = !0;
+            $.cookie("posscroll", scroll, {expires:7, path:"/"});
+
+            d=d+680;
             f= $("table").height();
-            //console.log(d+" , "+f);
+            console.log(d+" , "+f);
             if (d >= f &amp;&amp; b) {
               //console.log("chegou");
               e.content.page++;
               e.setloading(!0,!1);
               e.submit("&lt;FEIR_COD>"+(e.fairval || "")+"&lt;/FEIR_COD>","&lt;FORN_DESC>"+(e.fornval || "")+"&lt;/FORN_DESC>",(e.amosval || ""),!0);
             }
+            break;
+          case "fornecedor_cadastro":
+            console.log("SCROLL CADASTRO");
             break;
         }
         /*f.modal.close();
@@ -1683,7 +1808,7 @@ require(["methods","bootstrap.min","jquery.elevatezoom","sp/min", "app/content",
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Tue Aug 11th 2015 using the <a
+		on Wed Aug 12th 2015 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>

@@ -568,6 +568,8 @@ header .logo-print {
   background-position: -10px -210px;
 }
 .tooltip-content {
+  float: left;
+  margin-top: -10px;
   position: absolute;
   top: 50px;
   right: -40px;
@@ -597,7 +599,7 @@ header .logo-print {
   position: relative;
   float: left;
   width: auto;
-  min-height: 40px;
+  min-height: 30px;
   min-width: 200px;
   border-top: 1px solid #e6ebf0;
 }
@@ -622,10 +624,10 @@ header .logo-print {
   right: -93px;
 }
 .tooltip-content.rightless {
-  top: 32px;
+  top: 40px;
 }
 .tooltip-content.rightless:before {
-  right: 70px;
+  right: 25px;
 }
 .tooltip-content.legend {
   top: 75px;
@@ -647,12 +649,40 @@ header .logo-print {
   background: #414141;
   color: #fff;
 }
+.tooltip-content.filter {
+  float: left;
+  right: -150px;
+  height: 100px;
+}
+.tooltip-content.filter li {
+  border: solid 0px;
+}
+.tooltip-content.filter li a:before {
+  background: url("../images/sprite.png") top left no-repeat;
+  background-position: -10px -595px;
+  content: "";
+  width: 20px;
+  height: 20px;
+  display: block;
+  float: left;
+}
+.tooltip-content.filter .filterlist {
+  border: solid 1px purple;
+  width: 120px;
+  float: left;
+}
 .tooltip-content.price {
   right: -160px;
+  height: 45px;
 }
 .tooltip-content.date {
-  right: -90px;
-  top: 41px;
+  right: -110px;
+  top: 55px;
+  height: 45px;
+}
+.tooltip-content.date2 {
+  right: -150px;
+  top: 50px;
   height: 45px;
 }
 .tooltip-content.refine {
@@ -671,7 +701,7 @@ header .logo-print {
   max-width: 405px;
 }
 .tooltip-content.col-largest {
-  width: 500px;
+  width: 550px;
 }
 .tooltip-content.col-largest li {
   min-width: 244px;
@@ -698,6 +728,9 @@ header .logo-print {
   display: block;
 }
 .tooltip-filter button.sel + .tooltip-content {
+  display: block;
+}
+.tooltip-filter:hover .tooltip-content {
   display: block;
 }
 .notepad li {
@@ -1008,39 +1041,46 @@ form.search {
   margin: 0 auto 50px;
   padding-bottom: 115px;
 }
-.supplier {
+.supplier,
+.fornecedor_cadastro {
   overflow-y: hidden;
 }
-.supplier .content {
+.supplier .content,
+.fornecedor_cadastro .content {
   width: 100%;
   margin: 0;
   padding: 0;
 }
-.supplier .supplier-scroller {
+.supplier .supplier-scroller,
+.fornecedor_cadastro .supplier-scroller {
   position: relative;
   float: left;
   width: 100%;
   height: 410px;
   overflow-y: auto;
 }
-.supplier .supplier-scroller section {
+.supplier .supplier-scroller section,
+.fornecedor_cadastro .supplier-scroller section {
   position: relative;
   float: left;
   width: 100%;
   height: auto;
   min-height: 410px;
 }
-.supplier .supplier-scroller section .supplier-side {
+.supplier .supplier-scroller section .supplier-side,
+.fornecedor_cadastro .supplier-scroller section .supplier-side {
   position: relative;
   height: auto;
 }
-.supplier .supplier-scroller section .supplier-top-side {
+.supplier .supplier-scroller section .supplier-top-side,
+.fornecedor_cadastro .supplier-scroller section .supplier-top-side {
   position: relative;
   float: left;
   width: 100%;
   height: 50px;
 }
-.supplier body {
+.supplier body,
+.fornecedor_cadastro body {
   overflow: hidden;
 }
 .supplier-form-container {
@@ -2103,7 +2143,9 @@ form.search {
   position: relative;
   margin-right: 5px;
   top: 5px;
-  left: -1 px;
+  left: -1px;
+  float: left;
+  margin-left: 5px;
 }
 .icon.gotop:after {
   content: "";
@@ -2151,6 +2193,8 @@ form.search {
   margin-right: 5px;
   top: 3px;
   left: 0;
+  float: left;
+  margin: 5px 5px 0 10px;
 }
 .icon.bnext {
   line-height: 30px;
@@ -2284,7 +2328,7 @@ form.search {
   position: absolute;
   top: 25px;
   right: 10px;
-  cursor: default;
+  cursor: crosshair;
 }
 .icon.bzoom:after {
   width: 15px;
@@ -2293,6 +2337,8 @@ form.search {
   display: block;
   left: 0;
   top: 0;
+  width: 20px;
+  background-position: -4px -1285px;
 }
 .icon.bzoom:hover {
   background: #fff;
@@ -2304,21 +2350,29 @@ form.search {
   display: block;
   left: 0;
   top: 0;
+  width: 20px;
+  background-position: -5px -1410px;
 }
 .icon.bselection:hover:after {
   width: 15px;
   height: 15px;
   background-position: -35px -1285px;
+  width: 25px;
+  background-position: -30px -1285px;
 }
 .icon.bselection.sel:after {
   width: 15px;
   height: 15px;
   background-position: -35px -1285px;
+  width: 25px;
+  background-position: -30px -1285px;
 }
 .icon.bselection.sel:hover:after {
   width: 15px;
   height: 15px;
   background-position: -10px -1410px;
+  width: 20px;
+  background-position: -5px -1410px;
 }
 .icon.bselection-edit:after {
   width: 15px;
@@ -2515,11 +2569,13 @@ form.search {
   width: 15px;
   height: 25px;
   background-position: -30px -440px;
+  margin-left: 7px;
 }
 .caption-icons-icon.bannex.has:after {
   width: 10px;
   height: 25px;
   background-position: -10px -440px;
+  margin-left: 9px;
 }
 .detail-status .caption-icons-icon.bstatus {
   text-align: right;
@@ -2571,21 +2627,29 @@ form.search {
   width: 15px;
   height: 15px;
   background-position: -10px -1310px;
+  width: 25px;
+  background-position: -4px -1310px;
 }
 .thumbnail .icon.bselection-edit:hover:after {
   width: 15px;
   height: 15px;
   background-position: -35px -1310px;
+  width: 25px;
+  background-position: -29px -1310px;
 }
 .thumbnail .icon.bselection-edit.sel:after {
   width: 15px;
   height: 15px;
   background-position: -35px -1310px;
+  width: 25px;
+  background-position: -29px -1310px;
 }
 .thumbnail .icon.bselection-edit.sel:hover:after {
   width: 15px;
   height: 15px;
   background-position: -10px -1310px;
+  width: 25px;
+  background-position: -4px -1310px;
 }
 .thumbnail .caption-icons-icon {
   margin: 0;
@@ -3049,13 +3113,15 @@ label {
   border: 1px solid #e3eaee;
 }
 .form-inline .form-group {
-  width: 220px;
+  float: left;
+  width: 245px;
   border-right: 1px solid #e6ebf0;
-  padding-left: 5px;
+  padding-left: 10px;
 }
 .form-inline .form-control {
   display: inline-block;
-  width: 140px;
+  width: auto;
+  max-width: 150px;
   margin: -5px 0 0 10px;
 }
 .form-inline .icon {
@@ -3181,6 +3247,9 @@ label {
 }
 .fake-form.fake-form-supplier-equal.divisor {
   border-right: 1px solid #e3eaee;
+}
+.fake-form.fake-form-supplier-equal.bigger {
+  width: 100%;
 }
 .fake-form.fake-form-supplier-equal .delete {
   margin: 0;
@@ -3474,4 +3543,15 @@ form textarea {
 }
 .ie8 #toggle-menu li a.v1516:hover {
   background-position: -280px -80px;
+}
+.add_forn .right-list.supplier-page {
+  display: none;
+}
+.supplier-form-container .row.row-fixed {
+  width: 48%;
+  margin: 0 1% 10px;
+}
+.supplier-form-container .row.row-complet {
+  margin: 0 0 10px;
+  width: 100%;
 }
