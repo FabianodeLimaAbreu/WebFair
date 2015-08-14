@@ -357,8 +357,18 @@ open: function(a){
       }
    }
 },showSomething:function(a){
-  $(a.target).addClass('hide');
-  $("."+$(a.target).attr("name")).removeClass('hide');
+  var a=$(a.target);
+  a.addClass('hide');
+  switch (a.attr("name")){
+    case 'CONT_TEL2':
+      $("."+a.attr("name")).removeClass('hide');
+      break;
+    case 'CONT2_TEL2':
+      $("."+a.attr("name")).removeClass('hide');
+      break;
+    case 'showcontact':
+      $(".contact2").addClass('actived');
+  }
 },setFav:function(a){
   var i,el=$(a.target),html="";
   console.log(el.hasClass('sel'));
@@ -390,13 +400,12 @@ open: function(a){
 
 },setFavContact:function(a){
   var el=$(a.target);
-  console.log(el.hasClass('sel'));
-  if(el.hasClass('sel')){
-    this.favcontact=0;
+  if(el.hasClass('sel')){;
+    this.favcontact[parseInt(el.attr("name"))-1].fav=0;
     el.removeClass('sel');
   }
   else{
-    this.favcontact=1;
+    this.favcontact[parseInt(el.attr("name"))-1].fav=1;
     el.addClass('sel');
   }
   console.log("clicado no FAVORITO");
@@ -431,21 +440,24 @@ open: function(a){
         console.log(this.lasttab);
         console.log(date);
         html+="<FORN_STATUS>0</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>";
-        //context.ajaxrequest=!0;
-        //this.callService("GravarFornecedor",'<FORN_ID>0</FORN_ID>',html+""+pattern,"<FORN_DESC>"+$("input[name='FORN_DESC']").val()+"</FORN_DESC>",'<action>I</action>');
+        context.ajaxrequest=!0;
+        this.callService("GravarFornecedor",'<FORN_ID>0</FORN_ID>',html+""+pattern,"<FORN_DESC>"+$("input[name='FORN_DESC']").val()+"</FORN_DESC>",'<action>I</action>');
         
         status=setInterval(function(){
           if(!context.ajaxrequest){
             console.log("ENTROU NO SEGUNDO");
-            html="";
-            $(".contact.actived").find("input").each(function(a,b){
-              html+="<"+$(b).attr("name")+">"+$(b).val()+"</"+$(b).attr("name")+">";
+            $(".contact.actived").each(function(a,b){
+              html="";
+              $(b).find("input").each(function(a,b){
+                html+="<"+$(b).attr("name")+">"+$(b).val()+"</"+$(b).attr("name")+">";
+              });
+              html+="<SEGM_COD>"+$(".SEGM_COD option:selected").attr("value")+"</SEGM_COD>";
+              html+="<CONT_PRINCIPAL>"+context.favcontact[a].fav+"</CONT_PRINCIPAL>";
+              html+="<IMG_PATH_FRENTE>0</IMG_PATH_FRENTE><IMG_PATH_VERSO>0</IMG_PATH_VERSO><IMG_PATH_CONTATO>0</IMG_PATH_CONTATO>";
+              html+="<FORN_ID>"+context.item.FORN_ID+"</FORN_ID><CONT_INATIVO>0</CONT_INATIVO>";
+
+              context.callService("GravarFornecedorContato",html,pattern,"",'<action>I</action>');
             });
-            html+="<SEGM_COD>"+$(".SEGM_COD option:selected").attr("value")+"</SEGM_COD>";
-            html+="<CONT_PRINCIPAL>"+context.favcontact+"</CONT_PRINCIPAL>"
-            html+="<IMG_PATH_FRENTE>0</IMG_PATH_FRENTE><IMG_PATH_VERSO>0</IMG_PATH_VERSO><IMG_PATH_CONTATO>0</IMG_PATH_CONTATO>";
-            html+="<FORN_ID>"+context.item.FORN_ID+"</FORN_ID><CONT_INATIVO>0</CONT_INATIVO>";
-            //context.callService("GravarFornecedorContato",html,pattern,"",'<action>I</action>');
             clearInterval(status);
           }
         },100);
@@ -501,9 +513,13 @@ open: function(a){
   this.waitingfav=!1; // No final confirmo se o favorito ja foi setado, porque caso o usuario click no botao sem ter um favorito salvo, deixo para o final
   this.setfair=null;
   this.fav=0;
-  this.favcontact=0;
+  this.favcontact=[{'ordem':1,'fav':0},{'ordem':2,'fav':0}];
   this.ajaxrequest=!1;
   this.tab="";
+
+  //Na linha abaixo, na segunda, utilizarei para saber se uma tab ja foi salva ou não, porque caso ja tenha sido salva, não vou salvar dinovo qual o cara voltar. Se nao tiver sido salva ainda eu volto
+  //Posso realizar um listener nos inputs da pagina se ao mudar o valor, busco o closest(nav-item) e vejo o href, entao produto no array, se ja foi salva, seto para false pra salvar denovo
+  //this.tab=[{'tab':'dados','save':0},{'tab':'profile','fav':0},{'tab':'composition','fav':0},{'tab':'products','fav':0},{'tab':'markets','fav':0}];
   this.lasttab="";
   this.scroller=0;
 }});
