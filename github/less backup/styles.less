@@ -554,6 +554,11 @@ header{
 			}*/
 		}
 	}
+	&.status{
+		width:190px;
+		margin: -13px 0 0 -5px;
+		// border:solid 1px red;
+	}
 }
 // .tooltip-content-note{
 // 	&:before{
@@ -583,20 +588,23 @@ header{
 		  position: relative;
 		  background: url(../images/pointer_background.png) no-repeat;
 		  width: 26px;
-		  height: 12px;
+		  height: 13px;
 		  top: -12px;
 		  margin: auto;
 	}
 	li{
+		margin-left:5px;
 		position: relative;
 		float: left;
 		width: auto;
-		min-height: 30px;
-		min-width: 200px;
-		border-top: 1px solid #e6ebf0;
-		&:nth-child(odd){
+		max-width: auto;
+		min-height: 20px;
+		min-width: 155px;
+		// &:nth-child(odd){
 			border-right: 1px solid #e6ebf0;
-		}
+		 	height: 25px;
+		// }
+
 		&.tooltip-title{
 			border: none;
 			padding-left: 20px;
@@ -630,9 +638,18 @@ header{
 		}
 	}
 	&.status{
-		width: 405px;
+		width: 383px;
 		right: -80px;
+		height:45px;
+		&.tooltip-content{
+			li{
+				&.nodiv{
+				border-right:none;
+				}
+			}
+		}
 		.tooltip-item{
+			border-radius: 10px;
 			cursor: pointer;
 			&:hover,&.sel{
 				background: @dark-text;
@@ -641,23 +658,24 @@ header{
 		}
 	}
 	&.filter{
-		&.tooltip-content{
-			&:before{
-				margin-left: 160px;
-			}
+		button{
+			margin: 30px 0 0 10px;
+		}
+		&:before{
+			margin: auto 0 0 150px;
 		}
 		float: left;
-		right: -430px;
+		right: -440px;
 		width:730px;
-		height:100px;
+		height:110px;
 		p{
-			padding-left: 10px;
+			margin:5px 0 0 10px;
 		}
-		li{
-			margin-left:10px; 
+		li{ 
+			margin: 5px 0 0 10px;
 			a{
+				margin-left:5px;
 				color: @dark-text;
-				margin-left:5px; 
 				&:before{
 					margin-top: -5px;
 					.sprite;
@@ -679,15 +697,12 @@ header{
 			border: solid 0px;
 		}
 		.filterlist{
-            border-right: solid 1px #e6ebf0;
-            width: 110px;
-            height:85px;
-            float: left;
-        }
-        button{
-        	margin:25px 0 0 10px;
-        }
-    }
+			border-right: solid 1px #e6ebf0;
+			width: 110px;
+			height:85px;
+			float: left;
+		}
+	}
 	&.price{
 		right: -160px;
 		height:45px;
@@ -703,13 +718,21 @@ header{
 		height:45px;
 	}
 	&.refine{
-		width:900px;
-		max-width: 900px;
-		right: -171px;
-		&:before{
-			left: 190px;
-		} 
-	}
+		ul{
+			width:900px;
+			max-width: 900px;
+		}
+		li{
+			margin: -3px 0 0 10px;
+			padding: 5px 0 0 25px;
+		}
+		a{
+			color: @dark-text;}
+			right: -171px;
+			&:before{
+				left: 190px;
+			} 
+	}	
 	&.col-small{
 		max-width: 201px;
 		top: 41px;
@@ -721,6 +744,14 @@ header{
 		width: 550px;
 		li{
 			min-width: 244px;
+		}
+	}
+}
+
+.bmenu-legend{
+	.tooltip-content{
+		li{
+			min-width:48%;
 		}
 	}
 }

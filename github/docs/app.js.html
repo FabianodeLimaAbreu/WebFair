@@ -235,7 +235,17 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.el.find("#wrap").removeClass("hide");
 
       this.content = new Content({el:this.contentEl,usr_segm:this.usr.SEGM_COD/*bread:this.breadEl, type:this.usr.TIPO*/});
-      this.fornecedores = new Fornecedores();
+      this.fornecedores = new Fornecedores({
+        getloading:this.proxy(this.getloading),
+        setloading:this.proxy(this.setloading),
+        callService:this.proxy(this.callService),
+        deleteNote:this.proxy(this.deleteNote),
+        getSegm:this.proxy(this.getSegm),
+        setSegm:this.proxy(this.setSegm),
+        createComponent:this.proxy(this.createComponent),
+        setDate:this.proxy(this.setDate),
+        usr:this.usr
+      });
 
       this.spotlight = new Spotlight({
         callService:this.proxy(this.callService),
@@ -602,7 +612,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             context.bfair=$(".fair");
             context.bcity=$(".city");
             console.log("fornecedor cadastro");
-            $.getScript("js/lib/external-script.js");
+            //$.getScript("js/lib/external-script.js");
             if(!context.fair.length){
               status=setInterval(function(){
                 if(context.fair.length){
@@ -615,6 +625,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             else{
               context.createComponent(context.fair,context.bfair,'fair');
             }
+            context.fornecedores.reload();
             break;
           default:
             alert("dssda");
@@ -889,6 +900,31 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;GravarAmostraComposicao xmlns="http://tempuri.org/">&lt;AMOS_ID>'+a+'&lt;/AMOS_ID>&lt;compositions>'+b+'&lt;/compositions>&lt;/GravarAmostraComposicao>&lt;/soap:Body>&lt;/soap:Envelope>',
             'callback':null
           },
+          {
+            'name':'listarSegmentos',
+            'serviceName':'ListarSegmentos',
+            'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;ListarSegmentos xmlns="http://tempuri.org/">&lt;SEGM_COD>&lt;/SEGM_COD>&lt;/ListarSegmentos>&lt;/soap:Body>&lt;/soap:Envelope>',
+            'callback':function(data,req){
+              core.convertData(data,req,name);
+            }
+          },
+          {
+            'name':'GravarFornecedor',
+            'serviceName':'GravarFornecedor',
+            'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;GravarFornecedor xmlns="http://tempuri.org/">&lt;supplier>'+a+''+b+''+c+'&lt;PLAT_ID>2&lt;/PLAT_ID>&lt;/supplier>'+d+'&lt;/GravarFornecedor>&lt;/soap:Body>&lt;/soap:Envelope>',
+            'callback':function(data,req){
+              core.setloading(!1);
+            }
+          },
+          {
+            'name':'GravarFornecedorContato',
+            'serviceName':'GravarFornecedorContato',
+            'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;GravarFornecedorContato xmlns="http://tempuri.org/">&lt;contact>'+a+''+b+''+c+'&lt;PLAT_ID>2&lt;/PLAT_ID>&lt;/contact>'+d+'&lt;/GravarFornecedorContato>&lt;/soap:Body>&lt;/soap:Envelope>',
+            'callback':function(data,req){
+              core.setloading(!1);
+            }
+          },
+          
         ];
 
         $.support.cors=true;
@@ -968,6 +1004,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     processError:function(data, status, req){
       console.log("DEU ERRO");
       this.ajaxrequest=!1;
+      this.fornecedores.ajaxrequest=!1;
     },
     setdata:function(a,b){  
       var i,length;
@@ -1016,7 +1053,17 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     },
     callRequest:function(data, status, req){
         this.ajaxrequest=!1;
+        this.fornecedores.ajaxrequest=!1;
         if (status == "success") {
+          if(this.page === "fornecedor_cadastro" &amp;&amp; jQuery.parseJSON($(req.responseXML).text()).OBJ_ID){
+            if(!this.fornecedores.item){
+              this.fornecedores.item={};
+            }
+            console.dir($(req.responseXML).text());
+            console.log(jQuery.parseJSON($(req.responseXML).text()).OBJ_ID);
+            //OBJ_ID
+            this.fornecedores.item["FORN_ID"]=jQuery.parseJSON($(req.responseXML).text()).OBJ_ID;
+          }
           if(this.callback &amp;&amp; "function" === typeof this.callback){
             this.callback(data,req);
           }
@@ -1072,6 +1119,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             this.cities=jQuery.parseJSON($(req.responseXML).text());//.sortBy('FEIR_DESC').unique();
             this.createComponent(this.cities,this.bcity,what);
             break;
+          case "listarSegmentos":
+            this.setSegm(jQuery.parseJSON($(req.responseXML).text()));//.sortBy('FEIR_DESC').unique();
+            console.dir(this.getSegm);
+            break;
           default:
         }
     },
@@ -1103,6 +1154,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           html+="&lt;option value=''>Cidades: &lt;/option>";
           for(i=0;i&lt;data.length;i++){
             html+="&lt;option value='"+data[i].REGI_COD+"'>"+data[i].REGI_DESC+"&lt;/option>";
+          }
+          break;
+        case "segm":
+          comp.empty();
+          html+="&lt;option value=''>Segmentos: &lt;/option>";
+          for(i=0;i&lt;data.length;i++){
+            html+="&lt;option value='"+data[i].SEGM_COD+"'>"+data[i].SEGM_DESC+"&lt;/option>";
           }
           break;
       }
@@ -1509,19 +1567,19 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     changeFair:function(a){
       this.initialTime='2015-01-08';
       this.endTime='2015-10-10';
-      this.cookiefair={};
-      $("input[name='initial_date']").val("");
-      $("input[name='end_date']").val("");
-      this.itens_by_page=this.itens_page_default;
       //this.scroller=0;
-      this.bforn.val("");
-      $(".form-control-search").val("");
       if(this.page === "fornecedor_cadastro"){
         this.fornecedores.setfair=$(a.target).find("option:selected").val();
         this.notcombo=!1;
         this.submit("&lt;FEIR_COD>"+this.fairval+"&lt;/FEIR_COD>",!1,!1,!0);
         return !1;
       }
+      this.cookiefair={};
+      $("input[name='initial_date']").val("");
+      $("input[name='end_date']").val("");
+      this.itens_by_page=this.itens_page_default;
+      $(".form-control-search").val("");
+      this.bforn.val("");
       this.fairval=$(a.target).find("option:selected").val();
       this.notcombo=!0;
       this.mode=this.page+"/"+(this.fairval.replace(" ","_") || "padrao")+"/"+"padrao"+"/"+"padrao";
@@ -1618,6 +1676,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     },
     setPage:function(a){
       this.page=a;
+    },
+    getSegm:function(){
+      return this.segm;
+    },
+    setSegm:function(a){
+      this.segm=a;
     },
     /**
     * `Set the loading state`
@@ -1808,7 +1872,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Wed Aug 12th 2015 using the <a
+		on Fri Aug 14th 2015 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>

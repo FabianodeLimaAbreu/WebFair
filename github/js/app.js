@@ -138,7 +138,17 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.el.find("#wrap").removeClass("hide");
 
       this.content = new Content({el:this.contentEl,usr_segm:this.usr.SEGM_COD/*bread:this.breadEl, type:this.usr.TIPO*/});
-      this.fornecedores = new Fornecedores();
+      this.fornecedores = new Fornecedores({
+        getloading:this.proxy(this.getloading),
+        setloading:this.proxy(this.setloading),
+        callService:this.proxy(this.callService),
+        deleteNote:this.proxy(this.deleteNote),
+        getSegm:this.proxy(this.getSegm),
+        setSegm:this.proxy(this.setSegm),
+        createComponent:this.proxy(this.createComponent),
+        setDate:this.proxy(this.setDate),
+        usr:this.usr
+      });
 
       this.spotlight = new Spotlight({
         callService:this.proxy(this.callService),
@@ -505,7 +515,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             context.bfair=$(".fair");
             context.bcity=$(".city");
             console.log("fornecedor cadastro");
-            $.getScript("js/lib/external-script.js");
+            //$.getScript("js/lib/external-script.js");
             if(!context.fair.length){
               status=setInterval(function(){
                 if(context.fair.length){
@@ -518,6 +528,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             else{
               context.createComponent(context.fair,context.bfair,'fair');
             }
+            context.fornecedores.reload();
             break;
           default:
             alert("dssda");
@@ -792,6 +803,31 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarAmostraComposicao xmlns="http://tempuri.org/"><AMOS_ID>'+a+'</AMOS_ID><compositions>'+b+'</compositions></GravarAmostraComposicao></soap:Body></soap:Envelope>',
             'callback':null
           },
+          {
+            'name':'listarSegmentos',
+            'serviceName':'ListarSegmentos',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarSegmentos xmlns="http://tempuri.org/"><SEGM_COD></SEGM_COD></ListarSegmentos></soap:Body></soap:Envelope>',
+            'callback':function(data,req){
+              core.convertData(data,req,name);
+            }
+          },
+          {
+            'name':'GravarFornecedor',
+            'serviceName':'GravarFornecedor',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFornecedor xmlns="http://tempuri.org/"><supplier>'+a+''+b+''+c+'<PLAT_ID>2</PLAT_ID></supplier>'+d+'</GravarFornecedor></soap:Body></soap:Envelope>',
+            'callback':function(data,req){
+              core.setloading(!1);
+            }
+          },
+          {
+            'name':'GravarFornecedorContato',
+            'serviceName':'GravarFornecedorContato',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFornecedorContato xmlns="http://tempuri.org/"><contact>'+a+''+b+''+c+'<PLAT_ID>2</PLAT_ID></contact>'+d+'</GravarFornecedorContato></soap:Body></soap:Envelope>',
+            'callback':function(data,req){
+              core.setloading(!1);
+            }
+          },
+          
         ];
 
         $.support.cors=true;
@@ -871,6 +907,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     processError:function(data, status, req){
       console.log("DEU ERRO");
       this.ajaxrequest=!1;
+      this.fornecedores.ajaxrequest=!1;
     },
     setdata:function(a,b){  
       var i,length;
@@ -919,7 +956,17 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     },
     callRequest:function(data, status, req){
         this.ajaxrequest=!1;
+        this.fornecedores.ajaxrequest=!1;
         if (status == "success") {
+          if(this.page === "fornecedor_cadastro" && jQuery.parseJSON($(req.responseXML).text()).OBJ_ID){
+            if(!this.fornecedores.item){
+              this.fornecedores.item={};
+            }
+            console.dir($(req.responseXML).text());
+            console.log(jQuery.parseJSON($(req.responseXML).text()).OBJ_ID);
+            //OBJ_ID
+            this.fornecedores.item["FORN_ID"]=jQuery.parseJSON($(req.responseXML).text()).OBJ_ID;
+          }
           if(this.callback && "function" === typeof this.callback){
             this.callback(data,req);
           }
@@ -975,6 +1022,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             this.cities=jQuery.parseJSON($(req.responseXML).text());//.sortBy('FEIR_DESC').unique();
             this.createComponent(this.cities,this.bcity,what);
             break;
+          case "listarSegmentos":
+            this.setSegm(jQuery.parseJSON($(req.responseXML).text()));//.sortBy('FEIR_DESC').unique();
+            console.dir(this.getSegm);
+            break;
           default:
         }
     },
@@ -1006,6 +1057,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           html+="<option value=''>Cidades: </option>";
           for(i=0;i<data.length;i++){
             html+="<option value='"+data[i].REGI_COD+"'>"+data[i].REGI_DESC+"</option>";
+          }
+          break;
+        case "segm":
+          comp.empty();
+          html+="<option value=''>Segmentos: </option>";
+          for(i=0;i<data.length;i++){
+            html+="<option value='"+data[i].SEGM_COD+"'>"+data[i].SEGM_DESC+"</option>";
           }
           break;
       }
@@ -1412,19 +1470,19 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     changeFair:function(a){
       this.initialTime='2015-01-08';
       this.endTime='2015-10-10';
-      this.cookiefair={};
-      $("input[name='initial_date']").val("");
-      $("input[name='end_date']").val("");
-      this.itens_by_page=this.itens_page_default;
       //this.scroller=0;
-      this.bforn.val("");
-      $(".form-control-search").val("");
       if(this.page === "fornecedor_cadastro"){
         this.fornecedores.setfair=$(a.target).find("option:selected").val();
         this.notcombo=!1;
         this.submit("<FEIR_COD>"+this.fairval+"</FEIR_COD>",!1,!1,!0);
         return !1;
       }
+      this.cookiefair={};
+      $("input[name='initial_date']").val("");
+      $("input[name='end_date']").val("");
+      this.itens_by_page=this.itens_page_default;
+      $(".form-control-search").val("");
+      this.bforn.val("");
       this.fairval=$(a.target).find("option:selected").val();
       this.notcombo=!0;
       this.mode=this.page+"/"+(this.fairval.replace(" ","_") || "padrao")+"/"+"padrao"+"/"+"padrao";
@@ -1521,6 +1579,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     },
     setPage:function(a){
       this.page=a;
+    },
+    getSegm:function(){
+      return this.segm;
+    },
+    setSegm:function(a){
+      this.segm=a;
     },
     /**
     * `Set the loading state`

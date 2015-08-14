@@ -641,25 +641,12 @@ header{
 		}
 	}
 	&.filter{
-		&.tooltip-content{
-			&:before{
-				margin-left: 160px;
-			}
-		}
 		float: left;
-		right: -430px;
-		width:730px;
+		right: -150px;
 		height:100px;
-		p{
-			padding-left: 10px;
-		}
 		li{
-			margin-left:10px; 
 			a{
-				color: @dark-text;
-				margin-left:5px; 
 				&:before{
-					margin-top: -5px;
 					.sprite;
 					.other_square_notdot;
 					content:"";
@@ -669,25 +656,15 @@ header{
 					display: block;
 					float:left;
 				}
-				&.sel{
-					&:before{
-						.sprite;
-						.other_square_notdot_selected;
-					}
-				}
 			}
 			border: solid 0px;
 		}
 		.filterlist{
-            border-right: solid 1px #e6ebf0;
-            width: 110px;
-            height:85px;
-            float: left;
-        }
-        button{
-        	margin:25px 0 0 10px;
-        }
-    }
+			border:solid 1px purple;
+			width: 120px;
+			float: left;
+		}
+	}
 	&.price{
 		right: -160px;
 		height:45px;

@@ -348,6 +348,7 @@ open: function(a){
 */
 window.Fornecedores = Spine.Controller.sub({
 elements:{
+
 }, events:{
 },close:function() {
   //this.el.hide();
@@ -362,23 +363,246 @@ elements:{
 */
 callerEvents:function(){
   var context=this;
+  $("button.fav-big").bind("click",function(a){context.setFav(a);});  //setFavorito
+  //$(".navbar-nav li a").bind("click",function(a){context.saveForn(a);});  
+  
+  //ScrollSpy by http://jsfiddle.net/mekwall/up4nu/
+  $(".ScrollSpy").find(".nav-item").bind("click",function(a){context.changeTab(a);});
+  $(".supplier-scroller").bind("scroll",function(a){context.scrollTab(a);})
+  $(".favcontact").bind("click",function(a){context.setFavContact(a);});
+  $(".bplus-big").bind("click",function(a){context.showSomething(a);});
 },
 open: function(a){
   "use strict";
   var context=this;
-  this.item = a;
+  /*this.item = a;
   if(!this.item){
     return !1;
-  }
+  }*/
   this.callerEvents();
-  $(".sample-buttons button").eq(0).trigger('click');
-  this.populateDetail();
+  $(".ScrollSpy").find(".nav-item").eq(0).trigger('click');
+  if(!this.getSegm().length){
+    this.callService("listarSegmentos");
+  }
+  //this.fav=elemento.FLAG_PRIORIDADE;
+
+  this.populateForn();
+
+},changeTab:function(e){
+  var context=this;
+  e.preventDefault();
+  // Bind click handler to menu items
+  // so we can get a fancy scroll animation
+  if(!$(e.target).hasClass('nav-item')){
+    if($(e.target).prop("tagName") ===  "SPAN"){
+      e=$(e.target).parent();
+    }
+    else{
+      e=$(e.target).closest("a");
+    }
+  }
+  else{
+    e=$(e.target);
+  }
+
+  var href = e.attr("href");
+  //this.lasttab=href.replace("#","");
+  offsetTop = href === "#" ? 0 : $(href).position().top;
+  //console.dir($(href));
+  $('.supplier-scroller').stop().animate({
+      scrollTop: offsetTop,
+  }, 300,function(){
+    context.lasttab=context.tab || "dados";
+    context.tab=href.replace("#","");
+    context.saveForn();
+  });
+},scrollTab:function(a){
+  var lastId;
+  // Bind to scroll
+  // Get container scroll position
+
+  scrollItems = $(".ScrollSpy").find(".nav-item").map(function(){
+    var item = $($(this).attr("href"));
+    if (item.length) { return item; }
+  });
+
+   //var fromTop = $(this).scrollTop()+topMenuHeight;
+   var fromTop = $(a.target).scrollTop();
+   this.scroller=fromTop;
+   // Get id of current scroll item
+   var cur = scrollItems.map(function(){
+     if ($(this).position().top &lt;= fromTop)
+       return this;
+   });
+   // Get the id of the current element
+   cur = cur[cur.length-1];
+   var id = cur &amp;&amp; cur.length ? cur[0].id : "";
+   if (lastId !== id) {
+       lastId = id;
+
+
+       // Set/remove active class
+       $(".ScrollSpy").find(".nav-item")
+         .parent().removeClass("active")
+         .end().filter("[href=#"+id+"]").parent().addClass("active");
+
+      if(id !== "dados" &amp;&amp; this.setfair){
+        $(".fair").attr("disabled","disabled");
+      }
+      else{
+        $(".fair").removeAttr('disabled');
+      }
+   }
+},showSomething:function(a){
+  $(a.target).addClass('hide');
+  $("."+$(a.target).attr("name")).removeClass('hide');
+},setFav:function(a){
+  var i,el=$(a.target),html="";
+  console.log(el.hasClass('sel'));
+  if(el.hasClass('sel')){
+    this.fav=0;
+    el.removeClass('sel');
+  }
+  else{
+    this.fav=1;
+    el.addClass('sel');
+  }
+  console.log("clicado no FAVORITO");
+  if(this.item.FORN_ID){
+    this.waitingfav=!1;
+    context.ajaxrequest=!0;
+    if(this.item.FAVORITES.length){
+      for(i=0;i&lt;this.item.FAVORITES.length;i++){
+        html+="&lt;string>"+this.item.FAVORITES[i].SEGM_COD+"&lt;/string>";
+      }
+    }
+    else{
+      html+="&lt;string>"+this.usr.SEGM_COD+"&lt;/string>";
+    }
+    this.callService("GravarFornecedor",'&lt;FORN_ID>'+this.item.FORN_ID+'&lt;/FORN_ID>',html);
+  }
+  else{
+    this.waitingfav=!0;
+  }
+
+},setFavContact:function(a){
+  var el=$(a.target);
+  console.log(el.hasClass('sel'));
+  if(el.hasClass('sel')){
+    this.favcontact=0;
+    el.removeClass('sel');
+  }
+  else{
+    this.favcontact=1;
+    el.addClass('sel');
+  }
+  console.log("clicado no FAVORITO");
+},populateForn:function(){
+  var context=this;
+
+  if(!this.getSegm().length){
+    status=setInterval(function(){
+      if(context.getSegm().length){
+        context.ajaxrequest=!1;
+        context.createComponent(context.getSegm(),$(".SEGM_COD"),'segm');
+        clearInterval(status);
+      }
+    },100);
+  }
+  else{
+    context.createComponent(context.fair,context.bfair,'fair');
+  }
   this.setloading(!1);
+},saveForn:function(a){
+  var date=new Date(),html="",context=this,pattern="";
+  date=""+date.getFullYear()+"-0"+(date.getMonth()+1)+"-"+date.getDate();
+  pattern+="&lt;USU_COD>"+this.usr.USU_COD+"&lt;/USU_COD>"+"&lt;CREATE_DATE>"+date+"&lt;/CREATE_DATE>"+"&lt;FEIR_COD>"+this.setfair+"&lt;/FEIR_COD>";
+ /*if(this.tab === "dados" &amp;&amp; !this.scroller){
+    return !1;
+  }*/
+  if(this.setfair){
+    this.setloading(!0,!1);
+    switch (this.lasttab){
+      case 'dados':
+        console.log(this.tab);
+        console.log(this.lasttab);
+        console.log(date);
+        html+="&lt;FORN_STATUS>0&lt;/FORN_STATUS>&lt;FORN_INATIVO>0&lt;/FORN_INATIVO>";
+        //context.ajaxrequest=!0;
+        //this.callService("GravarFornecedor",'&lt;FORN_ID>0&lt;/FORN_ID>',html+""+pattern,"&lt;FORN_DESC>"+$("input[name='FORN_DESC']").val()+"&lt;/FORN_DESC>",'&lt;action>I&lt;/action>');
+        
+        status=setInterval(function(){
+          if(!context.ajaxrequest){
+            console.log("ENTROU NO SEGUNDO");
+            html="";
+            $(".contact.actived").find("input").each(function(a,b){
+              html+="&lt;"+$(b).attr("name")+">"+$(b).val()+"&lt;/"+$(b).attr("name")+">";
+            });
+            html+="&lt;SEGM_COD>"+$(".SEGM_COD option:selected").attr("value")+"&lt;/SEGM_COD>";
+            html+="&lt;CONT_PRINCIPAL>"+context.favcontact+"&lt;/CONT_PRINCIPAL>"
+            html+="&lt;IMG_PATH_FRENTE>0&lt;/IMG_PATH_FRENTE>&lt;IMG_PATH_VERSO>0&lt;/IMG_PATH_VERSO>&lt;IMG_PATH_CONTATO>0&lt;/IMG_PATH_CONTATO>";
+            html+="&lt;FORN_ID>"+context.item.FORN_ID+"&lt;/FORN_ID>&lt;CONT_INATIVO>0&lt;/CONT_INATIVO>";
+            //context.callService("GravarFornecedorContato",html,pattern,"",'&lt;action>I&lt;/action>');
+            clearInterval(status);
+          }
+        },100);
+        context.setloading(!1);
+        // console.log(this.setDate());
+        break;
+      case 'profile':
+        console.log(this.tab);
+        console.log(this.lasttab);
+        break;
+      case 'composition':
+        console.log(this.tab);
+        console.log(this.lasttab);
+        break;
+      case 'products':
+        console.log(this.tab);
+        console.log(this.lasttab);
+        break;
+      case 'markets':
+        console.log(this.tab);
+        console.log(this.lasttab);
+        break;
+    }
+    /*$("#"+this.tab).find("input[required='required']").each(function(a,b){
+      console.dir(b);
+    });*/
+  }
+  else{
+    if(this.lasttab &amp;&amp; this.tab !=="dados"){
+      alert("Selecione uma feira");
+    }
+  }
+  //this.setloading(!1);
+  //console.dir($("input[required='required']"));
+},reload:function(fair,code) {
+  "use strict";
+  var result;
+  this.setloading(!0,!1);
+  this.open();
+  /*result=this.getdata(code);
+  console.dir(result);
+  if(result.length){
+    this.open(result[0]);
+    this.nextsample=result[1];
+  }
+  else{
+    //this.open(jQuery.parseJSON('{"AMOS_COD":null,"AMOS_COTACAO_KG":0,"AMOS_COTACAO_M":0,"AMOS_DESC":"TESTE NACIONAL","AMOS_ENV_EMAIL":0,"AMOS_GRAMATURA_M":0,"AMOS_GRAMATURA_ML":0,"AMOS_HOMOLOGAR":0,"AMOS_ID":200000101,"AMOS_LARGURA_TOTAL":0,"AMOS_LARGURA_UTIL":0,"AMOS_ONCAS":0,"AMOS_PRECO":0,"AMOS_PRECO_UM":"","AMOS_STATUS":0,"BASE_COD":null,"BASE_DESC":"","COMPOSITIONS":[{"COMP_COD":"CJ ","COMP_DESC":"JUTE","TP_COMP_ID":0},{"COMP_COD":"CJ ","COMP_DESC":"JUTE","TP_COMP_ID":0}],"CREATE_DATE":"\/Date(1339642800000-0300)\/","FEIR_COD":"1 ","FEIR_DESC":"FOCUS TEXTIL - Sao Paulo\/Brazil","FLAG_FISICA":0,"FLAG_PRIORIDADE":0,"FORN_DESC":"TESTE FORNECEDOR IMPORTADORNECEDOR","FORN_ID":4200083,"GRUP_COD":null,"GRUP_DESC":"","IMG_PATH_SAMPLE":"","IMG_PATH_TICKET":"","NOTES":[],"SEGM_COD":"ML","SEGM_DESC":null,"SUBG_COD":null,"SUBG_DESC":"","TECI_COD":null,"TECI_DESC":"","USU_COD":36}'));
+    this.open(jQuery.parseJSON('{"AMOS_COD":null,"AMOS_COTACAO_KG":0,"AMOS_COTACAO_M":0,"AMOS_DESC":"TESTE NACIONAL","AMOS_ENV_EMAIL":0,"AMOS_GRAMATURA_M":0,"AMOS_GRAMATURA_ML":0,"AMOS_HOMOLOGAR":0,"AMOS_ID":200000101,"AMOS_LARGURA_TOTAL":0,"AMOS_LARGURA_UTIL":0,"AMOS_ONCAS":0,"AMOS_PRECO":0,"AMOS_PRECO_UM":"","AMOS_STATUS":0,"BASE_COD":null,"BASE_DESC":"","COMPOSITIONS":[{"COMP_COD":"CA ","COMP_DESC":"ACETATE","TP_COMP_ID":0},{"COMP_COD":"CJ ","COMP_DESC":"JUTE","TP_COMP_ID":0}],"CREATE_DATE":"\/Date(1339642800000-0300)\/","FEIR_COD":"1 ","FEIR_DESC":"FOCUS TEXTIL - Sao Paulo\/Brazil","FLAG_FISICA":0,"FLAG_PRIORIDADE":0,"FORN_DESC":"TESTE FORNECEDOR IMPORTADORNECEDOR","FORN_ID":4200083,"GRUP_COD":null,"GRUP_DESC":"","IMG_PATH_SAMPLE":"","IMG_PATH_TICKET":"","NOTES":[{"CREATE_DATE":"\/Date(1436508000000-0300)\/","NOTA_DESC":"Teste de Anotação2","NOTA_ID":339,"OBJ_ID":200000101,"PLAT_ID":0,"SEGM_DESC":"Todos ","TP_NOTA_ID":2,"USU_COD":36,"USU_NOME":"JACQUES STERN"}],"SEGM_COD":"ML","SEGM_DESC":null,"SUBG_COD":null,"SUBG_DESC":"","TECI_COD":null,"TECI_DESC":"","USU_COD":36}'));
+  }*/
 },init:function() {
-  this.item = null;
-  this.nextsample=null;
+  this.item = {};
   this.on=!1;
+  this.waitingfav=!1; // No final confirmo se o favorito ja foi setado, porque caso o usuario click no botao sem ter um favorito salvo, deixo para o final
   this.setfair=null;
+  this.fav=0;
+  this.favcontact=0;
+  this.ajaxrequest=!1;
+  this.tab="";
+  this.lasttab="";
+  this.scroller=0;
 }});</pre>
 	</article>
 </section>
@@ -400,7 +624,7 @@ open: function(a){
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Wed Aug 12th 2015 using the <a
+		on Fri Aug 14th 2015 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>

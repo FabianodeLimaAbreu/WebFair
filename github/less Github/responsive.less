@@ -1,0 +1,290 @@
+/*******************************
+          RESPONSIVE
+*******************************/
+
+@media only screen and(min-width:740px){
+	.bread-container{
+		.bread-box{
+			margin-left: auto;
+			max-width: 700px;
+		}
+	}
+	.bread-count{
+		width: auto;
+	}
+	.comand-container{
+		.comandbar{
+			max-width: 700px;
+		}
+	}
+	.table-container{
+		.table-content{
+			max-width: 700px;
+		}
+	}
+	.menu-ativo{
+		//If user open toggle-menu in small resolution and upper resolution
+		#toggle-menu{
+			top: 0;
+		}
+	}
+	#toggle-menu{
+		display: inline-block;
+		position: relative;
+		left: 0;
+		top: 0;
+		width: auto;
+		height: 80px;
+		background: none;
+		min-width:600px;
+		ul{
+			background: none;
+		}
+		li{
+			width: auto;
+			margin: 0 30px;
+			border-bottom: none;
+			&.inspbutton{
+				display: block;
+			}
+			a{
+				line-height: 125px;
+				margin-top: 0;
+			}
+		}
+	}
+	header .user{
+		right:20px;
+	}
+}
+
+@media only screen and(min-width:600px){
+	header{
+		.top-header{
+			.logo{
+				margin: 10px;
+			}
+		}
+	}
+	.container{
+		&.container-page{
+			margin-top: 50px;
+		}
+	}
+	// #modal{
+	// 	.modal-content{
+	// 		// left:50%;
+	// 		// margin-left:-260px;
+	// 		// padding: 40px;
+	// 	}
+	// 	.modal-text{
+	// 		width: 245px;
+	// 	}
+	// }
+}
+
+@media only screen and(min-width:900px){	
+	.detail{
+		.detail-sample{
+			max-width: 370px;
+		}
+		.detail-sample-container{
+			width: 370px;
+			img{
+				width: 368px;
+			}
+		}
+	}
+}
+
+@media only screen and(min-width:950px){
+	.container-fullsize .right-list{
+		font-size: 1em;
+	}
+	.supplier-form-container{
+		width: 590px;
+		.supplier-photo-side{
+			width: 170px;
+		}
+	}
+	.supplier-side{
+		&.left-side{
+			width: 590px;
+		}
+		&.right-side{
+			width: 300px;
+		}
+	}
+	.supplier-photo-side{
+		.photo-container{
+			height: 135px;
+		}
+	}
+	.fake-form{
+		&.fake-form-supplier-biggest{
+			width: 500px;
+		}
+	}
+	.notepad{
+		&.supplier-note-side{
+			.notepad-note{
+				width: 540px;
+			}
+		}
+	}
+}
+
+@media only screen and(min-width:1000px){
+	.right-list{
+		display: inline-block;
+	}
+	form.search.search-result{
+		float: none;
+		margin-left: 70px;
+		width: 400px;
+		input{
+			width: 400px;
+		}
+	}
+	.overview .viewport .col-large{
+		width: 25%;
+	}
+	.detail{
+		.detail-sample{
+			max-width: 420px;
+		}
+		.detail-sample-container{
+			width: 420px;
+			img{
+				width: 418px;
+			}
+		}
+	}	
+}
+
+@media only screen and(min-width:1200px){
+	.comand-container{
+		padding: 10px 0;
+		.comandbar{
+			display: block;
+		}
+	}
+	.bread-container{
+		.bread-box{
+			margin-left: auto;
+			max-width: 1160px;
+			left:-5px; // Fix
+		}	
+	}
+	.comand-container{
+		.comandbar{
+			max-width: 1160px;
+			left:-5px; // Fix
+		}
+	}
+	.table-container{
+		.table-content{
+			max-width: 1160px;
+		}
+	}
+	//Detail large
+	.detail{
+		
+	}
+	
+}
+
+@media only screen and(min-width:1400px){
+	.edit{
+		overflow-x: hidden;
+		body{
+			overflow-x: hidden;
+		}
+		.holder{
+			float: none;
+			margin: 0 auto;
+		}
+	}
+}
+
+@media only screen and(min-width:1440px){
+	.bread-container{
+		.bread-box{
+			margin-left: auto;
+			max-width: 1400px;
+			left:-5px;
+		}
+	}
+	.comand-container{
+		.comandbar{
+			max-width: 1400px;
+			left:-5px;
+		}
+	}
+	.table-container{
+		.table-content{
+			max-width: 1400px;
+			left:-5px;
+		}
+	}
+}
+@media only screen and(min-width:1690px){
+	.bread-container{
+		.bread-box{
+			margin-left: auto;
+			max-width: 1650px;
+		}
+	}
+	.comand-container{
+		.comandbar{
+			max-width: 1650px;
+			right: 12px;
+		}
+	}
+	.table-container{
+		.table-content{
+			max-width: 1650px;
+			right: 12px;
+		}
+	}
+	.bread-container{
+		right: 12px;
+	}
+}
+@media only screen and(min-height:750px){
+	.supplier{
+		.supplier-scroller{
+			height: 500px;
+			section{
+				min-height: 500px;
+			}
+		}
+	}
+}
+@media only screen and(min-height:800px){
+	.content{
+		// height: 570px;
+	}
+	.supplier{
+		.supplier-scroller{
+			height: 550px;
+			section{
+				min-height: 550px;
+			}
+		}
+	}
+}
+
+@media only screen and(min-height:900px){
+	.content{
+		// height: 670px;
+	}
+	.supplier{
+		.supplier-scroller{
+			height: 650px;
+			section{
+				min-height: 650px;
+			}
+		}
+	}
+}

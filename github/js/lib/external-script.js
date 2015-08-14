@@ -1,9 +1,8 @@
 // Cache selectors
 var lastId,
-    topMenu = $(".ScrollSpy"),
     //topMenuHeight = topMenu.outerHeight()+15,
     // All list items
-    menuItems = topMenu.find("a"),
+    menuItems = $(".ScrollSpy").find("a"),
     // Anchors corresponding to menu items
     scrollItems = menuItems.map(function(){
       var item = $($(this).attr("href"));

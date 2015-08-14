@@ -24,11 +24,11 @@
     <div class="navbar" >
       <div class="navbar-nav holder ScrollSpy">
         <ul class="nav nav-list affix">
-          <li><a href="#dados"><span>Dados Básicos</span><button type="button" class="caption-icons-icon justit bstatus incomplet"></button></a></li>
-          <li><a href="#profile"><span>Company Profile</span><button type="button" class="caption-icons-icon justit bstatus incomplet"></button></a></li>
-          <li><a href="#composition"><span>Main Composition</span><button type="button" class="caption-icons-icon justit bstatus incomplet"></button></a></li>
-          <li><a href="#products"><span>Main Products</span><button type="button" class="caption-icons-icon justit bstatus incomplet"></button></a></li>
-          <li><a href="#markets"><span>Main Markets</span><button type="button" class="caption-icons-icon justit bstatus incomplet"></button></a></li>
+          <li><a href="#dados" class="nav-item"><span>Dados Básicos</span><button type="button" class="caption-icons-icon justit bstatus incomplet"></button></a></li>
+          <li><a href="#profile" class="nav-item"><span>Company Profile</span><button type="button" class="caption-icons-icon justit bstatus incomplet" class="nav-item"></button></a></li>
+          <li><a href="#composition" class="nav-item"><span>Main Composition</span><button type="button" class="caption-icons-icon justit bstatus incomplet"></button></a></li>
+          <li><a href="#products" class="nav-item"><span>Main Products</span><button type="button" class="caption-icons-icon justit bstatus incomplet"></button></a></li>
+          <li><a href="#markets" class="nav-item"><span>Main Markets</span><button type="button" class="caption-icons-icon justit bstatus incomplet"></button></a></li>
         </ul>
       </div>
     </div>
@@ -40,10 +40,10 @@
               <div class="supplier-form-container floatLeft biggest">
                 <div class="fake-form fake-form-supplier-biggest">
                   <div class="form-group">
-                    <input type="text" class="form-control" name="login" placeholder="Fornecedor" autofocus="" autocomplete="off">
+                    <input type="text" class="form-control" name="FORN_DESC" placeholder="Fornecedor" autofocus="" autocomplete="off" required="required">
                   </div>
                 </div> 
-                <button type="button" class="icon floatLeft trash-big"></button>
+                <!--<button type="button" class="icon floatLeft trash-big"></button>-->
                 <button type="button" class="icon floatLeft fav-big"></button>
               </div>
             </div>
@@ -59,7 +59,7 @@
                   <div class="row">
                     <div class="fake-form fake-form-supplier-middle">
                       <div class="form-group">
-                        <input type="text" class="form-control" name="login" placeholder="Nome" autofocus="" autocomplete="off">
+                        <input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off">
                       </div>
                     </div>
                     <button type="button" class="icon floatLeft trash-big"></button>
@@ -67,29 +67,38 @@
                   <div class="row">
                     <div class="fake-form">
                       <div class="form-group">
-                        <input type="text" class="form-control" name="login" placeholder="E-mail" autofocus="" autocomplete="off">
+                        <input type="text" class="form-control" name="CONT_EMAIL" placeholder="E-mail" autofocus="" autocomplete="off">
                       </div>
                     </div>
                   </div>
                   <div class="row">
                     <div class="fake-form fake-form-supplier-equal floatLeft">
-                      <button class="tooltip-item tooltip-item-supplier caption-icons-icon bcircle">Contato Principal </button>
+                      <button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bcircle favcontact">Contato Principal </button>
                     </div>
                     <div class="fake-form fake-form-supplier-equal right">
-                      <div class="form-group">
-                        <input type="text" class="form-control" name="login" placeholder="Segmento" autofocus="" autocomplete="off">
+                      <div class="form-group styled-select">
+                        <select class="form-control bselect SEGM_COD" name="SEGM_COD">
+                          <option value="Segmento">Segmentos</option>
+                        </select>
                       </div>
                     </div>
                   </div>
                   <div class="row">
                     <div class="fake-form fake-form-supplier-middle">
                       <div class="form-group">
-                        <input type="text" class="form-control" name="login" placeholder="Tel 1" autofocus="" autocomplete="off">
+                        <input type="tel" class="form-control" name="CONT_TEL" placeholder="Tel 1" autofocus="" autocomplete="off">
                       </div>
                     </div>
-                    <button type="button" class="icon floatLeft bplus-big"></button>
+                    <button type="button" class="icon floatLeft bplus-big" name="CONT_TEL2"></button>
                   </div>
-                  <div class="row">
+                  <div class="row CONT_TEL2 hide">
+                    <div class="fake-form fake-form-supplier-middle">
+                      <div class="form-group">
+                        <input type="tel" class="form-control" name="CONT_TEL2" placeholder="Tel 2" autofocus="" autocomplete="off">
+                      </div>
+                    </div>
+                  </div>
+                  <!--<div class="row">
                     <div class="fake-form fake-form-supplier-equal floatLeft">
                       <div class="form-group styled-select">
                         <select class="form-control bselect countries">
@@ -336,7 +345,7 @@
                         </select>
                       </div>
                     </div>
-                  </div>
+                  </div>-->
                 </div>
               </div>
               <div class="supplier-form-container contact"> <!-- Add actived -->
@@ -350,7 +359,7 @@
                   <div class="row">
                     <div class="fake-form fake-form-supplier-middle">
                       <div class="form-group">
-                        <input type="text" class="form-control" name="login" placeholder="Nome" autofocus="" autocomplete="off">
+                        <input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off">
                       </div>
                     </div>
                     <button type="button" class="icon floatLeft trash-big"></button>
@@ -358,7 +367,7 @@
                   <div class="row">
                     <div class="fake-form">
                       <div class="form-group">
-                        <input type="text" class="form-control" name="login" placeholder="E-mail" autofocus="" autocomplete="off">
+                        <input type="text" class="form-control" name="CONT_EMAIL" placeholder="E-mail" autofocus="" autocomplete="off">
                       </div>
                     </div>
                   </div>
@@ -367,20 +376,22 @@
                       <button class="tooltip-item tooltip-item-supplier caption-icons-icon bcircle">Contato Principal </button>
                     </div>
                     <div class="fake-form fake-form-supplier-equal right">
-                      <div class="form-group">
-                        <input type="text" class="form-control" name="login" placeholder="Segmento" autofocus="" autocomplete="off">
+                      <div class="form-group styled-select">
+                        <select class="form-control bselect segm">
+                          <option value="Segmento">Segmentos</option>
+                        </select>
                       </div>
                     </div>
                   </div>
                   <div class="row">
                     <div class="fake-form fake-form-supplier-middle">
                       <div class="form-group">
-                        <input type="text" class="form-control" name="login" placeholder="Tel 1" autofocus="" autocomplete="off">
+                        <input type="text" class="form-control" name="CONT_TEL" placeholder="Tel 1" autofocus="" autocomplete="off">
                       </div>
                     </div>
                     <button type="button" class="icon floatLeft bplus-big"></button>
                   </div>
-                  <div class="row">
+                  <!--<div class="row">
                     <div class="fake-form fake-form-supplier-equal floatLeft">
                       <div class="form-group styled-select">
                         <select class="form-control bselect countries">
@@ -627,7 +638,7 @@
                         </select>
                       </div>
                     </div>
-                  </div>
+                  </div>-->
                 </div>
               </div>
               <div class="supplier-form-container">

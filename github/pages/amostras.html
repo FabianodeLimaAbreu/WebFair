@@ -78,26 +78,57 @@
           </li>
           <li class="main_opt_item tooltip-filter">
             <button type="button" class="main_opt_button">Filtrar</button><!--class="sel"-->
-            <div class="tooltip-content filter col-largest">
+            <div class="tooltip-content filter">
             
-            <div class="filterlist">
-              <p>Amostra Física</p>
-              <br>
-              <ul>
-                  <li><a href="//">Com</a></li>
-                  <li><a href="//">Sem</a></li>
-              </ul>
-            </div>
-            
-            
-            <div  class="filterlist">
-              <p>Amostra Física</p>
-              <br>
-              <ul>
-                  <li><a href="//">Com</a></li>
-                  <li><a href="//">Sem</a></li>
-              </ul>
-            </div>
+              <div class="filterlist">
+                <p>Amostra Física</p>
+                <br>
+                <ul>
+                    <li><a href="//">Com</a></li>
+                    <li><a href="//">Sem</a></li>
+                </ul>
+              </div>
+              <div  class="filterlist">
+                <p>Favoritas</p>
+                <br>
+                <ul>
+                    <li><a href="//">Sim</a></li>
+                    <li><a href="//">Não</a></li>
+                </ul>
+              </div>
+              <div class="filterlist">
+                <p>Homologar</p>
+                <br>
+                <ul>
+                    <li><a href="//">Sim</a></li>
+                    <li><a href="//">Não</a></li>
+                </ul>
+              </div>
+              <div  class="filterlist">
+                <p>Enviado E-mail</p>
+                <br>
+                <ul>
+                    <li><a href="//">Sim</a></li>
+                    <li><a href="//">Não</a></li>
+                </ul>
+              </div>
+              <div class="filterlist">
+                <p>Anotações</p>
+                <br>
+                <ul>
+                    <li><a href="//">Com</a></li>
+                    <li><a href="//">Sem</a></li>
+                </ul>
+              </div>
+              <div  class="filterlist">
+                <p>Anexos</p>
+                <br>
+                <ul>
+                    <li><a href="//">Com</a></li>
+                    <li><a href="//">Sem</a></li>
+                </ul>
+              </div>
+              <button type="button" class="icon s-five floatLeft save-date-filter">Ok</button>
 
             </div>
 
@@ -118,21 +149,21 @@
               </form>
             </div>
           </li>
-          <li class="main_opt_item tooltip tooltip-selectable">
+          <li class="main_opt_item tooltip status tooltip-selectable">
             <button type="button" class="main_opt_button">Status</button>
             <ul class="tooltip-content status col-large">
               <li>
-                <button type="button" class="tooltip-item" name="false">Completar Cadastro</button>
+                <button type="button" class="tooltip-item status" name="false">Completar Cadastro</button>
               </li>
-              <li>
-                <button type="button" class="tooltip-item" name="true">Cadastro Completo</button>
+              <li class="nodiv">
+                <button type="button" class="tooltip-item status" name="true">Cadastro Completo</button>
               </li>
             </ul>
           </li>
           <li class="main_opt_item tooltip-filter">
             <button type="button" class="main_opt_button">Refinar Busca</button>
             <div class="tooltip-content refine">
-              <div class="filter-area-collum filter-area-top">
+              <div class="filter-area-collum filter-area-top refine">
                 <ul class="filter_list">
                   <li><a href="#TECIMENTO" role="1" ng-class="{off:selcount[1].isOff == true}" fb-opensublist="fb-opensublist" class="first unsel">Tecimento</a><span ng-show="selcount[1].show" class="topcount ng-binding ng-hide">0</span></li>
                   <li><a href="#BASE" role="2" ng-class="{off:selcount[2].isOff == true}" fb-opensublist="fb-opensublist" class="unsel">Base</a><span ng-show="selcount[2].count" class="topcount ng-binding ng-hide">0</span></li>
@@ -140,8 +171,8 @@
                   <li><a href="#SGRUPO" role="4" ng-class="{off:selcount[4].isOff == true}" fb-opensublist="fb-opensublist" class="unsel">SubGrupo</a><span ng-show="selcount[4].count" class="topcount ng-binding ng-hide">0</span>
                   </li>
                   <li><a href="#CMP" role="6" ng-class="{off:selcount[6].isOff == true}" fb-opensublist="fb-opensublist" class="unsel">Composição</a><span ng-show="selcount[6].count" class="topcount ng-binding ng-hide">0</span></li>
-                  <li><a href="#limpar" ng-click="cancelFilter($event)" fb-opensublist="fb-opensublist" class="icon floatLeft icon-button bcancel unsel">Limpar Filtros</a></li>
                 </ul>
+                <button type="button" class="icon s-five floatLeft filter-price">Ok</button>
               </div>
 
             </div>
