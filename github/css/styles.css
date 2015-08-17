@@ -638,16 +638,26 @@ header .logo-print {
   padding-left: 60px;
 }
 .tooltip-content.status {
-  width: 405px;
+  width: 402px;
+  height: 45px;
   right: -80px;
 }
+.tooltip-content.status button {
+  margin-top: -7px;
+}
 .tooltip-content.status .tooltip-item {
+  border-radius: 10px;
   cursor: pointer;
 }
 .tooltip-content.status .tooltip-item:hover,
 .tooltip-content.status .tooltip-item.sel {
   background: #414141;
   color: #fff;
+}
+.tooltip-content.status li {
+  height: 20px;
+  margin-top: -5px;
+  border-top: none;
 }
 .tooltip-content.filter {
   float: left;
@@ -709,12 +719,43 @@ header .logo-print {
   height: 45px;
 }
 .tooltip-content.refine {
-  width: 900px;
+  width: 720px;
   max-width: 900px;
+  height: 45px;
   right: -171px;
 }
 .tooltip-content.refine:before {
-  left: 190px;
+  left: 85px;
+}
+.tooltip-content.search-refine a {
+  border-radius: 10px;
+  padding: 18px 0 0 0;
+  margin-top: -8px;
+  width: 130px;
+  height: 45px;
+  color: #414141;
+  display: block;
+}
+.tooltip-content.search-refine a:hover,
+.tooltip-content.search-refine a.sel {
+  background: #414141;
+  color: #fff;
+}
+.tooltip-content.search-refine span {
+  float: right;
+  margin-top: -10px;
+  display: none;
+}
+.tooltip-content.search-refine li {
+  text-align: center;
+  padding: 0;
+  margin-top: -5px;
+  min-width: 130px;
+  border-top: none;
+  border-right: solid 1px #e6ebf0;
+}
+.tooltip-content.search-refine button {
+  margin: -5px 0 0 5px;
 }
 .tooltip-content.col-small {
   max-width: 201px;

@@ -13,15 +13,15 @@
                   var wsUrl = "../../WebService.asmx?op=GravarFornecedorProfile ";
 
 
-                  var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFornecedorProfile xmlns="http://tempuri.org/"><Forn_ID>777</Forn_ID><profiles><Profile><FAB_COD>1</FAB_COD><PERF_COD>3</PERF_COD><TP_FAB_COD>1</TP_FAB_COD></Profile><Profile><FAB_COD>0</FAB_COD><PERF_COD>1</PERF_COD><TP_FAB_COD>0</TP_FAB_COD></Profile></profiles></GravarFornecedorProfile></soap:Body></soap:Envelope>';
+                  //var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFornecedorProfile xmlns="http://tempuri.org/"><Forn_ID>4200000</Forn_ID><profiles><Profile><FAB_COD>1</FAB_COD><PERF_COD>3</PERF_COD><TP_FAB_COD>1</TP_FAB_COD></Profile><Profile><FAB_COD>6</FAB_COD><PERF_COD>3</PERF_COD><TP_FAB_COD>2</TP_FAB_COD></Profile></profiles></GravarFornecedorProfile></soap:Body></soap:Envelope>';
 
                   //Serviço com fabrica
-                  //var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFornecedorProfile xmlns="http://tempuri.org/"><Forn_ID>4200000</Forn_ID><profiles><Profile><FAB_COD>1</FAB_COD><PERF_COD>3</PERF_COD><TP_FAB_COD>1</TP_FAB_COD></Profile></profiles></GravarFornecedorProfile></soap:Body></soap:Envelope>';
+                  //var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFornecedorProfile xmlns="http://tempuri.org/"><Forn_ID>4200000</Forn_ID><profiles><Profile><FAB_COD>5</FAB_COD><FAB_COD>2</FAB_COD><PERF_COD>3</PERF_COD><TP_FAB_COD>1</TP_FAB_COD></Profile><Profile><FAB_COD>2</FAB_COD><PERF_COD>3</PERF_COD><TP_FAB_COD>1</TP_FAB_COD></Profile></profiles></GravarFornecedorProfile></soap:Body></soap:Envelope>';
 
 
                   //NAO ENVIANDO FABRICA- passo FAB_COD e TP_FAB_COD como 0
-                  //var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFornecedorProfile xmlns="http://tempuri.org/"><Forn_ID>4200000</Forn_ID><profiles><Profile><FAB_COD>0</FAB_COD><PERF_COD>1</PERF_COD><TP_FAB_COD>0</TP_FAB_COD></Profile></profiles></GravarFornecedorProfile></soap:Body></soap:Envelope>';
-
+                  var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFornecedorProfile xmlns="http://tempuri.org/"><Forn_ID>4200000</Forn_ID><profiles><Profile><FAB_COD>0</FAB_COD><PERF_COD>2</PERF_COD><TP_FAB_COD>0</TP_FAB_COD></Profile></profiles></GravarFornecedorProfile></soap:Body></soap:Envelope>';
+                  
                   $.support.cors=true;
                   $.ajax({
                            type: "POST",

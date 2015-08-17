@@ -827,7 +827,22 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               core.setloading(!1);
             }
           },
-          
+          {
+            'name':'GravarFornecedorFavorito',
+            'serviceName':'GravarFornecedorFavorito',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFornecedorFavorito xmlns="http://tempuri.org/"><Forn_ID>4200188</Forn_ID><segments><string>ML</string></segments></GravarFornecedorFavorito></soap:Body></soap:Envelope>',
+            'callback':function(data,req){
+              core.setloading(!1);
+            }
+          },
+          {
+            'name':'GravarFornecedorProfile',
+            'serviceName':'GravarFornecedorProfile',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFornecedorProfile xmlns="http://tempuri.org/">'+a+'<profiles><Profile>'+b+'</Profile></profiles></GravarFornecedorProfile></soap:Body></soap:Envelope>',
+            'callback':function(data,req){
+              core.setloading(!1);
+            }
+          },
         ];
 
         $.support.cors=true;

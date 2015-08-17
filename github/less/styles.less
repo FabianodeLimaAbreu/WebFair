@@ -575,7 +575,7 @@ header{
 	display: none;
 	cursor: default;
 	transition: all 0.3s;
-	color: #414141;
+	color: @dark-text;
 	border-radius: 10px;
 	&:before{
 		  content: "";
@@ -630,14 +630,24 @@ header{
 		}
 	}
 	&.status{
-		width: 405px;
+		button{
+			margin-top: -7px;
+		}
+		width: 402px;
+		height:45px;
 		right: -80px;
 		.tooltip-item{
+			border-radius: 10px;
 			cursor: pointer;
 			&:hover,&.sel{
 				background: @dark-text;
 				color: #fff;
 			}
+		}
+		li{
+			height: 20px;
+			margin-top: -5px;
+			border-top:none;
 		}
 	}
 	&.filter{
@@ -703,12 +713,45 @@ header{
 		height:45px;
 	}
 	&.refine{
-		width:900px;
+		width:720px;
 		max-width: 900px;
+		height: 45px;
 		right: -171px;
 		&:before{
-			left: 190px;
+			left: 85px;
 		} 
+	}
+	&.search-refine{
+		a{
+			border-radius: 10px;
+			padding: 18px 0 0 0;
+			margin-top: -8px;
+			width: 130px;
+			height: 45px;
+			color: @dark-text;
+			display:block;
+			&:hover,&.sel{
+				background: @dark-text;
+				color: #fff;
+			}
+		}
+		span{
+			float: right;
+			margin-top:-10px;
+			display: none;
+		}
+		li{
+			text-align: center;
+			padding:0;
+			margin-top: -5px;
+			min-width:130px;
+			border-top:none;
+			border-right:solid 1px #e6ebf0;
+
+		}
+		button{
+			margin: -5px 0 0 5px;
+		}
 	}
 	&.col-small{
 		max-width: 201px;

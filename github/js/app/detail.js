@@ -274,6 +274,8 @@ callerEvents:function(){
   $(".supplier-scroller").bind("scroll",function(a){context.scrollTab(a);})
   $(".favcontact").bind("click",function(a){context.setFavContact(a);});
   $(".bplus-big").bind("click",function(a){context.showSomething(a);});
+  $("#profile .bcircle").bind("click",function(a){context.setProfile(a);});
+  $(".bmore").bind("click",function(a){context.addElem(a);});
 },
 open: function(a){
   "use strict";
@@ -369,7 +371,46 @@ open: function(a){
     case 'showcontact':
       $(".contact2").addClass('actived');
   }
-},setFav:function(a){
+},setProfile:function(a){
+  var el=$(a.target);
+  if(el.attr("name") === "3"){
+    $("#profile .bcircle").removeClass('sel');
+    el.addClass('sel');
+    $(".sel-factory").removeClass("hide");
+  }
+  else{
+    if(el.hasClass('sel')){
+      $("#profile .bcircle").removeClass('sel');
+    }
+    else{
+      $("#profile .bcircle").removeClass('sel');
+      el.addClass('sel');
+    }
+    $(".sel-factory").addClass("hide");
+  }
+},addElem:function(a){
+  var el=$(a.target),html="",context=this;
+  name=el.attr("name");
+  pos_string=name.indexOf("/")+1;
+  //cod_detalhe=hash.substr(pos_string, hash.length);
+  group=name.substr(0,pos_string-1);
+  html+='<div class="row"><button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bminus" name="'+name+'">'+el.text()+'</button></div>';
+  el.addClass("hide");
+  $("."+group+"-rem").append(html);
+  $(".bminus").bind("click",function(a){context.remElem(a);});
+},
+remElem:function(a){
+  var el=$(a.target),html="";
+  name=el.attr("name");
+  pos_string=name.indexOf("/")+1;
+  //cod_detalhe=hash.substr(pos_string, hash.length);
+  group=name.substr(0,pos_string-1);
+  html+='<div class="row"><button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bmore">'+el.text()+'</button></div>';
+  el.parent().remove();
+  console.log("removeu");
+  $("."+group+"-add").append(html);
+},
+setFav:function(a){
   var i,el=$(a.target),html="";
   console.log(el.hasClass('sel'));
   if(el.hasClass('sel')){
@@ -465,8 +506,20 @@ open: function(a){
         // console.log(this.setDate());
         break;
       case 'profile':
+        var html="",fab="";
         console.log(this.tab);
         console.log(this.lasttab);
+        $("#profile .bcircle.sel").each(function(a,b){
+          if($(b).attr("name") !== "3"){
+             html+="<FAB_COD>0</FAB_COD><PERF_COD>"+$(b).attr("name")+"</PERF_COD><TP_FAB_COD>0</TP_FAB_COD>";
+          }
+          else{
+            html+="<FAB_COD>0</FAB_COD><PERF_COD>"+$(b).attr("name")+"</PERF_COD><TP_FAB_COD>0</TP_FAB_COD>";
+          }
+        });
+        console.log(this.item.FORN_ID);
+        console.dir(this.item);
+        this.callService("GravarFornecedorProfile",'<Forn_ID>'+this.item.FORN_ID+'</Forn_ID>',html);
         break;
       case 'composition':
         console.log(this.tab);
