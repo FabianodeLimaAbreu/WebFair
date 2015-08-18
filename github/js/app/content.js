@@ -284,9 +284,9 @@ window.Box = Spine.Controller.sub({init:function() {
       case "fornecedores":
         var result="",i,status,nome_contato,segmento=[];
         status= a.FORN_STATUS ? "complet":"incomplet";
-        result+="<td><a href='#fornecedores/edit/"+a.FEIR_COD+"'>"+a.FORN_DESC+"</a></td>"+"<td><a href='#fornecedores/edit/"+a.FEIR_COD+"'>"+a.FEIR_DESC+"</a></td>"+"<td><a href='#fornecedores/edit/"+a.FEIR_COD+"'>"+a.CREATE_DATE+"</a></td>";
+        result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.FORN_DESC+"</a></td>"+"<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.FEIR_DESC+"</a></td>"+"<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.CREATE_DATE+"</a></td>";
         if(a.CONTACTS.length){
-          result+="<td><a href='#fornecedores/edit/"+a.FEIR_COD+"'>";
+          result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>";
           for(i=0;i<a.CONTACTS.length;i++){
             if(a.CONTACTS[i].CONT_NOME.length){
               nome_contato=a.CONTACTS[i].CONT_NOME;
@@ -300,14 +300,14 @@ window.Box = Spine.Controller.sub({init:function() {
           result+="</a></td>";
         }
         else{
-          result+="<td><a href='#fornecedores/edit/"+a.FEIR_COD+"'></a></td>";
+          result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'></a></td>";
         }
 
         if(segmento.length){
-          result+="<td><a href='#fornecedores/edit/"+a.FEIR_COD+"'>"+segmento.join("<br/>")+"</a></td>";
+          result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+segmento.join("<br/>")+"</a></td>";
         }
         else{
-          result+="<td><a href='#fornecedores/edit/"+a.FEIR_COD+"'></td>";
+          result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'></td>";
         }
 
         if(a.FAVORITES.length){
@@ -379,6 +379,12 @@ window.Box = Spine.Controller.sub({init:function() {
       case 'local':
         var result="";
         result+="<td>"+a.FEIR_DESC+"</td>"+"<td>"+a.REGI_DESC+"</td>"+"<td>"+a.PAIS_DESC+"</td>"+"<td><a href='#local/edit/"+a.FEIR_COD+"' class='icon floatLeft edit-big'></a></td>";
+        return result;
+        break;
+      case 'template_email':
+        var result="";
+        //result='<td><button type="button" class="caption-icons-icon justit bnote" name="'+a.TEMP_ID+'"></button></td><td>'+a.TEMP_ID+"</td>"+"<td>"+a.SEGM_DESC+"<br/>Assunto</br>"+"Texto"+"</td>"+"<td>"+a.TEMP_DESC+"</br>"+a.TEMP_SUBJECT+"</br>"+a.TEMP_BODY+"</td>"+"<td>"+a.TP_TEMP_DESC+"</br>ITENS PERSONALIZADOS"+"</td>";
+        result='<td><button type="button" class="caption-icons-icon justit bnote" name="'+a.TEMP_ID+'"></button></td><td>'+a.TEMP_ID+"</td>"+"<td>"+a.SEGM_DESC+"</td>"+"<td>"+a.TEMP_DESC+"</td>"+"<td>"+a.TP_TEMP_DESC+"</td>";
         return result;
         break;
       default:

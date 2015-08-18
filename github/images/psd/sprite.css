@@ -1,4 +1,4 @@
-.sprite{ background:url("../images/sprite.png") top left no-repeat; }
+.sprite{ background:url("sprite.png") top left no-repeat; }
 .actions-trash_blue{ width:25px; height:30px; background-position:-10px -10px; }
 .item-edit_big{ width:30px; height:30px; background-position:-10px -50px; }
 .menu-send_receive{ width:40px; height:30px; background-position:-10px -90px; }

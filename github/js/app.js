@@ -141,13 +141,15 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.fornecedores = new Fornecedores({
         getloading:this.proxy(this.getloading),
         setloading:this.proxy(this.setloading),
+        getdata:this.proxy(this.getdata),
         callService:this.proxy(this.callService),
         deleteNote:this.proxy(this.deleteNote),
         getSegm:this.proxy(this.getSegm),
         setSegm:this.proxy(this.setSegm),
         createComponent:this.proxy(this.createComponent),
         setDate:this.proxy(this.setDate),
-        usr:this.usr
+        usr:this.usr,
+        fair:this.fair
       });
 
       this.spotlight = new Spotlight({
@@ -292,9 +294,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         "fornecedores/*func/*code":function(a){
           var context=this;
           this.page ="fornecedor_cadastro";
-          $("html").attr("class","").addClass(this.page);
+          $("html").attr("class","fornecedor_cadastro view_forn");
           $(".zoomContainer").remove();
-          this.writePage(this.page);
+          this.writePage(this.page,a.code);
         },
         "fornecedores/*func":function(a){
           var context=this;
@@ -302,7 +304,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           this.page ="fornecedor_cadastro";
           $("html").attr("class","fornecedor_cadastro add_forn");
           $(".zoomContainer").remove();
-          this.writePage(this.page);
+          this.writePage(this.page,"new");
         },
         "relatorio":function(){
           var context=this;
@@ -330,6 +332,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         "template_email":function(){
           var context=this;
           this.page ="template_email";
+          $("html").attr("class","").addClass(this.page);
           this.writePage(this.page);
         },
         "gestao":function(){
@@ -366,12 +369,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     },
     writePage:function(hash,val){
       var context=this;  
-      if(this.page !== "detail"){
+      if(this.page !== "detail" && this.page !== "fornecedor_cadastro"){
         context.reset();
       }
-      /*if(this.page !== "detail" && !this.scroller){
-        //context.restartValues();
-      }*/
+
       this.container.load("pages/"+hash+".html",function( response, status, xhr){
         switch(context.page){
           case "amostras":
@@ -528,7 +529,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             else{
               context.createComponent(context.fair,context.bfair,'fair');
             }
-            context.fornecedores.reload();
+            context.fornecedores.reload(val);
+            break;
+          case "template_email":
+            //<TP_TEMP_ID>1</TP_TEMP_ID><TEMP_ID>1</TEMP_ID>
+            context.callService("template_email",'','<TEMP_DESC></TEMP_DESC><SEGM_COD></SEGM_COD>');
             break;
           default:
             alert("dssda");
@@ -830,7 +835,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           {
             'name':'GravarFornecedorFavorito',
             'serviceName':'GravarFornecedorFavorito',
-            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFornecedorFavorito xmlns="http://tempuri.org/"><Forn_ID>4200188</Forn_ID><segments><string>ML</string></segments></GravarFornecedorFavorito></soap:Body></soap:Envelope>',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFornecedorFavorito xmlns="http://tempuri.org/">'+a+'<segments>'+b+'</segments></GravarFornecedorFavorito></soap:Body></soap:Envelope>',
             'callback':function(data,req){
               core.setloading(!1);
             }
@@ -838,9 +843,41 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           {
             'name':'GravarFornecedorProfile',
             'serviceName':'GravarFornecedorProfile',
-            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFornecedorProfile xmlns="http://tempuri.org/">'+a+'<profiles><Profile>'+b+'</Profile></profiles></GravarFornecedorProfile></soap:Body></soap:Envelope>',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFornecedorProfile xmlns="http://tempuri.org/">'+a+'<profiles>'+b+'</profiles></GravarFornecedorProfile></soap:Body></soap:Envelope>',
             'callback':function(data,req){
               core.setloading(!1);
+            }
+          },
+          {
+            'name':'GravarFornecedorComposicao',
+            'serviceName':'GravarFornecedorComposicao',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFornecedorComposicao xmlns="http://tempuri.org/">'+a+'<compositions>'+b+'</compositions></GravarFornecedorComposicao></soap:Body></soap:Envelope>',
+            'callback':function(data,req){
+              core.setloading(!1);
+            }
+          },
+          {
+            'name':'GravarFornecedorProduto',
+            'serviceName':'GravarFornecedorProduto',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFornecedorProduto xmlns="http://tempuri.org/">'+a+'<products>'+b+'</products></GravarFornecedorProduto></soap:Body></soap:Envelope>',
+            'callback':function(data,req){
+              core.setloading(!1);
+            }
+          },
+          {
+            'name':'GravarFornecedorMercado',
+            'serviceName':'GravarFornecedorMercado',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFornecedorMercado xmlns="http://tempuri.org/">'+a+'<markets>'+b+'</markets></GravarFornecedorMercado></soap:Body></soap:Envelope>',
+            'callback':function(data,req){
+              core.setloading(!1);
+            }
+          },
+          {
+            'name':'template_email',
+            'serviceName':'listarTemplates',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarEmailTemplates xmlns="http://tempuri.org/">'+a+''+b+'</ListarEmailTemplates></soap:Body></soap:Envelope>',
+            callback:function(data,req){
+              core.convertData(data,req,name);
             }
           },
         ];
@@ -942,6 +979,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           this.content.changeview(this.view);
           this.createbox(this.data, this.content.page, !0);
           break;
+        case 'template':
+          this.data = a.sortBy("TEMP_ID");
+          this.content.changeview("list");
+          this.createbox(this.data, this.content.page, !0,"list");
+          break;
         case 'fornecedores':
           this.data = a.sortBy("FORN_ID");
           this.content.changeview("list");
@@ -977,8 +1019,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             if(!this.fornecedores.item){
               this.fornecedores.item={};
             }
-            console.dir($(req.responseXML).text());
-            console.log(jQuery.parseJSON($(req.responseXML).text()).OBJ_ID);
             //OBJ_ID
             this.fornecedores.item["FORN_ID"]=jQuery.parseJSON($(req.responseXML).text()).OBJ_ID;
           }
@@ -1039,7 +1079,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             break;
           case "listarSegmentos":
             this.setSegm(jQuery.parseJSON($(req.responseXML).text()));//.sortBy('FEIR_DESC').unique();
-            console.dir(this.getSegm);
+            break;
+          case "template_email":
+            this.data=jQuery.parseJSON($(req.responseXML).text());//.sortBy('FEIR_DESC').unique();
+            console.dir(this.data);
+            this.setdata(this.data,"template");
             break;
           default:
         }
@@ -1270,7 +1314,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                     // Mostrando (box sendo carregados)
                     $('.bread-search').find(".spec").text(k+1+" Resultados");
                 } else {
-                  //console.log("list");
                     if (l > 0) {
                         return g = new Box({
                             item : h,
@@ -1649,10 +1692,18 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       if(filter){
         var context=this,itens=[];
         this.data.filter(function(a,b){
-          if(a.AMOS_ID == filter){
-            itens.push(a);
-            itens.push(context.data[b+1]);
-            return itens;
+          if(a.AMOS_ID){
+            if(a.AMOS_ID == filter){
+              itens.push(a);
+              itens.push(context.data[b+1]);
+              return itens;
+            }
+          }
+          else{
+            if(a.FORN_ID == filter){
+              itens.push(a);
+              return itens;
+            }
           }
         });
         return itens;

@@ -129,9 +129,7 @@
                 </ul>
               </div>
               <button type="button" class="icon s-five floatLeft save-date-filter">Ok</button>
-
             </div>
-
           </li>
           <li class="main_opt_item tooltip tooltip-selectable ">
             <button type="button" class="main_opt_button">Faixa de Preços</button>
@@ -165,17 +163,22 @@
             <div class="tooltip-content refine search-refine">
               <div class="filter-area-collum filter-area-top refine">
                 <ul class="filter_list search-refine">
-                  <li><a href="#TECIMENTO" role="1" ng-class="{off:selcount[1].isOff == true}" fb-opensublist="fb-opensublist" class="first unsel">Tecimento</a><span ng-show="selcount[1].show" class="topcount ng-binding ng-hide">0</span></li>
-                  <li><a href="#BASE" role="2" ng-class="{off:selcount[2].isOff == true}" fb-opensublist="fb-opensublist" class="unsel">Base</a><span ng-show="selcount[2].count" class="topcount ng-binding ng-hide">0</span></li>
-                  <li><a href="#GRUPO" role="3" ng-class="{off:selcount[3].isOff == true}" fb-opensublist="fb-opensublist" class="unsel">Grupo</a><span ng-show="selcount[3].count" class="topcount ng-binding ng-hide">0</span></li>
-                  <li><a href="#SGRUPO" role="4" ng-class="{off:selcount[4].isOff == true}" fb-opensublist="fb-opensublist" class="unsel">SubGrupo</a><span ng-show="selcount[4].count" class="topcount ng-binding ng-hide">0</span>
+                  <li class="last-div"><a href="#TECIMENTO" role="1" ng-class="{off:selcount[1].isOff == true}" fb-opensublist="fb-opensublist" class="first unsel">Tecimento</a><span ng-show="selcount[1].show" class="topcount ng-binding ng-hide">0</span></li>
+                  <li class="last-div"><a href="#BASE" role="2" ng-class="{off:selcount[2].isOff == true}" fb-opensublist="fb-opensublist" class="unsel">Base</a><span ng-show="selcount[2].count" class="topcount ng-binding ng-hide">0</span></li>
+                  <li class="last-div"><a href="#GRUPO" role="3" ng-class="{off:selcount[3].isOff == true}" fb-opensublist="fb-opensublist" class="unsel">Grupo</a><span ng-show="selcount[3].count" class="topcount ng-binding ng-hide">0</span></li>
+                  <li class="last-div"><a href="#SGRUPO" role="4" ng-class="{off:selcount[4].isOff == true}" fb-opensublist="fb-opensublist" class="unsel">SubGrupo</a><span ng-show="selcount[4].count" class="topcount ng-binding ng-hide">0</span>
                   </li>
-                  <li><a href="#CMP" role="6" ng-class="{off:selcount[6].isOff == true}" fb-opensublist="fb-opensublist" class="unsel">Composição</a><span ng-show="selcount[6].count" class="topcount ng-binding ng-hide">0</span></li>
+                  <li class="last-div"><a href="#CMP" role="6" ng-class="{off:selcount[6].isOff == true}" fb-opensublist="fb-opensublist" class="unsel">Composição</a><span ng-show="selcount[6].count" class="topcount ng-binding ng-hide">0</span></li>
                 </ul>
                 <button type="button" class="icon s-five floatLeft filter-price">Ok</button>
               </div>
-
-            </div>
+              <div class="tooltip-content sub-refine hide">
+                <ul>
+                  <li><a href="//" class="first unsel">Tecimento</a></li>
+                  <li><a href="//" class="unsel">Base</a></li>
+                </ul>
+              </div>
+            </div> 
           </li>
         </ul>
       </div>
