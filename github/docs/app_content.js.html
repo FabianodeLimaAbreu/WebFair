@@ -223,8 +223,10 @@
 * @constructor
 */
 window.Modal = Spine.Controller.sub({
-  events:{
-    /*"click .bclose":"close" */
+  elements:{
+    ".modal-text":"msg_container", ".modal-cotent":"content",".question":"buttons_container",".question button":"buttons",".modal":"main"
+  },events:{
+    "click .alertclose":"close"
   },
 
   /**
@@ -235,15 +237,29 @@ window.Modal = Spine.Controller.sub({
   close:function(a){
     a.preventDefault();
     this.el.fadeOut('fast');
+    this.content.addClass('hide');
+    this.buttons_container.addClass('hide');
+    this.clean();
+    this.callback &amp;&amp; this.callback();
   },
-  open:function() {
+  //this.modal.open("message","Teste Fabiano",this.teste,!0,!0);
+  open:function(who,msg,call,isbad,isquest) {
+    var a;
+    msg= msg || "";
+    this.content.addClass('hide');
+    $("."+who).removeClass('hide');
+    isbad &amp;&amp; this.main.addClass("bad");
+    isquest &amp;&amp; this.buttons_container.removeClass('hide');
+    this.msg_container.html(msg);
     this.el.fadeIn('fast');
-    $(document).keypress(function(e) { 
-      if (e.keyCode == 27) {
-        $('#modal').fadeOut('fast');
-      }
-    });
+    if(call &amp;&amp; "function" === typeof call)
+      //If d is a function
+      this.callback = call;
   },
+  clean:function(){
+    this.main.find("input").val("");
+    this.main.find("textarea").val("");
+  }
 });
 
 /**
@@ -319,11 +335,14 @@ window.Box = Spine.Controller.sub({init:function() {
   * @param {Boolean} a. If true show mask, else hide mask.
   */
   render:function(a) {
+    var context=this;
     a &amp;&amp; (this.item = a);
     this.html(this.template(this.item));
-    "images" === this.view &amp;&amp; this.el.find(".thumbnail").prepend(this.url);  
+    "images" === this.view &amp;&amp; this.el.find(".thumbnail").prepend(this.url);
+    $(".bstar").unbind("click").bind("click",function(a){context.starForn(a)});
     return this;
-  },setDate:function(list){
+  },
+  setDate:function(list){
     var i,length;
     length=list.length;
     //console.dir(list);
@@ -379,7 +398,7 @@ window.Box = Spine.Controller.sub({init:function() {
   }, list:function(a) {
     switch (this.page){
       case "fornecedores":
-        var result="",i,status,nome_contato,segmento=[];
+        var result="",i,status,nome_contato,segmento=[],middlefav="";
         status= a.FORN_STATUS ? "complet":"incomplet";
         result+="&lt;td>&lt;a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.FORN_DESC+"&lt;/a>&lt;/td>"+"&lt;td>&lt;a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.FEIR_DESC+"&lt;/a>&lt;/td>"+"&lt;td>&lt;a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.CREATE_DATE+"&lt;/a>&lt;/td>";
         if(a.CONTACTS.length){
@@ -408,14 +427,26 @@ window.Box = Spine.Controller.sub({init:function() {
         }
 
         if(a.FAVORITES.length){
-          result+="&lt;td class='tooltip'>&lt;button type='button' class='caption-icons-icon justit bstar has'>&lt;/button>&lt;ul class='tooltip-content col-large'>";
+          for(i=0;i&lt;a.FAVORITES.length;i++){
+            console.log(a.FAVORITES[i].SEGM_COD+" , "+this.segm);
+            if(middlefav === ""){
+              if(a.FAVORITES[i].SEGM_COD === this.segm){
+                middlefav="has";
+              }
+              else{
+                console.log("diferente");
+                middlefav="middle";
+              }
+            }
+          }
+          result+="&lt;td class='tooltip'>&lt;button type='button' class='caption-icons-icon justit bstar "+middlefav+"' name='"+a.FORN_ID+"'>&lt;/button>&lt;ul class='tooltip-content col-large'>";
           for(i=0;i&lt;a.FAVORITES.length;i++){
             result+="&lt;li>&lt;button type='button' class='tooltip-item caption-icons-icon bstar has'>"+a.FAVORITES[i].SEGM_DESC+"&lt;/li>";
           }
           result+="&lt;/ul>&lt;/td>";
         }
         else{
-          result+="&lt;td>&lt;button type='button' class='caption-icons-icon justit bstar nothas'>&lt;/button>&lt;/td>";
+          result+="&lt;td>&lt;button type='button' class='caption-icons-icon justit bstar nothas' name='"+a.FORN_ID+"'>&lt;/button>&lt;/td>";
         }
 
         if(a.NOTES.length){
@@ -451,7 +482,7 @@ window.Box = Spine.Controller.sub({init:function() {
           for(i=0;i&lt;a.NOTES.length;i++){
             result+="&lt;li>&lt;article>&lt;div class='notepad-note blockquote'>&lt;p>"+a.NOTES[i].CREATE_DATE+" | "+ a.NOTES[i].USU_NOME+" | "+a.NOTES[i].OBJ_ID+"&lt;/p>&lt;p>"+a.NOTES[i].SEGM_DESC+" - Assunto:&lt;/p>&lt;p>"+a.NOTES[i].NOTA_DESC+"&lt;/p>&lt;/div>&lt;div class='blockquote'>&lt;button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+a.NOTES[i].NOTA_ID+"' name='"+a.NOTES[i].USU_COD+"'>&lt;/button>&lt;/div>&lt;/article>&lt;/li>"
           }
-          result+="&lt;/ul>&lt;/td>"
+          result+="&lt;/ul>&lt;/td>";
         }
         else{
           result+="&lt;td>&lt;/td>";
@@ -480,8 +511,8 @@ window.Box = Spine.Controller.sub({init:function() {
         break;
       case 'template_email':
         var result="";
-        //result='&lt;td>&lt;button type="button" class="caption-icons-icon justit bnote" name="'+a.TEMP_ID+'">&lt;/button>&lt;/td>&lt;td>'+a.TEMP_ID+"&lt;/td>"+"&lt;td>"+a.SEGM_DESC+"&lt;br/>Assunto&lt;/br>"+"Texto"+"&lt;/td>"+"&lt;td>"+a.TEMP_DESC+"&lt;/br>"+a.TEMP_SUBJECT+"&lt;/br>"+a.TEMP_BODY+"&lt;/td>"+"&lt;td>"+a.TP_TEMP_DESC+"&lt;/br>ITENS PERSONALIZADOS"+"&lt;/td>";
-        result='&lt;td>&lt;button type="button" class="caption-icons-icon justit bnote" name="'+a.TEMP_ID+'">&lt;/button>&lt;/td>&lt;td>'+a.TEMP_ID+"&lt;/td>"+"&lt;td>"+a.SEGM_DESC+"&lt;/td>"+"&lt;td>"+a.TEMP_DESC+"&lt;/td>"+"&lt;td>"+a.TP_TEMP_DESC+"&lt;/td>";
+        result='&lt;td>&lt;button type="button" class="caption-icons-icon justit bnote" name="'+a.TEMP_ID+'">&lt;/button>&lt;/td>&lt;td>'+a.TEMP_ID+"&lt;/td>"+"&lt;td>"+a.SEGM_DESC+"&lt;br/>&lt;div class='template"+a.TEMP_ID+" show-hide hide'>Assunto&lt;/br>"+"Texto"+"&lt;/div>&lt;/td>"+"&lt;td>"+a.TEMP_DESC+"&lt;/br>&lt;div class='template"+a.TEMP_ID+" show-hide hide'>"+a.TEMP_SUBJECT+"&lt;/br>"+a.TEMP_BODY+"&lt;/div>&lt;/td>"+"&lt;td>"+a.TP_TEMP_DESC+"&lt;/br>&lt;div class='template"+a.TEMP_ID+" show-hide hide'>ITENS PERSONALIZADOS"+"&lt;div class='close-size'>&lt;button type='button' class='icon floatLeft s-four edit-temp' alt='list' name='"+a.TEMP_ID+"'>Editar&lt;/button>&lt;button type='button' class='icon floatLeft s-four delete-temp' alt='list' name='"+a.TP_TEMP_ID+"' title='"+a.TEMP_ID+"''>Deletar&lt;/button>&lt;/div>&lt;/div>&lt;/td>";
+        //result='&lt;td>&lt;button type="button" class="caption-icons-icon justit bnote" name="'+a.TEMP_ID+'">&lt;/button>&lt;/td>&lt;td>'+a.TEMP_ID+"&lt;/td>"+"&lt;td>"+a.SEGM_DESC+"&lt;/td>"+"&lt;td>"+a.TEMP_DESC+"&lt;/td>"+"&lt;td>"+a.TP_TEMP_DESC+"&lt;/td>";
         return result;
         break;
       default:
@@ -509,7 +540,7 @@ window.Box = Spine.Controller.sub({init:function() {
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Tue Aug 18th 2015 using the <a
+		on Wed Aug 19th 2015 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>

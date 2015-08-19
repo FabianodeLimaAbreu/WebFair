@@ -33,6 +33,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       ".content":"contentEl",
       "#wrap .mask":"maskEl",
       "#wrap .loader":"loader",
+       ".modal_mask" : "modalEl",
       //".form-control":"searchEl",
       //".right-list button":"viewBtn",
       //"button.close":"closeBtn",
@@ -40,7 +41,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       //".table-container":"viewList",
       /*".viewport":"viewImage",
       ".bread-box":"breadEl",
-      "#modal" : "modalEl",
+     
       ".detail":"detailEl"*/
     },
 
@@ -72,7 +73,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       "click .tooltip-content.status button":"AmosByStatus",
       "click .filter-price":"AmosByPrice",
       "click .thumbnail img":"goDetail",
-      "click .main_opt_button.bemail":"sendEmail"
+      "click .main_opt_button.bemail":"sendEmail",
+      "click .bnote":"toggleTemplate",
+      "click .delete-temp":"deleteTemplate",
+      "change .type":"filterTemplate",      
       /*"submit .search":"submit",
       "click button.icon.go_back_default":"goBack",
       "click button.close":"getOut"*/
@@ -126,7 +130,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         actionHomolog:this.proxy(this.actionHomolog),
         SetItemAmos:this.proxy(this.SetItemAmos),
         callService:this.proxy(this.callService),
-        deleteNote:this.proxy(this.deleteNote)
+        deleteNote:this.proxy(this.deleteNote),
+        addNote:this.proxy(this.addNote)
       });
 
       this.header.addClass("goDown");
@@ -137,6 +142,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       
       this.el.find("#wrap").removeClass("hide");
 
+      this.modal = new Modal({el:this.modalEl});
       this.content = new Content({el:this.contentEl,usr_segm:this.usr.SEGM_COD/*bread:this.breadEl, type:this.usr.TIPO*/});
       this.fornecedores = new Fornecedores({
         getloading:this.proxy(this.getloading),
@@ -532,8 +538,18 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             context.fornecedores.reload(val);
             break;
           case "template_email":
-            //<TP_TEMP_ID>1</TP_TEMP_ID><TEMP_ID>1</TEMP_ID>
-            context.callService("template_email",'','<TEMP_DESC></TEMP_DESC><SEGM_COD></SEGM_COD>');
+            if(!context.fair.length){
+              status=setInterval(function(){
+                if(context.fair.length){
+                  context.ajaxrequest=!1;
+                  context.callService("template_email",'','<TEMP_DESC></TEMP_DESC><SEGM_COD></SEGM_COD>');
+                  clearInterval(status);
+                }
+              },100);
+            }
+            else{
+              context.callService("template_email",'','<TEMP_DESC></TEMP_DESC><SEGM_COD></SEGM_COD>');
+            }
             break;
           default:
             alert("dssda");
@@ -880,6 +896,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               core.convertData(data,req,name);
             }
           },
+          {
+            'name':'gravarTemplate',
+            'serviceName':'gravarTemplate',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarEmailTemplate xmlns="http://tempuri.org/"><template>'+a+''+b+'</template>'+c+'</GravarEmailTemplate></soap:Body></soap:Envelope>',
+            'callback':null
+          },
         ];
 
         $.support.cors=true;
@@ -1082,7 +1104,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             break;
           case "template_email":
             this.data=jQuery.parseJSON($(req.responseXML).text());//.sortBy('FEIR_DESC').unique();
-            console.dir(this.data);
+            this.data=this.data.filter(function(a,b){
+              if(a.SEGM_COD === "JN"){
+                return a;
+              }
+            });
             this.setdata(this.data,"template");
             break;
           default:
@@ -1228,6 +1254,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                             view : c,
                             tag : n,
                             detail : e.detail,
+                            starForn : e.proxy(e.starForn),
+                            segm:e.usr.SEGM_COD,
                             modal : e.modal,
                             page: e.page
                         }), e.active.create(g.render()),$('.bread-search').find(".spec").text(k+1+" Resultados"),l--, k++,!1;
@@ -1321,6 +1349,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                             tag : n,
                             detail : e.detail,
                             modal : e.modal,
+                            starForn : e.proxy(e.starForn),
+                            segm:e.usr.SEGM_COD,
                             page: e.page
                         }), e.active.create(g.render()),$('.bread-search').find(".spec").text(k+1+" Resultados"),l--, k++,!1;
                         //, $('.bread-box').find(".bread-load").text(k+1), l--, k++, !1*/
@@ -1430,6 +1460,59 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.createbox(this.fdata, this.content.page, !0,"list");
       //console.dir(typeof Boolean($(a.target).find("option:selected").val()));
     },
+    starForn:function(ev){
+      var el,i,html="",diff=!1;
+      el=this.data.filter(function(a,b) {
+        if(parseInt(a.FORN_ID) == parseInt($(ev.target).attr('name'))){
+          return a;
+        }
+      });
+      if(el.length){
+        if($(ev.target).hasClass('has')){
+          console.log("entrou has");
+          for(i=0;i<el[0].FAVORITES.length;i++){
+            if(el[0].FAVORITES[i].SEGM_COD !== this.usr.SEGM_COD){
+              console.log("diferente");
+              html+="<string>"+el[0].FAVORITES[i].SEGM_COD+"</string>";
+              diff=!0;
+            }
+            else{
+              console.log("igual");
+              if(el[0].FAVORITES[i].length >=1){
+                console.log("mais que 1");
+                diff=!0;
+              }
+              else{
+                diff=!1;
+              }
+            }
+          }
+          if(diff){
+            $(ev.target).removeClass('nothas').removeClass('has').addClass('middle');
+          }
+          else{
+            $(ev.target).removeClass('middle').removeClass('has').addClass('nothas');
+          }
+        }
+
+        else if($(ev.target).hasClass('middle')){
+          console.log("middle");
+          for(i=0;i<el[0].FAVORITES.length;i++){
+            html+="<string>"+el[0].FAVORITES[i].SEGM_COD+"</string>";
+          }
+          html+="<string>"+this.usr.SEGM_COD+"</string>";
+          $(ev.target).removeClass('nothas').removeClass('middle').addClass('has');
+        }
+        else{
+          console.log("nova");
+          html+="<string>"+this.usr.SEGM_COD+"</string>";
+          $(ev.target).removeClass('nothas').removeClass('middle').addClass('has');
+        }
+    }
+
+      this.callService("GravarFornecedorFavorito","<Forn_ID>"+parseInt($(ev.target).attr("name"))+"</Forn_ID>",html);
+
+    },
     AmosByStatus:function(ev){
       var aux;
       aux=this.data;
@@ -1485,6 +1568,56 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         return !1;
       }
       alert("Enviar email para: "+this.select_items.join(" , "));
+    },
+    toggleTemplate:function(a){
+      console.dir($(".template"+$(a.target).attr("name")));
+      if(!$(a.target).hasClass('sel')){
+        $(".show-hide").addClass('hide');
+        $(".bnote").removeClass('sel');
+        $(a.target).addClass('sel');
+        $(".template"+$(a.target).attr("name")).removeClass('hide');
+      }
+      else{
+        $(a.target).removeClass('sel');
+        $(".show-hide").addClass('hide');
+      }
+    },
+    deleteTemplate:function(a){
+      this.callService("gravarTemplate","<TEMP_ID>"+$(a.target).attr('title')+"</TEMP_ID>","<TP_TEMP_ID>"+$(a.target).attr('name')+"</TP_TEMP_ID>","<action>D</action>");
+      $(a.target).closest('tr').remove();
+    },
+    filterTemplate:function(ev){
+      //console.dir();
+      var aux,val;
+      val=$(ev.target).find("option:selected").val();
+      aux=this.data;
+      this.reset();
+
+      if(!val.length){
+        console.dir(this.data); 
+        this.fdata=aux;
+      }
+      else{
+        this.fdata = aux.filter(function(a,b){
+          if(parseInt(a.TP_TEMP_ID) === parseInt(val)){
+            return a;
+          }
+        });
+      }
+      
+      if(!this.fdata.length){
+        alert("NENHUM ITEM !!!");
+        return !1;
+      }
+      this.data=aux;
+      this.createbox(this.fdata, this.content.page, !0,"list");
+      //country=$(".countries").find("option:selected").val();
+    },
+    addNote:function(){
+      this.modal.open("notebook","Mensage,",!1,!1,!0);
+    },
+    teste:function(){
+      alert("erro");
     },
     compChange:function(ev){
       ev.preventDefault();

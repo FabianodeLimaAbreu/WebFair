@@ -126,8 +126,10 @@ window.Spotlight = Spine.Controller.sub({
 * @constructor
 */
 window.Modal = Spine.Controller.sub({
-  events:{
-    /*"click .bclose":"close" */
+  elements:{
+    ".modal-text":"msg_container", ".modal-cotent":"content",".question":"buttons_container",".question button":"buttons",".modal":"main"
+  },events:{
+    "click .alertclose":"close"
   },
 
   /**
@@ -138,15 +140,29 @@ window.Modal = Spine.Controller.sub({
   close:function(a){
     a.preventDefault();
     this.el.fadeOut('fast');
+    this.content.addClass('hide');
+    this.buttons_container.addClass('hide');
+    this.clean();
+    this.callback && this.callback();
   },
-  open:function() {
+  //this.modal.open("message","Teste Fabiano",this.teste,!0,!0);
+  open:function(who,msg,call,isbad,isquest) {
+    var a;
+    msg= msg || "";
+    this.content.addClass('hide');
+    $("."+who).removeClass('hide');
+    isbad && this.main.addClass("bad");
+    isquest && this.buttons_container.removeClass('hide');
+    this.msg_container.html(msg);
     this.el.fadeIn('fast');
-    $(document).keypress(function(e) { 
-      if (e.keyCode == 27) {
-        $('#modal').fadeOut('fast');
-      }
-    });
+    if(call && "function" === typeof call)
+      //If d is a function
+      this.callback = call;
   },
+  clean:function(){
+    this.main.find("input").val("");
+    this.main.find("textarea").val("");
+  }
 });
 
 /**
@@ -222,11 +238,14 @@ window.Box = Spine.Controller.sub({init:function() {
   * @param {Boolean} a. If true show mask, else hide mask.
   */
   render:function(a) {
+    var context=this;
     a && (this.item = a);
     this.html(this.template(this.item));
-    "images" === this.view && this.el.find(".thumbnail").prepend(this.url);  
+    "images" === this.view && this.el.find(".thumbnail").prepend(this.url);
+    $(".bstar").unbind("click").bind("click",function(a){context.starForn(a)});
     return this;
-  },setDate:function(list){
+  },
+  setDate:function(list){
     var i,length;
     length=list.length;
     //console.dir(list);
@@ -282,7 +301,7 @@ window.Box = Spine.Controller.sub({init:function() {
   }, list:function(a) {
     switch (this.page){
       case "fornecedores":
-        var result="",i,status,nome_contato,segmento=[];
+        var result="",i,status,nome_contato,segmento=[],middlefav="";
         status= a.FORN_STATUS ? "complet":"incomplet";
         result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.FORN_DESC+"</a></td>"+"<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.FEIR_DESC+"</a></td>"+"<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.CREATE_DATE+"</a></td>";
         if(a.CONTACTS.length){
@@ -311,14 +330,26 @@ window.Box = Spine.Controller.sub({init:function() {
         }
 
         if(a.FAVORITES.length){
-          result+="<td class='tooltip'><button type='button' class='caption-icons-icon justit bstar has'></button><ul class='tooltip-content col-large'>";
+          for(i=0;i<a.FAVORITES.length;i++){
+            console.log(a.FAVORITES[i].SEGM_COD+" , "+this.segm);
+            if(middlefav === ""){
+              if(a.FAVORITES[i].SEGM_COD === this.segm){
+                middlefav="has";
+              }
+              else{
+                console.log("diferente");
+                middlefav="middle";
+              }
+            }
+          }
+          result+="<td class='tooltip'><button type='button' class='caption-icons-icon justit bstar "+middlefav+"' name='"+a.FORN_ID+"'></button><ul class='tooltip-content col-large'>";
           for(i=0;i<a.FAVORITES.length;i++){
             result+="<li><button type='button' class='tooltip-item caption-icons-icon bstar has'>"+a.FAVORITES[i].SEGM_DESC+"</li>";
           }
           result+="</ul></td>";
         }
         else{
-          result+="<td><button type='button' class='caption-icons-icon justit bstar nothas'></button></td>";
+          result+="<td><button type='button' class='caption-icons-icon justit bstar nothas' name='"+a.FORN_ID+"'></button></td>";
         }
 
         if(a.NOTES.length){
@@ -354,7 +385,7 @@ window.Box = Spine.Controller.sub({init:function() {
           for(i=0;i<a.NOTES.length;i++){
             result+="<li><article><div class='notepad-note blockquote'><p>"+a.NOTES[i].CREATE_DATE+" | "+ a.NOTES[i].USU_NOME+" | "+a.NOTES[i].OBJ_ID+"</p><p>"+a.NOTES[i].SEGM_DESC+" - Assunto:</p><p>"+a.NOTES[i].NOTA_DESC+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+a.NOTES[i].NOTA_ID+"' name='"+a.NOTES[i].USU_COD+"'></button></div></article></li>"
           }
-          result+="</ul></td>"
+          result+="</ul></td>";
         }
         else{
           result+="<td></td>";
@@ -383,8 +414,8 @@ window.Box = Spine.Controller.sub({init:function() {
         break;
       case 'template_email':
         var result="";
-        //result='<td><button type="button" class="caption-icons-icon justit bnote" name="'+a.TEMP_ID+'"></button></td><td>'+a.TEMP_ID+"</td>"+"<td>"+a.SEGM_DESC+"<br/>Assunto</br>"+"Texto"+"</td>"+"<td>"+a.TEMP_DESC+"</br>"+a.TEMP_SUBJECT+"</br>"+a.TEMP_BODY+"</td>"+"<td>"+a.TP_TEMP_DESC+"</br>ITENS PERSONALIZADOS"+"</td>";
-        result='<td><button type="button" class="caption-icons-icon justit bnote" name="'+a.TEMP_ID+'"></button></td><td>'+a.TEMP_ID+"</td>"+"<td>"+a.SEGM_DESC+"</td>"+"<td>"+a.TEMP_DESC+"</td>"+"<td>"+a.TP_TEMP_DESC+"</td>";
+        result='<td><button type="button" class="caption-icons-icon justit bnote" name="'+a.TEMP_ID+'"></button></td><td>'+a.TEMP_ID+"</td>"+"<td>"+a.SEGM_DESC+"<br/><div class='template"+a.TEMP_ID+" show-hide hide'>Assunto</br>"+"Texto"+"</div></td>"+"<td>"+a.TEMP_DESC+"</br><div class='template"+a.TEMP_ID+" show-hide hide'>"+a.TEMP_SUBJECT+"</br>"+a.TEMP_BODY+"</div></td>"+"<td>"+a.TP_TEMP_DESC+"</br><div class='template"+a.TEMP_ID+" show-hide hide'>ITENS PERSONALIZADOS"+"<div class='close-size'><button type='button' class='icon floatLeft s-four edit-temp' alt='list' name='"+a.TEMP_ID+"'>Editar</button><button type='button' class='icon floatLeft s-four delete-temp' alt='list' name='"+a.TP_TEMP_ID+"' title='"+a.TEMP_ID+"''>Deletar</button></div></div></td>";
+        //result='<td><button type="button" class="caption-icons-icon justit bnote" name="'+a.TEMP_ID+'"></button></td><td>'+a.TEMP_ID+"</td>"+"<td>"+a.SEGM_DESC+"</td>"+"<td>"+a.TEMP_DESC+"</td>"+"<td>"+a.TP_TEMP_DESC+"</td>";
         return result;
         break;
       default:

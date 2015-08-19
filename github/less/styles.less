@@ -76,7 +76,7 @@ body{
 		}
 	}	*/
 }
-.mask{
+.mask,.modal_mask{
 	position: fixed;
 	left: 0;
 	top: 0;
@@ -447,19 +447,18 @@ header{
 		top: 12px;
 	}
 	&.bselect{
-		&:after{
-			position: absolute;
-			left: 15px;
-			top: 5px;
-			content: "";
-			display: block;
-			background: #fff url(../images/sprite.png);
-			width: 15px;
-			height: 15px;
-			background-position:-29px -1383px;
-			border: 1px solid #e5ecef;
-			border-radius: 50%;
-			padding: 14px;
+		span{
+			cursor: default;
+			float: left;
+			margin: 4px 0 0 -45px;
+    		padding: 6px 0 0 1px;
+    		&.icon.bselection:hover{
+    			background-color: #fff;
+				&:after{
+					.item_select;
+					width:25px;
+				}
+    		}
 		}
 	}
 	&.bannex-leg{
@@ -2275,7 +2274,7 @@ form.search{
 }
 // ******************************** alert note and question **************************************
 
-.question-note{
+.modal{
 	width:400px;
 	height:280px;
 	border-radius: 3px;
@@ -2286,6 +2285,19 @@ form.search{
 	margin-left: -200px;
 	top:50%;
 	margin-top: -140px;
+	button{
+		float: left;
+		width: 100px;
+		height: 30px;
+		border-radius: 15px;
+		color: white;
+		border: none;
+		background-color: @buttons;
+		margin: 10px 10px;
+		&:hover{
+			background-color: @dark-text;
+		}
+	}
 	.alertclose{
 		cursor:pointer;
 		border: none;
@@ -2293,8 +2305,12 @@ form.search{
 		.x;
 		margin: 10px 10px 0 0;
 		float: right;
+		&:hover{
+				background-color: white;
+		}
 	}
-	.question{
+	
+	.message{
 		border: none;
 		float: left;
 		width: 100%;
@@ -2318,19 +2334,6 @@ form.search{
 			float: left;
 			width:240px;
 			margin:10px 0 0 80px; 
-			button{
-				border: none;
-				color: white;
-				float: left;
-				width: 100px;
-				height:30px;
-				border-radius: 15px;
-				background-color: @buttons;
-				margin: 10px 10px;
-				&:hover{
-					background-color: @dark-text;
-				}
-			}
 		}
 	}
 	&.bad{
@@ -2343,11 +2346,39 @@ form.search{
 		div{
 			button{
 				background-color: #fc6634;
+				&:hover{
+					background-color: @dark-text;
+				}
 			}
 		}
 	}
 	.note{
-		
+		textarea,input{
+			padding: 10px 10px;
+			color:#8e8e93;
+			width:380px;
+			height:180px;
+			margin:10px 0 0 10px;
+			border-radius: 15px;
+			border: solid 1px #e3eaee;
+			background-color: @light-text;
+		}
+		input{
+			height:30px;
+		}
+		button{
+			float:right;
+		}
+		p{
+			width: 100%;
+			text-align: center;
+			margin: 15px 0 0 20px;
+		}
+	}
+	.dialog{
+		textarea{
+			height:140px;
+		}
 	}
 }
 

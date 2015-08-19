@@ -222,7 +222,8 @@ open: function(a){
   }
   this.reload(this.nextsample.FEIR_COD,this.nextsample.AMOS_ID);
 },plusNote:function(){
-  this.callService("gravarNotes");
+  this.addNote();
+  //this.callService("gravarNotes");
 },reload:function(fair,code) {
   "use strict";
   var result;

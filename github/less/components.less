@@ -43,9 +43,25 @@
 			right: 20px;
 			.sprite;
 			.other-go_top;
+			margin: 1px -8px 0 10px;
 		}
 	}
-	&.delete{
+	&.finishit{
+		float: right;
+		&:after{
+			content: "";
+			display: inline-block;
+			position: relative;
+			float: right;
+			text-align: center;
+			top: -1px;
+			right: 20px;
+			.sprite;
+			.check;
+			margin: 3px -8px 0 10px;
+		}
+	}
+	&.delete, &.delete-temp{
 		line-height: 30px;
 		text-align: right;
 		padding-right: 30px;
@@ -92,7 +108,7 @@
 			right: 5px;
 		}
 	}
-	&.edit{
+	&.edit, &.edit-temp{
 		line-height: 24px;
 		text-align: right;
 		padding-right: 30px;
@@ -105,6 +121,13 @@
 			margin-right: 5px;
 			top: 4px;
 			left: -4px;
+		}
+	}
+	&.edit-temp{
+		&:before{
+			.sprite;
+			.actions-edit;
+			margin: 0 36px 0 0;
 		}
 	}
 	&.edit-big{
@@ -137,6 +160,11 @@
 		 	display: block;
 		 	position: relative;
 		 	content: "";
+		 }
+		 &.sel{
+		 	&:after{
+			 	.actions-fav-big_selected;
+			 }
 		 }
 	}
 	&.trash-big{
@@ -424,6 +452,11 @@
 		&.nothas{
 			&:after{
 				.item-not_fav;
+			}
+		}
+		&.middle{
+			&:after{
+				.item-middle_fav;
 			}
 		}
 	}

@@ -58,7 +58,7 @@
                     <p class="tooltip-item caption-icons-icon bedit_mini">Editar</p>
                   </li>
                   <li>
-                    <p class="tooltip-item bselect">Selecionar</p>
+                    <p class="tooltip-item bselect"><span class="icon bselection"></span>Selecionar</p>
                   </li>
                   <li>
                     <p class="tooltip-item caption-icons-icon bsend_receive">Enviar e Receber</p>
@@ -114,27 +114,31 @@
         <img src="images/loader.gif" class="loader">
       </div>
       
-        <div class="question-note">
+      <div class="modal_mask">
+        <div class="modal">
           <button class="alertclose" type=""></button>
-          <div class="question hide">
-            <span class="question"></span>
-            <p>Loren ipsum loren ipsum ipsum loren ipsum loren ipsum ipsum loren ipsum ipsum loren ipsum ipsum loren</p>
-            <div>
-            <button type="">Sim</button>
-            <button type="">Não</button>
+          <div class="modal-cotent message hide">
+            <span></span>
+            <p class="modal-text">Loren ipsum loren ipsum ipsum loren ipsum loren ipsum ipsum loren ipsum ipsum loren ipsum ipsum loren</p>
+            <div class="question hide">
+              <button type="button" name="yes">Sim</button>
+              <button type="button" name="no">Não</button>
             </div>
           </div>
-          <div class="question bad">
-            <span class="question"></span>
-            <p>Loren ipsum loren ipsum ipsum loren ipsum loren ipsum ipsum loren ipsum ipsum loren ipsum ipsum loren</p>
-            <div>
-            <button type="">Sim</button>
-            <button type="">Não</button>
-            </div>
+          <div class="modal-cotent note notebook hide">
+            <p>Anotações</p>
+            <textarea type="text" name="Anotações" rows="4" cols="50" placeholder="Insira sua anotação..."></textarea>
+            <button type="">Salvar</button>
+          </div>
+          <div class="modal-cotent note dialog hide">
+            <p>E-mail</p>
+            <input placeholder="Assunto">
+            <textarea type="text" name="Anotações" rows="4" cols="50" placeholder="Mensagem..."></textarea>
+            <button type="">Enviar</button>
           </div>
         </div>
       </div>
-    
+      
     <script src="js/lib/jquery-1.10.1.min.js"></script>
     <script src="js/lib/spine/min.js"></script>
     <script src="js/lib/require-jquery.js" data-main="js/app"></script>
