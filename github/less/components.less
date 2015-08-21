@@ -47,6 +47,7 @@
 		}
 	}
 	&.finishit{
+		margin-top: 20px;
 		float: right;
 		&:after{
 			content: "";
@@ -74,6 +75,15 @@
 			margin-right: 5px;
 			top: 4px;
 			left: -4px;
+		}
+	}
+	&.delete-temp{
+		width:110px;
+		margin-bottom: 10px;
+		&:before{
+			.sprite;
+			.actions-trash;
+			margin: 0 7px 0 0;
 		}
 	}
 	&.bgoselect{
@@ -124,10 +134,13 @@
 		}
 	}
 	&.edit-temp{
+		margin-right: 10px;
+		margin-bottom: 10px;
+		width:110px;
 		&:before{
 			.sprite;
 			.actions-edit;
-			margin: 0 36px 0 0;
+			margin: 0 11px 0 0;
 		}
 	}
 	&.edit-big{

@@ -81,8 +81,8 @@
                 </ul>
               </a>
             </li>
-            <li class="menu-item"><a href="#gestao" class="bmenu-settings">Configurações</a></li>
-            <li class="menu-item"><a href="#send_receive" class="bmenu-send_receive">Enviar/Receber</a></li>
+            <!--<li class="menu-item"><a href="#gestao" class="bmenu-settings">Configurações</a></li>
+            <li class="menu-item"><a href="#send_receive" class="bmenu-send_receive">Enviar/Receber</a></li>-->
             <li class="menu-item"><a href="./login.html" class="bmenu-logoff">Sair</a></li>
           </ul>
         </div>
@@ -90,7 +90,7 @@
           <div class="nav-container">
             <nav>
               <ul class="nav-menu">
-                <li><a href="#relatorio">Gerar<br/>Relatório</a></li>
+                <!--<li><a href="#relatorio">Gerar<br/>Relatório</a></li>-->
                 <li><a href="#local">Local da<br/>Coleta</a></li>
                 <li><a href="#fornecedores">Fornecedor<br/>e Contato</a></li>
                 <li><a href="#amostras" class="amostras">Amostras</a></li>
@@ -113,7 +113,6 @@
       <div ng-show="maskshow" class="mask"> 
         <img src="images/loader.gif" class="loader">
       </div>
-      
       <div class="modal_mask">
         <div class="modal">
           <button class="alertclose" type=""></button>
@@ -128,13 +127,39 @@
           <div class="modal-cotent note notebook hide">
             <p>Anotações</p>
             <textarea type="text" name="Anotações" rows="4" cols="50" placeholder="Insira sua anotação..."></textarea>
-            <button type="">Salvar</button>
+            <button type="button" class="dialog-save" name="isnote">Salvar</button>
           </div>
           <div class="modal-cotent note dialog hide">
             <p>E-mail</p>
-            <input placeholder="Assunto">
-            <textarea type="text" name="Anotações" rows="4" cols="50" placeholder="Mensagem..."></textarea>
-            <button type="">Enviar</button>
+            <input type="text" placeholder="Descrição" name="TEMP_DESC">
+            <input type="text" placeholder="Assunto" name="TEMP_SUBJECT">
+            <textarea type="text" name="TEMP_BODY" rows="4" cols="50" placeholder="Mensagem..."></textarea>
+            <button type="button" class="dialog-save" name="istemp">Enviar</button>
+          </div>
+          <div class="modal-cotent note template hide">
+            <p>Enviar por E-mail</p><br>
+            <table id="table" class="table-striped sample">
+                <thead>
+                  <tr>
+                    <th>Descrição</th>
+                    <th>Tipo</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>FORNECEDOR NOVO - Solicitar envio de HANGERS</td>
+                    <td>Cotação</td>
+                  </tr>
+                  <tr>
+                    <td>FORNECEDOR NOVO - Solicitar envio de HANGERS</td>
+                    <td>Cotação</td>
+                  </tr>
+                  <tr>
+                    <td>FORNECEDOR NOVO - Solicitar envio de HANGERS</td>
+                    <td>Cotação</td>
+                  </tr>
+                </tbody>
+              </table>
           </div>
         </div>
       </div>

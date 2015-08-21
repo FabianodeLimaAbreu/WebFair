@@ -76,7 +76,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       "click .main_opt_button.bemail":"sendEmail",
       "click .bnote":"toggleTemplate",
       "click .delete-temp":"deleteTemplate",
-      "change .type":"filterTemplate",      
+      "click .edit-temp":"editTemplate",
+      "change .type":"filterTemplate",  
+      "click .newtemp":"newTemplate"    
       /*"submit .search":"submit",
       "click button.icon.go_back_default":"goBack",
       "click button.close":"getOut"*/
@@ -96,13 +98,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.itens_page_default=this.itens_by_page;
       this.ajaxrequest=!1;
       console.log("INIT DA APP");
-      this.cookiefair={};
+      this.cookiefair=[];
 
       //Var to storage the basic data
       this.fair=[];
       this.ffair=[];
       this.cities=[];
       this.forn=[];
+      this.email=[];
       this.segm=[];
       this.select_items=[];
       this.fairval="";
@@ -119,6 +122,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.father=!0;
       this.searchname="";*/
       this.breadarr = [];
+      this.usr = jQuery.parseJSON($.cookie("webfair"));
+      if(!this.usr)
+        window.location.href = 'login.html';
       //this.modal = new Modal({el:this.modalEl});
       this.detail = new Detail({
         getloading:this.proxy(this.getloading),
@@ -131,18 +137,16 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         SetItemAmos:this.proxy(this.SetItemAmos),
         callService:this.proxy(this.callService),
         deleteNote:this.proxy(this.deleteNote),
-        addNote:this.proxy(this.addNote)
+        usr:this.usr
       });
 
       this.header.addClass("goDown");
-      this.usr = jQuery.parseJSON($.cookie("webfair"));
-      if(!this.usr)
-        window.location.href = 'login.html';
+      
       this.username.text(this.usr.USU_NOME);
       
       this.el.find("#wrap").removeClass("hide");
 
-      this.modal = new Modal({el:this.modalEl});
+      this.modal = new Modal({el:this.modalEl,callService:this.proxy(this.callService),usr:this.usr,getPage:this.proxy(this.getPage)});
       this.content = new Content({el:this.contentEl,usr_segm:this.usr.SEGM_COD/*bread:this.breadEl, type:this.usr.TIPO*/});
       this.fornecedores = new Fornecedores({
         getloading:this.proxy(this.getloading),
@@ -191,25 +195,39 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           var a,b,c;
           console.log("ok");
           $(".zoomContainer").remove();
-          //cookiefair=jQuery.parseJSON($.cookie("posscroll"));
 
-          this.cookiefair=jQuery.parseJSON($.cookie("posscroll"));
+          /*if(!this.cookiefair.length){
+            this.cookiefair.push(jQuery.parseJSON($.cookie("posscroll")));
+          }*/
+          if(!this.cookiefair.length){
+            if(jQuery.parseJSON($.cookie("posscroll"))){
+              console.log("ok2");
+              console.dir(jQuery.parseJSON($.cookie("posscroll")));
+              console.dir(this.cookiefair);
+              this.cookiefair.push(jQuery.parseJSON($.cookie("posscroll")));
+            }
+            else{
+              this.cookiefair.push({"fairval":0,"fornval":0,"amosval":0});
+            }
+          }
           this.fairval = a=res.fairval !== "padrao" ? parseInt(res.fairval) : ""; 
           this.fornval = b=res.fornval !== "padrao" ? res.fornval.replace("_"," ").replace("_"," ").replace("_"," ") : "";
           this.amosval = c=res.amosval !== "padrao" ? res.amosval.replace("_"," ").replace("_"," ").replace("_"," ") : ""; 
-          if(this.cookiefair){
-            //console.log(a+" , "+this.cookiefair.fairval+" / "+(a == this.cookiefair.fairval));
-            if(a == this.cookiefair.fairval && b === this.cookiefair.fornval  && c === this.cookiefair.amosval ){
+          console.dir(this.cookiefair);
+          if(this.cookiefair.length){
+            //console.log(a+" , "+this.cookiefair[0].fairval+" / "+(a == this.cookiefair[0].fairval));
+            //console.dir(this.cookiefair);
+            if(a == this.cookiefair[0].fairval && b === this.cookiefair[0].fornval  && c === this.cookiefair[0].amosval ){
               console.log("bateu parametros do cookie");
-              this.initialTime=this.cookiefair.initialTime;
-              this.endTime=this.cookiefair.endTime;
+              this.initialTime=this.cookiefair[0].initialTime;
+              this.endTime=this.cookiefair[0].endTime;
             }
             else{
               console.log("NÃO bateu parametros do cookie");
-              this.cookiefair={};
+              this.cookiefair=[];
               $.removeCookie('posscroll', { path: '/' });
             }
-          } 
+          }
           if(parseInt(b)){
             b="<FORN_ID>"+b+"</FORN_ID>";
           }
@@ -247,23 +265,33 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         },
         "fornecedores/*fairval/*fornval/*amosval":function(res){
           var a,b,c;
+          console.log("ok");
           $(".zoomContainer").remove();
           //cookiefair=jQuery.parseJSON($.cookie("posscroll"));
 
-          this.cookiefair=jQuery.parseJSON($.cookie("posscroll"));
+          if(!this.cookiefair.length){
+            if(jQuery.parseJSON($.cookie("posscroll"))){
+              console.log("ok2");
+              console.dir(jQuery.parseJSON($.cookie("posscroll")));
+              console.dir(this.cookiefair);
+              this.cookiefair.push(jQuery.parseJSON($.cookie("posscroll")));
+            }
+            else{
+              this.cookiefair.push({"fairval":0,"fornval":0,"amosval":0});
+            }
+          }
           this.fairval = a=res.fairval !== "padrao" ? parseInt(res.fairval) : ""; 
           this.fornval = b=res.fornval !== "padrao" ? res.fornval.replace("_"," ").replace("_"," ").replace("_"," ") : "";
           this.amosval = c=res.amosval !== "padrao" ? res.amosval.replace("_"," ").replace("_"," ").replace("_"," ") : ""; 
-          if(this.cookiefair){
-            //console.log(a+" , "+this.cookiefair.fairval+" / "+(a == this.cookiefair.fairval));
-            if(a == this.cookiefair.fairval && b === this.cookiefair.fornval  && c === this.cookiefair.amosval ){
+          if(this.cookiefair.length){
+            if(a == this.cookiefair[0].fairval && b === this.cookiefair[0].fornval  && c === this.cookiefair[0].amosval ){
               console.log("bateu parametros do cookie");
-              this.initialTime=this.cookiefair.initialTime;
-              this.endTime=this.cookiefair.endTime;
+              this.initialTime=this.cookiefair[0].initialTime;
+              this.endTime=this.cookiefair[0].endTime;
             }
             else{
               console.log("NÃO bateu parametros do cookie");
-              this.cookiefair={};
+              this.cookiefair=[];
               $.removeCookie('posscroll', { path: '/' });
             }
           } 
@@ -618,7 +646,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     },
     submitDateFilter:function(a){
       if(!this.fairval){
-        alert("selecione pelo menos a feira!");
+        this.modal.open("message","Selecione ao menos uma feira para filtrar!!!",!1,!0);
         return !0;
       }
       this.reset();
@@ -681,18 +709,22 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.callService("gravarAmostras",pattern,html,'U');
     },
     selectItem:function(a){
+      var context=this;
       a.preventDefault();
       if($(a.target).hasClass("sel")){
         this.select_items = this.select_items.filter(function(element,i){
-           return element !== $(a.target).attr("name");
+           return element.AMOS_ID !== parseInt($(a.target).attr("name"));
         });
       }
       else{
-        this.select_items.push($(a.target).attr("name"));
+        console.log("aqui");
+        this.data.filter(function(element,i){
+          if(element.AMOS_ID === parseInt($(a.target).attr("name"))){
+            context.select_items.push({"AMOS_ID":parseInt(element.AMOS_ID),"AMOS_DESC":element.AMOS_DESC,"FORN_ID":element.FORN_ID,"FORN_DESC":element.FORN_DESC});
+          }
+        });
       }
       $(a.target).toggleClass("sel");
-
-
       if($(a.target).hasClass("bselection-edit")){
         this.action_name="edit";
       }
@@ -780,7 +812,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             'serviceName':'GravarFeira',
             'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFeira xmlns="http://tempuri.org/"><fair>'+a+'</fair><action>'+b+'</action></GravarFeira></soap:Body></soap:Envelope>',
             callback:function(data,req){
-              alert("gravou no banco");
+              this.modal.open("message","Local Salvo com Sucesso!!!",!1,!0);
               //core.convertData(data,req,name);
               window.location.reload();
             }
@@ -793,6 +825,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               if(core.notcombo){
                 core.convertData(data,req,name,!0);
               }
+              core.convertData(data,req,name);
+            }
+          },
+          {
+            'name':'email_fornecedor',
+            'serviceName':'ListarFornecedores',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedores xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+''+e+''+f+'</ListarFornecedores></soap:Body></soap:Envelope>',
+            callback:function(data,req){
               core.convertData(data,req,name);
             }
           },
@@ -815,8 +855,17 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           {
             'name':'gravarNotes',
             'serviceName':'GravarAnotacao',
-            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarAnotacao xmlns="http://tempuri.org/"><note><NOTA_ID>0</NOTA_ID><OBJ_ID>200000101</OBJ_ID><TP_NOTA_ID>2</TP_NOTA_ID><USU_COD>37</USU_COD><PLAT_ID>2</PLAT_ID><NOTA_DESC>Teste de Anotação2</NOTA_DESC><CREATE_DATE>2015-07-10</CREATE_DATE></note><action>I</action></GravarAnotacao></soap:Body></soap:Envelope>',
-            'callback':null
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarAnotacao xmlns="http://tempuri.org/"><note><NOTA_ID>0</NOTA_ID>'+a+'<PLAT_ID>2</PLAT_ID>'+b+'</note><action>I</action></GravarAnotacao></soap:Body></soap:Envelope>',
+            'callback':function(){
+              switch (core.page){
+                case "detail":
+                  core.detail.writeNote();
+                  break;
+                case "fornecedor_cadastro":
+                  core.fornecedores.writeNote();
+                  break;
+              }    
+            }
           },
           {
             'name':'gravarAmostraComposicao',
@@ -900,7 +949,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             'name':'gravarTemplate',
             'serviceName':'gravarTemplate',
             'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarEmailTemplate xmlns="http://tempuri.org/"><template>'+a+''+b+'</template>'+c+'</GravarEmailTemplate></soap:Body></soap:Envelope>',
-            'callback':null
+            'callback':function(data,req){
+              console.log(core.ajaxrequest);
+              core.modal.close(core.page);
+            }
           },
         ];
 
@@ -992,7 +1044,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       
 
       if (!this.data.length && b !="local") {        
-        return alert("NENHUMA AMOSTRA***"), $('.bread-search').find(".spec").text("0 Resultados");
+        return this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0), $('.bread-search').find(".spec").text("0 Resultados");
         //return this.modal.open(),this.breadEl.find('.bread-colec a').text("").removeClass('active'),this.setloading(!1), this.searchEl.find('input').blur();
       }  
       switch(b){
@@ -1034,15 +1086,28 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             
     },
     callRequest:function(data, status, req){
+        var query;
         this.ajaxrequest=!1;
         this.fornecedores.ajaxrequest=!1;
         if (status == "success") {
           if(this.page === "fornecedor_cadastro" && jQuery.parseJSON($(req.responseXML).text()).OBJ_ID){
-            if(!this.fornecedores.item){
-              this.fornecedores.item={};
+            console.log("salvou: "+jQuery.parseJSON($(req.responseXML).text()).OBJ_ID);
+            query=data.URL.replace("http://192.168.10.100/WebService.asmx?op=","");
+            console.log(query === "GravarAnotacao");
+            if(query === "GravarFornecedor"){
+              if(!this.fornecedores.item){
+                this.fornecedores.item={};
+              }
+              //OBJ_ID
+              this.fornecedores.item["FORN_ID"]=jQuery.parseJSON($(req.responseXML).text()).OBJ_ID;
             }
-            //OBJ_ID
-            this.fornecedores.item["FORN_ID"]=jQuery.parseJSON($(req.responseXML).text()).OBJ_ID;
+            else{
+              this.fornecedores.noteid=jQuery.parseJSON($(req.responseXML).text()).OBJ_ID;
+            }
+            
+          }
+          if(this.page === "detail" && jQuery.parseJSON($(req.responseXML).text()).OBJ_ID){
+            this.detail.noteid=jQuery.parseJSON($(req.responseXML).text()).OBJ_ID;
           }
           if(this.callback && "function" === typeof this.callback){
             this.callback(data,req);
@@ -1055,13 +1120,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             if(!this.data.length){
               this.data=jQuery.parseJSON($(req.responseXML).text()).unique();
               this.setDate(this.data);
+              console.dir(this.data);
               this.setdata(this.data,"amostras");
             }
             else{
               var temp=jQuery.parseJSON($(req.responseXML).text()).unique().sortBy("AMOS_ID");
               this.setDate(temp);
               this.data=this.data.concat(temp);
-              //console.dir(this.data);
+              console.dir(this.data);
               this.createbox(this.data, this.content.page, !0);
             }
             break;
@@ -1095,6 +1161,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               //this.callService(this.page,"<FEIR_COD>10</FEIR_COD>","<FORN_ID>4200000</FORN_ID>",1,20);
             }
             break;
+          case 'email_fornecedor':
+            this.sendEmailGo(jQuery.parseJSON($(req.responseXML).text()).unique());
+            break;
           case "cities":
             this.cities=jQuery.parseJSON($(req.responseXML).text());//.sortBy('FEIR_DESC').unique();
             this.createComponent(this.cities,this.bcity,what);
@@ -1103,16 +1172,31 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             this.setSegm(jQuery.parseJSON($(req.responseXML).text()));//.sortBy('FEIR_DESC').unique();
             break;
           case "template_email":
-            this.data=jQuery.parseJSON($(req.responseXML).text());//.sortBy('FEIR_DESC').unique();
-            this.data=this.data.filter(function(a,b){
-              if(a.SEGM_COD === "JN"){
-                return a;
-              }
-            });
-            this.setdata(this.data,"template");
+            var context=this;
+            console.log("convert");
+            if(this.page === "template_email"){
+              this.data=jQuery.parseJSON($(req.responseXML).text());//.sortBy('FEIR_DESC').unique();
+              this.data=this.data.filter(function(a,b){
+                if(a.SEGM_COD === context.usr.SEGM_COD){
+                  return a;
+                }
+              });
+              this.setdata(this.data,"template");
+            }
+            else{
+              this.email=jQuery.parseJSON($(req.responseXML).text());//.sortBy('FEIR_DESC').unique();
+              this.email=this.email.filter(function(a,b){
+                if(a.SEGM_COD === context.usr.SEGM_COD){
+                  return a;
+                }
+              });
+            }
             break;
           default:
         }
+    },
+    showComboTemplateEmail:function(){
+      console.log("show");
     },
     setDate:function(list){
       var i,length;
@@ -1188,9 +1272,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
                     clearInterval(f);
                     e.setloading(!1);
-                    if(e.cookiefair){
+                    if(e.cookiefair.length){
                       //console.log("scroll: "+e.cookiefair.posscroll);
-                      $(window).scrollTop(e.cookiefair.posscroll);
+                      $(window).scrollTop(e.cookiefair[0].posscroll);
                     }
                     if(c ==="list"){
                       /*console.dir($("#table tbody"));
@@ -1281,9 +1365,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
                     clearInterval(f);
                     e.setloading(!1);
-                    if(e.cookiefair){
+                    if(e.cookiefair.length){
                       //console.log("scroll: "+e.cookiefair.posscroll);
-                      $(window).scrollTop(e.cookiefair.posscroll);
+                      $(window).scrollTop(e.cookiefair[0].posscroll);
                     }
 
                     if(c ==="list"){
@@ -1422,6 +1506,20 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       //"images" !== this.view ? (this.content.table.show(), this.scroll(this.content.tbody)) : this.scroll();
     },
     enableSelect : function(a){
+      var context=this;
+      if(!context.email.length){
+        status=setInterval(function(){
+          if(context.fair.length && !context.email.length){
+            context.ajaxrequest=!1;
+            context.callService("template_email",'','<TEMP_DESC></TEMP_DESC><SEGM_COD></SEGM_COD>');
+            clearInterval(status);
+          }
+        },100);
+      }
+      else{
+        context.callService("template_email",'','<TEMP_DESC></TEMP_DESC><SEGM_COD></SEGM_COD>');
+      }
+
       if($(a.target).hasClass("sel") && this.view !== "list"){
         //Reseta array
         this.select_items=[];
@@ -1533,7 +1631,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       $(ev.target).toggleClass("sel");
       //this.content.page = 0;
       if(!this.fdata.length){
-        alert("NENHUM ITEM !!!");
+        this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0);
         $('.bread-search').find(".spec").text("0 Resultados");
         return !1;
       }
@@ -1553,7 +1651,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       });
       this.data=aux;
       if(!this.fdata.length){
-        alert("NENHUM ITEM !!!");
+        this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0);
         $('.bread-search').find(".spec").text("0 Resultados");
         return !1;
       }
@@ -1563,11 +1661,78 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.navigate("detail/"+$(a.target).attr("name"), !0);
     },
     sendEmail:function(){
+      console.log("clicou");
+      var i,context=this,error=!1;
       if(!this.select_items.length){
-        alert("Selecione ao menos um item");
+        this.modal.open("message","Selecione ao menos um item",!1,!0);
         return !1;
       }
-      alert("Enviar email para: "+this.select_items.join(" , "));
+
+      for(i=0;i<=this.select_items.length;i++){
+        if(this.select_items[i]){
+          if(i>0 && this.select_items[i].FORN_ID !== context.select_items[i-1].FORN_ID){
+            error=!0;
+          }
+        }
+        else{
+          if(error){
+            context.modal.open("message","Email pode ser enviado para apenas 1 fornecedor",!1,!0);
+            return !1;
+          }
+          else{
+            this.callService("email_fornecedor","<FEIR_COD></FEIR_COD>","<FORN_ID>"+this.select_items[0].FORN_ID+"</FORN_ID>",'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20'+'</LINHA_F>','<CREATE_DATE_I>2010-04-10</CREATE_DATE_I>','<CREATE_DATE_F>2050-04-10</CREATE_DATE_F>');
+          }
+        } 
+      }
+      //alert("Enviar email para: "+this.select_items.join(" , "));
+    },
+    sendEmailGo:function(item){
+      var i,j,length,amos_code=[],counter,any_principal=!0,email="",context=this;
+
+      length=item[0].CONTACTS.length;
+      if(!length){
+        this.modal.open("message","O Fornecedor não possui contatos cadastrados",!1,!0);
+        return !1;
+      }
+      else{
+        for(i=0;i<=length;i++){
+          if(item[0].CONTACTS[i]){
+            if(item[0].CONTACTS[i].CONT_PRINCIPAL){
+              email=item[0].CONTACTS[i].CONT_EMAIL;
+              any_principal=!1;
+            }
+          }
+          else{
+            for(j=0;j<this.select_items.length;j++){
+              amos_code.push(this.select_items[j].AMOS_ID);
+            }
+            if(any_principal){
+              //this.modal.open("message","O Fornecedor não possui um contato principal Cadastrado",!1,!0);
+                item[0].CONTACTS.forEach(function(element,index){
+                  console.log(!email.length);
+                  if(element.CONT_EMAIL.length && !email.length){
+                    email=element.CONT_EMAIL;
+
+                    console.log("entrou");
+                    context.modal.open("template",[context.email,amos_code,element.CONT_EMAIL,item,item[0]],!1,!1);
+                    return !1;
+                  }
+                  else{
+                    context.modal.open("message","Os Contatos deste fornecedor não possuem email cadastrado",!1,!0);
+                  }
+
+                });
+            }
+            else{
+              for(j=0;j<this.select_items.length;j++){
+                amos_code.push(this.select_items[j].AMOS_ID);
+              }
+              console.log("email para: "+email);
+              context.modal.open("template",[context.email,amos_code,email,item,item[0]],!1,!1);
+            }
+          }
+        }
+      }
     },
     toggleTemplate:function(a){
       console.dir($(".template"+$(a.target).attr("name")));
@@ -1585,6 +1750,16 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     deleteTemplate:function(a){
       this.callService("gravarTemplate","<TEMP_ID>"+$(a.target).attr('title')+"</TEMP_ID>","<TP_TEMP_ID>"+$(a.target).attr('name')+"</TP_TEMP_ID>","<action>D</action>");
       $(a.target).closest('tr').remove();
+    },
+    editTemplate:function(a){
+      var item,el=$(a.target);
+      console.dir(this.data)
+      item=this.data.filter(function(a,b){
+        if(parseInt(a.TEMP_ID) == parseInt(el.attr("name"))){
+          return a;
+        }
+      });
+      this.modal.open("dialog",item);
     },
     filterTemplate:function(ev){
       //console.dir();
@@ -1606,18 +1781,18 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       }
       
       if(!this.fdata.length){
-        alert("NENHUM ITEM !!!");
+        this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0);
         return !1;
       }
       this.data=aux;
       this.createbox(this.fdata, this.content.page, !0,"list");
       //country=$(".countries").find("option:selected").val();
     },
-    addNote:function(){
-      this.modal.open("notebook","Mensage,",!1,!1,!0);
+    newTemplate:function(){
+      this.modal.open("dialog","");
     },
-    teste:function(){
-      alert("erro");
+    getPage:function(){
+      return this.page;
     },
     compChange:function(ev){
       ev.preventDefault();
@@ -1659,6 +1834,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       }
     },
     changeFair:function(a){
+      console.log("mudou feira, RESETOU COOKIE")
       this.initialTime='2015-01-08';
       this.endTime='2015-10-10';
       //this.scroller=0;
@@ -1668,7 +1844,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         this.submit("<FEIR_COD>"+this.fairval+"</FEIR_COD>",!1,!1,!0);
         return !1;
       }
-      this.cookiefair={};
+      this.cookiefair=[];
       $("input[name='initial_date']").val("");
       $("input[name='end_date']").val("");
       this.itens_by_page=this.itens_page_default;
@@ -1864,7 +2040,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             b = e.content.itens.length;
             //console.dir(e.content.itens);
             //c =  20* e.itens.length;  
-            console.log("SCROLLED"); 
             var scroll={
               fornval:''+e.fornval,
               fairval:''+e.fairval,
@@ -1875,11 +2050,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               posscroll:d,
               total:b
             };
-            console.dir(scroll);
             $.cookie.json = !0;
+            console.dir(scroll);
             $.cookie("posscroll", scroll, {expires:7, path:"/"});
 
-            d=d+200;
+            d=d+830;
             f= $(".container").height();
             console.log(d+" , "+f);
             if (d >= f && b) {
@@ -1894,7 +2069,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             b = e.content.itens.length;
             //console.dir(e.content.itens);
             //c =  20* e.itens.length;  
-            console.log("SCROLLED"); 
             var scroll={
               fornval:''+e.fornval,
               fairval:''+e.fairval,
@@ -1923,12 +2097,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             console.log("SCROLL CADASTRO");
             break;
         }
-        /*f.modal.close();
-        b = z.scrollTop();
-        d = ('list' === f.view || f.active !== f.content) ? f.active.itens.length * 40 : $(document).height();
-        c = z.height();
-        a = (f.active === f.content) ? Math.ceil(f.fdata.length / 24) : Math.ceil(f.active.data.length / 24);
-        0.95 < b / (d - c) && (!f.loading && f.active.page < a && (f.active.page++, f.pt = b, (f.active === f.content) ? f.createbox(f.fdata, f.active.page) : f.createbox(f.active.data, f.active.page, !0, "list")));*/
       });
       /* Act on the event */
     },

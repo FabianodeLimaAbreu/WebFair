@@ -23,7 +23,8 @@
   width: 110px;
 }
 .s-eight {
-  width: 180px;
+  width: 180px !important;
+  max-width: 180px !important;
 }
 .s-five {
   width: 50px;
@@ -378,7 +379,7 @@ header .logo-print {
   clear: none;
   display: block;
   width: 100%;
-  height: 100%;
+  height: auto;
   min-height: 300px;
   top: 145px;
   margin-bottom: 0;
@@ -513,7 +514,7 @@ header .logo-print {
 }
 .tooltip-item.btrash-big:after {
   left: 10px;
-  top: 20px;
+  top: 5px;
 }
 .tooltip-item.tooltip-item-supplier {
   line-height: 30px;
@@ -1228,6 +1229,33 @@ form.search {
 .supplier-form-container .fake-form-supplier-equal.divisor .row {
   padding: 0 5px;
 }
+.supplier-form-container textarea {
+  float: left;
+  padding: 10px 10px;
+  color: #8e8e93;
+  min-width: 445px;
+  width: auto;
+  max-width: 590px;
+  height: 80px;
+  margin: 10px 0 10px 0;
+  border-radius: 15px;
+  border: solid 1px #e3eaee;
+  background-color: #f1f6fa;
+}
+.supplier-form-container textarea.addnote {
+  max-width: 700px;
+  min-width: 590px;
+  max-height: 100px;
+  min-height: 50px;
+}
+.supplier-form-container textarea.samplenote {
+  max-width: 445px;
+  max-height: 100px;
+  min-height: 50px;
+}
+.supplier-form-container button {
+  margin-bottom: 10px;
+}
 .supplier-side.left-side {
   float: left;
   width: 515px;
@@ -1311,7 +1339,7 @@ form.search {
   float: left;
 }
 .container-fullsize .right-list .right-list-item.realign:after {
-  left: 0;
+  left: 5px;
   top: 2px;
 }
 .container-fullsize .right-list .bimages:after {
@@ -1923,122 +1951,6 @@ form.search {
   float: right;
   margin-right: 135px;
 }
-/*********************************
-************************************	DEFAULT MODAL ***************************/
-#modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 9999;
-  width: 100%;
-  height: 1000px;
-  background: url(".-./images/mask_load.png");
-  display: none;
-}
-#modal .modal-content {
-  position: relative;
-  margin: 0;
-  padding: 0;
-  width: 97%;
-  max-width: 380px;
-  height: 220px;
-  z-index: 999;
-  border: 1px solid #ccc;
-  top: 200px;
-  margin: 0 auto;
-  background: #ffffff;
-  background: -webkit-gradient(linear, left bottom, left top, color-stop(1, #ffffff), color-stop(0, #f9f9f9));
-  background: -ms-linear-gradient(bottom, #ffffff, #f9f9f9);
-  background: -moz-linear-gradient(center top, #ffffff 0%, #f9f9f9 100%);
-  background: -o-linear-gradient(#f9f9f9, #ffffff);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f9f9f9', GradientType=0);
-}
-#modal .modal-content .big-icon {
-  position: relative;
-  float: none;
-  display: block;
-  width: 100px;
-  height: 90px;
-  margin: 40px auto 0;
-  background: url(../images/modal-warning.png) no-repeat;
-}
-#modal .modal-text {
-  position: relative;
-  float: left;
-  clear: none;
-  display: block;
-  color: #4d4d4d;
-  top: 10px;
-}
-#modal .modal-text h2 {
-  position: relative;
-  float: left;
-  clear: none;
-  display: block;
-  width: 100%;
-  text-align: center;
-  font-size: 10pt;
-  font-weight: 700;
-  line-height: 17pt;
-  text-transform: uppercase;
-}
-#modal .modal-text p {
-  position: relative;
-  float: left;
-  clear: none;
-  display: block;
-  width: 100%;
-  text-align: center;
-  font-size: 10pt;
-  line-height: 12pt;
-}
-#modal .bclose {
-  position: absolute;
-  right: -1px;
-  top: -1px;
-  padding: 0;
-  margin: 0;
-  width: 30px;
-  height: 30px;
-  background: #fff;
-  box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  border-top: solid 1px #c4c4c4;
-  border-left: solid 1px #c4c4c4;
-  border-right: solid 1px #c4c4c4;
-  border-bottom: solid 1px #c4c4c4;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  -ms-border-radius: 3px;
-  -o-border-radius: 3px;
-  border-radius: 3px;
-  background: #ffffff;
-  background: -webkit-gradient(linear, left bottom, left top, color-stop(1, #ffffff), color-stop(0, #f4f4f4));
-  background: -ms-linear-gradient(bottom, #ffffff, #f4f4f4);
-  background: -moz-linear-gradient(center top, #ffffff 0%, #f4f4f4 100%);
-  background: -o-linear-gradient(#f4f4f4, #ffffff);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f4f4f4', GradientType=0);
-}
-#modal .bclose:after {
-  position: absolute;
-  display: block;
-  width: 15px;
-  height: 15px;
-  right: 7px;
-  top: 7px;
-  background: url(../images/sprite.png);
-  background-position: 0 -45px;
-  content: "";
-}
-#modal .bclose:hover {
-  background: #f6f6f6;
-  background: -webkit-gradient(linear, left bottom, left top, color-stop(1, #f6f6f6), color-stop(0, #eaeaea));
-  background: -ms-linear-gradient(bottom, #f6f6f6, #eaeaea);
-  background: -moz-linear-gradient(center top, #f6f6f6 0%, #eaeaea 100%);
-  background: -o-linear-gradient(#eaeaea, #f6f6f6);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f6f6f6', endColorstr='#eaeaea', GradientType=0);
-}
 /******************************
 **************************************		SPOTLIGHT ******************************/
 .spotlight {
@@ -2217,7 +2129,7 @@ form.search {
 }
 .modal {
   width: 400px;
-  height: 280px;
+  height: auto;
   border-radius: 3px;
   background-color: white;
   border: solid 1px #d1d5d8;
@@ -2227,7 +2139,14 @@ form.search {
   top: 50%;
   margin-top: -140px;
 }
+.modal.foremail {
+  height: 500px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 500px;
+}
 .modal button {
+  cursor: pointer;
   float: left;
   width: 100px;
   height: 30px;
@@ -2252,6 +2171,9 @@ form.search {
 }
 .modal .alertclose:hover {
   background-color: white;
+}
+.modal tbody tr {
+  cursor: pointer;
 }
 .modal .message {
   border: none;
@@ -2295,6 +2217,7 @@ form.search {
 }
 .modal .note textarea,
 .modal .note input {
+  float: left;
   padding: 10px 10px;
   color: #8e8e93;
   width: 380px;
@@ -2305,7 +2228,7 @@ form.search {
   background-color: #f1f6fa;
 }
 .modal .note input {
-  height: 30px;
+  max-height: 30px;
 }
 .modal .note button {
   float: right;
@@ -2369,6 +2292,7 @@ form.search {
   margin: 1px -8px 0 10px;
 }
 .icon.finishit {
+  margin-top: 20px;
   float: right;
 }
 .icon.finishit:after {
@@ -2403,6 +2327,17 @@ form.search {
   margin-right: 5px;
   top: 4px;
   left: -4px;
+}
+.icon.delete-temp {
+  width: 110px;
+  margin-bottom: 10px;
+}
+.icon.delete-temp:before {
+  background: url("../images/sprite.png") top left no-repeat;
+  width: 20px;
+  height: 20px;
+  background-position: -10px -1355px;
+  margin: 0 7px 0 0;
 }
 .icon.bgoselect {
   line-height: 30px;
@@ -2459,12 +2394,17 @@ form.search {
   top: 4px;
   left: -4px;
 }
+.icon.edit-temp {
+  margin-right: 10px;
+  margin-bottom: 10px;
+  width: 110px;
+}
 .icon.edit-temp:before {
   background: url("../images/sprite.png") top left no-repeat;
   width: 20px;
   height: 20px;
   background-position: -10px -1325px;
-  margin: 0 36px 0 0;
+  margin: 0 11px 0 0;
 }
 .icon.edit-big {
   background: none;
@@ -3826,3 +3766,6 @@ form textarea {
   margin: 0 0 10px;
   width: 100%;
 }
+/*.supplier-form-container.show-to-note{
+	hei
+}*/

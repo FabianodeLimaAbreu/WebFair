@@ -26,7 +26,7 @@
 //SIZES
 .s-four{width: 140px;}
 .s-one{width: 110px;}
-.s-eight{width: 180px;}
+.s-eight{width: 180px !important;max-width: 180px !important;}
 .s-five{width: 50px}
 .s-eight-five{width: 85px;}
 .top-ten{margin-top: 10px;}
@@ -362,7 +362,7 @@ header{
 .container{
 	.fleft;
 	width:100%;
-	height:100%;
+	height:auto;
 	min-height:300px;
 	top: 145px;
 	margin-bottom: 0;
@@ -498,7 +498,7 @@ header{
 	&.btrash-big{
 		&:after{
 			left: 10px;
-			top: 20px;
+			top: 5px;
 		}
 	}
 	&.tooltip-item-supplier{
@@ -1252,6 +1252,35 @@ form.search{
 			padding: 0 5px;
 		}
 	}
+	textarea{
+		float: left;
+		padding: 10px 10px;
+		color:#8e8e93;
+		width:auto;
+		min-width: 445px;
+		width: auto;
+		max-width:590px;
+		height:80px;
+		margin:10px 0 10px 0;
+		border-radius: 15px;
+		border: solid 1px #e3eaee;
+		background-color: @light-text;
+		&.addnote{
+		max-width: 700px;
+		min-width: 590px;
+		max-height: 100px;
+		min-height: 50px;
+		}
+		&.samplenote{
+		max-width: 445px;
+		max-height: 100px;
+		min-height: 50px;
+		}
+	}
+	button{
+		margin-bottom: 10px;
+	}
+
 }
 
 .supplier-side{
@@ -1344,7 +1373,7 @@ form.search{
 				float: left;
 			}
 			&.realign:after{
-				left: 0;
+				left: 5px;
 				top: 2px;
 			}
 		}
@@ -1975,105 +2004,6 @@ form.search{
 }
 
 
-/*********************************
-************************************	DEFAULT MODAL ***************************/
-#modal{
-	position:fixed;
-	top:0;
-	left:0;
-	z-index:9999;
-	width:100%;
-	height:1000px;
-	background:url(".-./images/mask_load.png");
-	display: none;
-	.modal-content{
-		position: relative;
-		margin: 0;
-		padding: 0;
-		width: 97%;
-		max-width:380px;
-		height:220px;
-		z-index: 999;
-		border: 1px solid #ccc;
-		top: 200px;
-		margin: 0 auto;
-		.gradient(@from: #FFF, @to: #F9F9F9);
-		.big-icon{
-			position: relative;
-			float: none;
-			display: block;
-			width: 100px;
-			height: 90px;
-			margin:40px auto 0;
-			background:url(../images/modal-warning.png) no-repeat;		
-		}
-	}
-	.modal-text{
-		.fleft;
-		color:#4d4d4d;
-		top:10px;
-		h2{
-			.fleft;
-			width:100%;
-			text-align: center;
-			font-size: 10pt;
-			font-weight: 700;
-			line-height: 17pt;
-			text-transform: uppercase;
-		}
-		p{
-			.fleft;
-			width:100%;
-			text-align: center;
-			font-size: 10pt;
-			line-height: 12pt;
-		}
-	}	
-	.bclose{
-		position:absolute; 
-		right: -1px;
-		top: -1px;
-		padding: 0;
-		margin: 0;
-		width: 30px;
-		height: 30px;
-		background: #fff;
-		// border-width: 0 0 1px 1px;
-		// border-style: solid;		
-		// border-color:#c4c4c4;
-		.box-sizing;
-		.border(#c4c4c4);		
-		.radius(3px);
-		.gradient(@from: #FFF, @to: #F4F4F4);
-		&:after{
-			position: absolute;
-			display: block;
-			width: 15px;
-			height: 15px;
-			right: 7px;
-			top: 7px;
-			background:url(../images/sprite.png);
-			background-position: 0 -45px;
-			content: "";
-		}
-		&:hover{
-			.gradient(@from: #F6F6F6, @to: #EAEAEA);
-		}
-	}	
-	// .bad{
-	// 	h2{
-	// 		color: #b21e1e;
-	// 	}
-	// 	.big-icon{background-color: #b21e1e; background-position: -135px -133px;} //-30px para confirm
-	// 	.bclose,.bclose:hover{
-	// 		cursor: pointer;
-	// 		&:after{
-	// 			background:url(../images/sprite.png);background-position: 0 -45px;display: block;position: absolute;right: 6px;top: 7px;width: 15px;height: 15px;content: "";
-	// 		}
-	// 	}
-	// }
-}
-
 /******************************
 **************************************		SPOTLIGHT ******************************/
 .spotlight{
@@ -2276,7 +2206,7 @@ form.search{
 
 .modal{
 	width:400px;
-	height:280px;
+	height:auto;
 	border-radius: 3px;
 	background-color: white;
 	border: solid 1px #d1d5d8;
@@ -2285,7 +2215,13 @@ form.search{
 	margin-left: -200px;
 	top:50%;
 	margin-top: -140px;
-	button{
+	&.foremail{
+		height: 500px;
+	    overflow-y: auto;
+	    overflow-x: hidden;
+	    width: 500px;
+	}
+	button{cursor:pointer;
 		float: left;
 		width: 100px;
 		height: 30px;
@@ -2309,7 +2245,11 @@ form.search{
 				background-color: white;
 		}
 	}
-	
+	tbody{
+		tr{
+			cursor: pointer;
+		}
+	}
 	.message{
 		border: none;
 		float: left;
@@ -2354,6 +2294,7 @@ form.search{
 	}
 	.note{
 		textarea,input{
+			float: left;
 			padding: 10px 10px;
 			color:#8e8e93;
 			width:380px;
@@ -2364,7 +2305,7 @@ form.search{
 			background-color: @light-text;
 		}
 		input{
-			height:30px;
+			max-height:30px;
 		}
 		button{
 			float:right;
@@ -2377,13 +2318,10 @@ form.search{
 	}
 	.dialog{
 		textarea{
-			height:140px;
+			height: 140px;
 		}
 	}
 }
-
-
-
 
 
 

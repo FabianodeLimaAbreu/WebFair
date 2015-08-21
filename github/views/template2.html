@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-br" ng-app="app">
+  <head>
+    <title>WebFair - Home</title>
+    <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <meta name="description" content="">
+      <meta name="author" content="Focus">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,300" rel="stylesheet" type="text/css">
+      <!-- build:css css/styles.min.css-->
+      <link href="../css/reset.css" rel="stylesheet">
+      <link href="../css/styles.css" rel="stylesheet">
+      <!-- endbuild-->
+      <link rel="shortcut icon" href="images/favicon.ico">
+      <link rel="icon" type="image/icon" href="images/favicon.ico">
+      <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+      <!--[if gte IE 9]<html class="ie9"><![endif]-->
+      <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script><html class="ie8"><![endif]-->
+    </head>
+  <body>
+    <div id="wrap">
+      <header class="goDown">
+        <div class="header-collum header-top">
+          <a href="../index.html" class="logo"><img src="../images/logo_small.png" alt=""></a>
+          <!--<div class="user">
+            <a class="close menu-logoff" title="Sair">Sair</a>
+            <h2 class="login-name">Nome do Usuário</h2>
+          </div>
+          </div>-->
+          <h2 class="login-name"><span></span>Nome do Usuário</h2>
+          <ul class="menu">
+            <li class="menu-item">
+              <a href="#legend" class="bmenu-legend tooltip tooltip-selectable">
+                <span class="tooltip-item">Legendas</span>
+                <ul class="tooltip-content legend col-large">
+                  <li>
+                    <p class="tooltip-item caption-icons-icon bemail">Enviar por e-mail</p>
+                  </li>
+                  <li>
+                    <p class="tooltip-item caption-icons-icon bfisica nothas unable">Amostra Física</p>
+                  </li>
+                  <li>
+                    <p class="tooltip-item caption-icons-icon bstatus incomplet">Completar Cadastro</p>
+                  </li>
+                  <li>
+                    <p class="tooltip-item caption-icons-icon bfav nothas unable">Amostra Favorita</p>
+                  </li>
+                  <li>
+                    <p class="tooltip-item caption-icons-icon bstatus complet">Cadastro completo</p>
+                  </li>
+                  <li>
+                    <p class="tooltip-item caption-icons-icon bstar nothas">Fornecedor Favorito</p>
+                  </li>
+                  <li>
+                    <p class="tooltip-item caption-icons-icon bedit_mini">Editar</p>
+                  </li>
+                  <li>
+                    <p class="tooltip-item bselect">Selecionar</p>
+                  </li>
+                  <li>
+                    <p class="tooltip-item caption-icons-icon bsend_receive">Enviar e Receber</p>
+                  </li>
+                  <li>
+                    <p class="tooltip-item caption-icons-icon btrash">Excluir</p>
+                  </li>
+                  <li>
+                    <p class="tooltip-item caption-icons-icon bnote">Anotações</p>
+                  </li>
+                  <li>
+                    <p class="tooltip-item caption-icons-icon bhomologado nothas unable">Homologar</p>
+                  </li>
+                  <li>
+                    <p class="tooltip-item bannex-leg">Arquivo Anexo</p>
+                  </li>
+                  <li>
+                    <p class="tooltip-item bannex-leg add">Anexar Arquivo</p>
+                  </li>
+                </ul>
+              </a>
+            </li>
+            <li class="menu-item"><a href="../views/gestao.html" class="bmenu-settings">Configurações</a></li>
+            <li class="menu-item"><a href="#send_receive" class="bmenu-send_receive">Enviar/Receber</a></li>
+            <li class="menu-item"><a href="../login.html" class="bmenu-logoff">Sair</a></li>
+          </ul>
+        </div>
+        <div class="header-collum header-bottom">
+          <div class="nav-container">
+            <nav>
+              <ul class="nav-menu">
+                <li><a href="Teste1">Gerar<br/>Relatório</a></li>
+                <li><a href="../views/local.html">Local da<br/>Coleta</a></li>
+                <li><a href="../views/fornecedor.html">Fornecedor<br/>e Contato</a></li>
+                <li><a href="../index.html" class="amostras">Amostras</a></li>
+                <li><a href="../views/template_email.html" class="sel">Templates<br/>e-Mails</a></li>
+              </ul>
+            </nav>
+          </div>
+          <div class="config-menu">
+            <ul>
+              <li><a href="Teste1"></a></li>
+              <li><a href="Teste2"></a></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container">
+        <!--18-->
+        <div class="content"> 
+          <div class="container-fullsize">
+            <div class="container-fullsize-filter holder">
+              <div class="right-list">
+                <button type="button" class="icon floatLeft new s-four m-left newtemp" alt="list">Novo Template</button>
+              </div>
+              <div class="form-container">
+                <div class="fake-form medium last">
+                  <div class="form-group styled-select">
+                    <select class="form-control bselect type">
+                      <option value="">Tipo</option>
+                      <option value="1">Cotação</option>
+                      <option value="2">Agradecimento</option>
+                    </select>
+                  </div>
+                </div>
+                <!--<div class="fake-form medium last">
+                  <div class="form-group styled-select">
+                    <select class="form-control bselect">
+                      <option value="País">Segmento</option>
+                    </select>
+                  </div>
+                </div>-->
+              </div>
+            </div>
+          </div>
+          <div class="floatThead wrapper" style="display:block">
+            <div class="overview holder"style="display:block">
+              <table class="table table-striped sample">
+                <thead>
+                    <tr>
+                        <th><button type="button" class="caption-icons-icon justit bnote unable"></button></th><th>Código</th><th>Segmento</th><th>Descrição</th><th>Tipo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  <tr><td><button type="button" class="caption-icons-icon justit bnote"></button></td><td>HEINTEXTIL</td><td>HEINTEXTIL</td><td>XAOXING <br/> </td><td>CHINA</td></tr>
+                  <tr><td><button type="button" class="caption-icons-icon justit bnote"></button></td><td>HEINTEXTIL</td><td>HEINTEXTIL</td><td>XAOXING</td><td>CHINA</td></tr>
+                  <tr><td></td><td>HEINTEXTIL</td><td>HEINTEXTIL</td><td>XAOXING</td><td>CHINA</td></tr>
+                  <tr><td><button type="button" class="caption-icons-icon justit bnote"></button></td><td>0000000<br/></td><td>Malharia <div><br/><br/>Assunto<br/><br/>Texto</td><td>FORNECEDOR NOVO - Cotação e Hangers<br/><br/>Thank you for your attention<br/><br/>Dear ##SUPPLIER, We work in the Knitting Product Development Department at Focus Textil . This is a wholesaler and distributor company, which creates and commercializes fashion fabrics to many segments acting in the Brazilian market since 1940, with a portfolio of 15.000 clients. Thank you for your attention during this last event and despite not having made any sample selection, we would like to give continuity to this contact.When you have any new samples, please send them to the address below: Excim/SP – FOCUS TEXTIL Street Guaicurus, 375 – 4 andar – SALA 41 Zip Code: 05033-000 – Agua Branca - Sao Paulo - SPATT: Jonatan Furmanovich - ID TAX 02.384.871/0002-62 Phone / Fax: (55 11) 3879-6679 Product Department: (55 11) 3618-4777 ext. 4748 /  ext. 7011 / ext. 7080 Use preferably DHL, FedEx and UPS. Do not use TNT, China courier and EMS as couriers. Please inform courier AWB number as soon as you send it. Feel free to contact me anytime if you have any queries regarding this request. Kindly rkemember to reply this e-mail to all people in copy. Best regards.</td><td>1 - Cotação de Amostras<br/><br/>ITENS PERSONALIZADOS<br/><br/>1. FORNECEDOR2. AMOSTRAS3. CONTATO;<div class="close-size"><button type="button" class="icon gotop s-four" alt="list">Fechar</button></div></td></tr>
+                  <tr><td><button type="button" class="caption-icons-icon justit bnote"></button></td><td>HEINTEXTIL</td><td>HEINTEXTIL</td><td>XAOXING</td><td>CHINA</td></tr>
+                  <tr><td></td><td>HEINTEXTIL</td><td>XAOXING</td><td>CHINA</td><td>CHINA</td></tr>
+                  <tr><td></td><td>HEINTEXTIL</td><td>HEINTEXTIL</td><td>XAOXING</td><td>CHINA</td></tr>
+                  <tr><td><button type="button" class="caption-icons-icon justit bnote"></button></td><td>HEINTEXTIL</td><td>HEINTEXTIL</td><td>XAOXING</td><td>CHINA</td></tr>
+                  <tr><td><button type="button" class="caption-icons-icon justit bnote"></button></td><td>HEINTEXTIL</td><td>HEINTEXTIL</td><td>XAOXING</td><td>CHINA</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    <script src="js/lib/jquery-1.10.1.min.js"></script>
+    <script src="js/lib/spine/min.js"></script>
+    <script src="js/lib/require-jquery.js" data-main="js/app"></script>
+  </body>
+</html>

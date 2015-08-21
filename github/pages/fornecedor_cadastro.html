@@ -15,7 +15,7 @@
           <button type="button" class="icon floatLeft right-col-item new" alt="list">Novo Fornecedor</button>
         </div>-->
         <div class="right-col">
-          <button type="button" class="bdefault right-list-item realign s-four m-ten bedit" alt="list">Editar Fornecedor</button>
+          <button type="button" class="bdefault right-list-item realign s-eight m-ten bedit" alt="list">Editar Fornecedor</button>
         </div>
       </div>
     </div>
@@ -48,7 +48,7 @@
               </div>
             </div>
             <div class="supplier-side left-side">
-              <div class="supplier-form-container contact">
+              <div class="supplier-form-container contact cont">
                 <h2><span>Contato 1</span><button type="button" class="icon floatLeft bplus-big"></button></h2>
                 <div class="supplier-photo-side">
                   <div class="photo-container">
@@ -117,7 +117,7 @@
                   </div>-->
                 </div>
               </div>
-              <div class="supplier-form-container contact contact2"> <!-- Add actived -->
+              <div class="supplier-form-container contact cont contact2"> <!-- Add actived -->
                 <h2><span>Contato 2</span><button type="button" class="icon floatLeft bplus-big" name='showcontact'></button></h2>
                 <div class="supplier-photo-side">
                   <div class="photo-container">
@@ -186,12 +186,16 @@
                   </div>-->
                 </div>
               </div>
-              <div class="supplier-form-container">
-                <h2>Anotações<button type="button" class="icon floatLeft bplus-big"></button></h2>
+              <div class="supplier-form-container show-to-note">
+                <h2>Anotações<button type="button" class="icon floatLeft bplus-big" name="shownote"></button></h2>
+                <div class="hide">
+                  <textarea class="addnote" name="" placeholder="Insira sua anotação..."></textarea>
+                  <button type="button" class="icon floatRight s-eight-five savenote" name="isnote">Salvar</button>
+                </div>
               </div>
-              <!--<div class="supplier-form-container note contact actived">
+              <div class="supplier-form-container note contact actived">
                 <ul class="notepad supplier-note-side">
-                  <li>
+                  <!--<li>
                     <article>
                       <div class="notepad-note blockquote">
                         <p>12/03/2015 | xaou xing | 890938746</p>
@@ -214,9 +218,9 @@
                         <button type="button" class="tooltip-item caption-icons-icon btrash-big"></button>
                       </div>
                     </article>
-                  </li>
+                  </li>-->
                 </ul>
-              </div>-->
+              </div>
             </div>
             <div class="supplier-side right-side">
               <div class="card-side">
@@ -548,13 +552,14 @@
                     <button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bmore" name="mark/999">Others </button>
                   </div>
                 </div>
-                     <button type="button" class="icon floatLeft finishit s-four" alt="list">Finalizar</button>
+                     
               </div>
 
             </div>
             <div class="supplier-side right-side">
               <div class="close-size">
-                <button type="button" class="icon floatLeft gotop s-four" alt="list">Topo da Página</button>
+                <button type="button" class="icon floatLeft gotop s-four" alt="list">Topo da Página</button><br>
+                <button type="button" class="icon floatLeft finishit s-four" alt="list">Finalizar</button>
               </div>
             </div>
           </section>

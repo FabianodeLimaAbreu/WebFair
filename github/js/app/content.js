@@ -127,9 +127,11 @@ window.Spotlight = Spine.Controller.sub({
 */
 window.Modal = Spine.Controller.sub({
   elements:{
-    ".modal-text":"msg_container", ".modal-cotent":"content",".question":"buttons_container",".question button":"buttons",".modal":"main"
+    ".modal-text":"msg_container", ".modal-cotent":"content",".question":"buttons_container",".question button":"buttons",".modal":"main",".dialog-save":"bsave"
   },events:{
-    "click .alertclose":"close"
+    "click .alertclose":"close",
+    "click .dialog-save":"save",
+    "click .link":"goEmail"
   },
 
   /**
@@ -138,30 +140,118 @@ window.Modal = Spine.Controller.sub({
   * @param {Boolean} a. If true show mask, else hide mask.
   */
   close:function(a){
-    a.preventDefault();
+    if(typeof a === "object"){
+      a.preventDefault();
+    }
+    else{
+      if(a === "detail"){
+        var date,result="";
+        date=new Date();
+        date=date.getDate()+"/0"+(date.getMonth()+1)+"/"+date.getFullYear();
+        result+='<div class="supplier-form-container note contact actived"><ul class="notepad supplier-note-side">';
+        result+="<li><article><div class='notepad-note blockquote'><p>"+date+" | "+ this.usr.USU_NOME+" | "+this.objid+"</p><p>"+this.usr.SEGM_COD+"</p><p>"+$(".notebook textarea").val()+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+this.noteid+"' name='"+this.usr.USU_COD+"'></button></div></article></li>"
+        result+="</ul></div>";
+        $(".description-noteside").append(result);
+      }
+      /*else{
+        window.location.reload();
+      }*/
+    }
     this.el.fadeOut('fast');
     this.content.addClass('hide');
     this.buttons_container.addClass('hide');
     this.clean();
     this.callback && this.callback();
   },
+  goEmail:function(a){
+    var listemail=[],amos_code=[],address,counter,supplier;
+    a.preventDefault();
+    listemail=this.email[0][parseInt($(a.target).attr("name"))];
+    amos_code=this.email[1];
+    address=this.email[2];
+    supplier=this.email[3][0];
+
+    counter=amos_code.join(" ; ").length;
+
+    var texto=encodeURIComponent(listemail.TEMP_BODY.replace("##SAMPLES"," "+amos_code.join(" ; ")+" ").replace("##SUPPLIER",supplier.FORN_DESC).replace("##CONTACT",supplier.FORN_DESC).slice(0,(1290 - counter)));
+                    
+    window.open("mailto:"+address+"?subject="+encodeURIComponent(listemail.TEMP_SUBJECT)+"&body="+texto);
+  },
   //this.modal.open("message","Teste Fabiano",this.teste,!0,!0);
   open:function(who,msg,call,isbad,isquest) {
     var a;
     msg= msg || "";
+    this.email=msg;
+    this.objid=msg;
     this.content.addClass('hide');
     $("."+who).removeClass('hide');
     isbad && this.main.addClass("bad");
     isquest && this.buttons_container.removeClass('hide');
-    this.msg_container.html(msg);
+    this.main.removeClass('foremail');
+    if(typeof msg === "object"){
+      if(who === "template"){
+        this.main.addClass('foremail');
+        this.populateTemp(msg);
+      }
+      else{
+        this.populateForn(who,msg);
+      }
+    }
+    else{
+      this.msg_container.html(msg);
+    }
     this.el.fadeIn('fast');
     if(call && "function" === typeof call)
       //If d is a function
       this.callback = call;
   },
+  populateTemp:function(msg){
+    var i,html="";
+    this.email=msg;
+    console.dir(msg);
+    for(i=0;i<msg[0].length;i++){
+      html+="<tr><td><a href='#"+i+"' class='link' name='"+i+"'>"+msg[0][i].TEMP_DESC+"</a></td><td><a href='#"+i+"' class='link' name='"+i+"'>"+msg[0][i].TP_TEMP_DESC+"</a></td></tr>";
+    }
+    this.main.find("tbody").append(html);
+    /*counter=msg[1].join(" ; ").length;
+    console.log(msg[1].join(" ; "));*/
+  },
+  populateForn:function(who,msg){
+    $("."+who).find("input").each(function(a,b){
+      $(b).val(msg[0][$(b).attr("name")]);
+    });
+    $("."+who).find("textarea").val(msg[0].TEMP_BODY);
+  },
+  save:function(a){
+    var TEMP_ID,date;
+    switch($(a.target).attr("name")){
+      case "isnote":
+        if($(".notebook textarea").val().length){
+          if(this.getPage() === "detail"){
+            TEMP_ID=1;
+          }
+          else{
+            TEMP_ID=2;
+          }
+          date=new Date();
+          date=""+date.getFullYear()+"-0"+(date.getMonth()+1)+"-"+date.getDate();
+          this.callService("gravarNotes","<OBJ_ID>"+this.objid+"</OBJ_ID><TP_NOTA_ID>"+TEMP_ID+"</TP_NOTA_ID><USU_COD>"+this.usr.USU_COD+"</USU_COD>","<NOTA_DESC>"+$(".notebook textarea").val()+"</NOTA_DESC><CREATE_DATE>"+date+"</CREATE_DATE>");
+        }
+        else{
+          alert("digite o texto");
+        }
+        break;
+      case 'istemp':
+        console.dir(this.objid);
+        this.callService("gravarTemplate","<TEMP_ID>"+(this.objid[0].TEMP_ID || 0)+"</TEMP_ID>"+"<TEMP_DESC>"+$(".dialog input[name='TEMP_DESC']").val()+"</TEMP_DESC><TEMP_SUBJECT>"+$(".dialog input[name='TEMP_SUBJECT']").val()+"</TEMP_SUBJECT><TEMP_BODY>"+$(".dialog textarea").val()+"</TEMP_BODY><SEGM_COD>"+this.objid[0].SEGM_COD+"</SEGM_COD>","<TP_TEMP_ID>"+(this.objid[0].TP_TEMP_ID || 2)+"</TP_TEMP_ID>","<action>U</action>");
+        break;
+    }
+  },
   clean:function(){
     this.main.find("input").val("");
     this.main.find("textarea").val("");
+    this.objid="";
+    this.email=[];
   }
 });
 
@@ -414,8 +504,8 @@ window.Box = Spine.Controller.sub({init:function() {
         break;
       case 'template_email':
         var result="";
-        result='<td><button type="button" class="caption-icons-icon justit bnote" name="'+a.TEMP_ID+'"></button></td><td>'+a.TEMP_ID+"</td>"+"<td>"+a.SEGM_DESC+"<br/><div class='template"+a.TEMP_ID+" show-hide hide'>Assunto</br>"+"Texto"+"</div></td>"+"<td>"+a.TEMP_DESC+"</br><div class='template"+a.TEMP_ID+" show-hide hide'>"+a.TEMP_SUBJECT+"</br>"+a.TEMP_BODY+"</div></td>"+"<td>"+a.TP_TEMP_DESC+"</br><div class='template"+a.TEMP_ID+" show-hide hide'>ITENS PERSONALIZADOS"+"<div class='close-size'><button type='button' class='icon floatLeft s-four edit-temp' alt='list' name='"+a.TEMP_ID+"'>Editar</button><button type='button' class='icon floatLeft s-four delete-temp' alt='list' name='"+a.TP_TEMP_ID+"' title='"+a.TEMP_ID+"''>Deletar</button></div></div></td>";
-        //result='<td><button type="button" class="caption-icons-icon justit bnote" name="'+a.TEMP_ID+'"></button></td><td>'+a.TEMP_ID+"</td>"+"<td>"+a.SEGM_DESC+"</td>"+"<td>"+a.TEMP_DESC+"</td>"+"<td>"+a.TP_TEMP_DESC+"</td>";
+        //result='<td><button type="button" class="caption-icons-icon justit bnote" name="'+a.TEMP_ID+'"></button></td><td>'+a.TEMP_ID+"</td>"+"<td>"+a.SEGM_DESC+"<br/><div class='template"+a.TEMP_ID+" show-hide hide'>Assunto</br>"+"Texto"+"</div></td>"+"<td>"+a.TEMP_DESC+"</br><div class='template"+a.TEMP_ID+" show-hide hide'>"+a.TEMP_SUBJECT+"</br>"+a.TEMP_BODY+"</div></td>"+"<td>"+a.TP_TEMP_DESC+"</br><div class='template"+a.TEMP_ID+" show-hide hide'>ITENS PERSONALIZADOS"+"<div class='close-size'><button type='button' class='icon floatLeft s-four edit-temp' alt='list' name='"+a.TEMP_ID+"'>Editar</button><button type='button' class='icon floatLeft s-four delete-temp' alt='list' name='"+a.TP_TEMP_ID+"' title='"+a.TEMP_ID+"''>Deletar</button></div></div></td>";
+        result='<td><button type="button" class="caption-icons-icon justit bnote" name="'+a.TEMP_ID+'"></button></td><td>'+a.TEMP_ID+"</td>"+"<td>"+a.SEGM_DESC+"<br/><div class='template"+a.TEMP_ID+" show-hide hide'>Assunto</br>"+"Texto"+"</div></td>"+"<td>"+a.TEMP_DESC+"</br><div class='template"+a.TEMP_ID+" show-hide hide'>"+a.TEMP_SUBJECT+"</br>"+a.TEMP_BODY+"</div></td>"+"<td>"+a.TP_TEMP_DESC+"</br><div class='template"+a.TEMP_ID+" show-hide hide'>ITENS PERSONALIZADOS"+"<div class='close-size'>"+/*<button type='button' class='icon floatLeft s-four edit-temp' alt='list' name='"+a.TEMP_ID+"'>Editar</button><button type='button' class='icon floatLeft s-four delete-temp' alt='list' name='"+a.TP_TEMP_ID+"' title='"+a.TEMP_ID+"''>Deletar</button>*/"</div></div></td>";
         return result;
         break;
       default:
