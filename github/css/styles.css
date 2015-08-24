@@ -1226,6 +1226,14 @@ form.search {
   margin-bottom: 10px;
   min-height: 30px;
 }
+.supplier-form-container .row.row-fixed {
+  width: 48%;
+  margin: 0 1% 10px;
+}
+.supplier-form-container .row.row-complet {
+  margin: 0 0 10px;
+  width: 100%;
+}
 .supplier-form-container .fake-form-supplier-equal.divisor .row {
   padding: 0 5px;
 }
@@ -2101,6 +2109,9 @@ form.search {
   display: none;
 }
 .add_fair .delete {
+  display: none;
+}
+.add_forn .right-list.supplier-page {
   display: none;
 }
 .images .floatThead {
@@ -3755,17 +3766,3 @@ form textarea {
 .ie8 #toggle-menu li a.v1516:hover {
   background-position: -280px -80px;
 }
-.add_forn .right-list.supplier-page {
-  display: none;
-}
-.supplier-form-container .row.row-fixed {
-  width: 48%;
-  margin: 0 1% 10px;
-}
-.supplier-form-container .row.row-complet {
-  margin: 0 0 10px;
-  width: 100%;
-}
-/*.supplier-form-container.show-to-note{
-	hei
-}*/

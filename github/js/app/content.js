@@ -174,7 +174,7 @@ window.Modal = Spine.Controller.sub({
     counter=amos_code.join(" ; ").length;
 
     var texto=encodeURIComponent(listemail.TEMP_BODY.replace("##SAMPLES"," "+amos_code.join(" ; ")+" ").replace("##SUPPLIER",supplier.FORN_DESC).replace("##CONTACT",supplier.FORN_DESC).slice(0,(1290 - counter)));
-                    
+    this.close();   
     window.open("mailto:"+address+"?subject="+encodeURIComponent(listemail.TEMP_SUBJECT)+"&body="+texto);
   },
   //this.modal.open("message","Teste Fabiano",this.teste,!0,!0);
@@ -208,10 +208,11 @@ window.Modal = Spine.Controller.sub({
   populateTemp:function(msg){
     var i,html="";
     this.email=msg;
-    console.dir(msg);
+    this.main.find("tbody").empty();
     for(i=0;i<msg[0].length;i++){
       html+="<tr><td><a href='#"+i+"' class='link' name='"+i+"'>"+msg[0][i].TEMP_DESC+"</a></td><td><a href='#"+i+"' class='link' name='"+i+"'>"+msg[0][i].TP_TEMP_DESC+"</a></td></tr>";
     }
+    console.log(html);
     this.main.find("tbody").append(html);
     /*counter=msg[1].join(" ; ").length;
     console.log(msg[1].join(" ; "));*/
@@ -459,7 +460,6 @@ window.Box = Spine.Controller.sub({init:function() {
       case 'amostras':
         var homologado,note,fisica,fav,email,annex,status,result="",i;
         this.el.addClass('col col-small col-large');
-        $(".bselect").addClass("sel");
         homologado= a.AMOS_HOMOLOGAR ? "has":"nothas";
         note= a.NOTES.length   ? true:false;
         fisica= a.FLAG_FISICA ? "has":"nothas";

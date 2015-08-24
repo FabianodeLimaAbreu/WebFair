@@ -180,11 +180,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       }
       this.routes({
         "":function() {
-          this.menuopt.eq(3)[0].click();
+          this.menuopt.eq(2)[0].click();
         },
         "amostras":function(){
           var context=this;
           this.page ="amostras";
+          this.view = "images";
           console.log("AMOSTRAS NORMAL");
           $("html").attr("class","").addClass(this.page);
           $(".zoomContainer").remove();
@@ -1439,7 +1440,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                         }), e.active.create(g.render()),$('.bread-search').find(".spec").text(k+1+" Resultados"),l--, k++,!1;
                         //, $('.bread-box').find(".bread-load").text(k+1), l--, k++, !1*/
                     } else {
-                        clearInterval(f), e.setloading(!1);
+                      if(c === "list"){
+                        console.dir($("button.main_opt_button.bselect.bsel"));
+                        $("button.main_opt_button.bselect.bsel").trigger('click');
+                      }
+                      clearInterval(f), e.setloading(!1);
                     }
                 }
             }, 300);
@@ -1509,6 +1514,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       var context=this;
       if(!context.email.length){
         status=setInterval(function(){
+          console.log("enable select");
           if(context.fair.length && !context.email.length){
             context.ajaxrequest=!1;
             context.callService("template_email",'','<TEMP_DESC></TEMP_DESC><SEGM_COD></SEGM_COD>');
@@ -1527,6 +1533,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         $(".thumbnail .icon").attr("class","icon");
         $("html").attr("class","amostras");
         this.action_name="";
+      }
+      else if($(a.target).hasClass("sel") && this.view === "list"){
+        this.select_items=[];
+        $(".icon.bselection").removeClass('sel');
       }
       else{
         //Inicia gravação
@@ -1718,7 +1728,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                     return !1;
                   }
                   else{
-                    context.modal.open("message","Os Contatos deste fornecedor não possuem email cadastrado",!1,!0);
+                    if(!email.length){
+                      context.modal.open("message","Os Contatos deste fornecedor não possuem email cadastrado",!1,!0);
+                    }
                   }
 
                 });
