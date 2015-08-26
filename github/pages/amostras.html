@@ -1,0 +1,338 @@
+<div class="content">
+  <div class="container-fullsize">
+    <div class="container-fullsize-filter holder">
+      <div class="form-container">
+        <div class="fake-form m-ten">
+          <div class="form-group styled-select">
+            <select class="form-control bselect fair">
+              <!--<option value="País">Local de Coleta: </option>
+              <option value="África do Sul">África do Sul</option>
+              <option value="Albânia">Albânia</option>
+              <option value="Alemanha">Alemanha</option>
+              <option value="Andorra">Andorra</option>
+              <option value="Angola">Angola</option>
+              <option value="Anguilla">Anguilla</option>
+              <option value="Antigua">Antigua</option>
+              <option value="Arábia Saudita">Arábia Saudita</option>
+              <option value="Argentina">Argentina</option>
+              <option value="Armênia">Armênia</option>
+              <option value="Aruba">Aruba</option>
+              <option value="Austrália">Austrália</option>
+              <option value="Áustria">Áustria</option>
+              <option value="Azerbaijão">Azerbaijão</option>
+              <option value="Bahamas">Bahamas</option>
+              <option value="Bahrein">Bahrein</option>
+              <option value="Bangladesh">Bangladesh</option>-->
+            </select>
+          </div>
+        </div>
+        <div class="fake-form m-ten">
+          <div class="form-group">
+            <input type="text" class="form-control forn" name="fornecedores" placeholder="Fornecedores" autocomplete="off">
+            <ul class="spotlight">
+              <!--<li><button type="button">Teste</button></li>
+              <li><button type="button">Teste</button></li>-->
+            </dl>
+          </div>
+        </div>
+        <div class="fake-form m-ten">
+          <div class="form-group">
+            <input type="text" class="form-control form-control-search" name="login" placeholder="Busca por código ou nome da amostra" autofocus autocomplete="off">
+          </div>
+          <div class="fake-form-opt">
+            <div class="tooltip tooltip-selectable borderby">
+              <button type="button" class="bdefault s-four m-ten borderby" alt="list">Ordenar</button>
+              <ul class="tooltip-content col-small">
+                <li>
+                  <button type="button" class="tooltip-item caption-icons-icon bcircle" name="AMOS_ID">Código da Amostra</button>
+                </li>
+                <li>
+                  <button type="button" class="tooltip-item caption-icons-icon bcircle" name="FORN_DESC">Fornecedor</button>
+                </li>
+                <li>
+                  <button type="button" class="tooltip-item caption-icons-icon bcircle" name="BIGPRICE">Preço Maior</button>
+                </li>
+                <li>
+                  <button type="button" class="tooltip-item caption-icons-icon bcircle" name="AMOS_PRECO">Preço Menor</button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <ul class="main_opt large">
+          <li class="main_opt_item tooltip">
+            <button type="button" class="main_opt_button date-filter">Data</button>
+            <div class="tooltip-content date2 col-largest">
+              <form class="form-inline">
+                <div class="form-group">
+                  <label for="initial_date">Data Inicial</label>
+                  <input type="date" class="form-control" name="initial_date" autocomplete="off">
+                </div>
+                <div class="form-group">
+                  <label for="end_date">Data Final</label>
+                  <input type="date" class="form-control" name="end_date" autocomplete="off">
+                </div>
+                <button type="button" class="icon s-five floatLeft save-date-filter">Ok</button>
+              </form>
+            </div>
+          </li>
+          <li class="main_opt_item tooltip-filter">
+            <button type="button" class="main_opt_button">Filtrar</button><!--class="sel"-->
+            <div class="tooltip-content filter">
+            
+              <div class="filterlist">
+                <p>Amostra Física</p>
+                <br>
+                <ul>
+                    <li><a href="//">Com</a></li>
+                    <li><a href="//">Sem</a></li>
+                </ul>
+              </div>
+              <div  class="filterlist">
+                <p>Favoritas</p>
+                <br>
+                <ul>
+                    <li><a href="//">Sim</a></li>
+                    <li><a href="//">Não</a></li>
+                </ul>
+              </div>
+              <div class="filterlist">
+                <p>Homologar</p>
+                <br>
+                <ul>
+                    <li><a href="//">Sim</a></li>
+                    <li><a href="//">Não</a></li>
+                </ul>
+              </div>
+              <div  class="filterlist">
+                <p>Enviado E-mail</p>
+                <br>
+                <ul>
+                    <li><a href="//">Sim</a></li>
+                    <li><a href="//">Não</a></li>
+                </ul>
+              </div>
+              <div class="filterlist">
+                <p>Anotações</p>
+                <br>
+                <ul>
+                    <li><a href="//">Com</a></li>
+                    <li><a href="//">Sem</a></li>
+                </ul>
+              </div>
+              <div  class="filterlist">
+                <p>Anexos</p>
+                <br>
+                <ul>
+                    <li><a href="//">Com</a></li>
+                    <li><a href="//">Sem</a></li>
+                </ul>
+              </div>
+              <button type="button" class="icon s-five floatLeft save-date-filter">Ok</button>
+            </div>
+          </li>
+          <li class="main_opt_item tooltip tooltip-selectable ">
+            <button type="button" class="main_opt_button">Faixa de Preços</button>
+            <div class="tooltip-content price col-largest">
+              <form class="form-inline">
+                <div class="form-group">
+                  <label for="initial_price">Preço Inicial</label>
+                  <input type="text" class="form-control" name="initial_price" autocomplete="off">
+                </div>
+                <div class="form-group">
+                  <label for="end_price">Preço Final</label>
+                  <input type="text" class="form-control" name="end_price" autocomplete="off">
+                </div>
+                <button type="button" class="icon s-five floatLeft filter-price">Ok</button>
+              </form>
+            </div>
+          </li>
+          <li class="main_opt_item tooltip status tooltip-selectable">
+            <button type="button" class="main_opt_button">Status</button>
+            <ul class="tooltip-content status col-large">
+              <li>
+                <button type="button" class="tooltip-item status" name="false">Completar Cadastro</button>
+              </li>
+              <li class="nodiv">
+                <button type="button" class="tooltip-item status" name="true">Cadastro Completo</button>
+              </li>
+            </ul>
+          </li>
+          <li class="main_opt_item tooltip-filter">
+            <button type="button" class="main_opt_button">Refinar Busca</button>
+            <div class="tooltip-content refine search-refine">
+              <div class="filter-area-collum filter-area-top refine">
+                <ul class="filter_list search-refine">
+                  <li class="last-div"><a href="#TECIMENTO" role="1" ng-class="{off:selcount[1].isOff == true}" fb-opensublist="fb-opensublist" class="first unsel">Tecimento</a><span ng-show="selcount[1].show" class="topcount ng-binding ng-hide">0</span></li>
+                  <li class="last-div"><a href="#BASE" role="2" ng-class="{off:selcount[2].isOff == true}" fb-opensublist="fb-opensublist" class="unsel">Base</a><span ng-show="selcount[2].count" class="topcount ng-binding ng-hide">0</span></li>
+                  <li class="last-div"><a href="#GRUPO" role="3" ng-class="{off:selcount[3].isOff == true}" fb-opensublist="fb-opensublist" class="unsel">Grupo</a><span ng-show="selcount[3].count" class="topcount ng-binding ng-hide">0</span></li>
+                  <li class="last-div"><a href="#SGRUPO" role="4" ng-class="{off:selcount[4].isOff == true}" fb-opensublist="fb-opensublist" class="unsel">SubGrupo</a><span ng-show="selcount[4].count" class="topcount ng-binding ng-hide">0</span>
+                  </li>
+                  <li class="last-div"><a href="#CMP" role="6" ng-class="{off:selcount[6].isOff == true}" fb-opensublist="fb-opensublist" class="unsel">Composição</a><span ng-show="selcount[6].count" class="topcount ng-binding ng-hide">0</span></li>
+                </ul>
+                <button type="button" class="icon s-five floatLeft filter-price">Ok</button>
+              </div>
+              <div class="tooltip-content sub-refine hide">
+                <ul>
+                  <li><a href="//" class="first unsel">Tecimento</a></li>
+                  <li><a href="//" class="unsel">Base</a></li>
+                </ul>
+              </div>
+            </div> 
+          </li>
+        </ul>
+      </div>
+      <div class="right-list">
+        <div class="changeview">
+          <button type="button" class="bdefault right-list-item s-four m-ten bimages sel" alt="images">Imagens</button>
+          <button type="button" class="bdefault right-list-item s-four m-ten blist" alt="list">Lista</button>
+        </div>
+        <button type="button" class="bdefault right-list-item s-four m-ten bselect bedit bsel" name="bselection-edit">Editar Amostra</button>
+        <ul class="main_opt mini">
+          <li class="main_opt_item first"><button type="button" class="main_opt_button bselect bsel" name="bselection">Selecionar</button></li>
+          <li class="main_opt_item"><!--<button type="button" class="main_opt_button btrash"></button>--></li>
+          <li class="main_opt_item"><button type="button" class="main_opt_button bemail"></button></li>
+        </ul>
+      </div>
+      <div class="filter-container">
+        <div class="refine">
+          
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-fullsize">
+    <div class="overview holder">
+    <!--Esta difere a tabela do modo imagem -->
+      <div class="filter-crumb">
+        <p class="bread-search">Mostrando:<span class="spec">0</span>
+        </p>
+        <!--<p class="bread-count">Fornecedor: <span class="spec show"><span class="spec all">NENHUM</span>
+        </p>-->
+      </div>
+      <ul class="viewport">
+        
+      </ul>
+    </div>
+    <div class="floatThead wrapper">
+      <div class="filter-crumb table-large">
+        <p class="bread-search">Mostrando:<span class="spec">0 Amostras</span>
+        </p>
+        <!--<p class="bread-count">Fornecedor: <span class="spec show"></span><span class="spec all">NENHUM</span>
+        </p>-->
+      </div>
+      <table id="table" class="table-striped table-large">
+        <thead>
+            <tr>
+              <th></th><th>Fornecedor</th><th>Código</th><th>Data</th><th><button type="button" class="caption-icons-icon justit bfisica nothas unable"></button></th><th>Preço Inicial</th><th>M/kg</th><th><button type="button" class="caption-icons-icon justit bfav nothas unable"></button></th><th><button type="button" class="caption-icons-icon justit bhomologado nothas unable"></button></th><th><button type="button" class="caption-icons-icon justit bnote"></button></th><th><button type="button" class="icon bannex"></button></th><th><button type="button" class="caption-icons-icon justit bemail"></button></th><th>Tecimento</th><th>Base</th><th>Grupo</th><th>Sub-Grupo</th><th>Composição</th><th class="tlast">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+          <!--<tr><td><a href="#00651587000107" class="icon floatLeft bselection"></a></td><td>HEINTEXTIL</td><td>XAOXING</td><td>CHINA</td><td><button type="button" class="caption-icons-icon justit bfisica has"></button></td><td>XAOXING</td><td>CHINA</td><td><button type="button" class="caption-icons-icon justit bfav has"></button></td><td><button type="button" class="caption-icons-icon justit bhomologado nothas"></button></td><td><button type="button" class="caption-icons-icon justit bnote"></button></td><td></td><td><button type="button" class="caption-icons-icon justit bemail disabled"></button></td><td>CHINA</td><td>XAOXING</td><td>Grupo</td><td>Sub-Grupo</td><td>Composição</td><td><button type="button" class="caption-icons-icon justit bstatus complet"></button></td></tr>-->
+          
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="aside-edit">
+  <ul class="category">
+    <li><a href="#tecimento" class="category_button cama first">Tecimento</a>
+      <ul class="sub_category">
+        <li><a href="#M" title="Malha" name="TECI_COD"><span>Malha</span><span class="sub_category_counter hide">0</span></a></li><!--Remove .HIDE when >0-->
+        <li><a href="#P" title="Plano" name="TECI_COD"><span>Plano</span><span class="sub_category_counter hide">0</span></a></li>
+      </ul>
+    </li>
+    <li><a href="#base" class="category_button">Base</a>
+      <ul class="sub_category">
+        <li><a href="#11" title="Tinto" name="BASE_COD"><span>Tinto</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#12" title="Pronto para Tingir" name="BASE_COD"><span>Pronto para Tingir</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#13" title="Tinto em massa" name="BASE_COD"><span>Tinto em massa</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#21" title="Fio Tinto" name="BASE_COD"><span>Fio Tinto</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#31" title="Estampados" name="BASE_COD"><span>Estampados</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#32" title="Pronto para Estampar" name="BASE_COD"><span>Pronto para Estampar</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#99" title="Outros Tecidos" name="BASE_COD"><span>Outros Tecidos</span><span class="sub_category_counter hide">0</span></a></li>
+      </ul>
+    </li>
+    <li>
+      <!--Add actived to actived item menu-->
+      <a href="#cortinas" class="category_button cortinas">Grupo</a><!--actived-->
+      <ul class="sub_category"> <!--maximum-->
+        <li><a href="#AC" title="Acetinados" name="GRUP_COD"><span>Acetinados</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#AF" title="Alfaiataria" name="GRUP_COD"><span>Alfaiataria</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#AP" title="Aplicadores" name="GRUP_COD"><span>Aplicadores</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#CL" title="Colas" name="GRUP_COD"><span>Colas</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#CR" title="Aspectos de Couro" name="GRUP_COD"><span>Aspectos de Couro</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#DV" title="Diversos" name="GRUP_COD"><span>Diversos</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#EL" title="Eletrônicos" name="GRUP_COD"><span>Eletrônicos</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#JF" title="Jeanswear FLEX" name="GRUP_COD"><span>Jeanswear FLEX</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#JX" title="Jeanswear FIX" name="GRUP_COD"><span>Jeanswear FIX</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#LN" title="Aspectos de Linho" name="GRUP_COD"><span>Aspectos de Linho</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#ML" title="Malhas Leves" name="GRUP_COD"><span>Malhas Leves</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#MM" title="Malhas Médias" name="GRUP_COD"><span>Malhas Médias</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#MP" title="Malhas Pesadas" name="GRUP_COD"><span>Malhas Pesadas</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#NL" title="Aspectos Naturais Leves" name="GRUP_COD"><span>Aspectos Naturais Leves</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#NM" title="Aspectos Naturais Médios" name="GRUP_COD"><span>Aspectos Naturais Médios</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#NP" title="Aspectos Naturais Pesados" name="GRUP_COD"><span>Aspectos Naturais Pesados</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#PL" title="Peles" name="GRUP_COD"><span>Peles</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#PS" title="Paetês" name="GRUP_COD"><span>Paetês</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#RN" title="Rendas" name="GRUP_COD"><span>Rendas</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#TC" title="Tecnológicos" name="GRUP_COD"><span>Tecnológicos</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#TF" title="Tafetás" name="GRUP_COD"><span>Tafetás</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#TL" title="Tules" name="GRUP_COD"><span>Tules</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#TP" title="Transparências" name="GRUP_COD"><span>Transparências</span><span class="sub_category_counter hide">0</span></a></li>
+      </ul>
+    </li>
+    <li><a href="#decoracao" class="category_button decoracao">Subgrupo</a>
+      <ul class="sub_category">
+        <li><a href="#01" title="Acabamentos Diferenciados" name="SUBG_COD"><span>Acabamentos Diferenciados</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#02" title="Animal Print" name="SUBG_COD"><span>Animal Print</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#03" title="Aspectos de Denim" name="SUBG_COD"><span>Aspectos de Denim</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#04" title="Aveludados" name="SUBG_COD"><span>Aveludados</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#05" title="Bordados" name="SUBG_COD"><span>Bordados</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#06" title="Bordados em Tule" name="SUBG_COD"><span>Bordados em Tule</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#07" title="Bordados em Malha" name="SUBG_COD"><span>Bordados em Malha</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#08" title="Chevron" name="SUBG_COD"><span>Chevron</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#09" title="Clássicas" name="SUBG_COD"><span>Clássicas</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#10" title="Creponados" name="SUBG_COD"><span>Creponados</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#11" title="Crochets" name="SUBG_COD"><span>Crochets</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#12" title="Devores" name="SUBG_COD"><span>Devores</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#13" title="Dublados" name="SUBG_COD"><span>Dublados</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#14" title="Dupla Face" name="SUBG_COD"><span>Dupla Face</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#15" title="Elásticas" name="SUBG_COD"><span>Elásticas</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#16" title="Estampados" name="SUBG_COD"><span>Estampados</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#17" title="Estruturas Diferenciadas" name="SUBG_COD"><span>Estruturas Diferenciadas</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#18" title="Falsos Lisos" name="SUBG_COD"><span>Falsos Lisos</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#19" title="Feltrados" name="SUBG_COD"><span>Feltrados</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#20" title="Bordados em Renda" name="SUBG_COD"><span>Bordados em Renda</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#21" title="Flames" name="SUBG_COD"><span>Flames</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#23" title="Forros" name="SUBG_COD"><span>Forros</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#24" title="Guipir" name="SUBG_COD"><span>Guipir</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#25" title="Jacquards" name="SUBG_COD"><span>Jacquards</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#26" title="Lanosos" name="SUBG_COD"><span>Lanosos</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#27" title="Lisos" name="SUBG_COD"><span>Lisos</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#28" title="Listrados" name="SUBG_COD"><span>Listrados</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#29" title="Listrados / Xadrezes" name="SUBG_COD"><span>Listrados / Xadrezes</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#30" title="Maquinetados" name="SUBG_COD"><span>Maquinetados</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#31" title="Mesclas" name="SUBG_COD"><span>Mesclas</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#32" title="Metalizados" name="SUBG_COD"><span>Metalizados</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#33" title="Micro Padronagens" name="SUBG_COD"><span>Micro Padronagens</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#34" title="Risca de Giz" name="SUBG_COD"><span>Risca de Giz</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#35" title="Texturas" name="SUBG_COD"><span>Texturas</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#36" title="Toque Natural" name="SUBG_COD"><span>Toque Natural</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#37" title="Tricots" name="SUBG_COD"><span>Tricots</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#38" title="Veludos" name="SUBG_COD"><span>Veludos</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#39" title="Xadrez" name="SUBG_COD"><span>Xadrez</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#40" title="Negócios Diferenciados" name="SUBG_COD"><span>Negócios Diferenciados</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#41" title="4,0 oz a 6,9 oz" name="SUBG_COD"><span>4,0 oz a 6,9 oz</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#42" title="7,0 oz a 8,9 oz" name="SUBG_COD"><span>7,0 oz a 8,9 oz</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#43" title="9,0 oz a 14,0 oz" name="SUBG_COD"><span>9,0 oz a 14,0 oz</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#44" title="Outros Negócios" name="SUBG_COD"><span>Outros Negócios</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#45" title="Semi-Transparência" name="SUBG_COD"><span>Semi-Transparência</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#46" title="Tweed" name="SUBG_COD"><span>Tweed</span><span class="sub_category_counter hide">0</span></a></li>
+        <li><a href="#99" title="Retalhos Diversos" name="SUBG_COD"><span>Retalhos Diversos</span><span class="sub_category_counter hide">0</span></a></li>
+      </ul>
+    </li>
+    <button onclick="scrollDown(event)" class="upstair hide"><span class="upstair-text">Voltar para o topo</span><span class="upstair-ico"></span></button>
+  </ul>
+</div>

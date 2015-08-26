@@ -1,0 +1,51 @@
+<html>
+    <head>
+        <title>Calling Web Service from jQuery</title>
+        <script type="text/javascript" src="../js/lib/jquery-1.10.1.min.js"></script>
+        <script type="text/javascript" src="jquery.soap.js"></script>
+        <script type="text/javascript">
+            function strToJson(str) {
+                eval("var x = " + str + ";");
+                return JSON.stringify(x);
+            }
+            $(document).ready(function () {
+              $("#btnCallWebService").click(function (event) {
+                  var wsUrl = "../../WebService.asmx?op=GravarAnotacao";
+                  var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarAnotacao xmlns="http://tempuri.org/"><note><NOTA_ID>339</NOTA_ID><USU_COD>36</USU_COD><PLAT_ID>2</PLAT_ID><CREATE_DATE>2016-07-08</CREATE_DATE></note><action>D</action></GravarAnotacao></soap:Body></soap:Envelope>';
+
+                  //var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><SetSampleNotes xmlns="http://tempuri.org/"><note><NOTA_ID>3</NOTA_ID><OBJ_ID>101000001</OBJ_ID><TP_NOTA_ID>2</TP_NOTA_ID><USU_COD>41</USU_COD><PLAT_ID>2</PLAT_ID><NOTA_DESC>Teste de anotação</NOTA_DESC></note><action>I</action></SetSampleNotes></soap:Body></soap:Envelope>';
+                  $.support.cors=true;
+                  $.ajax({
+                           type: "POST",
+                           url: wsUrl,
+                           contentType: "text/xml; charset=utf-8",
+                           dataType: "xml",
+                           crossDomain: true,
+                           data: soapRequest,
+                        success: processSuccess,
+                         error: processError
+                         });
+                  });
+            });
+            
+            function processSuccess(data, status, req) {
+                if (status == "success") {
+                    $("#response").text($(req.responseXML).text());
+                    console.dir(jQuery.parseJSON($(req.responseXML).text()));
+
+                }
+            }
+            
+            function processError(data, status, req) {
+                alert(req.responseText + " " + status);
+            }            
+            </script>
+    </head>
+    <body>
+        <h3>
+            Calling Web Services with jQuery/AJAX
+        </h3>
+        <input id="btnCallWebService" value="Call web service" type="button" />
+        <div id="response"></div>
+    </body>
+</html>
