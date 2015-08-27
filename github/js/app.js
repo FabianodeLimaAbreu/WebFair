@@ -86,6 +86,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     init:function(){
       this.view = "images";
       this.page = "amostras";
+      this.nsort="AMOS_ID";
       this.itens = $([]);
       this.data=[];
       this.fdata = [];
@@ -111,8 +112,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.fairval="";
       this.fornval="";
       this.amosval="";
-      this.initialTime='2000-01-08';
-      this.endTime='2015-10-10';
+      this.initialTime='2000-01-01';
+      this.endTime='2020-10-10';
       this.notcombo=0;
 
 
@@ -197,12 +198,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         "amostras/*fairval/*fornval/*amosval":function(res){
           var a,b,c;
           console.log("this.cookiefair");
-          console.dir(jQuery.parseJSON($.cookie("posscroll")));
           $(".zoomContainer").remove();
 
           /*if(!this.cookiefair.length){
             this.cookiefair.push(jQuery.parseJSON($.cookie("posscroll")));
           }*/
+          console.dir(this.cookiefair);
           if(!this.cookiefair.length){
             if(jQuery.parseJSON($.cookie("posscroll"))){
               console.log("ok");
@@ -212,6 +213,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             }
             else{
               console.log("ok2");
+              console.dir(jQuery.parseJSON($.cookie("posscroll")));
               this.cookiefair.push({"fairval":0,"fornval":0,"amosval":0});
             }
           }
@@ -804,7 +806,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             //FEIR_COD e FORN_ID are optional fields
             'name':'amostras',
             'serviceName':'ListarAmostras',
-            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarAmostras xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+''+e+''+f+''+g+'</ListarAmostras></soap:Body></soap:Envelope>',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarAmostras xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+''+e+''+f+''+g+'<SEGM_COD>'+core.usr.SEGM_COD+'</SEGM_COD></ListarAmostras></soap:Body></soap:Envelope>',
             callback:function(data,req){
               core.convertData(data,req,name);
             }
@@ -1037,6 +1039,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         if(isNaN($(a.target).val())){
           search="<AMOS_DESC>"+$(a.target).val()+"</AMOS_DESC>";
         }
+        else if(!$(a.target).val().length){
+          search="";
+        }
         else{
           search="<AMOS_ID>"+$(a.target).val()+"</AMOS_ID>";
         }
@@ -1065,8 +1070,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       }  
       switch(b){
         case 'amostras':
-          this.data = a.sortBy("AMOS_ID");
+          this.data = a.sortBy(this.nsort);
           this.content.changeview(this.view);
+          console.dir(this.data);
           this.createbox(this.data, this.content.page, !0);
           break;
         case 'template':
@@ -1146,7 +1152,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               this.setdata(this.data,"amostras");
             }
             else{
-              var temp=jQuery.parseJSON($(req.responseXML).text()).unique().sortBy("AMOS_ID");
+              var temp=jQuery.parseJSON($(req.responseXML).text()).unique().sortBy(this.nsort);
               this.data=this.data.filter(function(a,b){
                 if(a.SEGM_COD === context.usr.SEGM_COD){
                   return a;
@@ -1526,11 +1532,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.order_box.find("button").removeClass("sel");
       $(a.target).addClass("sel");
       if(type !== "BIGPRICE"){
+        this.nsort=type;
         length= this.data.length;
         temp = this.data.sortBy(type).unique();
         this.createbox(temp, this.content.page,!1,!1,length);
       }
       else{
+        this.nsort="AMOS_PRECO";
         temp = this.data.sortBy("AMOS_PRECO").unique();
         length=this.data.length-1;
         for(i=length;i>=0;i--){
@@ -1651,7 +1659,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           item.push({"SEGM_COD":this.usr.SEGM_COD,"SEGM_DESC":this.usr.SEGM_DESC});
           $(ev.target).removeClass('nothas').removeClass('middle').addClass('has');
         }
-    }
+      }
 
       this.callService("GravarFornecedorFavorito","<Forn_ID>"+parseInt($(ev.target).attr("name"))+"</Forn_ID>",html);
 
@@ -1749,7 +1757,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           }
           else{
             for(j=0;j<this.select_items.length;j++){
-              amos_code.push(this.select_items[j].AMOS_ID);
+              amos_code.push(this.select_items[j].AMOS_DESC);
             }
             if(any_principal){
               //this.modal.open("message","O Fornecedor não possui um contato principal Cadastrado",!1,!0);
@@ -1882,8 +1890,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     },
     changeFair:function(a){
       console.log("mudou feira, RESETOU COOKIE")
-      this.initialTime='2000-01-08';
-      this.endTime='2015-10-10';
+      /*this.initialTime='2000-01-01';
+      this.endTime='2020-10-10';*/
       //this.scroller=0;
       if(this.page === "fornecedor_cadastro"){
         this.fornecedores.setfair=$(a.target).find("option:selected").val();
@@ -1892,10 +1900,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         return !1;
       }
       this.cookiefair=[];
-      $("input[name='initial_date']").val("");
-      $("input[name='end_date']").val("");
+      this.restartValues();
       this.itens_by_page=this.itens_page_default;
-      $(".form-control-search").val("");
+      this.resetFilters();
       this.bforn.val("");
       this.fairval=$(a.target).find("option:selected").val();
       this.notcombo=!0;
@@ -1941,6 +1948,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     getSpot:function(a){
       //13 === a.keyCode ? (this.spotlight.close(), this.searchEl.trigger("submit")) : (this.filter.close(), 1 < a.target.value.length ? this.spotlight.open(a) : this.spotlight.close());
       if(13 === a.keyCode){
+        this.resetFilters();
         this.spotlight.select(a);
       }
       else{
@@ -2087,6 +2095,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             b = e.content.itens.length;
             //console.dir(e.content.itens);
             //c =  20* e.itens.length;  
+            console.log(e.initialTime);
             var scroll={
               fornval:''+e.fornval,
               fairval:''+e.fairval,
@@ -2105,7 +2114,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             f= $(".container").height();
             console.log(d+" , "+f);
             if (d >= f && b) {
-              //console.log("chegou");
+              console.log("chegou");
               e.content.page++;
               e.setloading(!0,!1);
               e.submit("<FEIR_COD>"+(e.fairval || "")+"</FEIR_COD>","<FORN_DESC>"+(e.fornval || "")+"</FORN_DESC>",(e.amosval || ""),!0);
@@ -2161,9 +2170,21 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.fairval="";
       this.fornval="";
       this.amosval="";
-      /*this.initialTime='2015-01-08';
-      this.endTime='2015-10-10';*/
+      this.nsort="AMOS_DESC";
+      this.initialTime='2000-01-01';
+      this.endTime='2020-10-10';
       this.notcombo=0;
+    },
+    resetFilters:function(){
+      //DATE
+      $("input[name='initial_date']").val("");
+      $("input[name='end_date']").val("");
+      this.initialTime='2000-01-01';
+      this.endTime='2020-10-10';
+
+      //PRICE
+      $("input[name='initial_price']").val("");
+      $("input[name='end_price']").val("");
     }
   });
   new App;

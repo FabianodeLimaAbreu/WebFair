@@ -83,7 +83,7 @@ open: function(a){
   
 
   //TOP DO DETALHE, LISTA DE VALORES
-  var list=["AMOS_ID","FEIR_DESC","FORN_DESC","CREATE_DATE"/*,"AMOS_PRECO_UM","AMOS_PRECO"*/];
+  var list=["AMOS_DESC","FEIR_DESC","FORN_DESC","CREATE_DATE"/*,"AMOS_PRECO_UM","AMOS_PRECO"*/];
   var list_item=$(".description-top").find("dd");
   for(i=0;i<list.length;i++){
     name=list[i];
@@ -152,7 +152,7 @@ open: function(a){
 
   //DESCRIÇÃO COMPLETA INPUTS
   $(".detail-description").find("input").each(function(a,b){
-    $(b).val(item[$(b).attr("name")]);
+    $(b).val(item[$(b).attr("name").replace(".",",")]);
   });
   $(".AMOS_PRECO_UM option").each(function(a,b){
     if($(b).attr("value") === item["AMOS_PRECO_UM"]){
@@ -163,9 +163,24 @@ open: function(a){
 
   //ANOTAÇÕES
   if(note){
-    result="";
-    for(i=0;i<item.NOTES.length;i++){
-      result+="<li><article><div class='notepad-note blockquote'><p>"+item.NOTES[i].CREATE_DATE+" | "+ item.NOTES[i].USU_NOME+" | "+item.NOTES[i].OBJ_ID+"</p><p>"+item.NOTES[i].SEGM_DESC+"</p><p>"+item.NOTES[i].NOTA_DESC+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+item.NOTES[i].NOTA_ID+"' name='"+item.NOTES[i].USU_COD+"'></button></div></article></li>"
+    var segnote=[],result="";
+    for(i=item.NOTES.length;i>0;i--){
+      if(item.NOTES[i-1].SEGM_COD === this.usr.SEGM_COD){
+        segnote.push(item.NOTES[i-1]);
+      }
+    }
+    if(segnote.length){
+      for(i=0;i<segnote.length;i++){
+        result+="<li><article><div class='notepad-note blockquote'><p>"+segnote[i].CREATE_DATE+" | "+ segnote[i].USU_NOME+" | "+segnote[i].OBJ_ID+"</p><p>"+segnote[i].SEGM_DESC+"</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
+        if(segnote[i].USU_COD === this.usr.USU_COD){
+          result+= "<button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' id='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'></button>";
+        }
+        result+="</div></article></li>";
+      }
+      result+="</ul></td>";
+    }
+    else{
+      result+="</ul></td>";
     }
   }
   else{
@@ -212,12 +227,18 @@ open: function(a){
     }); 
   }
 },saveDetail:function(){
-  var html="",item=this.item;
+  var html="",item=this.item,complet=0;
   $(".detail-description").find("input").each(function(a,b){
-    html+="<"+$(b).attr("name")+">"+$(b).val()+"</"+$(b).attr("name")+">";
+    html+="<"+$(b).attr("name")+">"+$(b).val().replace(",",".")+"</"+$(b).attr("name")+">";
+    if($(b).attr('required') && $(b).val() !== "0"/* && item.COMPOSITIONS.length*/){
+      complet=1;
+    }
   });
   html+="<AMOS_PRECO_UM>"+$(".AMOS_PRECO_UM option:selected").attr("value")+"</AMOS_PRECO_UM>";
-  pattern="<AMOS_ID>"+item.AMOS_ID+"</AMOS_ID><FORN_ID>"+item.FORN_ID+"</FORN_ID><FEIR_COD>"+parseInt(item.FEIR_COD)+"</FEIR_COD><USU_COD>"+item.USU_COD+"</USU_COD><AMOS_DESC>"+item.AMOS_DESC+"</AMOS_DESC><AMOS_STATUS>"+item.AMOS_STATUS+"</AMOS_STATUS><AMOS_ENV_EMAIL>"+item.AMOS_ENV_EMAIL+"</AMOS_ENV_EMAIL><TECI_COD>"+(item.TECI_COD || "")+"</TECI_COD><BASE_COD>"+(item.BASE_COD || "")+"</BASE_COD><GRUP_COD>"+(item.GRUP_COD || "")+"</GRUP_COD><SUBG_COD>"+(item.SUBG_COD || "")+"</SUBG_COD><SEGM_COD>"+item.SEGM_COD+"</SEGM_COD><FLAG_PRIORIDADE>"+item.FLAG_PRIORIDADE+"</FLAG_PRIORIDADE><AMOS_HOMOLOGAR>"+item.AMOS_HOMOLOGAR+"</AMOS_HOMOLOGAR><FLAG_FISICA>"+item.FLAG_FISICA+"</FLAG_FISICA><CREATE_DATE>"+"2015-01-01"+"</CREATE_DATE>";
+  pattern="<AMOS_ID>"+item.AMOS_ID+"</AMOS_ID><FORN_ID>"+item.FORN_ID+"</FORN_ID><FEIR_COD>"+parseInt(item.FEIR_COD)+"</FEIR_COD><USU_COD>"+item.USU_COD+"</USU_COD><AMOS_DESC>"+item.AMOS_DESC+"</AMOS_DESC><AMOS_STATUS>"+complet+"</AMOS_STATUS><AMOS_ENV_EMAIL>"+item.AMOS_ENV_EMAIL+"</AMOS_ENV_EMAIL><TECI_COD>"+(item.TECI_COD || "")+"</TECI_COD><BASE_COD>"+(item.BASE_COD || "")+"</BASE_COD><GRUP_COD>"+(item.GRUP_COD || "")+"</GRUP_COD><SUBG_COD>"+(item.SUBG_COD || "")+"</SUBG_COD><SEGM_COD>"+item.SEGM_COD+"</SEGM_COD><FLAG_PRIORIDADE>"+item.FLAG_PRIORIDADE+"</FLAG_PRIORIDADE><AMOS_HOMOLOGAR>"+item.AMOS_HOMOLOGAR+"</AMOS_HOMOLOGAR><FLAG_FISICA>"+item.FLAG_FISICA+"</FLAG_FISICA><CREATE_DATE>"+"2015-01-01"+"</CREATE_DATE>";
+  if(complet){
+    $(".detail-status .bstatus").removeClass('incomplet').addClass('complet');
+  }
   this.setloading(!0,!1);
   this.callService("gravarAmostras",pattern,html,'U');
 },deleteSample:function(){
@@ -414,6 +435,7 @@ open: function(a){
    }
 },deleteFornNote:function(a){
   $(".contact"+$(a.target).attr("name")).addClass('hide');
+  
 },showSomething:function(a){
   if($("html").hasClass('view_forn')){
     return !1;
@@ -517,7 +539,7 @@ open: function(a){
         return !0;
       }
       else{
-        html+='<div class="row row-fixed row-item"><button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bminus" name="'+name+'">'+'<input type="text" class="form-control form-control-bmore" name="'+name+'" placeholder="Other" autocomplete="off" required="required" disabled="disabled" value="'+el.find("input").val()+'"/></button></div>';
+        html+='<div class="row row-fixed row-item"><button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bminus" name="'+name+'">'+'<input type="text" class="form-control form-control-bmore" name="'+name+'" placeholder="Other" autocomplete="off" disabled="disabled" value="'+el.find("input").val()+'"/></button></div>';
       }
     }
     else{
@@ -543,7 +565,7 @@ open: function(a){
   cod_detalhe=name.substr(pos_string, name.length);
   group=name.substr(0,pos_string-1);
   if(13 === a.keyCode){
-    html+='<div class="row row-fixed row-item"><button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bminus" name="'+name+'">'+'<input type="text" class="form-control form-control-bmore" name="'+name+'" placeholder="Other" autocomplete="off" required="required" disabled="disabled" value="'+el.val()+'"/></button></div>';
+    html+='<div class="row row-fixed row-item"><button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bminus" name="'+name+'">'+'<input type="text" class="form-control form-control-bmore" name="'+name+'" placeholder="Other" autocomplete="off" disabled="disabled" value="'+el.val()+'"/></button></div>';
     el.parent().addClass("hide");
     console.dir($("."+group+"-rem"));
     $("."+group+"-rem").append(html);
@@ -750,7 +772,7 @@ setFav:function(a){
   //Gravar dados nos campos
 
 },inputValues:function(){
-  var context=this;
+  var context=this,complet=!1;
   if(this.item.FORN_ID){
     $(".bedit").trigger('click');
     $(".fair option").each(function(a,b){
@@ -772,9 +794,24 @@ setFav:function(a){
     }
     //ANOTAÇÕES
     if(this.item.NOTES.length){
+      var segnote=[];
       var result="";
-      for(i=0;i<this.item.NOTES.length;i++){
-        result+="<li><article><div class='notepad-note blockquote'><p>"+this.item.NOTES[i].CREATE_DATE+" | "+ this.item.NOTES[i].USU_NOME+" | "+this.item.NOTES[i].OBJ_ID+"</p><p>"+this.item.NOTES[i].SEGM_DESC+"</p><p>"+this.item.NOTES[i].NOTA_DESC+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+this.item.NOTES[i].NOTA_ID+"' name='"+this.item.NOTES[i].USU_COD+"'></button></div></article></li>"
+      for(i=this.item.NOTES.length;i>0;i--){
+        if(this.item.NOTES[i-1].SEGM_COD === this.usr.SEGM_COD){
+          segnote.push(this.item.NOTES[i-1]);
+        }
+      }
+      if(segnote){
+        this.setDate(segnote);
+        for(i=0;i<segnote.length;i++){
+          result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+ segnote[i].USU_NOME+" | "+segnote[i].OBJ_ID+"</b></p><p>"+segnote[i].SEGM_DESC+" - Assunto:</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
+          if(segnote[i].USU_COD === this.usr.USU_COD){
+            result+= "<button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' id='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'></button>";
+          }
+        }
+      }
+      else{
+        result="";
       }
     }
     else{
@@ -796,7 +833,24 @@ setFav:function(a){
         else{
           template+='<img src="images/contact.png" width="100%" class="noimage">';
         } 
-        template+='</div></div><div class="supplier-firstform"><div class="row"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[i].CONT_NOME+'"></div></div><button type="button" class="icon floatLeft trash-big" name="'+(i+1)+'"></button></div><div class="row"><div class="fake-form"><div class="form-group"><input type="text" class="form-control" name="CONT_EMAIL" placeholder="E-mail" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[i].CONT_EMAIL+'"></div></div></div><div class="row top-ten"><div class="fake-form fake-form-supplier-equal floatLeft">';
+        template+='</div></div><div class="supplier-firstform"><div class="row"><div class="fake-form fake-form-supplier-middle"><div class="form-group">';
+        template+='<input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[i].CONT_NOME+'"';
+        if(i === 0){
+          template+=' required="required">';
+        }
+        else{
+          template+=' >';
+        }
+        
+        template+='</div></div><button type="button" class="icon floatLeft trash-big" name="'+(i+1)+'"></button></div><div class="row"><div class="fake-form"><div class="form-group"><input type="text" class="form-control" name="CONT_EMAIL" placeholder="E-mail" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[i].CONT_EMAIL+'"';
+        
+        if(i === 0){
+          template+=' required="required" ></div></div></div><div class="row top-ten"><div class="fake-form fake-form-supplier-equal floatLeft">';
+        }
+        else{
+          template+='></div></div></div><div class="row top-ten"><div class="fake-form fake-form-supplier-equal floatLeft">';;
+        }
+
         if(context.item.CONTACTS[i].CONT_PRINCIPAL){
           context.favcontact=i;
           template+='<button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bcircle favcontact sel" name="'+(i+1)+'">Contato Principal </button>'
@@ -825,7 +879,7 @@ setFav:function(a){
         var template="",temp="",cont="",template2="";
         template+='<div class="supplier-form-container contact contact1 actived cont"><h2><span>Contato 1</span></h2><div class="supplier-photo-side"><div class="photo-container">';
         template+='<img src=http://bdb/ifair_img/'+context.item.CONTACTS[0].IMG_PATH_CONTATO+' width="100%">';
-        template+='</div> </div><div class="supplier-firstform"><div class="row"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_NOME+'"></div></div><button type="button" class="icon floatLeft trash-big" name="1"></button></div><div class="row"><div class="fake-form"><div class="form-group"><input type="text" class="form-control" name="CONT_EMAIL" placeholder="E-mail" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_EMAIL+'"></div></div></div><div class="row top-ten"><div class="fake-form fake-form-supplier-equal floatLeft">';
+        template+='</div> </div><div class="supplier-firstform"><div class="row"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_NOME+'" required="required"></div></div><button type="button" class="icon floatLeft trash-big" name="1"></button></div><div class="row"><div class="fake-form"><div class="form-group"><input type="text" class="form-control" name="CONT_EMAIL" placeholder="E-mail" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_EMAIL+'" required="required"></div></div></div><div class="row top-ten"><div class="fake-form fake-form-supplier-equal floatLeft">';
         cont+='<button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bcircle favcontact sel" name="1">Contato Principal </button>';
         template+='</div><div class="fake-form fake-form-supplier-equal right"><div class="form-group styled-select"><select class="form-control bselect SEGM_COD" name="SEGM_COD"><option value="Segmento">Segmentos</option></select></div></div></div><div class="row"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="tel" class="form-control" name="CONT_TEL" placeholder="Tel 1" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_TEL+'"></div></div><button type="button" class="icon floatLeft bplus-big" name="CONT_TEL2"></button></div><div class="row CONT_TEL2 top-ten hide"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="tel" class="form-control" name="CONT_TEL2" placeholder="Tel 2" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_TEL2+'"></div></div></div></div></div>';
         context.favcontact=0;
@@ -837,7 +891,7 @@ setFav:function(a){
         temp='<div class="supplier-form-container contact contact1 actived cont"><h2><span>Contato 1</span></h2>';
         template+='<div class="supplier-photo-side"><div class="photo-container">';
         template+='<img src="images/contact.png" width="100%" class="noimage">';
-        template1+='</div></div><div class="supplier-firstform"><div class="row"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off"></div></div><button type="button" class="icon floatLeft trash-big" name="1"></button></div><div class="row"><div class="fake-form"><div class="form-group"><input type="text" class="form-control" name="CONT_EMAIL" placeholder="E-mail" autofocus="" autocomplete="off"></div></div></div><div class="row top-ten"><div class="fake-form fake-form-supplier-equal floatLeft">';
+        template1+='</div></div><div class="supplier-firstform"><div class="row"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off" required="required"></div></div><button type="button" class="icon floatLeft trash-big" name="1"></button></div><div class="row"><div class="fake-form"><div class="form-group"><input type="text" class="form-control" name="CONT_EMAIL" placeholder="E-mail" autofocus="" autocomplete="off" required="required"></div></div></div><div class="row top-ten"><div class="fake-form fake-form-supplier-equal floatLeft">';
         cont+='<button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bcircle favcontact" name="1">Contato Principal </button>';
         template2+='</div><div class="fake-form fake-form-supplier-equal right"><div class="form-group styled-select"><select class="form-control bselect SEGM_COD" name="SEGM_COD"><option value="Segmento">Segmentos</option></select></div></div></div><div class="row"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="tel" class="form-control" name="CONT_TEL" placeholder="Tel 1" autofocus="" autocomplete="off"></div></div><button type="button" class="icon floatLeft bplus-big" name="CONT_TEL2" name="CONT_TEL2"></button></div><div class="row CONT_TEL2 top-ten hide"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="tel" class="form-control" name="CONT_TEL2" placeholder="Tel 2" autofocus="" autocomplete="off"></div></div></div></div></div>';
         context.favcontact=null;
@@ -870,6 +924,7 @@ setFav:function(a){
     });
 
     if(context.item.PROFILES.length){
+      $("a[href='#profile'] button").removeClass('incomplet').addClass('complet');
       for(var i=0;i<context.item.PROFILES.length;i++){
         console.log("profiles: "+context.item.PROFILES[i].PERF_COD);
         if(context.item.PROFILES[i].PERF_COD == 3){
@@ -893,6 +948,7 @@ setFav:function(a){
       }
     }
     if(context.item.COMPOSITIONS.length){
+      $("a[href='#composition'] button").removeClass('incomplet').addClass('complet');
       for(var i=0;i<context.item.COMPOSITIONS.length;i++){
         var n;
         if(isNaN(context.item.COMPOSITIONS[i].COMP_COD.replace(" ",""))){
@@ -910,6 +966,7 @@ setFav:function(a){
       }
     }
     if(context.item.PRODUCTS.length){
+      $("a[href='#products'] button").removeClass('incomplet').addClass('complet');
       for(var i=0;i<context.item.PRODUCTS.length;i++){
         /*if($(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").attr("name") === "prod/9999"){
           $(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").find("input").val(context.item.PRODUCTS[i].PROD_OTHERS);
@@ -918,6 +975,7 @@ setFav:function(a){
       }
     }
     if(context.item.MARKETS.length){
+      $("a[href='#markets'] button").removeClass('incomplet').addClass('complet');
       for(var i=0;i<context.item.MARKETS.length;i++){
         $(".mark-add button[name='mark/"+parseInt(context.item.MARKETS[i].MERC_COD)+"']").trigger('click');
       }
@@ -928,7 +986,7 @@ setFav:function(a){
     var template="",temp="",cont="",template1="",template2="";
     temp+='<div class="supplier-form-container contact contact1 actived cont"><h2><span>Contato 1</span></h2>';
     template+='<div class="supplier-photo-side"><div class="photo-container"><img src="images/contact.png" width="100%" class="noimage">';
-    template1+='</div></div><div class="supplier-firstform"><div class="row"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off"></div></div><button type="button" class="icon floatLeft trash-big" name="1"></button></div><div class="row"><div class="fake-form"><div class="form-group"><input type="text" class="form-control" name="CONT_EMAIL" placeholder="E-mail" autofocus="" autocomplete="off"></div></div></div><div class="row top-ten"><div class="fake-form fake-form-supplier-equal floatLeft">';
+    template1+='</div></div><div class="supplier-firstform"><div class="row"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off" required="required"></div></div><button type="button" class="icon floatLeft trash-big" name="1"></button></div><div class="row"><div class="fake-form"><div class="form-group"><input type="text" class="form-control" name="CONT_EMAIL" placeholder="E-mail" autofocus="" autocomplete="off" required="required"></div></div></div><div class="row top-ten"><div class="fake-form fake-form-supplier-equal floatLeft">';
     cont+='<button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bcircle favcontact" name="1">Contato Principal </button>';
     template2+='</div><div class="fake-form fake-form-supplier-equal right"><div class="form-group styled-select"><select class="form-control bselect SEGM_COD" name="SEGM_COD"><option value="Segmento">Segmentos</option></select></div></div></div><div class="row"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="tel" class="form-control" name="CONT_TEL" placeholder="Tel 1" autofocus="" autocomplete="off"></div></div><button type="button" class="icon floatLeft bplus-big" name="CONT_TEL2"></button></div><div class="row CONT_TEL2 top-ten hide"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="tel" class="form-control" name="CONT_TEL2" placeholder="Tel 2" autofocus="" autocomplete="off"></div></div></div></div></div>';
     context.favcontact=null;
@@ -940,12 +998,21 @@ setFav:function(a){
     context.createComponent(this.getSegm(),$(".SEGM_COD"),'segm');
     $(".form-control-other").attr('disabled', 'disabled');
   }
+
+  $("#dados input[required='required']").each(function(index,el){
+    if($(el).val().length){
+      complet=!0;
+    }
+  });
+  if(complet){
+    $("a[href='#dados'] button").removeClass('incomplet').addClass('complet');
+  }
   $(".bplus-big").bind("click",function(a){context.showSomething(a);});
   $(".favcontact").bind("click",function(a){context.setFavContact(a);});
   $(".trash-big").bind("click",function(a){context.deleteFornNote(a);});
 },saveForn:function(goout){
 
-  var date=new Date(),html="",context=this,pattern="";
+  var date=new Date(),html="",complet=0,context=this,pattern="";
   var addforn=$("html").hasClass('add_forn') ? "I" : "U";
   date=""+date.getFullYear()+"-0"+(date.getMonth()+1)+"-"+date.getDate();
   console.log(this.tab);
@@ -961,14 +1028,6 @@ setFav:function(a){
       case 'dados':
         console.log(this.tab);
         console.log(this.lasttab);
-        html+="<FORN_INATIVO>0</FORN_INATIVO>";
-        if(addforn === "I"){
-          html+="<FORN_STATUS>0</FORN_STATUS>";
-        }
-        else{
-          html+="<FORN_STATUS>"+this.item.FORN_STATUS+"</FORN_STATUS>";
-        }
-
 
         context.ajaxrequest=!0;
         this.callService("GravarFornecedor",'<FORN_ID>'+(context.item.FORN_ID || 0)+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+$("input[name='FORN_DESC']").val()+"</FORN_DESC>",'<action>'+addforn+'</action>');
@@ -981,6 +1040,7 @@ setFav:function(a){
                 html+="<"+$(el).attr("name")+">"+$(el).val()+"</"+$(el).attr("name")+">";
               });
               html+="<SEGM_COD>"+$(".contact"+(a+1)+" .SEGM_COD option:selected").attr("value")+"</SEGM_COD>";
+              console.log("DIUSFAFDUIDSFIUFDSIH: "+$(".contact"+(a+1)+" .SEGM_COD option:selected").attr("value"));
               if(a === context.favcontact){
                 html+="<CONT_PRINCIPAL>1</CONT_PRINCIPAL>";
               }
@@ -994,6 +1054,14 @@ setFav:function(a){
               else{
                 html+="<CONT_INATIVO>0</CONT_INATIVO>";
               }
+
+              if(addforn === "I"){
+                html+="<FORN_STATUS>0</FORN_STATUS>";
+              }
+              else{
+                html+="<FORN_STATUS>"+context.item.FORN_STATUS+"</FORN_STATUS>";
+              }
+
               if(!$("html").hasClass('add_forn')){
                 if(context.item.CONTACTS[a]){
                   html+="<CONT_ID>"+context.item.CONTACTS[a].CONT_ID+"</CONT_ID><IMG_PATH_FRENTE>"+context.item.CONTACTS[a].IMG_PATH_FRENTE+"</IMG_PATH_FRENTE><IMG_PATH_VERSO>"+context.item.CONTACTS[a].IMG_PATH_VERSO+"</IMG_PATH_VERSO><IMG_PATH_CONTATO>"+context.item.CONTACTS[a].IMG_PATH_CONTATO+"</IMG_PATH_CONTATO>";

@@ -180,7 +180,7 @@ open: function(a){
   
 
   //TOP DO DETALHE, LISTA DE VALORES
-  var list=["AMOS_ID","FEIR_DESC","FORN_DESC","CREATE_DATE"/*,"AMOS_PRECO_UM","AMOS_PRECO"*/];
+  var list=["AMOS_DESC","FEIR_DESC","FORN_DESC","CREATE_DATE"/*,"AMOS_PRECO_UM","AMOS_PRECO"*/];
   var list_item=$(".description-top").find("dd");
   for(i=0;i&lt;list.length;i++){
     name=list[i];
@@ -249,7 +249,7 @@ open: function(a){
 
   //DESCRIÇÃO COMPLETA INPUTS
   $(".detail-description").find("input").each(function(a,b){
-    $(b).val(item[$(b).attr("name")]);
+    $(b).val(item[$(b).attr("name").replace(".",",")]);
   });
   $(".AMOS_PRECO_UM option").each(function(a,b){
     if($(b).attr("value") === item["AMOS_PRECO_UM"]){
@@ -260,9 +260,24 @@ open: function(a){
 
   //ANOTAÇÕES
   if(note){
-    result="";
+    var segnote=[],result="";
     for(i=0;i&lt;item.NOTES.length;i++){
-      result+="&lt;li>&lt;article>&lt;div class='notepad-note blockquote'>&lt;p>"+item.NOTES[i].CREATE_DATE+" | "+ item.NOTES[i].USU_NOME+" | "+item.NOTES[i].OBJ_ID+"&lt;/p>&lt;p>"+item.NOTES[i].SEGM_DESC+"&lt;/p>&lt;p>"+item.NOTES[i].NOTA_DESC+"&lt;/p>&lt;/div>&lt;div class='blockquote'>&lt;button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+item.NOTES[i].NOTA_ID+"' name='"+item.NOTES[i].USU_COD+"'>&lt;/button>&lt;/div>&lt;/article>&lt;/li>"
+      if(item.NOTES[i].SEGM_COD === this.usr.SEGM_COD){
+        segnote.push(item.NOTES[i]);
+      }
+    }
+    if(segnote.length){
+      for(i=0;i&lt;segnote.length;i++){
+        result+="&lt;li>&lt;article>&lt;div class='notepad-note blockquote'>&lt;p>"+segnote[i].CREATE_DATE+" | "+ segnote[i].USU_NOME+" | "+segnote[i].OBJ_ID+"&lt;/p>&lt;p>"+segnote[i].SEGM_DESC+"&lt;/p>&lt;p>"+segnote[i].NOTA_DESC+"&lt;/p>&lt;/div>&lt;div class='blockquote'>";
+        if(segnote[i].USU_COD === this.usr.USU_COD){
+          result+= "&lt;button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' id='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'>&lt;/button>";
+        }
+        result+="&lt;/div>&lt;/article>&lt;/li>";
+      }
+      result+="&lt;/ul>&lt;/td>";
+    }
+    else{
+      result+="&lt;/ul>&lt;/td>";
     }
   }
   else{
@@ -311,7 +326,7 @@ open: function(a){
 },saveDetail:function(){
   var html="",item=this.item;
   $(".detail-description").find("input").each(function(a,b){
-    html+="&lt;"+$(b).attr("name")+">"+$(b).val()+"&lt;/"+$(b).attr("name")+">";
+    html+="&lt;"+$(b).attr("name")+">"+$(b).val().replace(",",".")+"&lt;/"+$(b).attr("name")+">";
   });
   html+="&lt;AMOS_PRECO_UM>"+$(".AMOS_PRECO_UM option:selected").attr("value")+"&lt;/AMOS_PRECO_UM>";
   pattern="&lt;AMOS_ID>"+item.AMOS_ID+"&lt;/AMOS_ID>&lt;FORN_ID>"+item.FORN_ID+"&lt;/FORN_ID>&lt;FEIR_COD>"+parseInt(item.FEIR_COD)+"&lt;/FEIR_COD>&lt;USU_COD>"+item.USU_COD+"&lt;/USU_COD>&lt;AMOS_DESC>"+item.AMOS_DESC+"&lt;/AMOS_DESC>&lt;AMOS_STATUS>"+item.AMOS_STATUS+"&lt;/AMOS_STATUS>&lt;AMOS_ENV_EMAIL>"+item.AMOS_ENV_EMAIL+"&lt;/AMOS_ENV_EMAIL>&lt;TECI_COD>"+(item.TECI_COD || "")+"&lt;/TECI_COD>&lt;BASE_COD>"+(item.BASE_COD || "")+"&lt;/BASE_COD>&lt;GRUP_COD>"+(item.GRUP_COD || "")+"&lt;/GRUP_COD>&lt;SUBG_COD>"+(item.SUBG_COD || "")+"&lt;/SUBG_COD>&lt;SEGM_COD>"+item.SEGM_COD+"&lt;/SEGM_COD>&lt;FLAG_PRIORIDADE>"+item.FLAG_PRIORIDADE+"&lt;/FLAG_PRIORIDADE>&lt;AMOS_HOMOLOGAR>"+item.AMOS_HOMOLOGAR+"&lt;/AMOS_HOMOLOGAR>&lt;FLAG_FISICA>"+item.FLAG_FISICA+"&lt;/FLAG_FISICA>&lt;CREATE_DATE>"+"2015-01-01"+"&lt;/CREATE_DATE>";
@@ -511,6 +526,7 @@ open: function(a){
    }
 },deleteFornNote:function(a){
   $(".contact"+$(a.target).attr("name")).addClass('hide');
+  
 },showSomething:function(a){
   if($("html").hasClass('view_forn')){
     return !1;
@@ -869,9 +885,24 @@ setFav:function(a){
     }
     //ANOTAÇÕES
     if(this.item.NOTES.length){
+      var segnote=[];
       var result="";
       for(i=0;i&lt;this.item.NOTES.length;i++){
-        result+="&lt;li>&lt;article>&lt;div class='notepad-note blockquote'>&lt;p>"+this.item.NOTES[i].CREATE_DATE+" | "+ this.item.NOTES[i].USU_NOME+" | "+this.item.NOTES[i].OBJ_ID+"&lt;/p>&lt;p>"+this.item.NOTES[i].SEGM_DESC+"&lt;/p>&lt;p>"+this.item.NOTES[i].NOTA_DESC+"&lt;/p>&lt;/div>&lt;div class='blockquote'>&lt;button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+this.item.NOTES[i].NOTA_ID+"' name='"+this.item.NOTES[i].USU_COD+"'>&lt;/button>&lt;/div>&lt;/article>&lt;/li>"
+        if(this.item.NOTES[i].SEGM_COD === this.usr.SEGM_COD){
+          segnote.push(this.item.NOTES[i]);
+        }
+      }
+      if(segnote){
+        this.setDate(segnote);
+        for(i=0;i&lt;segnote.length;i++){
+          result+="&lt;li>&lt;article>&lt;div class='notepad-note blockquote'>&lt;p>&lt;b>"+segnote[i].CREATE_DATE+" | "+ segnote[i].USU_NOME+" | "+segnote[i].OBJ_ID+"&lt;/b>&lt;/p>&lt;p>"+segnote[i].SEGM_DESC+" - Assunto:&lt;/p>&lt;p>"+segnote[i].NOTA_DESC+"&lt;/p>&lt;/div>&lt;div class='blockquote'>";
+          if(segnote[i].USU_COD === this.usr.USU_COD){
+            result+= "&lt;button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' id='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'>&lt;/button>";
+          }
+        }
+      }
+      else{
+        result="";
       }
     }
     else{
@@ -1267,7 +1298,7 @@ setFav:function(a){
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Wed Aug 26th 2015 using the <a
+		on Thu Aug 27th 2015 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>

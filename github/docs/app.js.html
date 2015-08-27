@@ -183,6 +183,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     init:function(){
       this.view = "images";
       this.page = "amostras";
+      this.nsort="AMOS_ID";
       this.itens = $([]);
       this.data=[];
       this.fdata = [];
@@ -208,8 +209,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.fairval="";
       this.fornval="";
       this.amosval="";
-      this.initialTime='2000-01-08';
-      this.endTime='2015-10-10';
+      this.initialTime='2000-01-01';
+      this.endTime='2020-10-10';
       this.notcombo=0;
 
 
@@ -294,12 +295,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         "amostras/*fairval/*fornval/*amosval":function(res){
           var a,b,c;
           console.log("this.cookiefair");
-          console.dir(jQuery.parseJSON($.cookie("posscroll")));
           $(".zoomContainer").remove();
 
           /*if(!this.cookiefair.length){
             this.cookiefair.push(jQuery.parseJSON($.cookie("posscroll")));
           }*/
+          console.dir(this.cookiefair);
           if(!this.cookiefair.length){
             if(jQuery.parseJSON($.cookie("posscroll"))){
               console.log("ok");
@@ -309,6 +310,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             }
             else{
               console.log("ok2");
+              console.dir(jQuery.parseJSON($.cookie("posscroll")));
               this.cookiefair.push({"fairval":0,"fornval":0,"amosval":0});
             }
           }
@@ -901,7 +903,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             //FEIR_COD e FORN_ID are optional fields
             'name':'amostras',
             'serviceName':'ListarAmostras',
-            'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;ListarAmostras xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+''+e+''+f+''+g+'&lt;/ListarAmostras>&lt;/soap:Body>&lt;/soap:Envelope>',
+            'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;ListarAmostras xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+''+e+''+f+''+g+'&lt;SEGM_COD>'+core.usr.SEGM_COD+'&lt;/SEGM_COD>&lt;/ListarAmostras>&lt;/soap:Body>&lt;/soap:Envelope>',
             callback:function(data,req){
               core.convertData(data,req,name);
             }
@@ -1134,6 +1136,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         if(isNaN($(a.target).val())){
           search="&lt;AMOS_DESC>"+$(a.target).val()+"&lt;/AMOS_DESC>";
         }
+        else if(!$(a.target).val().length){
+          search="";
+        }
         else{
           search="&lt;AMOS_ID>"+$(a.target).val()+"&lt;/AMOS_ID>";
         }
@@ -1162,8 +1167,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       }  
       switch(b){
         case 'amostras':
-          this.data = a.sortBy("AMOS_ID");
+          this.data = a.sortBy(this.nsort);
           this.content.changeview(this.view);
+          console.dir(this.data);
           this.createbox(this.data, this.content.page, !0);
           break;
         case 'template':
@@ -1243,7 +1249,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               this.setdata(this.data,"amostras");
             }
             else{
-              var temp=jQuery.parseJSON($(req.responseXML).text()).unique().sortBy("AMOS_ID");
+              var temp=jQuery.parseJSON($(req.responseXML).text()).unique().sortBy(this.nsort);
               this.data=this.data.filter(function(a,b){
                 if(a.SEGM_COD === context.usr.SEGM_COD){
                   return a;
@@ -1623,11 +1629,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.order_box.find("button").removeClass("sel");
       $(a.target).addClass("sel");
       if(type !== "BIGPRICE"){
+        this.nsort=type;
         length= this.data.length;
         temp = this.data.sortBy(type).unique();
         this.createbox(temp, this.content.page,!1,!1,length);
       }
       else{
+        this.nsort="AMOS_PRECO";
         temp = this.data.sortBy("AMOS_PRECO").unique();
         length=this.data.length-1;
         for(i=length;i>=0;i--){
@@ -1748,7 +1756,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           item.push({"SEGM_COD":this.usr.SEGM_COD,"SEGM_DESC":this.usr.SEGM_DESC});
           $(ev.target).removeClass('nothas').removeClass('middle').addClass('has');
         }
-    }
+      }
 
       this.callService("GravarFornecedorFavorito","&lt;Forn_ID>"+parseInt($(ev.target).attr("name"))+"&lt;/Forn_ID>",html);
 
@@ -1846,7 +1854,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           }
           else{
             for(j=0;j&lt;this.select_items.length;j++){
-              amos_code.push(this.select_items[j].AMOS_ID);
+              amos_code.push(this.select_items[j].AMOS_DESC);
             }
             if(any_principal){
               //this.modal.open("message","O Fornecedor não possui um contato principal Cadastrado",!1,!0);
@@ -1979,8 +1987,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     },
     changeFair:function(a){
       console.log("mudou feira, RESETOU COOKIE")
-      this.initialTime='2000-01-08';
-      this.endTime='2015-10-10';
+      /*this.initialTime='2000-01-01';
+      this.endTime='2020-10-10';*/
       //this.scroller=0;
       if(this.page === "fornecedor_cadastro"){
         this.fornecedores.setfair=$(a.target).find("option:selected").val();
@@ -2184,6 +2192,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             b = e.content.itens.length;
             //console.dir(e.content.itens);
             //c =  20* e.itens.length;  
+            console.log(e.initialTime);
             var scroll={
               fornval:''+e.fornval,
               fairval:''+e.fairval,
@@ -2202,7 +2211,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             f= $(".container").height();
             console.log(d+" , "+f);
             if (d >= f &amp;&amp; b) {
-              //console.log("chegou");
+              console.log("chegou");
               e.content.page++;
               e.setloading(!0,!1);
               e.submit("&lt;FEIR_COD>"+(e.fairval || "")+"&lt;/FEIR_COD>","&lt;FORN_DESC>"+(e.fornval || "")+"&lt;/FORN_DESC>",(e.amosval || ""),!0);
@@ -2258,8 +2267,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.fairval="";
       this.fornval="";
       this.amosval="";
-      /*this.initialTime='2015-01-08';
-      this.endTime='2015-10-10';*/
+      this.nsort="AMOS_DESC";
+      this.initialTime='2000-01-01';
+      this.endTime='2020-10-10';
       this.notcombo=0;
     }
   });
@@ -2286,7 +2296,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Wed Aug 26th 2015 using the <a
+		on Thu Aug 27th 2015 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>

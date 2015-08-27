@@ -725,6 +725,10 @@ header .logo-print {
 .tooltip-content.price {
   right: -160px;
   height: 45px;
+  top: 40px;
+}
+.tooltip-content.price:before {
+  left: 15px;
 }
 .tooltip-content.date {
   right: -110px;

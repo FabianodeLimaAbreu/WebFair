@@ -6,7 +6,7 @@ window.Spotlight = Spine.Controller.sub({
     //"click .spotlight button":"select"
   }, 
   select:function(a) {
-    var fair="<FEIR_COD>",name="<FORN_ID>";
+    var fair="<FEIR_COD>",name="<FORN_ID>",amos="<AMOS_DESC>";
     if("object" === typeof a) {
      a = $(a.target);
     }else {
@@ -18,7 +18,13 @@ window.Spotlight = Spine.Controller.sub({
       $(".forn").val(a.text());
     }
     else{
-      name="<FORN_DESC>"+a.val()+"</FORN_DESC>";
+      if(!a.val().length){
+
+      }
+      else{
+        name="<FORN_DESC>"+a.val()+"</FORN_DESC>";
+      }
+      
       this.setFornVal(a.val());
     }
     this.reset();
@@ -29,19 +35,30 @@ window.Spotlight = Spine.Controller.sub({
       fair+="</FEIR_COD>";
     }
 
+    if(this.getAmosVal()){
+      if(isNaN(this.getAmosVal())){
+        amos+=this.getAmosVal()+"</AMOS_DESC>";
+      }
+      else{
+        amos="<AMOS_ID>"+this.getAmosVal()+"</AMOS_ID>";
+      }
+    }
+    else{
+      amos+="</AMOS_DESC>";
+    }
     $(window).scrollTop(0);
     if(this.getPage() === "amostras"){
       console.log(this.getFairVal());
-      this.mode="amostras/"+((""+this.getFairVal()).replace(" ","_") || "padrao")+"/"+((""+this.getFornVal()).replace(" ","_") || "padrao")+"/"+"padrao";
+      this.mode="amostras/"+((""+this.getFairVal()).replace(" ","_") || "padrao")+"/"+((""+this.getFornVal()).replace(" ","_") || "padrao")+"/"+((""+this.getAmosVal()).replace(" ","_") || "padrao");
       this.navigate(this.mode, !1);
-      this.callService("amostras",fair,name,"",'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20'+'</LINHA_F>','<CREATE_DATE_I>2010-01-01</CREATE_DATE_I>','<CREATE_DATE_F>2050-01-01</CREATE_DATE_F>');
+      this.callService("amostras",fair,name,amos,'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20'+'</LINHA_F>','<CREATE_DATE_I>2000-01-01</CREATE_DATE_I>','<CREATE_DATE_F>2020-01-01</CREATE_DATE_F>');
       this.close();
     }
     else{
       this.setNotCombo(!0);
       this.mode="fornecedores/"+((""+this.getFairVal()).replace(" ","_") || "padrao")+"/"+((""+this.getFornVal()).replace(" ","_") || "padrao")+"/"+"padrao";
       this.navigate(this.mode, !1);
-      this.callService("fornecedores",fair,name,'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20'+'</LINHA_F>','<CREATE_DATE_I>2010-04-10</CREATE_DATE_I>','<CREATE_DATE_F>2050-04-10</CREATE_DATE_F>');
+      this.callService("fornecedores",fair,name,'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20'+'</LINHA_F>','<CREATE_DATE_I>2000-01-01</CREATE_DATE_I>','<CREATE_DATE_F>2020-01-01</CREATE_DATE_F>');
       this.close();
     }
 }, over:function(a) {
@@ -346,7 +363,7 @@ window.Box = Spine.Controller.sub({init:function() {
     var homologado,note,fisica,fav,email,annex,status,result="",samesegm=!1;
     this.el.addClass('col col-small col-large');
     $(".bselect").removeClass("sel");
-    homologado= a.AMOS_HOMOLOGAR ? "has":"nothas";
+    homologado= a.AMOS_HOMOLOGAR ? "has":"nothas";  
     note= a.NOTES.length   ? true:false;
     fisica= a.FLAG_FISICA ? "has":"nothas";
     fav= a.FLAG_PRIORIDADE ? "has":"nothas";
@@ -355,19 +372,35 @@ window.Box = Spine.Controller.sub({init:function() {
     email= a.AMOS_ENV_EMAIL? "sent":"disabled";
 
     //Creating result
-    result+="<a href='#detail/"+parseInt(a.FEIR_COD)+"/"+a.AMOS_ID+"'><div class='thumbnail'><button type='button' name='"+a.AMOS_ID+"' class='icon'></button>"; //bselection
+    result+="<a href='#detail/"+parseInt(a.FEIR_COD)+"/"+a.AMOS_DESC+"'><div class='thumbnail'><button type='button' name='"+a.AMOS_ID+"' class='icon'></button>"; //bselection
     result+="<div class='caption'><div class='caption-upside'><ul class='caption-icons'><li><button type='button' class='caption-icons-icon justit bstatus "+status+"' title='"+status.capitalize()+"'></button></li><li><button type='button' class='caption-icons-icon justit bemail "+email+"'></button></li>";
     result+="<li><button type='button' class='caption-icons-icon justit setitem bhomologado "+homologado+"' name='"+a.AMOS_ID+"' title='Homologar'></button></li>"
     if(note){
-      this.setDate(a.NOTES);
-      result+="<li class='tooltip tooltip-selectable'><button type='button' class='caption-icons-icon justit bnote'></button><ul class='tooltip-content notepad notepadmess rightless'><li class='tooltip-title'><p class='tooltip-item'>Anotações</p></li>";
-      for(i=0;i<a.NOTES.length;i++){
-        result+="<li><article><div class='notepad-note blockquote'><p><b>"+a.NOTES[i].CREATE_DATE+/*a.NOTES[i].CREATE_DATE*/" | "+ a.NOTES[i].USU_NOME+" | "+a.NOTES[i].OBJ_ID+"</b></p><p>"+a.NOTES[i].SEGM_DESC+" - Assunto:</p><p>"+a.NOTES[i].NOTA_DESC+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' id='"+a.NOTES[i].NOTA_ID+"' name='"+a.NOTES[i].USU_COD+"'></button></div></article></li>"
+      var segnote=[];
+      for(i=a.NOTES.length;i>0;i--){
+        if(a.NOTES[i-1].SEGM_COD === this.usr.SEGM_COD){
+          segnote.push(a.NOTES[i-1]);
+        }
       }
-      result+="</ul></li>";
+      if(segnote.length){
+        this.setDate(segnote);
+        result+="<li class='tooltip tooltip-selectable'><button type='button' class='caption-icons-icon justit bnote'></button><ul class='tooltip-content notepad notepadmess rightless'><li class='tooltip-title'><p class='tooltip-item'>Anotações</p></li>";
+        for(i=0;i<segnote.length;i++){
+          result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+ segnote[i].USU_NOME+" | "+segnote[i].OBJ_ID+"</b></p><p>"+segnote[i].SEGM_DESC+" - Assunto:</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
+          if(segnote[i].USU_COD === this.usr.USU_COD){
+            result+= "<button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' id='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'></button>";
+          }
+          result+="</div></article></li>";
+        }
+        result+="</ul></td>";
+      }
+      else{
+        result+="</ul></td>";
+      }
     }
+
     result+="<li><button type='button' class='caption-icons-icon justit setitem bfisica "+fisica+"' name='"+a.AMOS_ID+"' title='Fisica'></button></li><li><button type='button' class='caption-icons-icon justit setitem bfav "+fav+"' name='"+a.AMOS_ID+"' title='Favoritar'></button></li></ul>";
-    result+="<div class='caption-desc'><p><span>Código da Amostra: </span><span>"+a.AMOS_ID+"</span></p><p><span>Fornecedor: </span><span>"+a.FORN_DESC+"</span></p><p><span>Data: </span><span>"+a.CREATE_DATE+"</span></p>";
+    result+="<div class='caption-desc'><p><span>Código da Amostra: </span><span>"+a.AMOS_DESC+"</span></p><p><span>Fornecedor: </span><span>"+a.FORN_DESC+"</span></p><p><span>Data: </span><span>"+a.CREATE_DATE+"</span></p>";
     if(annex){
       result+="<button type='button' class='icon bannex'></button>";
     }
@@ -442,17 +475,28 @@ window.Box = Spine.Controller.sub({init:function() {
           result+="<td><button type='button' class='caption-icons-icon justit bstar nothas' name='"+a.FORN_ID+"'></button></td>";
         }
 
-        if(a.NOTES.length && "Masculino Plano " === "Masculino Plano "){
-          this.setDate(a.NOTES);
-          result+="<td class='tooltip tooltip-selectable'><button type='button' class='caption-icons-icon justit bnote'></button><ul class='tooltip-content notepad notepadmess col-large'><li class='tooltip-title'><p class='tooltip-item'>Anotações</p></li>";
-          for(i=0;i<a.NOTES.length;i++){
-            result+="<li><article><div class='notepad-note blockquote'><p><b>"+a.NOTES[i].CREATE_DATE+" | "+ a.NOTES[i].USU_NOME+" | "+a.NOTES[i].OBJ_ID+"</b></p><p>"+a.NOTES[i].SEGM_DESC+" - Assunto:</p><p>"+a.NOTES[i].NOTA_DESC+"</p></div><div class='blockquote'>";
-            if(a.NOTES[i].USU_COD === this.usr.USU_COD){
-              result+= "<button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' id='"+a.NOTES[i].NOTA_ID+"' name='"+a.NOTES[i].USU_COD+"'></button>";
+        if(a.NOTES.length ){
+          var segnote=[];
+          for(i=a.NOTES.length;i>0;i--){
+            if(a.NOTES[i-1].SEGM_COD === this.usr.SEGM_COD){
+              segnote.push(a.NOTES[i-1]);
             }
-            result+="</div></article></li>"
           }
-          result+="</ul></td>"
+          if(segnote.length){
+            this.setDate(a.NOTES);
+            result+="<td class='tooltip tooltip-selectable'><button type='button' class='caption-icons-icon justit bnote'></button><ul class='tooltip-content notepad notepadmess col-large'><li class='tooltip-title'><p class='tooltip-item'>Anotações</p></li>";
+            for(i=0;i<segnote.length;i++){
+              result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+ segnote[i].USU_NOME+" | "+segnote[i].OBJ_ID+"</b></p><p>"+segnote[i].SEGM_DESC+" - Assunto:</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
+              if(segnote[i].USU_COD === this.usr.USU_COD){
+                result+= "<button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' id='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'></button>";
+              }
+              result+="</div></article></li>"
+            }
+            result+="</ul></td>"
+          }
+          else{
+            result+="<td></td>";
+          }
         }
         else{
           result+="<td></td>";
@@ -472,17 +516,34 @@ window.Box = Spine.Controller.sub({init:function() {
         email= a.AMOS_ENV_EMAIL? "sent":"disabled";
 
         //Creating result
-        result+="<td><button type='button' name='"+a.AMOS_ID+"'' class='icon bselection' name='"+a.AMOS_ID+"'></button></td><td><a href='#detail/"+parseInt(a.FEIR_COD)+"/"+a.AMOS_ID+"'>"+a.FORN_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.AMOS_ID+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.CREATE_DATE+"</a></td><td><button type='button' class='caption-icons-icon justit setitem bfisica "+fisica+"' name='"+a.AMOS_ID+"' title='Fisica'></button></td><td>"+a.AMOS_PRECO+"</td><td>"+a.AMOS_COTACAO_KG+"</td><td><button type='button' class='caption-icons-icon justit setitem bfav "+fav+"' name='"+a.AMOS_ID+"' title='Favoritar'></button></td><td><button type='button' class='caption-icons-icon justit setitem bhomologado "+homologado+"' name='"+a.AMOS_ID+"' title='Homologar'></button></td>";
+        result+="<td><button type='button' name='"+a.AMOS_ID+"' class='icon bselection'></button></td><td><a href='#detail/"+parseInt(a.FEIR_COD)+"/"+a.AMOS_ID+"'>"+a.FORN_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.AMOS_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.CREATE_DATE+"</a></td><td><button type='button' class='caption-icons-icon justit setitem bfisica "+fisica+"' name='"+a.AMOS_ID+"' title='Fisica'></button></td><td>"+a.AMOS_PRECO+"</td><td>"+a.AMOS_COTACAO_KG+"</td><td><button type='button' class='caption-icons-icon justit setitem bfav "+fav+"' name='"+a.AMOS_ID+"' title='Favoritar'></button></td><td><button type='button' class='caption-icons-icon justit setitem bhomologado "+homologado+"' name='"+a.AMOS_ID+"' title='Homologar'></button></td>";
         if(note){
-          result+="<td class='tooltip tooltip-selectable'><button type='button' class='caption-icons-icon justit bnote'></button><ul class='tooltip-content notepad notepadmess col-large'><li class='tooltip-title'><p class='tooltip-item'>Anotações</p></li>";
-          for(i=0;i<a.NOTES.length;i++){
-            result+="<li><article><div class='notepad-note blockquote'><p><b>"+a.NOTES[i].CREATE_DATE+" | "+ a.NOTES[i].USU_NOME+" | "+a.NOTES[i].OBJ_ID+"</b></p><p>"+a.NOTES[i].SEGM_DESC+" - Assunto:</p><p>"+a.NOTES[i].NOTA_DESC+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' id='"+a.NOTES[i].NOTA_ID+"' name='"+a.NOTES[i].USU_COD+"'></button></div></article></li>"
+          var segnote=[];
+          for(i=a.NOTES.length;i>0;i--){
+            if(a.NOTES[i-1].SEGM_COD === this.usr.SEGM_COD){
+              segnote.push(a.NOTES[i-1]);
+            }
           }
-          result+="</ul></td>";
+          if(segnote){
+            this.setDate(segnote);
+            result+="<td class='tooltip tooltip-selectable'><button type='button' class='caption-icons-icon justit bnote'></button><ul class='tooltip-content notepad notepadmess col-large'><li class='tooltip-title'><p class='tooltip-item'>Anotações</p></li>";
+            for(i=0;i<segnote.length;i++){
+              result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+ segnote[i].USU_NOME+" | "+segnote[i].OBJ_ID+"</b></p><p>"+segnote[i].SEGM_DESC+" - Assunto:</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
+              if(segnote[i].USU_COD === this.usr.USU_COD){
+                result+= "<button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' id='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'></button>";
+              }
+              result+="</div></article></li>"
+            }
+            result+="</ul></td>"
+          }
+          else{
+            result+="<td></td>";
+          }
         }
         else{
           result+="<td></td>";
         }
+
         annex ? result+="<td><button type='button' class='icon bannex'></button></td>" : result+="<td></td>";
         result+="<td><button type='button' class='caption-icons-icon justit bemail "+email+"'></button></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.TECI_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.BASE_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.GRUP_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.SUBG_DESC+"</a></td>";
         if(a.COMPOSITIONS.length){
