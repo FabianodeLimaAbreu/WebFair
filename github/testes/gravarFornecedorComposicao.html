@@ -13,7 +13,7 @@
                   var wsUrl = "../../WebService.asmx?op=GravarFornecedorComposicao ";
 
                   //O SERVIÇO MESMO JA EXCLUI E INSERI
-                  var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFornecedorComposicao xmlns="http://tempuri.org/"><FORN_ID>777</FORN_ID><compositions><string>CA</string><string>CJ</string><string>CO</string></compositions></GravarFornecedorComposicao></soap:Body></soap:Envelope>';
+                  var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFornecedorComposicao xmlns="http://tempuri.org/"><FORN_ID>3</FORN_ID><compositions><Composition><COMP_COD>9999</COMP_COD><COMP_OTHERS></COMP_OTHERS><TP_COMP_ID>2</TP_COMP_ID></Composition><Composition><COMP_COD>CA</COMP_COD><COMP_OTHERS></COMP_OTHERS><TP_COMP_ID>2</TP_COMP_ID></Composition></compositions></GravarFornecedorComposicao></soap:Body></soap:Envelope>';
 
                   $.support.cors=true;
                   $.ajax({

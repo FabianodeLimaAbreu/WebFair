@@ -1175,23 +1175,27 @@ form.search {
   float: left;
   width: 100%;
   height: 410px;
-  overflow-y: auto;
+  overflow-y: hidden;
 }
-.supplier .supplier-scroller section,
-.fornecedor_cadastro .supplier-scroller section {
+.supplier .supplier-scroller form,
+.fornecedor_cadastro .supplier-scroller form {
+  width: 102%;
+}
+.supplier .supplier-scroller form section,
+.fornecedor_cadastro .supplier-scroller form section {
   position: relative;
   float: left;
   width: 100%;
-  height: auto;
-  min-height: 410px;
+  height: 410px;
+  overflow-y: auto;
 }
-.supplier .supplier-scroller section .supplier-side,
-.fornecedor_cadastro .supplier-scroller section .supplier-side {
+.supplier .supplier-scroller form section .supplier-side,
+.fornecedor_cadastro .supplier-scroller form section .supplier-side {
   position: relative;
   height: auto;
 }
-.supplier .supplier-scroller section .supplier-top-side,
-.fornecedor_cadastro .supplier-scroller section .supplier-top-side {
+.supplier .supplier-scroller form section .supplier-top-side,
+.fornecedor_cadastro .supplier-scroller form section .supplier-top-side {
   position: relative;
   float: left;
   width: 100%;

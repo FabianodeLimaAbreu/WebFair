@@ -115,7 +115,13 @@
       $(".forn").val(a.text());
     }
     else{
-      name="&lt;FORN_DESC>"+a.val()+"&lt;/FORN_DESC>";
+      if(!a.val().length){
+
+      }
+      else{
+        name="&lt;FORN_DESC>"+a.val()+"&lt;/FORN_DESC>";
+      }
+      
       this.setFornVal(a.val());
     }
     this.reset();
@@ -142,14 +148,14 @@
       console.log(this.getFairVal());
       this.mode="amostras/"+((""+this.getFairVal()).replace(" ","_") || "padrao")+"/"+((""+this.getFornVal()).replace(" ","_") || "padrao")+"/"+((""+this.getAmosVal()).replace(" ","_") || "padrao");
       this.navigate(this.mode, !1);
-      this.callService("amostras",fair,name,amos,'&lt;LINHA_I>'+'1'+'&lt;/LINHA_I>','&lt;LINHA_F>'+'20'+'&lt;/LINHA_F>','&lt;CREATE_DATE_I>2010-01-01&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>2050-01-01&lt;/CREATE_DATE_F>');
+      this.callService("amostras",fair,name,amos,'&lt;LINHA_I>'+'1'+'&lt;/LINHA_I>','&lt;LINHA_F>'+'20'+'&lt;/LINHA_F>','&lt;CREATE_DATE_I>2000-01-01&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>2020-01-01&lt;/CREATE_DATE_F>');
       this.close();
     }
     else{
       this.setNotCombo(!0);
       this.mode="fornecedores/"+((""+this.getFairVal()).replace(" ","_") || "padrao")+"/"+((""+this.getFornVal()).replace(" ","_") || "padrao")+"/"+"padrao";
       this.navigate(this.mode, !1);
-      this.callService("fornecedores",fair,name,'&lt;LINHA_I>'+'1'+'&lt;/LINHA_I>','&lt;LINHA_F>'+'20'+'&lt;/LINHA_F>','&lt;CREATE_DATE_I>2010-04-10&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>2050-04-10&lt;/CREATE_DATE_F>');
+      this.callService("fornecedores",fair,name,'&lt;LINHA_I>'+'1'+'&lt;/LINHA_I>','&lt;LINHA_F>'+'20'+'&lt;/LINHA_F>','&lt;CREATE_DATE_I>2000-01-01&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>2020-01-01&lt;/CREATE_DATE_F>');
       this.close();
     }
 }, over:function(a) {
@@ -463,14 +469,23 @@ window.Box = Spine.Controller.sub({init:function() {
     email= a.AMOS_ENV_EMAIL? "sent":"disabled";
 
     //Creating result
+    /*result+="&lt;a href='#detail/"+parseInt(a.FEIR_COD)+"/"+a.AMOS_DESC+"'>&lt;div class='thumbnail'>";
+    if(!this.getUnableSelect()){
+      result+="&lt;button type='button' name='"+a.AMOS_ID+"' class='icon'>&lt;/button>"; //bselection
+    }
+    else{
+      result+="&lt;button type='button' name='"+a.AMOS_ID+"' class='icon bselection'>&lt;/button>"; //bselection
+    }*/
+    //console.log(this.getStatusSelect);
     result+="&lt;a href='#detail/"+parseInt(a.FEIR_COD)+"/"+a.AMOS_DESC+"'>&lt;div class='thumbnail'>&lt;button type='button' name='"+a.AMOS_ID+"' class='icon'>&lt;/button>"; //bselection
+
     result+="&lt;div class='caption'>&lt;div class='caption-upside'>&lt;ul class='caption-icons'>&lt;li>&lt;button type='button' class='caption-icons-icon justit bstatus "+status+"' title='"+status.capitalize()+"'>&lt;/button>&lt;/li>&lt;li>&lt;button type='button' class='caption-icons-icon justit bemail "+email+"'>&lt;/button>&lt;/li>";
     result+="&lt;li>&lt;button type='button' class='caption-icons-icon justit setitem bhomologado "+homologado+"' name='"+a.AMOS_ID+"' title='Homologar'>&lt;/button>&lt;/li>"
     if(note){
       var segnote=[];
-      for(i=0;i&lt;a.NOTES.length;i++){
-        if(a.NOTES[i].SEGM_COD === this.usr.SEGM_COD){
-          segnote.push(a.NOTES[i]);
+      for(i=a.NOTES.length;i>0;i--){
+        if(a.NOTES[i-1].SEGM_COD === this.usr.SEGM_COD){
+          segnote.push(a.NOTES[i-1]);
         }
       }
       if(segnote.length){
@@ -568,9 +583,9 @@ window.Box = Spine.Controller.sub({init:function() {
 
         if(a.NOTES.length ){
           var segnote=[];
-          for(i=0;i&lt;a.NOTES.length;i++){
-            if(a.NOTES[i].SEGM_COD === this.usr.SEGM_COD){
-              segnote.push(a.NOTES[i]);
+          for(i=a.NOTES.length;i>0;i--){
+            if(a.NOTES[i-1].SEGM_COD === this.usr.SEGM_COD){
+              segnote.push(a.NOTES[i-1]);
             }
           }
           if(segnote.length){
@@ -610,9 +625,9 @@ window.Box = Spine.Controller.sub({init:function() {
         result+="&lt;td>&lt;button type='button' name='"+a.AMOS_ID+"' class='icon bselection'>&lt;/button>&lt;/td>&lt;td>&lt;a href='#detail/"+parseInt(a.FEIR_COD)+"/"+a.AMOS_ID+"'>"+a.FORN_DESC+"&lt;/a>&lt;/td>&lt;td>&lt;a href='#detail/"+a.AMOS_ID+"'>"+a.AMOS_DESC+"&lt;/a>&lt;/td>&lt;td>&lt;a href='#detail/"+a.AMOS_ID+"'>"+a.CREATE_DATE+"&lt;/a>&lt;/td>&lt;td>&lt;button type='button' class='caption-icons-icon justit setitem bfisica "+fisica+"' name='"+a.AMOS_ID+"' title='Fisica'>&lt;/button>&lt;/td>&lt;td>"+a.AMOS_PRECO+"&lt;/td>&lt;td>"+a.AMOS_COTACAO_KG+"&lt;/td>&lt;td>&lt;button type='button' class='caption-icons-icon justit setitem bfav "+fav+"' name='"+a.AMOS_ID+"' title='Favoritar'>&lt;/button>&lt;/td>&lt;td>&lt;button type='button' class='caption-icons-icon justit setitem bhomologado "+homologado+"' name='"+a.AMOS_ID+"' title='Homologar'>&lt;/button>&lt;/td>";
         if(note){
           var segnote=[];
-          for(i=0;i&lt;a.NOTES.length;i++){
-            if(a.NOTES[i].SEGM_COD === this.usr.SEGM_COD){
-              segnote.push(a.NOTES[i]);
+          for(i=a.NOTES.length;i>0;i--){
+            if(a.NOTES[i-1].SEGM_COD === this.usr.SEGM_COD){
+              segnote.push(a.NOTES[i-1]);
             }
           }
           if(segnote){
@@ -688,7 +703,7 @@ window.Box = Spine.Controller.sub({init:function() {
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Thu Aug 27th 2015 using the <a
+		on Fri Aug 28th 2015 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>

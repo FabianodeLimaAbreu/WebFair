@@ -331,6 +331,7 @@ callerEvents:function(){
   $(".savenote").bind("click",function(a){context.saveNote(a);});
   $(".form-control-bmore").bind("click",function(a){context.stopOnMore(a);});
   $(".form-control-bmore").bind("keyup",function(a){context.setOthers(a);});
+  $(".gotop").bind("click",function(a){context.goTop();});
 
   if(!$("html").hasClass('view_forn')){
     $("input").removeAttr('disabled');
@@ -400,39 +401,13 @@ open: function(a){
   }, 300,function(){
     context.lasttab=context.tab || "dados";
     context.tab=href.replace("#","");
+    $(".ScrollSpy").find(".nav-item")
+     .parent().removeClass("active")
+     .end().filter("[href=#"+context.tab+"]").parent().addClass("active");
     context.saveForn();
   });
 },scrollTab:function(a){
-  var lastId;
-  // Bind to scroll
-  // Get container scroll position
 
-  scrollItems = $(".ScrollSpy").find(".nav-item").map(function(){
-    var item = $($(this).attr("href"));
-    if (item.length) { return item; }
-  });
-
-   //var fromTop = $(this).scrollTop()+topMenuHeight;
-   var fromTop = $(a.target).scrollTop();
-   this.scroller=fromTop;
-   // Get id of current scroll item
-   var cur = scrollItems.map(function(){
-     if ($(this).position().top <= fromTop)
-       return this;
-   });
-   // Get the id of the current element
-   cur = cur[cur.length-1];
-   var id = cur && cur.length ? cur[0].id : "";
-   if (lastId !== id) {
-       lastId = id;
-
-
-       // Set/remove active class
-       $(".ScrollSpy").find(".nav-item")
-         .parent().removeClass("active")
-         .end().filter("[href=#"+id+"]").parent().addClass("active");
-
-   }
 },deleteFornNote:function(a){
   $(".contact"+$(a.target).attr("name")).addClass('hide');
   
@@ -533,9 +508,9 @@ open: function(a){
   cod_detalhe=name.substr(pos_string, name.length);
   group=name.substr(0,pos_string-1);
   if(b){
-    if(cod_detalhe == "9999"){
-      if(!el.find("input").val().length || el.find("input").val() === "Digite a composição e tecle enter:"){
-        el.find("input").val("Digite a composição e tecle enter:");
+    if(cod_detalhe == "9999" || cod_detalhe == "999"){
+      if(!el.find("input").val().length || el.find("input").val() === "Digite o valor e tecle enter:"){
+        el.find("input").val("Digite o valor e tecle enter:");
         return !0;
       }
       else{
@@ -772,7 +747,7 @@ setFav:function(a){
   //Gravar dados nos campos
 
 },inputValues:function(){
-  var context=this,complet=!1;
+  var context=this,complet=!0;
   if(this.item.FORN_ID){
     $(".bedit").trigger('click');
     $(".fair option").each(function(a,b){
@@ -874,15 +849,23 @@ setFav:function(a){
     }
     else{
       if(context.item.CONTACTS.length){
+        var template="",temp="",cont="",template1="",template2="";
         //Tem apenas 1 contato
         console.log("Tem apenas 1 contato");
         var template="",temp="",cont="",template2="";
-        template+='<div class="supplier-form-container contact contact1 actived cont"><h2><span>Contato 1</span></h2><div class="supplier-photo-side"><div class="photo-container">';
+        temp+='<div class="supplier-form-container contact contact1 actived cont"><h2><span>Contato 1</span></h2><div class="supplier-photo-side"><div class="photo-container">';
         template+='<img src=http://bdb/ifair_img/'+context.item.CONTACTS[0].IMG_PATH_CONTATO+' width="100%">';
-        template+='</div> </div><div class="supplier-firstform"><div class="row"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_NOME+'" required="required"></div></div><button type="button" class="icon floatLeft trash-big" name="1"></button></div><div class="row"><div class="fake-form"><div class="form-group"><input type="text" class="form-control" name="CONT_EMAIL" placeholder="E-mail" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_EMAIL+'" required="required"></div></div></div><div class="row top-ten"><div class="fake-form fake-form-supplier-equal floatLeft">';
+        template1+='</div> </div><div class="supplier-firstform"><div class="row"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_NOME+'" required="required"></div></div><button type="button" class="icon floatLeft trash-big" name="1"></button></div><div class="row"><div class="fake-form"><div class="form-group"><input type="text" class="form-control" name="CONT_EMAIL" placeholder="E-mail" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_EMAIL+'" required="required"></div></div></div><div class="row top-ten"><div class="fake-form fake-form-supplier-equal floatLeft">';
         cont+='<button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bcircle favcontact sel" name="1">Contato Principal </button>';
-        template+='</div><div class="fake-form fake-form-supplier-equal right"><div class="form-group styled-select"><select class="form-control bselect SEGM_COD" name="SEGM_COD"><option value="Segmento">Segmentos</option></select></div></div></div><div class="row"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="tel" class="form-control" name="CONT_TEL" placeholder="Tel 1" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_TEL+'"></div></div><button type="button" class="icon floatLeft bplus-big" name="CONT_TEL2"></button></div><div class="row CONT_TEL2 top-ten hide"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="tel" class="form-control" name="CONT_TEL2" placeholder="Tel 2" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_TEL2+'"></div></div></div></div></div>';
+        template2+='</div><div class="fake-form fake-form-supplier-equal right"><div class="form-group styled-select"><select class="form-control bselect SEGM_COD" name="SEGM_COD"><option value="Segmento">Segmentos</option></select></div></div></div><div class="row"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="tel" class="form-control" name="CONT_TEL" placeholder="Tel 1" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_TEL+'"></div></div><button type="button" class="icon floatLeft bplus-big" name="CONT_TEL2"></button></div><div class="row CONT_TEL2 top-ten hide"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="tel" class="form-control" name="CONT_TEL2" placeholder="Tel 2" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_TEL2+'"></div></div></div></div></div>';
         context.favcontact=0;
+        $("#dados .contact-container").prepend(temp+template+template1+cont+template2);
+        template='<div class="supplier-photo-side"><div class="photo-container">';
+        template+='<img src="images/contact.png" width="100%" class="noimage">';
+        template1='</div></div><div class="supplier-firstform"><div class="row"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off"></div></div><button type="button" class="icon floatLeft trash-big" name="2"></button></div><div class="row"><div class="fake-form"><div class="form-group"><input type="text" class="form-control" name="CONT_EMAIL" placeholder="E-mail" autofocus="" autocomplete="off"></div></div></div><div class="row top-ten"><div class="fake-form fake-form-supplier-equal floatLeft">';
+        cont='<button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bcircle favcontact" name="2">Contato Principal </button>';
+        template='<div class="supplier-form-container contact contact2 cont"><h2><span>Contato 2</span><button type="button" class="icon floatLeft bplus-big" name="showcontact"></button></h2>'+template+template1+cont+template2+'</div>';
+        $("#dados .contact-container").append(template);
       }
       else{
         //Nao possui contato
@@ -895,12 +878,13 @@ setFav:function(a){
         cont+='<button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bcircle favcontact" name="1">Contato Principal </button>';
         template2+='</div><div class="fake-form fake-form-supplier-equal right"><div class="form-group styled-select"><select class="form-control bselect SEGM_COD" name="SEGM_COD"><option value="Segmento">Segmentos</option></select></div></div></div><div class="row"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="tel" class="form-control" name="CONT_TEL" placeholder="Tel 1" autofocus="" autocomplete="off"></div></div><button type="button" class="icon floatLeft bplus-big" name="CONT_TEL2" name="CONT_TEL2"></button></div><div class="row CONT_TEL2 top-ten hide"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="tel" class="form-control" name="CONT_TEL2" placeholder="Tel 2" autofocus="" autocomplete="off"></div></div></div></div></div>';
         context.favcontact=null;
-      }
-      $("#dados .contact-container").prepend(temp+template+template1+cont+template2);
-      template1='</div></div><div class="supplier-firstform"><div class="row"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off"></div></div><button type="button" class="icon floatLeft trash-big" name="2"></button></div><div class="row"><div class="fake-form"><div class="form-group"><input type="text" class="form-control" name="CONT_EMAIL" placeholder="E-mail" autofocus="" autocomplete="off"></div></div></div><div class="row top-ten"><div class="fake-form fake-form-supplier-equal floatLeft">';
-      cont='<button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bcircle favcontact" name="2">Contato Principal </button>';
-      template='<div class="supplier-form-container contact contact2 cont"><h2><span>Contato 2</span><button type="button" class="icon floatLeft bplus-big" name="showcontact"></button></h2>'+template+template1+cont+template2+'</div>';
-      $("#dados .contact-container").append(template);
+        $("#dados .contact-container").prepend(temp+template+template1+cont+template2);
+
+        template1='</div></div><div class="supplier-firstform"><div class="row"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off"></div></div><button type="button" class="icon floatLeft trash-big" name="2"></button></div><div class="row"><div class="fake-form"><div class="form-group"><input type="text" class="form-control" name="CONT_EMAIL" placeholder="E-mail" autofocus="" autocomplete="off"></div></div></div><div class="row top-ten"><div class="fake-form fake-form-supplier-equal floatLeft">';
+        cont='<button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bcircle favcontact" name="2">Contato Principal </button>';
+        template='<div class="supplier-form-container contact contact2 cont"><h2><span>Contato 2</span><button type="button" class="icon floatLeft bplus-big" name="showcontact"></button></h2>'+template+template1+cont+template2+'</div>';
+        $("#dados .contact-container").append(template);
+      }      
     }
 
     context.createComponent(this.getSegm(),$(".SEGM_COD"),'segm');
@@ -968,15 +952,19 @@ setFav:function(a){
     if(context.item.PRODUCTS.length){
       $("a[href='#products'] button").removeClass('incomplet').addClass('complet');
       for(var i=0;i<context.item.PRODUCTS.length;i++){
-        /*if($(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").attr("name") === "prod/9999"){
+        console.log($(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").attr("name"));
+        if($(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").attr("name") === "prod/999"){
           $(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").find("input").val(context.item.PRODUCTS[i].PROD_OTHERS);
-        }*/
+        }
         $(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").trigger('click');
       }
     }
     if(context.item.MARKETS.length){
       $("a[href='#markets'] button").removeClass('incomplet').addClass('complet');
       for(var i=0;i<context.item.MARKETS.length;i++){
+        if($(".mark-add button[name='mark/"+parseInt(context.item.MARKETS[i].MERC_COD)+"']").attr("name") === "mark/999"){
+          $(".mark-add button[name='mark/"+parseInt(context.item.MARKETS[i].MERC_COD)+"']").find("input").val(context.item.MARKETS[i].MERC_OTHERS);
+        }
         $(".mark-add button[name='mark/"+parseInt(context.item.MARKETS[i].MERC_COD)+"']").trigger('click');
       }
     }
@@ -1000,8 +988,9 @@ setFav:function(a){
   }
 
   $("#dados input[required='required']").each(function(index,el){
-    if($(el).val().length){
-      complet=!0;
+    console.log($(el).val().length+" , "+$(el).val()+" , "+$(el).val().length === true);
+    if(!$(el).val().length && complet){
+      complet=!1;
     }
   });
   if(complet){
@@ -1011,8 +1000,7 @@ setFav:function(a){
   $(".favcontact").bind("click",function(a){context.setFavContact(a);});
   $(".trash-big").bind("click",function(a){context.deleteFornNote(a);});
 },saveForn:function(goout){
-
-  var date=new Date(),html="",complet=0,context=this,pattern="";
+  var date=new Date(),html="",complet=0,context=this,pattern="",complet=!0;
   var addforn=$("html").hasClass('add_forn') ? "I" : "U";
   date=""+date.getFullYear()+"-0"+(date.getMonth()+1)+"-"+date.getDate();
   console.log(this.tab);
@@ -1030,13 +1018,17 @@ setFav:function(a){
         console.log(this.lasttab);
 
         context.ajaxrequest=!0;
-        this.callService("GravarFornecedor",'<FORN_ID>'+(context.item.FORN_ID || 0)+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+$("input[name='FORN_DESC']").val()+"</FORN_DESC>",'<action>'+addforn+'</action>');
-        
+        console.log(html);
+        this.callService("GravarFornecedor",'<FORN_ID>'+(context.item.FORN_ID || 0)+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+$("input[name='FORN_DESC']").val()+"</FORN_DESC>",'<FORN_STATUS>1</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>'+addforn+'</action>');
+        $(".fair").attr('disabled', 'disabled');
         status=setInterval(function(){
           if(!context.ajaxrequest){
             $(".cont.actived").each(function(a,b){
               html="";
               $(b).find("input").each(function(index,el){
+                if($(el).attr("required") && !$(el).val().length && complet){
+                  complet=!1;
+                }
                 html+="<"+$(el).attr("name")+">"+$(el).val()+"</"+$(el).attr("name")+">";
               });
               html+="<SEGM_COD>"+$(".contact"+(a+1)+" .SEGM_COD option:selected").attr("value")+"</SEGM_COD>";
@@ -1056,9 +1048,17 @@ setFav:function(a){
               }
 
               if(addforn === "I"){
-                html+="<FORN_STATUS>0</FORN_STATUS>";
+                html+="<FORN_STATUS>1</FORN_STATUS>";
               }
               else{
+                if(complet){
+                  $("a[href='#dados'] button").removeClass('incomplet').addClass('complet');
+                  context.item.FORN_STATUS=1;
+                }
+                else{
+                  $("a[href='#dados'] button").removeClass('complet').addClass('incomplet');
+                  context.item.FORN_STATUS=0;
+                }
                 html+="<FORN_STATUS>"+context.item.FORN_STATUS+"</FORN_STATUS>";
               }
 
@@ -1081,11 +1081,20 @@ setFav:function(a){
             clearInterval(status);
           }
         },100);
+        
+        if($(".ScrollSpy .nav-item button.complet").length === 5  && this.item.FORN_STATUS === 0){
+          console.log("cadastro completo");
+        }
         context.setloading(!1);
         // console.log(this.setDate());
         break;
       case 'profile':
-        var html="",other="";
+        if(!this.item.FORN_ID){
+          this.modal.open("message","Você deve primeiro salvar um fornecedor!!!",!1,!0);
+          context.setloading(!1);
+          return !1;
+        }
+        var html="",other="",complet=!0;
         console.log(this.tab);
         console.log(this.lasttab);
         if($("#profile .row-top .bcircle").hasClass('sel')){
@@ -1105,45 +1114,130 @@ setFav:function(a){
             });
           }
         }
+        else{
+          console.log("nenhum profile selecionado encima");
+          complet=!1;
+        }
 
         $("#profile .row-down .bcircle.sel").each(function(a,b){
           if($(b).attr("name") == "999"){
             other=$(b).parent().find("input").val();
           }
           html+="<Profile><FAB_COD>0</FAB_COD><PERF_COD>"+$(b).attr("name")+"</PERF_COD><TP_FAB_COD>0</TP_FAB_COD><PERF_OTHERS>"+other+"</PERF_OTHERS></Profile>";
-        })
+        });
+        if(complet){
+          $("a[href='#profile'] button").removeClass('incomplet').addClass('complet');
+        }
+        else{
+          $("a[href='#profile'] button").removeClass('complet').addClass('incomplet');
+        }
+
+        
+        if($(".ScrollSpy .nav-item button.complet").length === 5  && this.item.FORN_STATUS === 0){
+          console.log("cadastro completo");
+        }
+
         this.callService("GravarFornecedorProfile",'<Forn_ID>'+this.item.FORN_ID+'</Forn_ID>',html);
+
         break;
       case 'composition':
-        var html="";
+        if(!this.item.FORN_ID){
+          this.modal.open("message","Você deve primeiro salvar um fornecedor!!!",!1,!0);
+          context.setloading(!1);
+          return !1;
+        }
+        var html="",others="";
         console.log(this.tab);
         console.log(this.lasttab);
+
         $(".comp-rem .row-item").each(function(a,b){
           var el=$(b).find(".bminus").attr("name");
-          html+="<string>"+el.substr(el.indexOf("/")+1, el.length)+"</string>";
+          //html+="<string>"+el.substr(el.indexOf("/")+1, el.length)+"</string>";
+          if(el.substr(el.indexOf("/")+1, el.length) === "9999"){
+            others=el.substr(0,el.indexOf("/"));
+          }
+          else{
+            others="";
+          }
+          html+="<Composition><COMP_COD>"+el.substr(el.indexOf("/")+1)+"</COMP_COD><COMP_OTHERS>"+others+"</COMP_OTHERS><TP_COMP_ID>2</TP_COMP_ID></Composition>";
         });
+        if(html.length){
+          $("a[href='#composition'] button").removeClass('incomplet').addClass('complet');
+        }
+        else{
+          $("a[href='#composition'] button").removeClass('complet').addClass('incomplet');
+        }
         this.callService("GravarFornecedorComposicao",'<FORN_ID>'+this.item.FORN_ID+'</FORN_ID>',html);
+
+        if($(".ScrollSpy .nav-item button.complet").length === 5  && this.item.FORN_STATUS === 0){
+          console.log("cadastro completo");
+        }
+
         break;
       case 'products':
+        if(!this.item.FORN_ID){
+          this.modal.open("message","Você deve primeiro salvar um fornecedor!!!",!1,!0);
+          context.setloading(!1);
+          return !1;
+        }
         console.log(this.tab);
         console.log(this.lasttab);
         var html="";
         console.log(this.tab);
         console.log(this.lasttab);
         $(".prod-rem .row-item").each(function(a,b){
-          var el=$(b).find(".bminus").attr("name");
-          html+="<Product><PROD_COD>"+el.substr(el.indexOf("/")+1, el.length)+"</PROD_COD><PROD_OTHERS></PROD_OTHERS></Product>";
+          var el=$(b).find(".bminus").attr("name"),others="";
+          if(el.substr(el.indexOf("/")+1, el.length) === "999"){
+            others=el.substr(0,el.indexOf("/"));
+          }
+          else{
+            others="";
+          }
+          html+="<Product><PROD_COD>"+el.substr(el.indexOf("/")+1, el.length)+"</PROD_COD><PROD_OTHERS>"+others+"</PROD_OTHERS></Product>";
         });
+        if(html.length){
+          $("a[href='#products'] button").removeClass('incomplet').addClass('complet');
+        }
+        else{
+          $("a[href='#products'] button").removeClass('complet').addClass('incomplet');
+        }
         this.callService("GravarFornecedorProduto",'<Forn_ID>'+context.item.FORN_ID+'</Forn_ID>',html);
+
+        if($(".ScrollSpy .nav-item button.complet").length === 5  && this.item.FORN_STATUS === 0){
+          console.log("cadastro completo");
+        }
+
         break;
       case 'markets':
+        if(!this.item.FORN_ID){
+          this.modal.open("message","Você deve primeiro salvar um fornecedor!!!",!1,!0);
+          context.setloading(!1);
+          return !1;
+        }
         console.log(this.tab);
         console.log(this.lasttab);
+        var html="",others="";
         $(".mark-rem .row-item").each(function(a,b){
           var el=$(b).find(".bminus").attr("name");
-          html+="<int>"+el.substr(el.indexOf("/")+1, el.length)+"</int>";
+          if(el.substr(el.indexOf("/")+1, el.length) === "999"){
+            others=el.substr(0,el.indexOf("/"));
+          }
+          else{
+            others="";
+          }
+          html+="<Market><MERC_COD>"+el.substr(el.indexOf("/")+1, el.length)+"</MERC_COD><MERC_OTHERS>"+others+"</MERC_OTHERS></Market>"
         });
+        if(html.length){
+          $("a[href='#markets'] button").removeClass('incomplet').addClass('complet');
+        }
+        else{
+          $("a[href='#markets'] button").removeClass('complet').addClass('incomplet');
+        }
         this.callService("GravarFornecedorMercado",'<Forn_ID>'+context.item.FORN_ID+'</Forn_ID>',html);
+
+        if($(".ScrollSpy .nav-item button.complet").length === 5  && this.item.FORN_STATUS === 0){
+          console.log("cadastro completo");
+        }
 
         status=setInterval(function(){
           if(!context.ajaxrequest && goout){
@@ -1152,7 +1246,6 @@ setFav:function(a){
             clearInterval(status);
           }
         },100);
-
         break;
     }
     /*$("#"+this.tab).find("input[required='required']").each(function(a,b){
@@ -1161,11 +1254,13 @@ setFav:function(a){
   }
   else{
     if(this.lasttab && this.tab !=="dados" && !this.setfair){
-      this.modal.open("message","Você deve selecionar uma feira!!!",!1,!0);
+      this.modal.open("message","Você deve primeiro salvar um fornecedor!!!",!1,!0);
     }
   }
   //this.setloading(!1);
   //console.dir($("input[required='required']"));
+},goTop:function(){
+  $(".nav-item").eq(0).trigger('click');
 },reload:function(code) {
   "use strict";
   var result;

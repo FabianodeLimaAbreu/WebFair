@@ -13,7 +13,7 @@
                   var wsUrl = "../../WebService.asmx?op=GravarFornecedorMercado ";
 
                   //O SERVIÇO MESMO JA EXCLUI E INSERI
-                  var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFornecedorMercado xmlns="http://tempuri.org/"><Forn_ID>3</Forn_ID><markets><int>2</int></markets></GravarFornecedorMercado></soap:Body></soap:Envelope>';
+                  var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFornecedorMercado xmlns="http://tempuri.org/"><Forn_ID>3</Forn_ID><markets><Market><MERC_COD>2</MERC_COD><MERC_OTHERS></MERC_OTHERS></Market><Market><MERC_COD>999</MERC_COD><MERC_DESC></MERC_DESC><MERC_OTHERS>Teste</MERC_OTHERS></Market></markets></GravarFornecedorMercado></soap:Body></soap:Envelope>';
 
                   $.support.cors=true;
                   $.ajax({

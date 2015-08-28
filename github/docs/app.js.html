@@ -246,7 +246,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.el.find("#wrap").removeClass("hide");
 
       this.modal = new Modal({el:this.modalEl,callService:this.proxy(this.callService),usr:this.usr,getPage:this.proxy(this.getPage)});
-      this.content = new Content({el:this.contentEl,usr:this.usr/*bread:this.breadEl, type:this.usr.TIPO*/});
+      this.content = new Content({el:this.contentEl,usr:this.usr,getStatusSelect:this.proxy(this.getStatusSelect)/*bread:this.breadEl, type:this.usr.TIPO*/});
       this.fornecedores = new Fornecedores({
         getloading:this.proxy(this.getloading),
         setloading:this.proxy(this.setloading),
@@ -999,7 +999,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           {
             'name':'GravarFornecedor',
             'serviceName':'GravarFornecedor',
-            'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;GravarFornecedor xmlns="http://tempuri.org/">&lt;supplier>'+a+''+b+''+c+'&lt;PLAT_ID>2&lt;/PLAT_ID>&lt;/supplier>'+d+'&lt;/GravarFornecedor>&lt;/soap:Body>&lt;/soap:Envelope>',
+            'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;GravarFornecedor xmlns="http://tempuri.org/">&lt;supplier>'+a+''+b+''+c+''+d+'&lt;PLAT_ID>2&lt;/PLAT_ID>&lt;/supplier>'+e+'&lt;/GravarFornecedor>&lt;/soap:Body>&lt;/soap:Envelope>',
             'callback':function(data,req){
               core.setloading(!1);
             }
@@ -1664,6 +1664,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       if($(a.target).hasClass("sel") &amp;&amp; this.view !== "list"){
         //Reseta array
         this.select_items=[];
+        this.unable_select=!1;
         $(a.target).removeClass("sel");
         $(".thumbnail .icon").attr("class","icon");
         $("html").attr("class","amostras");
@@ -1676,6 +1677,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       else{
         //Inicia gravação
         this.select_items=[];
+        this.unable_select=!0;
         $(".bsel").removeClass("sel");
         $(a.target).addClass("sel");
         $(".thumbnail .icon").attr("class","icon").addClass($(a.target).attr("name"));
@@ -1997,10 +1999,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         return !1;
       }
       this.cookiefair=[];
-      $("input[name='initial_date']").val("");
-      $("input[name='end_date']").val("");
+      this.restartValues();
       this.itens_by_page=this.itens_page_default;
-      $(".form-control-search").val("");
+      this.resetFilters();
       this.bforn.val("");
       this.fairval=$(a.target).find("option:selected").val();
       this.notcombo=!0;
@@ -2046,6 +2047,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     getSpot:function(a){
       //13 === a.keyCode ? (this.spotlight.close(), this.searchEl.trigger("submit")) : (this.filter.close(), 1 &lt; a.target.value.length ? this.spotlight.open(a) : this.spotlight.close());
       if(13 === a.keyCode){
+        this.resetFilters();
         this.spotlight.select(a);
       }
       else{
@@ -2104,6 +2106,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     },
     setSegm:function(a){
       this.segm=a;
+    },
+    getStatusSelect:function(){
+      return this.unable_select;
     },
     /**
     * `Set the loading state`
@@ -2259,11 +2264,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.fdata = [];
       this.itens = $([]);
       this.itens.remove();
+      this.unable_select=!1;
       this.content.reset();
     },
     restartValues:function(){
       //Var to storage the basic data
       console.log("restartValues");
+      this.unable_select=!1;
       this.fairval="";
       this.fornval="";
       this.amosval="";
@@ -2271,6 +2278,17 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.initialTime='2000-01-01';
       this.endTime='2020-10-10';
       this.notcombo=0;
+    },
+    resetFilters:function(){
+      //DATE
+      $("input[name='initial_date']").val("");
+      $("input[name='end_date']").val("");
+      this.initialTime='2000-01-01';
+      this.endTime='2020-10-10';
+
+      //PRICE
+      $("input[name='initial_price']").val("");
+      $("input[name='end_price']").val("");
     }
   });
   new App;
@@ -2296,7 +2314,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Thu Aug 27th 2015 using the <a
+		on Fri Aug 28th 2015 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>

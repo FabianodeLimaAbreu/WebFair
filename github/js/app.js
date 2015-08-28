@@ -149,7 +149,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.el.find("#wrap").removeClass("hide");
 
       this.modal = new Modal({el:this.modalEl,callService:this.proxy(this.callService),usr:this.usr,getPage:this.proxy(this.getPage)});
-      this.content = new Content({el:this.contentEl,usr:this.usr/*bread:this.breadEl, type:this.usr.TIPO*/});
+      this.content = new Content({el:this.contentEl,usr:this.usr,getStatusSelect:this.proxy(this.getStatusSelect)/*bread:this.breadEl, type:this.usr.TIPO*/});
       this.fornecedores = new Fornecedores({
         getloading:this.proxy(this.getloading),
         setloading:this.proxy(this.setloading),
@@ -902,7 +902,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           {
             'name':'GravarFornecedor',
             'serviceName':'GravarFornecedor',
-            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFornecedor xmlns="http://tempuri.org/"><supplier>'+a+''+b+''+c+'<PLAT_ID>2</PLAT_ID></supplier>'+d+'</GravarFornecedor></soap:Body></soap:Envelope>',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFornecedor xmlns="http://tempuri.org/"><supplier>'+a+''+b+''+c+''+d+'<PLAT_ID>2</PLAT_ID></supplier>'+e+'</GravarFornecedor></soap:Body></soap:Envelope>',
             'callback':function(data,req){
               core.setloading(!1);
             }
@@ -1567,6 +1567,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       if($(a.target).hasClass("sel") && this.view !== "list"){
         //Reseta array
         this.select_items=[];
+        this.unable_select=!1;
         $(a.target).removeClass("sel");
         $(".thumbnail .icon").attr("class","icon");
         $("html").attr("class","amostras");
@@ -1579,6 +1580,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       else{
         //Inicia gravação
         this.select_items=[];
+        this.unable_select=!0;
         $(".bsel").removeClass("sel");
         $(a.target).addClass("sel");
         $(".thumbnail .icon").attr("class","icon").addClass($(a.target).attr("name"));
@@ -2008,6 +2010,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     setSegm:function(a){
       this.segm=a;
     },
+    getStatusSelect:function(){
+      return this.unable_select;
+    },
     /**
     * `Set the loading state`
     * @memberOf App#
@@ -2162,11 +2167,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.fdata = [];
       this.itens = $([]);
       this.itens.remove();
+      this.unable_select=!1;
       this.content.reset();
     },
     restartValues:function(){
       //Var to storage the basic data
       console.log("restartValues");
+      this.unable_select=!1;
       this.fairval="";
       this.fornval="";
       this.amosval="";

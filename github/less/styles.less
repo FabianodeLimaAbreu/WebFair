@@ -1195,22 +1195,26 @@ form.search{
 		float: left;
 		width: 100%;
 		height: 410px;
-		overflow-y: auto;
-		section{
-			position: relative;
-			float: left;
-			width: 100%;
-			height: auto;
-			min-height: 410px;
-			.supplier-side{
-				position: relative;
-				height: auto;
-			}
-			.supplier-top-side{
+		overflow-y: hidden;
+		form{
+			width: 102%;
+			section{
 				position: relative;
 				float: left;
 				width: 100%;
-				height: 50px;
+				height: 410px;
+				overflow-y: auto;
+				//min-height: 410px;
+				.supplier-side{
+					position: relative;
+					height: auto;
+				}
+				.supplier-top-side{
+					position: relative;
+					float: left;
+					width: 100%;
+					height: 50px;
+				}
 			}
 		}
 	}

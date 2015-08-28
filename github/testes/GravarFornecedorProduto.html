@@ -13,7 +13,7 @@
                   var wsUrl = "../../WebService.asmx?op=GravarFornecedorProduto ";
 
                   //O SERVIÇO MESMO JA EXCLUI E INSERI
-                  var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFornecedorProduto xmlns="http://tempuri.org/"><Forn_ID>777</Forn_ID><products><Product><PROD_COD>1</PROD_COD><PROD_OTHERS></PROD_OTHERS></Product><Product><PROD_COD>2</PROD_COD><PROD_OTHERS></PROD_OTHERS></Product></products></GravarFornecedorProduto></soap:Body></soap:Envelope>';
+                  var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFornecedorProduto xmlns="http://tempuri.org/"><Forn_ID>777</Forn_ID><products><Product><PROD_COD>1</PROD_COD><PROD_OTHERS></PROD_OTHERS></Product><Product><PROD_COD>999</PROD_COD><PROD_OTHERS>OK</PROD_OTHERS></Product></products></GravarFornecedorProduto></soap:Body></soap:Envelope>';
 
                   $.support.cors=true;
                   $.ajax({

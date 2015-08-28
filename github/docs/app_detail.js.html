@@ -261,9 +261,9 @@ open: function(a){
   //ANOTAÇÕES
   if(note){
     var segnote=[],result="";
-    for(i=0;i&lt;item.NOTES.length;i++){
-      if(item.NOTES[i].SEGM_COD === this.usr.SEGM_COD){
-        segnote.push(item.NOTES[i]);
+    for(i=item.NOTES.length;i>0;i--){
+      if(item.NOTES[i-1].SEGM_COD === this.usr.SEGM_COD){
+        segnote.push(item.NOTES[i-1]);
       }
     }
     if(segnote.length){
@@ -324,12 +324,18 @@ open: function(a){
     }); 
   }
 },saveDetail:function(){
-  var html="",item=this.item;
+  var html="",item=this.item,complet=0;
   $(".detail-description").find("input").each(function(a,b){
     html+="&lt;"+$(b).attr("name")+">"+$(b).val().replace(",",".")+"&lt;/"+$(b).attr("name")+">";
+    if($(b).attr('required') &amp;&amp; $(b).val() !== "0"/* &amp;&amp; item.COMPOSITIONS.length*/){
+      complet=1;
+    }
   });
   html+="&lt;AMOS_PRECO_UM>"+$(".AMOS_PRECO_UM option:selected").attr("value")+"&lt;/AMOS_PRECO_UM>";
-  pattern="&lt;AMOS_ID>"+item.AMOS_ID+"&lt;/AMOS_ID>&lt;FORN_ID>"+item.FORN_ID+"&lt;/FORN_ID>&lt;FEIR_COD>"+parseInt(item.FEIR_COD)+"&lt;/FEIR_COD>&lt;USU_COD>"+item.USU_COD+"&lt;/USU_COD>&lt;AMOS_DESC>"+item.AMOS_DESC+"&lt;/AMOS_DESC>&lt;AMOS_STATUS>"+item.AMOS_STATUS+"&lt;/AMOS_STATUS>&lt;AMOS_ENV_EMAIL>"+item.AMOS_ENV_EMAIL+"&lt;/AMOS_ENV_EMAIL>&lt;TECI_COD>"+(item.TECI_COD || "")+"&lt;/TECI_COD>&lt;BASE_COD>"+(item.BASE_COD || "")+"&lt;/BASE_COD>&lt;GRUP_COD>"+(item.GRUP_COD || "")+"&lt;/GRUP_COD>&lt;SUBG_COD>"+(item.SUBG_COD || "")+"&lt;/SUBG_COD>&lt;SEGM_COD>"+item.SEGM_COD+"&lt;/SEGM_COD>&lt;FLAG_PRIORIDADE>"+item.FLAG_PRIORIDADE+"&lt;/FLAG_PRIORIDADE>&lt;AMOS_HOMOLOGAR>"+item.AMOS_HOMOLOGAR+"&lt;/AMOS_HOMOLOGAR>&lt;FLAG_FISICA>"+item.FLAG_FISICA+"&lt;/FLAG_FISICA>&lt;CREATE_DATE>"+"2015-01-01"+"&lt;/CREATE_DATE>";
+  pattern="&lt;AMOS_ID>"+item.AMOS_ID+"&lt;/AMOS_ID>&lt;FORN_ID>"+item.FORN_ID+"&lt;/FORN_ID>&lt;FEIR_COD>"+parseInt(item.FEIR_COD)+"&lt;/FEIR_COD>&lt;USU_COD>"+item.USU_COD+"&lt;/USU_COD>&lt;AMOS_DESC>"+item.AMOS_DESC+"&lt;/AMOS_DESC>&lt;AMOS_STATUS>"+complet+"&lt;/AMOS_STATUS>&lt;AMOS_ENV_EMAIL>"+item.AMOS_ENV_EMAIL+"&lt;/AMOS_ENV_EMAIL>&lt;TECI_COD>"+(item.TECI_COD || "")+"&lt;/TECI_COD>&lt;BASE_COD>"+(item.BASE_COD || "")+"&lt;/BASE_COD>&lt;GRUP_COD>"+(item.GRUP_COD || "")+"&lt;/GRUP_COD>&lt;SUBG_COD>"+(item.SUBG_COD || "")+"&lt;/SUBG_COD>&lt;SEGM_COD>"+item.SEGM_COD+"&lt;/SEGM_COD>&lt;FLAG_PRIORIDADE>"+item.FLAG_PRIORIDADE+"&lt;/FLAG_PRIORIDADE>&lt;AMOS_HOMOLOGAR>"+item.AMOS_HOMOLOGAR+"&lt;/AMOS_HOMOLOGAR>&lt;FLAG_FISICA>"+item.FLAG_FISICA+"&lt;/FLAG_FISICA>&lt;CREATE_DATE>"+"2015-01-01"+"&lt;/CREATE_DATE>";
+  if(complet){
+    $(".detail-status .bstatus").removeClass('incomplet').addClass('complet');
+  }
   this.setloading(!0,!1);
   this.callService("gravarAmostras",pattern,html,'U');
 },deleteSample:function(){
@@ -422,6 +428,7 @@ callerEvents:function(){
   $(".savenote").bind("click",function(a){context.saveNote(a);});
   $(".form-control-bmore").bind("click",function(a){context.stopOnMore(a);});
   $(".form-control-bmore").bind("keyup",function(a){context.setOthers(a);});
+  $(".gotop").bind("click",function(a){context.goTop();});
 
   if(!$("html").hasClass('view_forn')){
     $("input").removeAttr('disabled');
@@ -491,39 +498,13 @@ open: function(a){
   }, 300,function(){
     context.lasttab=context.tab || "dados";
     context.tab=href.replace("#","");
+    $(".ScrollSpy").find(".nav-item")
+     .parent().removeClass("active")
+     .end().filter("[href=#"+context.tab+"]").parent().addClass("active");
     context.saveForn();
   });
 },scrollTab:function(a){
-  var lastId;
-  // Bind to scroll
-  // Get container scroll position
 
-  scrollItems = $(".ScrollSpy").find(".nav-item").map(function(){
-    var item = $($(this).attr("href"));
-    if (item.length) { return item; }
-  });
-
-   //var fromTop = $(this).scrollTop()+topMenuHeight;
-   var fromTop = $(a.target).scrollTop();
-   this.scroller=fromTop;
-   // Get id of current scroll item
-   var cur = scrollItems.map(function(){
-     if ($(this).position().top &lt;= fromTop)
-       return this;
-   });
-   // Get the id of the current element
-   cur = cur[cur.length-1];
-   var id = cur &amp;&amp; cur.length ? cur[0].id : "";
-   if (lastId !== id) {
-       lastId = id;
-
-
-       // Set/remove active class
-       $(".ScrollSpy").find(".nav-item")
-         .parent().removeClass("active")
-         .end().filter("[href=#"+id+"]").parent().addClass("active");
-
-   }
 },deleteFornNote:function(a){
   $(".contact"+$(a.target).attr("name")).addClass('hide');
   
@@ -624,13 +605,13 @@ open: function(a){
   cod_detalhe=name.substr(pos_string, name.length);
   group=name.substr(0,pos_string-1);
   if(b){
-    if(cod_detalhe == "9999"){
-      if(!el.find("input").val().length || el.find("input").val() === "Digite a composição e tecle enter:"){
-        el.find("input").val("Digite a composição e tecle enter:");
+    if(cod_detalhe == "9999" || cod_detalhe == "999"){
+      if(!el.find("input").val().length || el.find("input").val() === "Digite o valor e tecle enter:"){
+        el.find("input").val("Digite o valor e tecle enter:");
         return !0;
       }
       else{
-        html+='&lt;div class="row row-fixed row-item">&lt;button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bminus" name="'+name+'">'+'&lt;input type="text" class="form-control form-control-bmore" name="'+name+'" placeholder="Other" autocomplete="off" required="required" disabled="disabled" value="'+el.find("input").val()+'"/>&lt;/button>&lt;/div>';
+        html+='&lt;div class="row row-fixed row-item">&lt;button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bminus" name="'+name+'">'+'&lt;input type="text" class="form-control form-control-bmore" name="'+name+'" placeholder="Other" autocomplete="off" disabled="disabled" value="'+el.find("input").val()+'"/>&lt;/button>&lt;/div>';
       }
     }
     else{
@@ -656,7 +637,7 @@ open: function(a){
   cod_detalhe=name.substr(pos_string, name.length);
   group=name.substr(0,pos_string-1);
   if(13 === a.keyCode){
-    html+='&lt;div class="row row-fixed row-item">&lt;button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bminus" name="'+name+'">'+'&lt;input type="text" class="form-control form-control-bmore" name="'+name+'" placeholder="Other" autocomplete="off" required="required" disabled="disabled" value="'+el.val()+'"/>&lt;/button>&lt;/div>';
+    html+='&lt;div class="row row-fixed row-item">&lt;button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bminus" name="'+name+'">'+'&lt;input type="text" class="form-control form-control-bmore" name="'+name+'" placeholder="Other" autocomplete="off" disabled="disabled" value="'+el.val()+'"/>&lt;/button>&lt;/div>';
     el.parent().addClass("hide");
     console.dir($("."+group+"-rem"));
     $("."+group+"-rem").append(html);
@@ -863,7 +844,7 @@ setFav:function(a){
   //Gravar dados nos campos
 
 },inputValues:function(){
-  var context=this;
+  var context=this,complet=!0;
   if(this.item.FORN_ID){
     $(".bedit").trigger('click');
     $(".fair option").each(function(a,b){
@@ -887,9 +868,9 @@ setFav:function(a){
     if(this.item.NOTES.length){
       var segnote=[];
       var result="";
-      for(i=0;i&lt;this.item.NOTES.length;i++){
-        if(this.item.NOTES[i].SEGM_COD === this.usr.SEGM_COD){
-          segnote.push(this.item.NOTES[i]);
+      for(i=this.item.NOTES.length;i>0;i--){
+        if(this.item.NOTES[i-1].SEGM_COD === this.usr.SEGM_COD){
+          segnote.push(this.item.NOTES[i-1]);
         }
       }
       if(segnote){
@@ -924,7 +905,24 @@ setFav:function(a){
         else{
           template+='&lt;img src="images/contact.png" width="100%" class="noimage">';
         } 
-        template+='&lt;/div>&lt;/div>&lt;div class="supplier-firstform">&lt;div class="row">&lt;div class="fake-form fake-form-supplier-middle">&lt;div class="form-group">&lt;input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[i].CONT_NOME+'">&lt;/div>&lt;/div>&lt;button type="button" class="icon floatLeft trash-big" name="'+(i+1)+'">&lt;/button>&lt;/div>&lt;div class="row">&lt;div class="fake-form">&lt;div class="form-group">&lt;input type="text" class="form-control" name="CONT_EMAIL" placeholder="E-mail" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[i].CONT_EMAIL+'">&lt;/div>&lt;/div>&lt;/div>&lt;div class="row top-ten">&lt;div class="fake-form fake-form-supplier-equal floatLeft">';
+        template+='&lt;/div>&lt;/div>&lt;div class="supplier-firstform">&lt;div class="row">&lt;div class="fake-form fake-form-supplier-middle">&lt;div class="form-group">';
+        template+='&lt;input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[i].CONT_NOME+'"';
+        if(i === 0){
+          template+=' required="required">';
+        }
+        else{
+          template+=' >';
+        }
+        
+        template+='&lt;/div>&lt;/div>&lt;button type="button" class="icon floatLeft trash-big" name="'+(i+1)+'">&lt;/button>&lt;/div>&lt;div class="row">&lt;div class="fake-form">&lt;div class="form-group">&lt;input type="text" class="form-control" name="CONT_EMAIL" placeholder="E-mail" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[i].CONT_EMAIL+'"';
+        
+        if(i === 0){
+          template+=' required="required" >&lt;/div>&lt;/div>&lt;/div>&lt;div class="row top-ten">&lt;div class="fake-form fake-form-supplier-equal floatLeft">';
+        }
+        else{
+          template+='>&lt;/div>&lt;/div>&lt;/div>&lt;div class="row top-ten">&lt;div class="fake-form fake-form-supplier-equal floatLeft">';;
+        }
+
         if(context.item.CONTACTS[i].CONT_PRINCIPAL){
           context.favcontact=i;
           template+='&lt;button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bcircle favcontact sel" name="'+(i+1)+'">Contato Principal &lt;/button>'
@@ -948,15 +946,23 @@ setFav:function(a){
     }
     else{
       if(context.item.CONTACTS.length){
+        var template="",temp="",cont="",template1="",template2="";
         //Tem apenas 1 contato
         console.log("Tem apenas 1 contato");
         var template="",temp="",cont="",template2="";
-        template+='&lt;div class="supplier-form-container contact contact1 actived cont">&lt;h2>&lt;span>Contato 1&lt;/span>&lt;/h2>&lt;div class="supplier-photo-side">&lt;div class="photo-container">';
+        temp+='&lt;div class="supplier-form-container contact contact1 actived cont">&lt;h2>&lt;span>Contato 1&lt;/span>&lt;/h2>&lt;div class="supplier-photo-side">&lt;div class="photo-container">';
         template+='&lt;img src=http://bdb/ifair_img/'+context.item.CONTACTS[0].IMG_PATH_CONTATO+' width="100%">';
-        template+='&lt;/div> &lt;/div>&lt;div class="supplier-firstform">&lt;div class="row">&lt;div class="fake-form fake-form-supplier-middle">&lt;div class="form-group">&lt;input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_NOME+'">&lt;/div>&lt;/div>&lt;button type="button" class="icon floatLeft trash-big" name="1">&lt;/button>&lt;/div>&lt;div class="row">&lt;div class="fake-form">&lt;div class="form-group">&lt;input type="text" class="form-control" name="CONT_EMAIL" placeholder="E-mail" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_EMAIL+'">&lt;/div>&lt;/div>&lt;/div>&lt;div class="row top-ten">&lt;div class="fake-form fake-form-supplier-equal floatLeft">';
+        template1+='&lt;/div> &lt;/div>&lt;div class="supplier-firstform">&lt;div class="row">&lt;div class="fake-form fake-form-supplier-middle">&lt;div class="form-group">&lt;input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_NOME+'" required="required">&lt;/div>&lt;/div>&lt;button type="button" class="icon floatLeft trash-big" name="1">&lt;/button>&lt;/div>&lt;div class="row">&lt;div class="fake-form">&lt;div class="form-group">&lt;input type="text" class="form-control" name="CONT_EMAIL" placeholder="E-mail" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_EMAIL+'" required="required">&lt;/div>&lt;/div>&lt;/div>&lt;div class="row top-ten">&lt;div class="fake-form fake-form-supplier-equal floatLeft">';
         cont+='&lt;button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bcircle favcontact sel" name="1">Contato Principal &lt;/button>';
-        template+='&lt;/div>&lt;div class="fake-form fake-form-supplier-equal right">&lt;div class="form-group styled-select">&lt;select class="form-control bselect SEGM_COD" name="SEGM_COD">&lt;option value="Segmento">Segmentos&lt;/option>&lt;/select>&lt;/div>&lt;/div>&lt;/div>&lt;div class="row">&lt;div class="fake-form fake-form-supplier-middle">&lt;div class="form-group">&lt;input type="tel" class="form-control" name="CONT_TEL" placeholder="Tel 1" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_TEL+'">&lt;/div>&lt;/div>&lt;button type="button" class="icon floatLeft bplus-big" name="CONT_TEL2">&lt;/button>&lt;/div>&lt;div class="row CONT_TEL2 top-ten hide">&lt;div class="fake-form fake-form-supplier-middle">&lt;div class="form-group">&lt;input type="tel" class="form-control" name="CONT_TEL2" placeholder="Tel 2" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_TEL2+'">&lt;/div>&lt;/div>&lt;/div>&lt;/div>&lt;/div>';
+        template2+='&lt;/div>&lt;div class="fake-form fake-form-supplier-equal right">&lt;div class="form-group styled-select">&lt;select class="form-control bselect SEGM_COD" name="SEGM_COD">&lt;option value="Segmento">Segmentos&lt;/option>&lt;/select>&lt;/div>&lt;/div>&lt;/div>&lt;div class="row">&lt;div class="fake-form fake-form-supplier-middle">&lt;div class="form-group">&lt;input type="tel" class="form-control" name="CONT_TEL" placeholder="Tel 1" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_TEL+'">&lt;/div>&lt;/div>&lt;button type="button" class="icon floatLeft bplus-big" name="CONT_TEL2">&lt;/button>&lt;/div>&lt;div class="row CONT_TEL2 top-ten hide">&lt;div class="fake-form fake-form-supplier-middle">&lt;div class="form-group">&lt;input type="tel" class="form-control" name="CONT_TEL2" placeholder="Tel 2" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_TEL2+'">&lt;/div>&lt;/div>&lt;/div>&lt;/div>&lt;/div>';
         context.favcontact=0;
+        $("#dados .contact-container").prepend(temp+template+template1+cont+template2);
+        template='&lt;div class="supplier-photo-side">&lt;div class="photo-container">';
+        template+='&lt;img src="images/contact.png" width="100%" class="noimage">';
+        template1='&lt;/div>&lt;/div>&lt;div class="supplier-firstform">&lt;div class="row">&lt;div class="fake-form fake-form-supplier-middle">&lt;div class="form-group">&lt;input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off">&lt;/div>&lt;/div>&lt;button type="button" class="icon floatLeft trash-big" name="2">&lt;/button>&lt;/div>&lt;div class="row">&lt;div class="fake-form">&lt;div class="form-group">&lt;input type="text" class="form-control" name="CONT_EMAIL" placeholder="E-mail" autofocus="" autocomplete="off">&lt;/div>&lt;/div>&lt;/div>&lt;div class="row top-ten">&lt;div class="fake-form fake-form-supplier-equal floatLeft">';
+        cont='&lt;button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bcircle favcontact" name="2">Contato Principal &lt;/button>';
+        template='&lt;div class="supplier-form-container contact contact2 cont">&lt;h2>&lt;span>Contato 2&lt;/span>&lt;button type="button" class="icon floatLeft bplus-big" name="showcontact">&lt;/button>&lt;/h2>'+template+template1+cont+template2+'&lt;/div>';
+        $("#dados .contact-container").append(template);
       }
       else{
         //Nao possui contato
@@ -965,16 +971,17 @@ setFav:function(a){
         temp='&lt;div class="supplier-form-container contact contact1 actived cont">&lt;h2>&lt;span>Contato 1&lt;/span>&lt;/h2>';
         template+='&lt;div class="supplier-photo-side">&lt;div class="photo-container">';
         template+='&lt;img src="images/contact.png" width="100%" class="noimage">';
-        template1+='&lt;/div>&lt;/div>&lt;div class="supplier-firstform">&lt;div class="row">&lt;div class="fake-form fake-form-supplier-middle">&lt;div class="form-group">&lt;input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off">&lt;/div>&lt;/div>&lt;button type="button" class="icon floatLeft trash-big" name="1">&lt;/button>&lt;/div>&lt;div class="row">&lt;div class="fake-form">&lt;div class="form-group">&lt;input type="text" class="form-control" name="CONT_EMAIL" placeholder="E-mail" autofocus="" autocomplete="off">&lt;/div>&lt;/div>&lt;/div>&lt;div class="row top-ten">&lt;div class="fake-form fake-form-supplier-equal floatLeft">';
+        template1+='&lt;/div>&lt;/div>&lt;div class="supplier-firstform">&lt;div class="row">&lt;div class="fake-form fake-form-supplier-middle">&lt;div class="form-group">&lt;input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off" required="required">&lt;/div>&lt;/div>&lt;button type="button" class="icon floatLeft trash-big" name="1">&lt;/button>&lt;/div>&lt;div class="row">&lt;div class="fake-form">&lt;div class="form-group">&lt;input type="text" class="form-control" name="CONT_EMAIL" placeholder="E-mail" autofocus="" autocomplete="off" required="required">&lt;/div>&lt;/div>&lt;/div>&lt;div class="row top-ten">&lt;div class="fake-form fake-form-supplier-equal floatLeft">';
         cont+='&lt;button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bcircle favcontact" name="1">Contato Principal &lt;/button>';
         template2+='&lt;/div>&lt;div class="fake-form fake-form-supplier-equal right">&lt;div class="form-group styled-select">&lt;select class="form-control bselect SEGM_COD" name="SEGM_COD">&lt;option value="Segmento">Segmentos&lt;/option>&lt;/select>&lt;/div>&lt;/div>&lt;/div>&lt;div class="row">&lt;div class="fake-form fake-form-supplier-middle">&lt;div class="form-group">&lt;input type="tel" class="form-control" name="CONT_TEL" placeholder="Tel 1" autofocus="" autocomplete="off">&lt;/div>&lt;/div>&lt;button type="button" class="icon floatLeft bplus-big" name="CONT_TEL2" name="CONT_TEL2">&lt;/button>&lt;/div>&lt;div class="row CONT_TEL2 top-ten hide">&lt;div class="fake-form fake-form-supplier-middle">&lt;div class="form-group">&lt;input type="tel" class="form-control" name="CONT_TEL2" placeholder="Tel 2" autofocus="" autocomplete="off">&lt;/div>&lt;/div>&lt;/div>&lt;/div>&lt;/div>';
         context.favcontact=null;
-      }
-      $("#dados .contact-container").prepend(temp+template+template1+cont+template2);
-      template1='&lt;/div>&lt;/div>&lt;div class="supplier-firstform">&lt;div class="row">&lt;div class="fake-form fake-form-supplier-middle">&lt;div class="form-group">&lt;input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off">&lt;/div>&lt;/div>&lt;button type="button" class="icon floatLeft trash-big" name="2">&lt;/button>&lt;/div>&lt;div class="row">&lt;div class="fake-form">&lt;div class="form-group">&lt;input type="text" class="form-control" name="CONT_EMAIL" placeholder="E-mail" autofocus="" autocomplete="off">&lt;/div>&lt;/div>&lt;/div>&lt;div class="row top-ten">&lt;div class="fake-form fake-form-supplier-equal floatLeft">';
-      cont='&lt;button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bcircle favcontact" name="2">Contato Principal &lt;/button>';
-      template='&lt;div class="supplier-form-container contact contact2 cont">&lt;h2>&lt;span>Contato 2&lt;/span>&lt;button type="button" class="icon floatLeft bplus-big" name="showcontact">&lt;/button>&lt;/h2>'+template+template1+cont+template2+'&lt;/div>';
-      $("#dados .contact-container").append(template);
+        $("#dados .contact-container").prepend(temp+template+template1+cont+template2);
+
+        template1='&lt;/div>&lt;/div>&lt;div class="supplier-firstform">&lt;div class="row">&lt;div class="fake-form fake-form-supplier-middle">&lt;div class="form-group">&lt;input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off">&lt;/div>&lt;/div>&lt;button type="button" class="icon floatLeft trash-big" name="2">&lt;/button>&lt;/div>&lt;div class="row">&lt;div class="fake-form">&lt;div class="form-group">&lt;input type="text" class="form-control" name="CONT_EMAIL" placeholder="E-mail" autofocus="" autocomplete="off">&lt;/div>&lt;/div>&lt;/div>&lt;div class="row top-ten">&lt;div class="fake-form fake-form-supplier-equal floatLeft">';
+        cont='&lt;button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bcircle favcontact" name="2">Contato Principal &lt;/button>';
+        template='&lt;div class="supplier-form-container contact contact2 cont">&lt;h2>&lt;span>Contato 2&lt;/span>&lt;button type="button" class="icon floatLeft bplus-big" name="showcontact">&lt;/button>&lt;/h2>'+template+template1+cont+template2+'&lt;/div>';
+        $("#dados .contact-container").append(template);
+      }      
     }
 
     context.createComponent(this.getSegm(),$(".SEGM_COD"),'segm');
@@ -998,6 +1005,7 @@ setFav:function(a){
     });
 
     if(context.item.PROFILES.length){
+      $("a[href='#profile'] button").removeClass('incomplet').addClass('complet');
       for(var i=0;i&lt;context.item.PROFILES.length;i++){
         console.log("profiles: "+context.item.PROFILES[i].PERF_COD);
         if(context.item.PROFILES[i].PERF_COD == 3){
@@ -1021,6 +1029,7 @@ setFav:function(a){
       }
     }
     if(context.item.COMPOSITIONS.length){
+      $("a[href='#composition'] button").removeClass('incomplet').addClass('complet');
       for(var i=0;i&lt;context.item.COMPOSITIONS.length;i++){
         var n;
         if(isNaN(context.item.COMPOSITIONS[i].COMP_COD.replace(" ",""))){
@@ -1038,15 +1047,21 @@ setFav:function(a){
       }
     }
     if(context.item.PRODUCTS.length){
+      $("a[href='#products'] button").removeClass('incomplet').addClass('complet');
       for(var i=0;i&lt;context.item.PRODUCTS.length;i++){
-        /*if($(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").attr("name") === "prod/9999"){
+        console.log($(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").attr("name"));
+        if($(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").attr("name") === "prod/999"){
           $(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").find("input").val(context.item.PRODUCTS[i].PROD_OTHERS);
-        }*/
+        }
         $(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").trigger('click');
       }
     }
     if(context.item.MARKETS.length){
+      $("a[href='#markets'] button").removeClass('incomplet').addClass('complet');
       for(var i=0;i&lt;context.item.MARKETS.length;i++){
+        if($(".mark-add button[name='mark/"+parseInt(context.item.MARKETS[i].MERC_COD)+"']").attr("name") === "mark/999"){
+          $(".mark-add button[name='mark/"+parseInt(context.item.MARKETS[i].MERC_COD)+"']").find("input").val(context.item.MARKETS[i].MERC_OTHERS);
+        }
         $(".mark-add button[name='mark/"+parseInt(context.item.MARKETS[i].MERC_COD)+"']").trigger('click');
       }
     }
@@ -1056,7 +1071,7 @@ setFav:function(a){
     var template="",temp="",cont="",template1="",template2="";
     temp+='&lt;div class="supplier-form-container contact contact1 actived cont">&lt;h2>&lt;span>Contato 1&lt;/span>&lt;/h2>';
     template+='&lt;div class="supplier-photo-side">&lt;div class="photo-container">&lt;img src="images/contact.png" width="100%" class="noimage">';
-    template1+='&lt;/div>&lt;/div>&lt;div class="supplier-firstform">&lt;div class="row">&lt;div class="fake-form fake-form-supplier-middle">&lt;div class="form-group">&lt;input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off">&lt;/div>&lt;/div>&lt;button type="button" class="icon floatLeft trash-big" name="1">&lt;/button>&lt;/div>&lt;div class="row">&lt;div class="fake-form">&lt;div class="form-group">&lt;input type="text" class="form-control" name="CONT_EMAIL" placeholder="E-mail" autofocus="" autocomplete="off">&lt;/div>&lt;/div>&lt;/div>&lt;div class="row top-ten">&lt;div class="fake-form fake-form-supplier-equal floatLeft">';
+    template1+='&lt;/div>&lt;/div>&lt;div class="supplier-firstform">&lt;div class="row">&lt;div class="fake-form fake-form-supplier-middle">&lt;div class="form-group">&lt;input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off" required="required">&lt;/div>&lt;/div>&lt;button type="button" class="icon floatLeft trash-big" name="1">&lt;/button>&lt;/div>&lt;div class="row">&lt;div class="fake-form">&lt;div class="form-group">&lt;input type="text" class="form-control" name="CONT_EMAIL" placeholder="E-mail" autofocus="" autocomplete="off" required="required">&lt;/div>&lt;/div>&lt;/div>&lt;div class="row top-ten">&lt;div class="fake-form fake-form-supplier-equal floatLeft">';
     cont+='&lt;button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bcircle favcontact" name="1">Contato Principal &lt;/button>';
     template2+='&lt;/div>&lt;div class="fake-form fake-form-supplier-equal right">&lt;div class="form-group styled-select">&lt;select class="form-control bselect SEGM_COD" name="SEGM_COD">&lt;option value="Segmento">Segmentos&lt;/option>&lt;/select>&lt;/div>&lt;/div>&lt;/div>&lt;div class="row">&lt;div class="fake-form fake-form-supplier-middle">&lt;div class="form-group">&lt;input type="tel" class="form-control" name="CONT_TEL" placeholder="Tel 1" autofocus="" autocomplete="off">&lt;/div>&lt;/div>&lt;button type="button" class="icon floatLeft bplus-big" name="CONT_TEL2">&lt;/button>&lt;/div>&lt;div class="row CONT_TEL2 top-ten hide">&lt;div class="fake-form fake-form-supplier-middle">&lt;div class="form-group">&lt;input type="tel" class="form-control" name="CONT_TEL2" placeholder="Tel 2" autofocus="" autocomplete="off">&lt;/div>&lt;/div>&lt;/div>&lt;/div>&lt;/div>';
     context.favcontact=null;
@@ -1068,12 +1083,21 @@ setFav:function(a){
     context.createComponent(this.getSegm(),$(".SEGM_COD"),'segm');
     $(".form-control-other").attr('disabled', 'disabled');
   }
+
+  $("#dados input[required='required']").each(function(index,el){
+    console.log($(el).val().length+" , "+$(el).val()+" , "+$(el).val().length === true);
+    if(!$(el).val().length &amp;&amp; complet){
+      complet=!1;
+    }
+  });
+  if(complet){
+    $("a[href='#dados'] button").removeClass('incomplet').addClass('complet');
+  }
   $(".bplus-big").bind("click",function(a){context.showSomething(a);});
   $(".favcontact").bind("click",function(a){context.setFavContact(a);});
   $(".trash-big").bind("click",function(a){context.deleteFornNote(a);});
 },saveForn:function(goout){
-
-  var date=new Date(),html="",context=this,pattern="";
+  var date=new Date(),html="",complet=0,context=this,pattern="",complet=!0;
   var addforn=$("html").hasClass('add_forn') ? "I" : "U";
   date=""+date.getFullYear()+"-0"+(date.getMonth()+1)+"-"+date.getDate();
   console.log(this.tab);
@@ -1089,26 +1113,23 @@ setFav:function(a){
       case 'dados':
         console.log(this.tab);
         console.log(this.lasttab);
-        html+="&lt;FORN_INATIVO>0&lt;/FORN_INATIVO>";
-        if(addforn === "I"){
-          html+="&lt;FORN_STATUS>0&lt;/FORN_STATUS>";
-        }
-        else{
-          html+="&lt;FORN_STATUS>"+this.item.FORN_STATUS+"&lt;/FORN_STATUS>";
-        }
-
 
         context.ajaxrequest=!0;
-        this.callService("GravarFornecedor",'&lt;FORN_ID>'+(context.item.FORN_ID || 0)+'&lt;/FORN_ID>',html+""+pattern,"&lt;FORN_DESC>"+$("input[name='FORN_DESC']").val()+"&lt;/FORN_DESC>",'&lt;action>'+addforn+'&lt;/action>');
-        
+        console.log(html);
+        this.callService("GravarFornecedor",'&lt;FORN_ID>'+(context.item.FORN_ID || 0)+'&lt;/FORN_ID>',html+""+pattern,"&lt;FORN_DESC>"+$("input[name='FORN_DESC']").val()+"&lt;/FORN_DESC>",'&lt;FORN_STATUS>1&lt;/FORN_STATUS>&lt;FORN_INATIVO>0&lt;/FORN_INATIVO>','&lt;action>'+addforn+'&lt;/action>');
+        $(".fair").attr('disabled', 'disabled');
         status=setInterval(function(){
           if(!context.ajaxrequest){
             $(".cont.actived").each(function(a,b){
               html="";
               $(b).find("input").each(function(index,el){
+                if($(el).attr("required") &amp;&amp; !$(el).val().length &amp;&amp; complet){
+                  complet=!1;
+                }
                 html+="&lt;"+$(el).attr("name")+">"+$(el).val()+"&lt;/"+$(el).attr("name")+">";
               });
               html+="&lt;SEGM_COD>"+$(".contact"+(a+1)+" .SEGM_COD option:selected").attr("value")+"&lt;/SEGM_COD>";
+              console.log("DIUSFAFDUIDSFIUFDSIH: "+$(".contact"+(a+1)+" .SEGM_COD option:selected").attr("value"));
               if(a === context.favcontact){
                 html+="&lt;CONT_PRINCIPAL>1&lt;/CONT_PRINCIPAL>";
               }
@@ -1122,6 +1143,22 @@ setFav:function(a){
               else{
                 html+="&lt;CONT_INATIVO>0&lt;/CONT_INATIVO>";
               }
+
+              if(addforn === "I"){
+                html+="&lt;FORN_STATUS>1&lt;/FORN_STATUS>";
+              }
+              else{
+                if(complet){
+                  $("a[href='#dados'] button").removeClass('incomplet').addClass('complet');
+                  context.item.FORN_STATUS=1;
+                }
+                else{
+                  $("a[href='#dados'] button").removeClass('complet').addClass('incomplet');
+                  context.item.FORN_STATUS=0;
+                }
+                html+="&lt;FORN_STATUS>"+context.item.FORN_STATUS+"&lt;/FORN_STATUS>";
+              }
+
               if(!$("html").hasClass('add_forn')){
                 if(context.item.CONTACTS[a]){
                   html+="&lt;CONT_ID>"+context.item.CONTACTS[a].CONT_ID+"&lt;/CONT_ID>&lt;IMG_PATH_FRENTE>"+context.item.CONTACTS[a].IMG_PATH_FRENTE+"&lt;/IMG_PATH_FRENTE>&lt;IMG_PATH_VERSO>"+context.item.CONTACTS[a].IMG_PATH_VERSO+"&lt;/IMG_PATH_VERSO>&lt;IMG_PATH_CONTATO>"+context.item.CONTACTS[a].IMG_PATH_CONTATO+"&lt;/IMG_PATH_CONTATO>";
@@ -1141,11 +1178,20 @@ setFav:function(a){
             clearInterval(status);
           }
         },100);
+        
+        if($(".ScrollSpy .nav-item button.complet").length === 5  &amp;&amp; this.item.FORN_STATUS === 0){
+          console.log("cadastro completo");
+        }
         context.setloading(!1);
         // console.log(this.setDate());
         break;
       case 'profile':
-        var html="",other="";
+        if(!this.item.FORN_ID){
+          this.modal.open("message","Você deve primeiro salvar um fornecedor!!!",!1,!0);
+          context.setloading(!1);
+          return !1;
+        }
+        var html="",other="",complet=!0;
         console.log(this.tab);
         console.log(this.lasttab);
         if($("#profile .row-top .bcircle").hasClass('sel')){
@@ -1165,45 +1211,130 @@ setFav:function(a){
             });
           }
         }
+        else{
+          console.log("nenhum profile selecionado encima");
+          complet=!1;
+        }
 
         $("#profile .row-down .bcircle.sel").each(function(a,b){
           if($(b).attr("name") == "999"){
             other=$(b).parent().find("input").val();
           }
           html+="&lt;Profile>&lt;FAB_COD>0&lt;/FAB_COD>&lt;PERF_COD>"+$(b).attr("name")+"&lt;/PERF_COD>&lt;TP_FAB_COD>0&lt;/TP_FAB_COD>&lt;PERF_OTHERS>"+other+"&lt;/PERF_OTHERS>&lt;/Profile>";
-        })
+        });
+        if(complet){
+          $("a[href='#profile'] button").removeClass('incomplet').addClass('complet');
+        }
+        else{
+          $("a[href='#profile'] button").removeClass('complet').addClass('incomplet');
+        }
+
+        
+        if($(".ScrollSpy .nav-item button.complet").length === 5  &amp;&amp; this.item.FORN_STATUS === 0){
+          console.log("cadastro completo");
+        }
+
         this.callService("GravarFornecedorProfile",'&lt;Forn_ID>'+this.item.FORN_ID+'&lt;/Forn_ID>',html);
+
         break;
       case 'composition':
-        var html="";
+        if(!this.item.FORN_ID){
+          this.modal.open("message","Você deve primeiro salvar um fornecedor!!!",!1,!0);
+          context.setloading(!1);
+          return !1;
+        }
+        var html="",others="";
         console.log(this.tab);
         console.log(this.lasttab);
+
         $(".comp-rem .row-item").each(function(a,b){
           var el=$(b).find(".bminus").attr("name");
-          html+="&lt;string>"+el.substr(el.indexOf("/")+1, el.length)+"&lt;/string>";
+          //html+="&lt;string>"+el.substr(el.indexOf("/")+1, el.length)+"&lt;/string>";
+          if(el.substr(el.indexOf("/")+1, el.length) === "9999"){
+            others=el.substr(0,el.indexOf("/"));
+          }
+          else{
+            others="";
+          }
+          html+="&lt;Composition>&lt;COMP_COD>"+el.substr(el.indexOf("/")+1)+"&lt;/COMP_COD>&lt;COMP_OTHERS>"+others+"&lt;/COMP_OTHERS>&lt;TP_COMP_ID>2&lt;/TP_COMP_ID>&lt;/Composition>";
         });
+        if(html.length){
+          $("a[href='#composition'] button").removeClass('incomplet').addClass('complet');
+        }
+        else{
+          $("a[href='#composition'] button").removeClass('complet').addClass('incomplet');
+        }
         this.callService("GravarFornecedorComposicao",'&lt;FORN_ID>'+this.item.FORN_ID+'&lt;/FORN_ID>',html);
+
+        if($(".ScrollSpy .nav-item button.complet").length === 5  &amp;&amp; this.item.FORN_STATUS === 0){
+          console.log("cadastro completo");
+        }
+
         break;
       case 'products':
+        if(!this.item.FORN_ID){
+          this.modal.open("message","Você deve primeiro salvar um fornecedor!!!",!1,!0);
+          context.setloading(!1);
+          return !1;
+        }
         console.log(this.tab);
         console.log(this.lasttab);
         var html="";
         console.log(this.tab);
         console.log(this.lasttab);
         $(".prod-rem .row-item").each(function(a,b){
-          var el=$(b).find(".bminus").attr("name");
-          html+="&lt;Product>&lt;PROD_COD>"+el.substr(el.indexOf("/")+1, el.length)+"&lt;/PROD_COD>&lt;PROD_OTHERS>&lt;/PROD_OTHERS>&lt;/Product>";
+          var el=$(b).find(".bminus").attr("name"),others="";
+          if(el.substr(el.indexOf("/")+1, el.length) === "999"){
+            others=el.substr(0,el.indexOf("/"));
+          }
+          else{
+            others="";
+          }
+          html+="&lt;Product>&lt;PROD_COD>"+el.substr(el.indexOf("/")+1, el.length)+"&lt;/PROD_COD>&lt;PROD_OTHERS>"+others+"&lt;/PROD_OTHERS>&lt;/Product>";
         });
+        if(html.length){
+          $("a[href='#products'] button").removeClass('incomplet').addClass('complet');
+        }
+        else{
+          $("a[href='#products'] button").removeClass('complet').addClass('incomplet');
+        }
         this.callService("GravarFornecedorProduto",'&lt;Forn_ID>'+context.item.FORN_ID+'&lt;/Forn_ID>',html);
+
+        if($(".ScrollSpy .nav-item button.complet").length === 5  &amp;&amp; this.item.FORN_STATUS === 0){
+          console.log("cadastro completo");
+        }
+
         break;
       case 'markets':
+        if(!this.item.FORN_ID){
+          this.modal.open("message","Você deve primeiro salvar um fornecedor!!!",!1,!0);
+          context.setloading(!1);
+          return !1;
+        }
         console.log(this.tab);
         console.log(this.lasttab);
+        var html="",others="";
         $(".mark-rem .row-item").each(function(a,b){
           var el=$(b).find(".bminus").attr("name");
-          html+="&lt;int>"+el.substr(el.indexOf("/")+1, el.length)+"&lt;/int>";
+          if(el.substr(el.indexOf("/")+1, el.length) === "999"){
+            others=el.substr(0,el.indexOf("/"));
+          }
+          else{
+            others="";
+          }
+          html+="&lt;Market>&lt;MERC_COD>"+el.substr(el.indexOf("/")+1, el.length)+"&lt;/MERC_COD>&lt;MERC_OTHERS>"+others+"&lt;/MERC_OTHERS>&lt;/Market>"
         });
+        if(html.length){
+          $("a[href='#markets'] button").removeClass('incomplet').addClass('complet');
+        }
+        else{
+          $("a[href='#markets'] button").removeClass('complet').addClass('incomplet');
+        }
         this.callService("GravarFornecedorMercado",'&lt;Forn_ID>'+context.item.FORN_ID+'&lt;/Forn_ID>',html);
+
+        if($(".ScrollSpy .nav-item button.complet").length === 5  &amp;&amp; this.item.FORN_STATUS === 0){
+          console.log("cadastro completo");
+        }
 
         status=setInterval(function(){
           if(!context.ajaxrequest &amp;&amp; goout){
@@ -1212,7 +1343,6 @@ setFav:function(a){
             clearInterval(status);
           }
         },100);
-
         break;
     }
     /*$("#"+this.tab).find("input[required='required']").each(function(a,b){
@@ -1221,11 +1351,13 @@ setFav:function(a){
   }
   else{
     if(this.lasttab &amp;&amp; this.tab !=="dados" &amp;&amp; !this.setfair){
-      this.modal.open("message","Você deve selecionar uma feira!!!",!1,!0);
+      this.modal.open("message","Você deve primeiro salvar um fornecedor!!!",!1,!0);
     }
   }
   //this.setloading(!1);
   //console.dir($("input[required='required']"));
+},goTop:function(){
+  $(".nav-item").eq(0).trigger('click');
 },reload:function(code) {
   "use strict";
   var result;
@@ -1298,7 +1430,7 @@ setFav:function(a){
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Thu Aug 27th 2015 using the <a
+		on Fri Aug 28th 2015 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>

@@ -372,7 +372,16 @@ window.Box = Spine.Controller.sub({init:function() {
     email= a.AMOS_ENV_EMAIL? "sent":"disabled";
 
     //Creating result
+    /*result+="<a href='#detail/"+parseInt(a.FEIR_COD)+"/"+a.AMOS_DESC+"'><div class='thumbnail'>";
+    if(!this.getUnableSelect()){
+      result+="<button type='button' name='"+a.AMOS_ID+"' class='icon'></button>"; //bselection
+    }
+    else{
+      result+="<button type='button' name='"+a.AMOS_ID+"' class='icon bselection'></button>"; //bselection
+    }*/
+    //console.log(this.getStatusSelect);
     result+="<a href='#detail/"+parseInt(a.FEIR_COD)+"/"+a.AMOS_DESC+"'><div class='thumbnail'><button type='button' name='"+a.AMOS_ID+"' class='icon'></button>"; //bselection
+
     result+="<div class='caption'><div class='caption-upside'><ul class='caption-icons'><li><button type='button' class='caption-icons-icon justit bstatus "+status+"' title='"+status.capitalize()+"'></button></li><li><button type='button' class='caption-icons-icon justit bemail "+email+"'></button></li>";
     result+="<li><button type='button' class='caption-icons-icon justit setitem bhomologado "+homologado+"' name='"+a.AMOS_ID+"' title='Homologar'></button></li>"
     if(note){
