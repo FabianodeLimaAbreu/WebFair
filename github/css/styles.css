@@ -1543,6 +1543,8 @@ form.search {
   position: relative;
   float: left;
   width: 155px;
+  height: 350px;
+  overflow-y: auto;
 }
 .aside-edit .category li {
   width: 100%;

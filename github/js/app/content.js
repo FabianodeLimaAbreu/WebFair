@@ -404,8 +404,11 @@ window.Box = Spine.Controller.sub({init:function() {
         result+="</ul></td>";
       }
       else{
-        result+="</ul></td>";
+        result+="";
       }
+    }
+    else{
+      result+="";
     }
 
     result+="<li><button type='button' class='caption-icons-icon justit setitem bfisica "+fisica+"' name='"+a.AMOS_ID+"' title='Fisica'></button></li><li><button type='button' class='caption-icons-icon justit setitem bfav "+fav+"' name='"+a.AMOS_ID+"' title='Favoritar'></button></li></ul>";

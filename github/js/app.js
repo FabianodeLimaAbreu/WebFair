@@ -78,7 +78,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       "click .delete-temp":"deleteTemplate",
       "click .edit-temp":"editTemplate",
       "change .type":"filterTemplate",  
-      "click .newtemp":"newTemplate"    
+      "click .newtemp":"newTemplate",
+      "click .category_button":"showSubCategories",
+      "click .sub_category a":"setCompositions"    
       /*"submit .search":"submit",
       "click button.icon.go_back_default":"goBack",
       "click button.close":"getOut"*/
@@ -235,17 +237,18 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               $.removeCookie('posscroll', { path: '/' });
             }
           }
-          if(parseInt(b)){
-            b="<FORN_ID>"+b+"</FORN_ID>";
+          if(b.length){
+             if(isNaN(b)){
+              b="<FORN_DESC>"+b+"</FORN_DESC>";
+             }
+             else{
+              b="<FORN_ID>"+b+"</FORN_ID>";
+             }
           }
           else{
-            if(b){
-              b="<FORN_DESC>"+b+"</FORN_DESC>";
-            }
-            else{
-              b="";
-            }
+            b="";
           }
+          
           if(parseInt(c)){
             c="<AMOS_ID>"+c+"</AMOS_ID>";
           }
@@ -336,7 +339,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         "fornecedores/*func/*code":function(a){
           var context=this;
           this.page ="fornecedor_cadastro";
-          $("html").attr("class","fornecedor_cadastro view_forn");
+          $("html").attr("class","fornecedor_cadastro edit_forn");
           $(".zoomContainer").remove();
           this.writePage(this.page,a.code);
         },
@@ -889,7 +892,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             'name':'gravarAmostraComposicao',
             'serviceName':'GravarAmostraComposicao',
             'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarAmostraComposicao xmlns="http://tempuri.org/"><AMOS_ID>'+a+'</AMOS_ID><compositions>'+b+'</compositions></GravarAmostraComposicao></soap:Body></soap:Envelope>',
-            'callback':null
+            'callback':function(){
+              console.log("ok");
+              core.setloading(!1);
+            }
           },
           {
             'name':'listarSegmentos',
@@ -1325,7 +1331,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
                     v = h.AMOS_ID || null; 
                     //Usando por enquanto o caminho para a imagem large, pois as amostras antigas eram salvas em tamanho muito pequeno
-                    p = new Image, q = "http://bdb/ifair_img/"+h.IMG_PATH_SAMPLE.replace("thumb","large"), $(p).load(function() {
+                    p = new Image, q = /*"http://bdb/ifair_img/"+h.IMG_PATH_SAMPLE.replace("thumb","large")*/"http://192.168.10.100/webfair/ifairimg/"+h.IMG_PATH_SAMPLE.replace("thumb","large"), $(p).load(function() {
                         if (!l > 0)
                           return !1;
 
@@ -1365,7 +1371,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                     }).attr("src", q);
 
                     // Mostrando (box sendo carregados)
-                    $('.bread-search').find(".spec").text(k+1+" Resultados");
+                    $('.bread-search').find(".spec").text(k+1+" de "+h.COUNT_AMOS+" Resultados");;
                 } else {
                   //console.log("list");
                     if (l > 0) {
@@ -1377,7 +1383,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                             usr:e.usr,
                             modal : e.modal,
                             page: e.page
-                        }), e.active.create(g.render()),$('.bread-search').find(".spec").text(k+1+" Resultados"),l--, $("tbody .bstar").unbind("click").bind("click",function(a){context.starForn(a)}), k++,!1;
+                        }), e.active.create(g.render()),$('.bread-search').find(".spec").text(k+1+" de "+h[count]+" Resultados"),l--, $("tbody .bstar").unbind("click").bind("click",function(a){context.starForn(a)}), k++,!1;
                         //, $('.bread-box').find(".bread-load").text(k+1), l--, k++, !1*/
                     } else {
                         clearInterval(f), e.setloading(!1);
@@ -1420,7 +1426,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
                     v = h.AMOS_ID || null; 
                     //Usando por enquanto o caminho para a imagem large, pois as amostras antigas eram salvas em tamanho muito pequeno
-                    p = new Image, q = "http://bdb/ifair_img/"+h.IMG_PATH_SAMPLE.replace("thumb","large"), $(p).load(function() {
+                    p = new Image, q = /*"http://bdb/ifair_img/"+h.IMG_PATH_SAMPLE.replace("thumb","large")*/"http://192.168.10.100/webfair/ifairimg/"+h.IMG_PATH_SAMPLE.replace("thumb","large"), $(p).load(function() {
                         if (!l > 0)
                             return !1;
 
@@ -1461,8 +1467,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                     }).attr("src", q);
 
                     // Mostrando (box sendo carregados)
-                    $('.bread-search').find(".spec").text(k+1+" Resultados");
+                    $('.bread-search').find(".spec").text(k+1+" de "+h.COUNT_AMOS+" Resultados");
                 } else {
+                    var count="COUNT_FORN";
+                    if(context.page === "amostras"){
+                      count="COUNT_AMOS";
+                    }
                     if (l > 0) {
                         return g = new Box({
                             item : h,
@@ -1472,7 +1482,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                             modal : e.modal,
                             usr:e.usr,
                             page: e.page
-                        }), e.active.create(g.render()),$('.bread-search').find(".spec").text(k+1+" Resultados"),l--, $("tbody .bstar").unbind("click").bind("click",function(a){context.starForn(a)}),k++,!1;
+                        }), e.active.create(g.render()),$('.bread-search').find(".spec").text(k+1+" de "+h[count]+" Resultados"),l--, $("tbody .bstar").unbind("click").bind("click",function(a){context.starForn(a)}),k++,!1;
 
                         //, $('.bread-box').find(".bread-load").text(k+1), l--, k++, !1*/
                     } else {
@@ -1585,9 +1595,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         $(a.target).addClass("sel");
         $(".thumbnail .icon").attr("class","icon").addClass($(a.target).attr("name"));
         $("html").attr("class","amostras").addClass("select");
-        if($(a.target).hasClass("bedit") && !$(a.target).hasClass('unable')){
+        $("html").addClass("edit");
+        /*if($(a.target).hasClass("bedit") && !$(a.target).hasClass('unable')){
           $("html").addClass("edit");
-        }
+        }*/
       }
     },
     changeCountries: function(a){
@@ -1598,7 +1609,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       aux=this.data;
       this.reset();
       this.fdata = aux.filter(function(a,b){
-        if(Boolean(a[$(ev.target).find("option:selected").attr("name")].length) === $(ev.target).find("option:selected").val().bool()){
+        if(Boolean(a[$(ev.target).find("option:selected").attr("name")]) === $(ev.target).find("option:selected").val().bool()){
           return a;
         }
       });
@@ -1696,8 +1707,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       //AMOS_PRECO
       var aux,initial,end;
       aux=this.data;
-      initial=$("input[name='initial_price']").val();
-      end=$("input[name='end_price']").val();
+      initial=$("input[name='initial_price']").val() || 0;
+      end=$("input[name='end_price']").val() || 100000;
       this.reset();
       this.fdata = aux.filter(function(a,b){
         if(parseInt(a["AMOS_PRECO"]) >= parseInt(initial) && parseInt(a["AMOS_PRECO"]) <= parseInt(end)){
@@ -1847,6 +1858,25 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     },
     newTemplate:function(){
       this.modal.open("dialog","");
+    },
+    showSubCategories:function(a){
+      a.preventDefault();
+      if($(a.target).hasClass('actived')){
+        $(".category_button").removeClass('actived');
+        $(".sub_category").removeClass('maximum');
+      }
+      else{
+        $(".category_button").removeClass('actived');
+        $(".sub_category").removeClass('maximum');
+        $(a.target).addClass('actived').parent().find(".sub_category").addClass('maximum');
+      }
+
+    },
+    setCompositions:function(a){
+      a.preventDefault();
+      this.modal.open("message","Em Desenvolvimento!!!",!1,!0);
+      //this.setloading(!0,!1);
+      //this.callService("gravarAmostraComposicao","2000","sdsa");
     },
     getPage:function(){
       return this.page;

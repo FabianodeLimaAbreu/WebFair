@@ -212,7 +212,8 @@ open: function(a){
     $(a.target).addClass('sel');
     html='<button class="icon bzoom"></button>';
     if(item[name]){
-      html+='<img id="zoom" src="//bdb/ifair_img/'+item[name].replace("thumb","large")+'" data-zoom-image="//bdb/ifair_img/'+item[name].replace("thumb","large")+'"/>';
+      //html+='<img id="zoom" src="//bdb/ifair_img/'+item[name].replace("thumb","large")+'" data-zoom-image="//bdb/ifair_img/'+item[name].replace("thumb","large")+'"/>';
+      html+='<img id="zoom" src="http://192.168.10.100/webfair/ifairimg/'+item[name].replace("thumb","large")+'" data-zoom-image="http://192.168.10.100/webfair/ifairimg/'+item[name].replace("thumb","large")+'"/>';
     }
     else{
       html+='<img id="zoom_01" src="http://189.126.197.169/img/large/large_NONE.jpg" data-zoom-image="http://189.126.197.169/img/large/large_NONE.jpg"/>';
@@ -333,7 +334,7 @@ callerEvents:function(){
   $(".form-control-bmore").bind("keyup",function(a){context.setOthers(a);});
   $(".gotop").bind("click",function(a){context.goTop();});
 
-  if(!$("html").hasClass('view_forn')){
+  /*if(!$("html").hasClass('view_forn')){
     $("input").removeAttr('disabled');
     $("select").removeAttr('disabled');
   }
@@ -349,7 +350,7 @@ callerEvents:function(){
       $("input").removeAttr('disabled');
       $("select").removeAttr('disabled');
     }
-  });
+  });*/
 },
 open: function(a){
   "use strict";
@@ -360,6 +361,9 @@ open: function(a){
     return !1;
   }
   console.dir(this.item);
+  $("html").attr("class","fornecedor_cadastro edit_forn");
+  $("input").removeAttr('disabled');
+  $("select").removeAttr('disabled');
   $(".question-note").remove();
   this.callerEvents();
   $(".ScrollSpy").find(".nav-item").eq(0).trigger('click');
@@ -749,7 +753,6 @@ setFav:function(a){
 },inputValues:function(){
   var context=this,complet=!0;
   if(this.item.FORN_ID){
-    $(".bedit").trigger('click');
     $(".fair option").each(function(a,b){
       if(parseInt($(b).attr("value")) === parseInt(context.item["FEIR_COD"])){
         $(b).attr("selected","selected");
@@ -1014,12 +1017,16 @@ setFav:function(a){
     this.setloading(!0,!1);
     switch (this.lasttab){
       case 'dados':
+        var isFinished=0;
         console.log(this.tab);
         console.log(this.lasttab);
 
+        console.log(($(".ScrollSpy .nav-item button.complet").length >= 4)+" , "+$("input[name='FORN_DESC']").val().length+" , "+$(".contact1 input[name='CONT_NOME']").val().length+" , "+$(".contact1 input[name='CONT_EMAIL']").val().length);
+        if($(".ScrollSpy .nav-item button.complet").length >= 4 && $("input[name='FORN_DESC']").val().length && $(".contact1 input[name='CONT_NOME']").val().length && $(".contact1 input[name='CONT_EMAIL']").val().length){
+          isFinished=1
+        }
         context.ajaxrequest=!0;
-        console.log(html);
-        this.callService("GravarFornecedor",'<FORN_ID>'+(context.item.FORN_ID || 0)+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+$("input[name='FORN_DESC']").val()+"</FORN_DESC>",'<FORN_STATUS>1</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>'+addforn+'</action>');
+        this.callService("GravarFornecedor",'<FORN_ID>'+(context.item.FORN_ID || 0)+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+$("input[name='FORN_DESC']").val()+"</FORN_DESC>",'<FORN_STATUS>'+isFinished+'</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>'+addforn+'</action>');
         $(".fair").attr('disabled', 'disabled');
         status=setInterval(function(){
           if(!context.ajaxrequest){
@@ -1085,6 +1092,9 @@ setFav:function(a){
         if($(".ScrollSpy .nav-item button.complet").length === 5  && this.item.FORN_STATUS === 0){
           console.log("cadastro completo");
         }
+        else{
+          console.log("cadastro incompleto");
+        }
         context.setloading(!1);
         // console.log(this.setDate());
         break;
@@ -1132,12 +1142,23 @@ setFav:function(a){
           $("a[href='#profile'] button").removeClass('complet').addClass('incomplet');
         }
 
-        
-        if($(".ScrollSpy .nav-item button.complet").length === 5  && this.item.FORN_STATUS === 0){
+        if($(".ScrollSpy .nav-item button.complet").length === 5){
           console.log("cadastro completo");
+          context.ajaxrequest=!0;
+          this.callService("GravarFornecedor",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+context.item.FORN_DESC+"</FORN_DESC>",'<FORN_STATUS>1</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>U</action>');
+        }
+        else{
+          console.log("cadastro incompleto");
+          context.ajaxrequest=!0;
+          this.callService("GravarFornecedor",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+context.item.FORN_DESC+"</FORN_DESC>",'<FORN_STATUS>0</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>U</action>');
         }
 
-        this.callService("GravarFornecedorProfile",'<Forn_ID>'+this.item.FORN_ID+'</Forn_ID>',html);
+        status=setInterval(function(){
+          if(!context.ajaxrequest){
+            context.callService("GravarFornecedorProfile",'<Forn_ID>'+context.item.FORN_ID+'</Forn_ID>',html);
+            clearInterval(status);
+          }
+        },100);
 
         break;
       case 'composition':
@@ -1167,11 +1188,24 @@ setFav:function(a){
         else{
           $("a[href='#composition'] button").removeClass('complet').addClass('incomplet');
         }
-        this.callService("GravarFornecedorComposicao",'<FORN_ID>'+this.item.FORN_ID+'</FORN_ID>',html);
 
-        if($(".ScrollSpy .nav-item button.complet").length === 5  && this.item.FORN_STATUS === 0){
+        if($(".ScrollSpy .nav-item button.complet").length === 5){
           console.log("cadastro completo");
+          context.ajaxrequest=!0;
+          this.callService("GravarFornecedor",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+context.item.FORN_DESC+"</FORN_DESC>",'<FORN_STATUS>1</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>U</action>');
         }
+        else{
+          console.log("cadastro incompleto");
+          context.ajaxrequest=!0;
+          this.callService("GravarFornecedor",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+context.item.FORN_DESC+"</FORN_DESC>",'<FORN_STATUS>0</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>U</action>');
+        }
+
+        status=setInterval(function(){
+          if(!context.ajaxrequest){
+            context.callService("GravarFornecedorComposicao",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html);
+            clearInterval(status);
+          }
+        },100);
 
         break;
       case 'products':
@@ -1201,11 +1235,24 @@ setFav:function(a){
         else{
           $("a[href='#products'] button").removeClass('complet').addClass('incomplet');
         }
-        this.callService("GravarFornecedorProduto",'<Forn_ID>'+context.item.FORN_ID+'</Forn_ID>',html);
 
-        if($(".ScrollSpy .nav-item button.complet").length === 5  && this.item.FORN_STATUS === 0){
+        if($(".ScrollSpy .nav-item button.complet").length === 5){
           console.log("cadastro completo");
+          context.ajaxrequest=!0;
+          this.callService("GravarFornecedor",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+context.item.FORN_DESC+"</FORN_DESC>",'<FORN_STATUS>1</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>U</action>');
         }
+        else{
+          console.log("cadastro incompleto");
+          context.ajaxrequest=!0;
+          this.callService("GravarFornecedor",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+context.item.FORN_DESC+"</FORN_DESC>",'<FORN_STATUS>0</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>U</action>');
+        }
+
+        status=setInterval(function(){
+          if(!context.ajaxrequest){
+            context.callService("GravarFornecedorProduto",'<Forn_ID>'+context.item.FORN_ID+'</Forn_ID>',html);
+            clearInterval(status);
+          }
+        },100);
 
         break;
       case 'markets':
@@ -1216,7 +1263,7 @@ setFav:function(a){
         }
         console.log(this.tab);
         console.log(this.lasttab);
-        var html="",others="";
+        var html="",others="",last_request=!1;
         $(".mark-rem .row-item").each(function(a,b){
           var el=$(b).find(".bminus").attr("name");
           if(el.substr(el.indexOf("/")+1, el.length) === "999"){
@@ -1233,14 +1280,29 @@ setFav:function(a){
         else{
           $("a[href='#markets'] button").removeClass('complet').addClass('incomplet');
         }
-        this.callService("GravarFornecedorMercado",'<Forn_ID>'+context.item.FORN_ID+'</Forn_ID>',html);
 
-        if($(".ScrollSpy .nav-item button.complet").length === 5  && this.item.FORN_STATUS === 0){
+        if($(".ScrollSpy .nav-item button.complet").length === 5){
           console.log("cadastro completo");
+          context.ajaxrequest=!0;
+          this.callService("GravarFornecedor",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+context.item.FORN_DESC+"</FORN_DESC>",'<FORN_STATUS>1</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>U</action>');
+        }
+        else{
+          console.log("cadastro incompleto");
+          context.ajaxrequest=!0;
+          this.callService("GravarFornecedor",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+context.item.FORN_DESC+"</FORN_DESC>",'<FORN_STATUS>0</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>U</action>');
         }
 
         status=setInterval(function(){
-          if(!context.ajaxrequest && goout){
+          last_request=!0;
+          if(!context.ajaxrequest){
+            context.callService("GravarFornecedorMercado",'<Forn_ID>'+context.item.FORN_ID+'</Forn_ID>',html);
+            clearInterval(status);
+            last_request=!0;
+          }
+        },100);
+
+        last=setInterval(function(){
+          if(!context.ajaxrequest && goout && !last_request){
             context.setloading(!1);
             context.close();
             clearInterval(status);
