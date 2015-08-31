@@ -83,7 +83,7 @@ open: function(a){
   
 
   //TOP DO DETALHE, LISTA DE VALORES
-  var list=["AMOS_DESC","FEIR_DESC","FORN_DESC","CREATE_DATE"/*,"AMOS_PRECO_UM","AMOS_PRECO"*/];
+  var list=[/*"AMOS_DESC",*/"FEIR_DESC","FORN_DESC","CREATE_DATE"/*,"AMOS_PRECO_UM","AMOS_PRECO"*/];
   var list_item=$(".description-top").find("dd");
   for(i=0;i<list.length;i++){
     name=list[i];
@@ -97,40 +97,32 @@ open: function(a){
   result="<tr>";
   if(item.TECI_DESC){
     result+="<td>";
-    for(i=0;i<item.COMPOSITIONS.length;i++){
-      result+=""+item.COMPOSITIONS[i].COMP_DESC+"<br/>";
-    }
+    result+=""+item.TECI_DESC+"<br/>";
     result+="</td>";
   }
   else{
     result+="<td> - </td>";
   }
   
-  if(item.TECI_DESC){
+  if(item.BASE_DESC){
     result+="<td>";
-    for(i=0;i<item.COMPOSITIONS.length;i++){
-      result+=""+item.COMPOSITIONS[i].COMP_DESC+"<br/>";
-    }
+    result+=""+item.BASE_DESC+"<br/>";
     result+="</td>";
   }
   else{
     result+="<td> - </td>";
   }
-  if(item.TECI_DESC){
+  if(item.GRUP_DESC){
     result+="<td>";
-    for(i=0;i<item.COMPOSITIONS.length;i++){
-      result+=""+item.COMPOSITIONS[i].COMP_DESC+"<br/>";
-    }
+    result+=""+item.GRUP_DESC+"<br/>";
     result+="</td>";
   }
   else{
     result+="<td> - </td>";
   }
-  if(item.TECI_DESC){
+  if(item.SUBG_DESC){
     result+="<td>";
-    for(i=0;i<item.COMPOSITIONS.length;i++){
-      result+=""+item.COMPOSITIONS[i].COMP_DESC+"<br/>";
-    }
+    result+=""+item.SUBG_DESC+"<br/>";
     result+="</td>";
   }
   else{
@@ -228,20 +220,33 @@ open: function(a){
     }); 
   }
 },saveDetail:function(){
-  var html="",item=this.item,complet=0;
+  var html="",item=this.item,complet=1;
   $(".detail-description").find("input").each(function(a,b){
     html+="<"+$(b).attr("name")+">"+$(b).val().replace(",",".")+"</"+$(b).attr("name")+">";
-    if($(b).attr('required') && $(b).val() !== "0"/* && item.COMPOSITIONS.length*/){
-      complet=1;
+    if($(b).attr('required')){
+      if(item.COMPOSITIONS.length){  
+        if((parseInt($(b).val()) === 0) || !$(b).val().length){
+          complet=0; 
+        }
+      }
+      else{
+        complet=0;
+      }
     }
+    
   });
   html+="<AMOS_PRECO_UM>"+$(".AMOS_PRECO_UM option:selected").attr("value")+"</AMOS_PRECO_UM>";
-  pattern="<AMOS_ID>"+item.AMOS_ID+"</AMOS_ID><FORN_ID>"+item.FORN_ID+"</FORN_ID><FEIR_COD>"+parseInt(item.FEIR_COD)+"</FEIR_COD><USU_COD>"+item.USU_COD+"</USU_COD><AMOS_DESC>"+item.AMOS_DESC+"</AMOS_DESC><AMOS_STATUS>"+complet+"</AMOS_STATUS><AMOS_ENV_EMAIL>"+item.AMOS_ENV_EMAIL+"</AMOS_ENV_EMAIL><TECI_COD>"+(item.TECI_COD || "")+"</TECI_COD><BASE_COD>"+(item.BASE_COD || "")+"</BASE_COD><GRUP_COD>"+(item.GRUP_COD || "")+"</GRUP_COD><SUBG_COD>"+(item.SUBG_COD || "")+"</SUBG_COD><SEGM_COD>"+item.SEGM_COD+"</SEGM_COD><FLAG_PRIORIDADE>"+item.FLAG_PRIORIDADE+"</FLAG_PRIORIDADE><AMOS_HOMOLOGAR>"+item.AMOS_HOMOLOGAR+"</AMOS_HOMOLOGAR><FLAG_FISICA>"+item.FLAG_FISICA+"</FLAG_FISICA><CREATE_DATE>"+"2015-01-01"+"</CREATE_DATE>";
+  pattern="<AMOS_ID>"+item.AMOS_ID+"</AMOS_ID><FORN_ID>"+item.FORN_ID+"</FORN_ID><FEIR_COD>"+parseInt(item.FEIR_COD)+"</FEIR_COD><USU_COD>"+item.USU_COD+"</USU_COD><AMOS_STATUS>"+complet+"</AMOS_STATUS><AMOS_ENV_EMAIL>"+item.AMOS_ENV_EMAIL+"</AMOS_ENV_EMAIL><TECI_COD>"+(item.TECI_COD || "")+"</TECI_COD><BASE_COD>"+(item.BASE_COD || "")+"</BASE_COD><GRUP_COD>"+(item.GRUP_COD || "")+"</GRUP_COD><SUBG_COD>"+(item.SUBG_COD || "")+"</SUBG_COD><SEGM_COD>"+item.SEGM_COD+"</SEGM_COD><FLAG_PRIORIDADE>"+item.FLAG_PRIORIDADE+"</FLAG_PRIORIDADE><AMOS_HOMOLOGAR>"+item.AMOS_HOMOLOGAR+"</AMOS_HOMOLOGAR><FLAG_FISICA>"+item.FLAG_FISICA+"</FLAG_FISICA><CREATE_DATE>"+"2015-01-01"+"</CREATE_DATE>";
   if(complet){
     $(".detail-status .bstatus").removeClass('incomplet').addClass('complet');
   }
+  else{
+    $(".detail-status .bstatus").removeClass('complet').addClass('incomplet');
+  }
   this.setloading(!0,!1);
-  this.callService("gravarAmostras",pattern,html,'U');
+  console.log(html);
+  console.log(pattern);
+  //this.callService("gravarAmostras",pattern,html,'U');
 },deleteSample:function(){
   this.modal.open("message","Elemento de deletar amostra não ativo no momento!!!",!1,!0);
 },nextSample:function(){

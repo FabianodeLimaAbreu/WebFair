@@ -180,7 +180,7 @@ open: function(a){
   
 
   //TOP DO DETALHE, LISTA DE VALORES
-  var list=["AMOS_DESC","FEIR_DESC","FORN_DESC","CREATE_DATE"/*,"AMOS_PRECO_UM","AMOS_PRECO"*/];
+  var list=[/*"AMOS_DESC",*/"FEIR_DESC","FORN_DESC","CREATE_DATE"/*,"AMOS_PRECO_UM","AMOS_PRECO"*/];
   var list_item=$(".description-top").find("dd");
   for(i=0;i&lt;list.length;i++){
     name=list[i];
@@ -194,40 +194,32 @@ open: function(a){
   result="&lt;tr>";
   if(item.TECI_DESC){
     result+="&lt;td>";
-    for(i=0;i&lt;item.COMPOSITIONS.length;i++){
-      result+=""+item.COMPOSITIONS[i].COMP_DESC+"&lt;br/>";
-    }
+    result+=""+item.TECI_DESC+"&lt;br/>";
     result+="&lt;/td>";
   }
   else{
     result+="&lt;td> - &lt;/td>";
   }
   
-  if(item.TECI_DESC){
+  if(item.BASE_DESC){
     result+="&lt;td>";
-    for(i=0;i&lt;item.COMPOSITIONS.length;i++){
-      result+=""+item.COMPOSITIONS[i].COMP_DESC+"&lt;br/>";
-    }
+    result+=""+item.BASE_DESC+"&lt;br/>";
     result+="&lt;/td>";
   }
   else{
     result+="&lt;td> - &lt;/td>";
   }
-  if(item.TECI_DESC){
+  if(item.GRUP_DESC){
     result+="&lt;td>";
-    for(i=0;i&lt;item.COMPOSITIONS.length;i++){
-      result+=""+item.COMPOSITIONS[i].COMP_DESC+"&lt;br/>";
-    }
+    result+=""+item.GRUP_DESC+"&lt;br/>";
     result+="&lt;/td>";
   }
   else{
     result+="&lt;td> - &lt;/td>";
   }
-  if(item.TECI_DESC){
+  if(item.SUBG_DESC){
     result+="&lt;td>";
-    for(i=0;i&lt;item.COMPOSITIONS.length;i++){
-      result+=""+item.COMPOSITIONS[i].COMP_DESC+"&lt;br/>";
-    }
+    result+=""+item.SUBG_DESC+"&lt;br/>";
     result+="&lt;/td>";
   }
   else{
@@ -325,20 +317,33 @@ open: function(a){
     }); 
   }
 },saveDetail:function(){
-  var html="",item=this.item,complet=0;
+  var html="",item=this.item,complet=1;
   $(".detail-description").find("input").each(function(a,b){
     html+="&lt;"+$(b).attr("name")+">"+$(b).val().replace(",",".")+"&lt;/"+$(b).attr("name")+">";
-    if($(b).attr('required') &amp;&amp; $(b).val() !== "0"/* &amp;&amp; item.COMPOSITIONS.length*/){
-      complet=1;
+    if($(b).attr('required')){
+      if(item.COMPOSITIONS.length){  
+        if((parseInt($(b).val()) === 0) || !$(b).val().length){
+          complet=0; 
+        }
+      }
+      else{
+        complet=0;
+      }
     }
+    
   });
   html+="&lt;AMOS_PRECO_UM>"+$(".AMOS_PRECO_UM option:selected").attr("value")+"&lt;/AMOS_PRECO_UM>";
-  pattern="&lt;AMOS_ID>"+item.AMOS_ID+"&lt;/AMOS_ID>&lt;FORN_ID>"+item.FORN_ID+"&lt;/FORN_ID>&lt;FEIR_COD>"+parseInt(item.FEIR_COD)+"&lt;/FEIR_COD>&lt;USU_COD>"+item.USU_COD+"&lt;/USU_COD>&lt;AMOS_DESC>"+item.AMOS_DESC+"&lt;/AMOS_DESC>&lt;AMOS_STATUS>"+complet+"&lt;/AMOS_STATUS>&lt;AMOS_ENV_EMAIL>"+item.AMOS_ENV_EMAIL+"&lt;/AMOS_ENV_EMAIL>&lt;TECI_COD>"+(item.TECI_COD || "")+"&lt;/TECI_COD>&lt;BASE_COD>"+(item.BASE_COD || "")+"&lt;/BASE_COD>&lt;GRUP_COD>"+(item.GRUP_COD || "")+"&lt;/GRUP_COD>&lt;SUBG_COD>"+(item.SUBG_COD || "")+"&lt;/SUBG_COD>&lt;SEGM_COD>"+item.SEGM_COD+"&lt;/SEGM_COD>&lt;FLAG_PRIORIDADE>"+item.FLAG_PRIORIDADE+"&lt;/FLAG_PRIORIDADE>&lt;AMOS_HOMOLOGAR>"+item.AMOS_HOMOLOGAR+"&lt;/AMOS_HOMOLOGAR>&lt;FLAG_FISICA>"+item.FLAG_FISICA+"&lt;/FLAG_FISICA>&lt;CREATE_DATE>"+"2015-01-01"+"&lt;/CREATE_DATE>";
+  pattern="&lt;AMOS_ID>"+item.AMOS_ID+"&lt;/AMOS_ID>&lt;FORN_ID>"+item.FORN_ID+"&lt;/FORN_ID>&lt;FEIR_COD>"+parseInt(item.FEIR_COD)+"&lt;/FEIR_COD>&lt;USU_COD>"+item.USU_COD+"&lt;/USU_COD>&lt;AMOS_STATUS>"+complet+"&lt;/AMOS_STATUS>&lt;AMOS_ENV_EMAIL>"+item.AMOS_ENV_EMAIL+"&lt;/AMOS_ENV_EMAIL>&lt;TECI_COD>"+(item.TECI_COD || "")+"&lt;/TECI_COD>&lt;BASE_COD>"+(item.BASE_COD || "")+"&lt;/BASE_COD>&lt;GRUP_COD>"+(item.GRUP_COD || "")+"&lt;/GRUP_COD>&lt;SUBG_COD>"+(item.SUBG_COD || "")+"&lt;/SUBG_COD>&lt;SEGM_COD>"+item.SEGM_COD+"&lt;/SEGM_COD>&lt;FLAG_PRIORIDADE>"+item.FLAG_PRIORIDADE+"&lt;/FLAG_PRIORIDADE>&lt;AMOS_HOMOLOGAR>"+item.AMOS_HOMOLOGAR+"&lt;/AMOS_HOMOLOGAR>&lt;FLAG_FISICA>"+item.FLAG_FISICA+"&lt;/FLAG_FISICA>&lt;CREATE_DATE>"+"2015-01-01"+"&lt;/CREATE_DATE>";
   if(complet){
     $(".detail-status .bstatus").removeClass('incomplet').addClass('complet');
   }
+  else{
+    $(".detail-status .bstatus").removeClass('complet').addClass('incomplet');
+  }
   this.setloading(!0,!1);
-  this.callService("gravarAmostras",pattern,html,'U');
+  console.log(html);
+  console.log(pattern);
+  //this.callService("gravarAmostras",pattern,html,'U');
 },deleteSample:function(){
   this.modal.open("message","Elemento de deletar amostra não ativo no momento!!!",!1,!0);
 },nextSample:function(){

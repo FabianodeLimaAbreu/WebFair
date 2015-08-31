@@ -2300,14 +2300,16 @@ form.search {
 }
 .icon.new,
 .icon.hash,
-.icon.close-temp {
+.icon.close-temp,
+.icon.newuser {
   width: 140px;
   float: right;
   line-height: 30px;
 }
 .icon.new:before,
 .icon.hash:before,
-.icon.close-temp:before {
+.icon.close-temp:before,
+.icon.newuser:before {
   content: "";
   background: url("../images/sprite.png") top left no-repeat;
   width: 20px;
@@ -2320,6 +2322,9 @@ form.search {
   left: -1px;
   float: left;
   margin-left: 5px;
+}
+.icon.newuser {
+  margin-bottom: 10px;
 }
 .icon.hash,
 .icon.close-temp {
@@ -3856,7 +3861,7 @@ form textarea {
 .ui-datepicker th {
   padding: .7em .2em;
 }
-.fake-form.last {
+.temp-fake .fake-form.last {
   margin-right: 10px;
 }
 .open-info {

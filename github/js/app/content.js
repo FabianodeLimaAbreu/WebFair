@@ -380,7 +380,7 @@ window.Box = Spine.Controller.sub({init:function() {
       result+="<button type='button' name='"+a.AMOS_ID+"' class='icon bselection'></button>"; //bselection
     }*/
     //console.log(this.getStatusSelect);
-    result+="<a href='#detail/"+parseInt(a.FEIR_COD)+"/"+a.AMOS_DESC+"'><div class='thumbnail'><button type='button' name='"+a.AMOS_ID+"' class='icon'></button>"; //bselection
+    result+="<a href='#detail/"+parseInt(a.FEIR_COD)+"/"+a.AMOS_DESC+"'><div class='thumbnail' id="+a.AMOS_ID+"><button type='button' name='"+a.AMOS_ID+"' class='icon'></button>"; //bselection
 
     result+="<div class='caption'><div class='caption-upside'><ul class='caption-icons'><li><button type='button' class='caption-icons-icon justit bstatus "+status+"' title='"+status.capitalize()+"'></button></li><li><button type='button' class='caption-icons-icon justit bemail "+email+"'></button></li>";
     result+="<li><button type='button' class='caption-icons-icon justit setitem bhomologado "+homologado+"' name='"+a.AMOS_ID+"' title='Homologar'></button></li>"
@@ -417,6 +417,22 @@ window.Box = Spine.Controller.sub({init:function() {
       result+="<button type='button' class='icon bannex'></button>";
     }
     result+="</div></div></a><div class='caption-downside'><ul>";
+    if(a.TECI_DESC){
+      result+="<li>";
+      result+="<a href='#"+a.TECI_COD+"' name='TECI_COD' title='"+a.AMOS_ID+"'>"+a.TECI_DESC+"</a></li>";
+    }
+    if(a.BASE_DESC){
+      result+="<li>";
+      result+="<a href='#"+a.BASE_COD+"' name='BASE_COD' title='"+a.AMOS_ID+"'>"+a.BASE_DESC+"</a></li>";
+    }
+    if(a.GRUP_DESC){
+      result+="<li>";
+      result+="<a href='#"+a.GRUP_COD+"' name='GRUP_COD' title='"+a.AMOS_ID+"'>"+a.GRUP_DESC+"</a></li>";
+    }
+    if(a.SUBG_DESC){
+      result+="<li>";
+      result+="<a href='#"+a.SUBG_COD+"' name='SUBG_COD' title='"+a.AMOS_ID+"'>"+a.SUBG_DESC+"</a></li>";
+    }
     if(a.COMPOSITIONS.length){
       //result+="<li>";
       for(i=0;i<a.COMPOSITIONS.length;i++){
@@ -424,11 +440,8 @@ window.Box = Spine.Controller.sub({init:function() {
         result+="<a href='#"+a.COMPOSITIONS[i].COMP_COD.replace("   ","")+"' name='"+a.AMOS_ID+"'>"+a.COMPOSITIONS[i].COMP_DESC+"</a></li>";
         //concat.push(a.COMPOSITIONS[i].COMP_DESC);
       }
-      result+="</ul>";
     }
-    else{
-      result+="</ul>";
-    }
+    result+="</ul>";
     //Por Enquanto
     //result+="<li>Plano</li><li>Tinto</li><li>Transparências</li><li>Bordado</li><li>Viscose</li><li>Plano</li><li>Tinto</li><li>Transparências</li><li>Bordado</li><li>Viscose</li>";
     result+="</div></div></div>";

@@ -477,7 +477,7 @@ window.Box = Spine.Controller.sub({init:function() {
       result+="&lt;button type='button' name='"+a.AMOS_ID+"' class='icon bselection'>&lt;/button>"; //bselection
     }*/
     //console.log(this.getStatusSelect);
-    result+="&lt;a href='#detail/"+parseInt(a.FEIR_COD)+"/"+a.AMOS_DESC+"'>&lt;div class='thumbnail'>&lt;button type='button' name='"+a.AMOS_ID+"' class='icon'>&lt;/button>"; //bselection
+    result+="&lt;a href='#detail/"+parseInt(a.FEIR_COD)+"/"+a.AMOS_DESC+"'>&lt;div class='thumbnail' id="+a.AMOS_ID+">&lt;button type='button' name='"+a.AMOS_ID+"' class='icon'>&lt;/button>"; //bselection
 
     result+="&lt;div class='caption'>&lt;div class='caption-upside'>&lt;ul class='caption-icons'>&lt;li>&lt;button type='button' class='caption-icons-icon justit bstatus "+status+"' title='"+status.capitalize()+"'>&lt;/button>&lt;/li>&lt;li>&lt;button type='button' class='caption-icons-icon justit bemail "+email+"'>&lt;/button>&lt;/li>";
     result+="&lt;li>&lt;button type='button' class='caption-icons-icon justit setitem bhomologado "+homologado+"' name='"+a.AMOS_ID+"' title='Homologar'>&lt;/button>&lt;/li>"
@@ -514,6 +514,22 @@ window.Box = Spine.Controller.sub({init:function() {
       result+="&lt;button type='button' class='icon bannex'>&lt;/button>";
     }
     result+="&lt;/div>&lt;/div>&lt;/a>&lt;div class='caption-downside'>&lt;ul>";
+    if(a.TECI_DESC){
+      result+="&lt;li>";
+      result+="&lt;a href='#"+a.TECI_COD+"' name='TECI_COD' title='"+a.AMOS_ID+"'>"+a.TECI_DESC+"&lt;/a>&lt;/li>";
+    }
+    if(a.BASE_DESC){
+      result+="&lt;li>";
+      result+="&lt;a href='#"+a.BASE_COD+"' name='BASE_COD' title='"+a.AMOS_ID+"'>"+a.BASE_DESC+"&lt;/a>&lt;/li>";
+    }
+    if(a.GRUP_DESC){
+      result+="&lt;li>";
+      result+="&lt;a href='#"+a.GRUP_COD+"' name='GRUP_COD' title='"+a.AMOS_ID+"'>"+a.GRUP_DESC+"&lt;/a>&lt;/li>";
+    }
+    if(a.SUBG_DESC){
+      result+="&lt;li>";
+      result+="&lt;a href='#"+a.SUBG_COD+"' name='SUBG_COD' title='"+a.AMOS_ID+"'>"+a.SUBG_DESC+"&lt;/a>&lt;/li>";
+    }
     if(a.COMPOSITIONS.length){
       //result+="&lt;li>";
       for(i=0;i&lt;a.COMPOSITIONS.length;i++){
@@ -521,11 +537,8 @@ window.Box = Spine.Controller.sub({init:function() {
         result+="&lt;a href='#"+a.COMPOSITIONS[i].COMP_COD.replace("   ","")+"' name='"+a.AMOS_ID+"'>"+a.COMPOSITIONS[i].COMP_DESC+"&lt;/a>&lt;/li>";
         //concat.push(a.COMPOSITIONS[i].COMP_DESC);
       }
-      result+="&lt;/ul>";
     }
-    else{
-      result+="&lt;/ul>";
-    }
+    result+="&lt;/ul>";
     //Por Enquanto
     //result+="&lt;li>Plano&lt;/li>&lt;li>Tinto&lt;/li>&lt;li>Transparências&lt;/li>&lt;li>Bordado&lt;/li>&lt;li>Viscose&lt;/li>&lt;li>Plano&lt;/li>&lt;li>Tinto&lt;/li>&lt;li>Transparências&lt;/li>&lt;li>Bordado&lt;/li>&lt;li>Viscose&lt;/li>";
     result+="&lt;/div>&lt;/div>&lt;/div>";
