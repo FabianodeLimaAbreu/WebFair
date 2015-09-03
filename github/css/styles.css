@@ -126,6 +126,7 @@ body #wrap {
   color: #8e8e93;
 }
 .holder .form-container.supplier-page {
+  float: right;
   width: 63%;
   max-width: 400px;
 }
@@ -1181,6 +1182,10 @@ form.search {
 .fornecedor_cadastro .supplier-scroller form {
   width: 102%;
 }
+.supplier .supplier-scroller form.dados,
+.fornecedor_cadastro .supplier-scroller form.dados {
+  width: 69%;
+}
 .supplier .supplier-scroller form section,
 .fornecedor_cadastro .supplier-scroller form section {
   position: relative;
@@ -1189,10 +1194,23 @@ form.search {
   height: 410px;
   overflow-y: auto;
 }
+.supplier .supplier-scroller form section#dados,
+.fornecedor_cadastro .supplier-scroller form section#dados {
+  width: 148%;
+  height: 410px;
+  overflow-y: hidden;
+}
 .supplier .supplier-scroller form section .supplier-side,
 .fornecedor_cadastro .supplier-scroller form section .supplier-side {
   position: relative;
   height: auto;
+}
+.supplier .supplier-scroller form section .supplier-side.dados,
+.fornecedor_cadastro .supplier-scroller form section .supplier-side.dados {
+  position: relative;
+  height: 355px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 .supplier .supplier-scroller form section .supplier-top-side,
 .fornecedor_cadastro .supplier-scroller form section .supplier-top-side {
@@ -1304,7 +1322,6 @@ form.search {
   float: right;
   height: auto;
   width: 100%;
-  margin-bottom: 10px;
 }
 .supplier-side.right-side .card-side .subtitle {
   position: relative;
@@ -1332,7 +1349,6 @@ form.search {
 .supplier-photo-side .photo-container img {
   width: auto;
   height: 100%;
-  margin-left: -70px;
 }
 .supplier-photo-side .photo-container img.noimage {
   margin-left: 0px;
@@ -2322,6 +2338,17 @@ form.search {
   left: -1px;
   float: left;
   margin-left: 5px;
+}
+.icon.goback {
+  padding-right: 10px;
+  position: absolute;
+  width: 85px;
+}
+.icon.goback:before {
+  margin: 3px 0 0 8px;
+  width: 15px;
+  height: 15px;
+  background-position: -35px -1499px;
 }
 .icon.newuser {
   margin-bottom: 10px;
@@ -3697,6 +3724,9 @@ form textarea {
   .supplier-side.right-side {
     width: 300px;
   }
+  .supplier-side.dados {
+    width: 610px;
+  }
   .supplier-photo-side .photo-container {
     height: 135px;
     background-color: #cbcbcb;
@@ -3886,6 +3916,27 @@ form textarea {
 }
 .table {
   width: 900px;
+}
+.table-config {
+  width: 1200px;
+}
+.table-config button.tooltip-item:after {
+  position: relative;
+  margin: -30px 20px 0 -10px;
+}
+.table-config button.caption-icons-icon:after {
+  margin: 8px auto -7px auto;
+}
+.table-config button.tooltip-item:after {
+  position: relative;
+  margin: -25px 20px 0 -10px;
+  cursor: pointer;
+}
+.newuser input.form-control {
+  width: 480px;
+}
+.wrapper-config {
+  width: 1200px;
 }
 .thbutton {
   width: 40px;

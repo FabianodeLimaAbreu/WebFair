@@ -80,7 +80,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       "change .type":"filterTemplate",  
       "click .newtemp":"newTemplate",
       "click .category_button":"showSubCategories",
-      "click .sub_category a":"setCompositions"    
+      "click .sub_category a":"setCompositions",
+      "keyup input[name='FEIR_DESC']":"toUpperCaseValue",
+      "keyup input[name='FORN_DESC']":"toUpperCaseValue"
       /*"submit .search":"submit",
       "click button.icon.go_back_default":"goBack",
       "click button.close":"getOut"*/
@@ -88,7 +90,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     init:function(){
       this.view = "images";
       this.page = "amostras";
-      this.nsort="AMOS_ID";
+      this.nsort="AMOS_DESC";
       this.itens = $([]);
       this.data=[];
       this.fdata = [];
@@ -128,6 +130,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.usr = jQuery.parseJSON($.cookie("webfair"));
       if(!this.usr)
         window.location.href = 'login.html';
+
+        console.dir(this.usr);
+
       //this.modal = new Modal({el:this.modalEl});
       this.detail = new Detail({
         getloading:this.proxy(this.getloading),
@@ -538,8 +543,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             context.bcity=$(".city");
             if(context.usr.USU_COD !== 1){
               $(".bnew-fair").hide();
-            }            
-            //context.callService(context.page,"<FEIR_COD></FEIR_COD>","<PAIS_COD>BR</PAIS_COD>","<REGI_COD>SP</REGI_COD>");
+            }          
+            //context.callService("local",'<FEIR_COD></FEIR_COD>','<PAIS_COD></PAIS_COD>','<REGI_COD></REGI_COD>');
             break;
           case "local_cadastro":
             context.bcity=$(".city");
@@ -633,7 +638,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         });
         //html+="<CREATE_DATE>"+new Date().toLocaleDateString().replace("/","-").replace("/","-")+"</CREATE_DATE>";
         html+="<CREATE_DATE>"+"2015-12-12"+"</CREATE_DATE>";
-        console.dir(html);
         this.callService("gravarLocal",html,"U");
       }
       else{
@@ -1076,6 +1080,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       }  
       switch(b){
         case 'amostras':
+        console.log(this.nsort);
           this.data = a.sortBy(this.nsort);
           this.content.changeview(this.view);
           console.dir(this.data);
@@ -1173,6 +1178,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           case "local":
             this.fair.push(jQuery.parseJSON($(req.responseXML).text()).sortBy('FEIR_DESC').unique());
             this.fair=this.fair[0];
+           // context.setdata(this.fair,"local");
             break;
           case "fornecedores":
             if(notcombo){
@@ -1304,7 +1310,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           var i;
           //console.log("ENTROU PARA SORTBY");
           m=((0+1)*length);
-          var p, h, q, k = (0*length), l = length, e = this;
+          var p, h, q, k = (0*length), l = length, e = this,countf=1;
           if (a[k]) {
             f = setInterval(function() {
                 h = a[k];   
@@ -1371,10 +1377,19 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                     }).attr("src", q);
 
                     // Mostrando (box sendo carregados)
-                    $('.bread-search').find(".spec").text(k+1+" de "+h.COUNT_AMOS+" Resultados");;
+                    if(h.FORN_ID !== a[k-1].FORN_ID){
+                      console.log(h.FORN_ID+" = "+a[k-1].FORN_ID);
+                      console.log(countf);
+                      countf++;
+                    }
+                    $('.bread-search').find(".spec").text(k+1+" de "+h.COUNT_AMOS+" Resultados / "+countf+" Fornecedores");
                 } else {
                   //console.log("list");
                     if (l > 0) {
+                        if(h.FORN_ID !== a[k-1].FORN_ID){
+                          console.log(h.AMOS_ID+" = "+a[k-1].AMOS_ID);
+                          countf++;
+                        }
                         return g = new Box({
                             item : h,
                             view : c,
@@ -1383,7 +1398,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                             usr:e.usr,
                             modal : e.modal,
                             page: e.page
-                        }), e.active.create(g.render()),$('.bread-search').find(".spec").text(k+1+" de "+h[count]+" Resultados"),l--, $("tbody .bstar").unbind("click").bind("click",function(a){context.starForn(a)}), k++,!1;
+                        }), e.active.create(g.render()),$('.bread-search').find(".spec").text(k+1+" de "+h[count]+" Resultados / "+countf+" Fornecedores"),l--, $("tbody .bstar").unbind("click").bind("click",function(a){context.starForn(a)}), k++,!1;
                         //, $('.bread-box').find(".bread-load").text(k+1), l--, k++, !1*/
                     } else {
                         clearInterval(f), e.setloading(!1);
@@ -1398,7 +1413,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         else{
           //console.log("ESCREVENDO SEM SORTBY");
           m=((this.content.page+1)*this.itens_by_page);
-          var p, h, q, k = (this.content.page*this.itens_by_page), l = this.itens_by_page, e = this;
+          var p, h, q, k = (this.content.page*this.itens_by_page), l = this.itens_by_page, e = this,countf=1;
           if (a[k]) {
             f = setInterval(function() {
                 h = a[k];   
@@ -1467,11 +1482,24 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                     }).attr("src", q);
 
                     // Mostrando (box sendo carregados)
-                    $('.bread-search').find(".spec").text(k+1+" de "+h.COUNT_AMOS+" Resultados");
+                    if(h.FORN_ID !== a[k-1].FORN_ID){
+                      console.log(h.FORN_ID+" = "+a[k-1].FORN_ID);
+                      console.log(countf);
+                      countf++;
+                    }
+                    $('.bread-search').find(".spec").text(k+1+" de "+h.COUNT_AMOS+" Resultados / "+countf+" Fornecedores");
                 } else {
                     var count="COUNT_FORN";
                     if(context.page === "amostras"){
                       count="COUNT_AMOS";
+
+                      if(a[k-1]){
+                        console.log(h.FORN_ID+" , "+a[k-1].FORN_ID);
+                        if(h.FORN_ID !== a[k-1].FORN_ID){
+                          console.log(h.FORN_ID+" = "+a[k-1].FORN_ID);
+                          countf++;
+                        }
+                      }
                     }
                     if (l > 0) {
                         return g = new Box({
@@ -1482,7 +1510,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                             modal : e.modal,
                             usr:e.usr,
                             page: e.page
-                        }), e.active.create(g.render()),$('.bread-search').find(".spec").text(k+1+" de "+h[count]+" Resultados"),l--, $("tbody .bstar").unbind("click").bind("click",function(a){context.starForn(a)}),k++,!1;
+                        }), e.active.create(g.render()),count === "COUNT_FORN" ? $('.bread-search').find(".spec").text(k+1+" de "+h[count]+" Resultados ") : $('.bread-search').find(".spec").text(k+1+" de "+h[count]+" Resultados / "+countf+" Fornecedores"),$("tbody .bstar").unbind("click").bind("click",function(a){context.starForn(a)}),l--, k++,!1;
 
                         //, $('.bread-box').find(".bread-load").text(k+1), l--, k++, !1*/
                     } else {
@@ -1873,21 +1901,27 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
     },
     setCompositions:function(a){
-      var length,context=this,l=0;
-      a.preventDefault();
+      var length,context=this,l=0,obj;
+      if($(a.target).prop("tagName") ===  "SPAN"){
+        obj=$(a.target).parent();
+      }
+      else{
+        obj=$(a.target);
+        a.preventDefault();
+      }
       length=this.select_items.length;
       //this.modal.open("message","Em Desenvolvimento!!!",!1,!0);
       this.setloading(!0,!1);
-      if($(a.target).attr("name") === "COMP"){
+      if(obj.attr("name") === "COMP"){
         status=setInterval(function(){
           if(l<length){
             var html="";
             context.data.filter(function(elem,index){
               if(elem.AMOS_ID == context.select_items[l].AMOS_ID){
-                elem.COMPOSITIONS.push({"COMP_COD":$(a.target).attr("href").replace("#",""),"COMP_DESC":$(a.target).attr("title")})
+                elem.COMPOSITIONS.push({"COMP_COD":obj.attr("href").replace("#",""),"COMP_DESC":obj.attr("title")})
               }
             });
-            $("#"+context.select_items[l].AMOS_ID+" .caption-downside ul").append("<li><a href='#"+$(a.target).attr('href').replace("#","")+"' name='"+context.select_items[l].AMOS_ID+"'>"+$(a.target).attr('title').toUpperCase()+"</a></li>");
+            $("#"+context.select_items[l].AMOS_ID+" .caption-downside ul").append("<li><a href='#"+obj.attr('href').replace("#","")+"' name='"+context.select_items[l].AMOS_ID+"'>"+obj.attr('title').toUpperCase()+"</a></li>");
             $("#"+context.select_items[l].AMOS_ID+" .caption-downside a").each(function(index, el) {
               html+="<Composition><COMP_COD>"+$(el).attr("href").replace("#","")+"</COMP_COD><COMP_OTHERS></COMP_OTHERS><TP_COMP_ID>1</TP_COMP_ID></Composition>";
             });
@@ -1908,21 +1942,28 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         status=setInterval(function(){
           if(l<length){
             var html="",pattern="";
-            if(!$("#"+context.select_items[l].AMOS_ID+" .caption-downside a[href='"+$(a.target).attr('href')+"']").length){
+            if(!$("#"+context.select_items[l].AMOS_ID+" .caption-downside a[href='"+obj.attr('href')+"']").length){
               //Fazer identificar se ja tem um para aquele atributo e remover
-              if($("#"+context.select_items[l].AMOS_ID+" .caption-downside a[name='"+$(a.target).attr('name')+"']").length){
-                $("#"+context.select_items[l].AMOS_ID+" .caption-downside a[name='"+$(a.target).attr('name')+"']").parent().remove();
+              if($("#"+context.select_items[l].AMOS_ID+" .caption-downside a[name='"+obj.attr('name')+"']").length){
+                $("#"+context.select_items[l].AMOS_ID+" .caption-downside a[name='"+obj.attr('name')+"']").parent().remove();
               }
-              $("#"+context.select_items[l].AMOS_ID+" .caption-downside ul").append("<li><a href='#"+$(a.target).attr('href').replace("#","")+"' name='"+$(a.target).attr('name')+"'>"+$(a.target).attr('title').toUpperCase()+"</a></li>");
+              $("#"+context.select_items[l].AMOS_ID+" .caption-downside ul").append("<li><a href='#"+obj.attr('href').replace("#","")+"' name='"+obj.attr('name')+"'>"+obj.attr('title').toUpperCase()+"</a></li>");
               context.data.filter(function(elem,index){
                 if(elem.AMOS_ID == context.select_items[l].AMOS_ID){
+                  var day,date;
                   date=new Date();
-                  date=""+date.getFullYear()+"-0"+(date.getMonth()+1)+"-"+date.getDate();
+                  if(parseInt(date.getDate())<10){
+                    day="0"+date.getDate();
+                  }
+                  else{
+                    day=date.getDate();
+                  }
+                  date=""+date.getFullYear()+"-0"+(date.getMonth()+1)+"-"+day;
                   //pattern+="<AMOS_ID>"+parseInt(elem.AMOS_ID)+"</AMOS_ID><FORN_ID>"+parseInt(elem.FORN_ID)+"</FORN_ID><FEIR_COD>"+parseInt(elem.FEIR_COD)+"</FEIR_COD><USU_COD>"+parseInt(elem.USU_COD)+"</USU_COD><AMOS_DESC>"+elem.AMOS_DESC+"</AMOS_DESC><AMOS_STATUS>"+elem.AMOS_STATUS+"</AMOS_STATUS><AMOS_ENV_EMAIL>"+elem.AMOS_ENV_EMAIL+"</AMOS_ENV_EMAIL><TECI_COD>"+(elem.TECI_COD || "")+"</TECI_COD><BASE_COD>"+(elem.BASE_COD || "")+"</BASE_COD><GRUP_COD>"+(elem.GRUP_COD || "")+"</GRUP_COD><SUBG_COD>"+(elem.SUBG_COD || "")+"</SUBG_COD><SEGM_COD>"+(elem.SEGM_COD || "")+"</SEGM_COD><FLAG_PRIORIDADE>"+elem.FLAG_PRIORIDADE+"</FLAG_PRIORIDADE><AMOS_HOMOLOGAR>"+elem.AMOS_HOMOLOGAR+"</AMOS_HOMOLOGAR><FLAG_FISICA>"+elem.FLAG_FISICA+"</FLAG_FISICA><CREATE_DATE>"+date+"</CREATE_DATE>";
                   //html+="<AMOS_PRECO>"+elem.AMOS_PRECO+"</AMOS_PRECO><AMOS_LARGURA_TOTAL>"+elem.AMOS_LARGURA_TOTAL+"</AMOS_LARGURA_TOTAL><AMOS_GRAMATURA_M>"+elem.AMOS_GRAMATURA_M+"</AMOS_GRAMATURA_M><AMOS_COTACAO_M>"+elem.AMOS_COTACAO_M+"</AMOS_COTACAO_M><AMOS_COTACAO_KG>"+elem.AMOS_COTACAO_KG+"</AMOS_COTACAO_KG><AMOS_LARGURA_UTIL>"+elem.AMOS_LARGURA_UTIL+"</AMOS_LARGURA_UTIL><AMOS_GRAMATURA_ML>"+elem.AMOS_GRAMATURA_ML+"</AMOS_GRAMATURA_ML><AMOS_ONCAS>"+elem.AMOS_ONCAS+"</AMOS_ONCAS><AMOS_PRECO_UM>"+elem.AMOS_PRECO_UM+"</AMOS_PRECO_UM>";
                   
-                  elem[$(a.target).attr("name")]=$(a.target).attr("href").replace("#","");
-                  elem[$(a.target).attr("name").replace("_COD","_DESC")]=$(a.target).attr("title");
+                  elem[obj.attr("name")]=obj.attr("href").replace("#","");
+                  elem[obj.attr("name").replace("_COD","_DESC")]=obj.attr("title");
                   console.dir(elem);
                   pattern+="<AMOS_ID>"+parseInt(elem.AMOS_ID)+"</AMOS_ID><FORN_ID>"+parseInt(elem.FORN_ID)+"</FORN_ID><FEIR_COD>"+parseInt(elem.FEIR_COD)+"</FEIR_COD><USU_COD>"+parseInt(elem.USU_COD)+"</USU_COD><AMOS_DESC>"+elem.AMOS_DESC+"</AMOS_DESC><AMOS_STATUS>"+elem.AMOS_STATUS+"</AMOS_STATUS><AMOS_ENV_EMAIL>"+elem.AMOS_ENV_EMAIL+"</AMOS_ENV_EMAIL><TECI_COD>"+(elem.TECI_COD || "")+"</TECI_COD><BASE_COD>"+(elem.BASE_COD || "")+"</BASE_COD><GRUP_COD>"+(elem.GRUP_COD || "")+"</GRUP_COD><SUBG_COD>"+(elem.SUBG_COD || "")+"</SUBG_COD><SEGM_COD>"+(elem.SEGM_COD || "")+"</SEGM_COD><FLAG_PRIORIDADE>"+elem.FLAG_PRIORIDADE+"</FLAG_PRIORIDADE><AMOS_HOMOLOGAR>"+elem.AMOS_HOMOLOGAR+"</AMOS_HOMOLOGAR><FLAG_FISICA>"+elem.FLAG_FISICA+"</FLAG_FISICA><CREATE_DATE>"+date+"</CREATE_DATE>";
                   html+="<AMOS_DESC>"+elem.AMOS_DESC+"</AMOS_DESC><AMOS_PRECO>"+elem.AMOS_PRECO+"</AMOS_PRECO><AMOS_LARGURA_TOTAL>"+elem.AMOS_LARGURA_TOTAL+"</AMOS_LARGURA_TOTAL><AMOS_GRAMATURA_M>"+elem.AMOS_GRAMATURA_M+"</AMOS_GRAMATURA_M><AMOS_COTACAO_KG>"+elem.AMOS_COTACAO_KG+"</AMOS_COTACAO_KG><AMOS_LARGURA_UTIL>"+elem.AMOS_LARGURA_UTIL+"</AMOS_LARGURA_UTIL><AMOS_GRAMATURA_ML>"+elem.AMOS_GRAMATURA_ML+"</AMOS_GRAMATURA_ML><AMOS_ONCAS>"+elem.AMOS_ONCAS+"</AMOS_ONCAS><AMOS_PRECO_UM>"+elem.AMOS_PRECO_UM+"</AMOS_PRECO_UM>";
@@ -1942,6 +1983,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       }
 
       //this.callService("gravarAmostraComposicao","102004997","<Composition><COMP_COD>CL_1</COMP_COD><COMP_OTHERS></COMP_OTHERS><TP_COMP_ID>1</TP_COMP_ID></Composition>");
+    },
+    toUpperCaseValue:function(a){
+      $(a.target).val($(a.target).val().toUpperCase());
     },
     getPage:function(){
       return this.page;
@@ -1966,8 +2010,15 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           el.parent().remove();
           context.data.filter(function(elem,index){
             if(elem.AMOS_ID == el.attr("title")){
+              var day;
               date=new Date();
-              date=""+date.getFullYear()+"-0"+(date.getMonth()+1)+"-"+date.getDate();
+              if(parseInt(date.getDate())<10){
+                day="0"+date.getDate();
+              }
+              else{
+                day=date.getDate();
+              }
+              date=""+date.getFullYear()+"-0"+(date.getMonth()+1)+"-"+day;
               
               elem[el.attr("name")]=null;
               elem[el.attr("name").replace("_COD","_DESC")]="";

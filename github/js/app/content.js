@@ -251,8 +251,15 @@ window.Modal = Spine.Controller.sub({
           else{
             TEMP_ID=2;
           }
+          var day,date;
           date=new Date();
-          date=""+date.getFullYear()+"-0"+(date.getMonth()+1)+"-"+date.getDate();
+          if(parseInt(date.getDate())<10){
+            day="0"+date.getDate();
+          }
+          else{
+            day=date.getDate();
+          }
+          date=""+date.getFullYear()+"-0"+(date.getMonth()+1)+"-"+day;
           this.callService("gravarNotes","<OBJ_ID>"+this.objid+"</OBJ_ID><TP_NOTA_ID>"+TEMP_ID+"</TP_NOTA_ID><USU_COD>"+this.usr.USU_COD+"</USU_COD>","<NOTA_DESC>"+$(".notebook textarea").val()+"</NOTA_DESC><CREATE_DATE>"+date+"</CREATE_DATE>");
         }
         else{
@@ -452,19 +459,32 @@ window.Box = Spine.Controller.sub({init:function() {
         var result="",i,status,nome_contato,segmento=[],middlefav="";
         status= a.FORN_STATUS ? "complet":"incomplet";
         result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.FORN_DESC+"</a></td>"+"<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.FEIR_DESC+"</a></td>"+"<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.CREATE_DATE+"</a></td>";
+        
+
         if(a.CONTACTS.length){
-          result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>";
+          var scont=[];
           for(i=0;i<a.CONTACTS.length;i++){
-            if(a.CONTACTS[i].CONT_NOME.length){
-              nome_contato=a.CONTACTS[i].CONT_NOME;
+            if(a.CONTACTS[i].SEGM_COD === this.usr.SEGM_COD){
+              scont.push(a.CONTACTS[i]);
             }
-            else{
-              nome_contato="SEM NOME";
-            }
-            segmento.push(a.CONTACTS[i].SEGM_DESC);
-            result+=""+nome_contato+"<br/>";
           }
-          result+="</a></td>";
+          if(scont.length){
+            result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>";
+            for(i=0;i<scont.length;i++){
+              if(scont[i].CONT_NOME.length){
+                nome_contato=scont[i].CONT_NOME;
+              }
+              else{
+                nome_contato="SEM NOME";
+              }
+              segmento.push(scont[i].SEGM_DESC);
+              result+=""+nome_contato+"<br/>";
+            }
+            result+="</a></td>";
+          }
+          else{
+             result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'></a></td>";
+          }
         }
         else{
           result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'></a></td>";
