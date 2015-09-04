@@ -8,6 +8,9 @@
 		}
 	}
 }
+.left10{
+	margin-left: 10px;
+}
 .open-info{
 	background-color: #71abcc;
 	border-radius: 50%;
@@ -49,8 +52,7 @@
 .newuser{
 	input{
 		&.form-control{
-			
-			width:480px;
+			width:490px;
 		}	
 	}
 }
@@ -145,4 +147,49 @@
 			padding: 0;
 			margin-left: -17px;
 		}
+}
+.onoff-holder, .onoff-holder2{
+	margin:5px 0 0 18px;
+	float:left;
+	width: auto;
+	height: 20px;
+	// border: 1px solid red;
+	p{
+		float: left;
+		margin: 4px 0 0 0;
+	}
+}
+.onoff-holder2{
+	margin-left:60px;
+}
+.onoff{
+	.left10;
+	float: left;
+	padding: 0;
+	border:none;
+	width: 30px;
+	height:18px;
+	position: absolute;
+	float: left;
+	.sprite;
+	.handle_off;
+	span{
+		position: absolute;
+		display: block;
+		top:0;
+		left: 0;
+		-webkit-transition: left 0.3s;
+	    transition: left 0.3s;
+		.sprite;
+		.handle_onoff;
+	}
+	&.sel{
+		.sprite;
+		.handle_on;
+		span{
+		-webkit-transition: left 0.3s;
+	    transition: left 0.3s;
+		left: 11px;
+		}
+	}
 }

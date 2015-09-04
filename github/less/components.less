@@ -13,9 +13,8 @@
 	&:hover,&.sel{
 		background: @dark-text;
 	}
-	&.new, &.hash, &.close-temp, &.newuser{
+	&.new, &.hash, &.close-temp, &.newuser,&.newfair{
 		width:140px;
-		float: right;
 		line-height: 30px;
 		&:before{
 			content: "";
@@ -32,10 +31,17 @@
 			margin-left: 5px;
 		}
 	}
+	&.new, &.hash, &.close-temp, &.newuser{
+		float: right;
+	}
 	&.goback{
 	    padding-right: 10px;
 		position: absolute;
 		.s-eight-five;
+		&.goback-relative{
+			position: relative;
+			margin-right: 10px;
+		}
 		&:before{
 			margin: 3px 0 0 8px;
 			.actions-arrow_left_left

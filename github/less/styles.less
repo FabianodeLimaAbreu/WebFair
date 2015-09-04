@@ -252,8 +252,9 @@ header{
 		color: #fff;
 		float: right;
 		height: 50px;
-		line-height: 50px;
-		margin-top: 10px;
+		line-height: 15px;
+		margin-top: 20px;
+	    min-width: 130px;
 		.login-name-bar{
 			background: url(../images/border-shadow.png) no-repeat;
 			width: 15px;
@@ -289,6 +290,11 @@ header{
 		}
 	}*/
 }
+.login-id{
+	height: 12px;
+	font-size:11px;
+	color: @light-text;
+ }
 .header-bottom{
 	.nav-container{
 		position: relative;
@@ -501,6 +507,27 @@ header{
 		&.sel,&:hover{
 			&:after{
 				.other_dot;
+			}
+		}
+	}
+	&.bsquare{
+		cursor: pointer;
+		&:after{
+			position: absolute;
+			left: 10px;
+			top: 10px;
+			content: "";
+			display: block;
+			.sprite;
+			.other_square_notdot;
+		}
+		&.bcicle-other{
+			display: inline;
+    		width: 20px;
+		}
+		&.sel,&:hover{
+			&:after{
+				.other_square_notdot_selected;
 			}
 		}
 	}
@@ -1197,6 +1224,7 @@ form.search{
 		width: 100%;
 		height: 410px;
 		overflow-y: hidden;
+		overflow-x: hidden;
 		form{
 			width: 102%;
 			&.dados{
@@ -1210,7 +1238,6 @@ form.search{
 				overflow-y: auto;
 				&#dados{
 				    width: 148%;
-				    height: 410px;
 				    overflow-y: hidden;
 				}
 				//min-height: 410px;
@@ -1381,6 +1408,7 @@ form.search{
 			width: auto;
 			height: 100%;
     		//margin-left: -70px;
+    		cursor: pointer;
 			&.noimage{
 				margin-left: 0px;
 			}
@@ -1551,9 +1579,7 @@ form.search{
 		top: 4px;
 		span{
 			display: inline-block;
-			min-width: 200px;
 			font-weight: 400;
-			max-width: 660px;
 			overflow: hidden;
 			text-overflow: ellipsis;
 			white-space: nowrap;

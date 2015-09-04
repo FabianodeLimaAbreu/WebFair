@@ -290,8 +290,9 @@ header .logo-print {
   color: #fff;
   float: right;
   height: 50px;
-  line-height: 50px;
-  margin-top: 10px;
+  line-height: 15px;
+  margin-top: 20px;
+  min-width: 130px;
 }
 .header-top h2 .login-name-bar {
   background: url(../images/border-shadow.png) no-repeat;
@@ -300,6 +301,11 @@ header .logo-print {
   position: relative;
   float: left;
   margin: 0 10px 0 0;
+}
+.login-id {
+  height: 12px;
+  font-size: 11px;
+  color: #f1f6fa;
 }
 .header-bottom .nav-container {
   position: relative;
@@ -435,7 +441,7 @@ header .logo-print {
 .menu .menu-item a.bmenu-legend:after {
   width: 30px;
   height: 30px;
-  background-position: -10px -330px;
+  background-position: -10px -90px;
   left: 10px;
 }
 .menu .menu-item a.bmenu-settings:after {
@@ -446,12 +452,12 @@ header .logo-print {
 .menu .menu-item a.bmenu-send_receive:after {
   width: 40px;
   height: 30px;
-  background-position: -10px -210px;
+  background-position: -10px -370px;
 }
 .menu .menu-item a.bmenu-logoff:after {
   width: 25px;
   height: 30px;
-  background-position: -10px -50px;
+  background-position: -10px -290px;
   right: 2px;
   left: 0;
 }
@@ -479,7 +485,7 @@ header .logo-print {
 .tooltip-item.bselect span.icon.bselection:hover:after {
   width: 15px;
   height: 15px;
-  background-position: -10px -1550px;
+  background-position: -10px -1737px;
   width: 25px;
 }
 .tooltip-item.bannex-leg:after {
@@ -491,13 +497,13 @@ header .logo-print {
   background: url("../images/sprite.png") top left no-repeat;
   width: 9px;
   height: 25px;
-  background-position: -10px -410px;
+  background-position: -10px -445px;
 }
 .tooltip-item.bannex-leg.add:after {
   left: 20px;
   width: 16px;
   height: 25px;
-  background-position: -29px -410px;
+  background-position: -29px -445px;
 }
 .tooltip-item.bcircle {
   cursor: pointer;
@@ -511,7 +517,7 @@ header .logo-print {
   background: url("../images/sprite.png") top left no-repeat;
   width: 20px;
   height: 20px;
-  background-position: -10px -845px;
+  background-position: -10px -906px;
 }
 .tooltip-item.bcircle.bcicle-other {
   display: inline;
@@ -521,7 +527,31 @@ header .logo-print {
 .tooltip-item.bcircle:hover:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -875px;
+  background-position: -10px -936px;
+}
+.tooltip-item.bsquare {
+  cursor: pointer;
+}
+.tooltip-item.bsquare:after {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  content: "";
+  display: block;
+  background: url("../images/sprite.png") top left no-repeat;
+  width: 20px;
+  height: 20px;
+  background-position: -10px -876px;
+}
+.tooltip-item.bsquare.bcicle-other {
+  display: inline;
+  width: 20px;
+}
+.tooltip-item.bsquare.sel:after,
+.tooltip-item.bsquare:hover:after {
+  width: 20px;
+  height: 20px;
+  background-position: -10px -666px;
 }
 .tooltip-item.btrash-big:after {
   left: 10px;
@@ -584,7 +614,7 @@ header .logo-print {
   background: url("../images/sprite.png") top left no-repeat;
   width: 30px;
   height: 30px;
-  background-position: -10px -90px;
+  background-position: -10px -330px;
 }
 .tooltip-content {
   float: left;
@@ -701,7 +731,7 @@ header .logo-print {
 .tooltip-content.filter li a:before {
   margin-top: -5px;
   background: url("../images/sprite.png") top left no-repeat;
-  background-position: -10px -815px;
+  background-position: -10px -876px;
   content: "";
   width: 20px;
   height: 20px;
@@ -712,7 +742,7 @@ header .logo-print {
   background: url("../images/sprite.png") top left no-repeat;
   width: 20px;
   height: 20px;
-  background-position: -10px -635px;
+  background-position: -10px -666px;
 }
 .tooltip-content.filter .filterlist {
   border-right: solid 1px #e6ebf0;
@@ -1177,6 +1207,7 @@ form.search {
   width: 100%;
   height: 410px;
   overflow-y: hidden;
+  overflow-x: hidden;
 }
 .supplier .supplier-scroller form,
 .fornecedor_cadastro .supplier-scroller form {
@@ -1197,7 +1228,6 @@ form.search {
 .supplier .supplier-scroller form section#dados,
 .fornecedor_cadastro .supplier-scroller form section#dados {
   width: 148%;
-  height: 410px;
   overflow-y: hidden;
 }
 .supplier .supplier-scroller form section .supplier-side,
@@ -1349,6 +1379,7 @@ form.search {
 .supplier-photo-side .photo-container img {
   width: auto;
   height: 100%;
+  cursor: pointer;
 }
 .supplier-photo-side .photo-container img.noimage {
   margin-left: 0px;
@@ -1396,17 +1427,17 @@ form.search {
 .container-fullsize .right-list .bimages:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1085px;
+  background-position: -10px -1146px;
 }
 .container-fullsize .right-list .blist:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1055px;
+  background-position: -10px -1116px;
 }
 .container-fullsize .right-list .bedit:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1025px;
+  background-position: -10px -606px;
 }
 .container-fullsize .main_opt {
   position: relative;
@@ -1461,7 +1492,7 @@ form.search {
 .container-fullsize .main_opt .main_opt_item .main_opt_button.bemail:after {
   width: 20px;
   height: 15px;
-  background-position: -10px -1525px;
+  background-position: -10px -1637px;
 }
 .container-fullsize .main_opt .main_opt_item .main_opt_button.bemail.disabled {
   cursor: default;
@@ -1469,12 +1500,12 @@ form.search {
 .container-fullsize .main_opt .main_opt_item .main_opt_button.bemail.disabled:after {
   width: 20px;
   height: 15px;
-  background-position: -10px -1650px;
+  background-position: -10px -1612px;
 }
 .container-fullsize .main_opt .main_opt_item .main_opt_button.btrash:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1355px;
+  background-position: -10px -1446px;
 }
 .container-fullsize .main_opt.large .main_opt_item {
   width: 20%;
@@ -1517,9 +1548,7 @@ form.search {
 }
 .filter-crumb .bread-search span {
   display: inline-block;
-  min-width: 200px;
   font-weight: 400;
-  max-width: 660px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1590,7 +1619,7 @@ form.search {
   display: inline-block;
   width: 10px;
   height: 10px;
-  background-position: -40px -515px;
+  background-position: -40px -546px;
   position: relative;
   float: right;
   right: 5px;
@@ -1599,7 +1628,7 @@ form.search {
 .aside-edit .category li .category_button.actived:after {
   width: 10px;
   height: 10px;
-  background-position: -40px -545px;
+  background-position: -40px -515px;
 }
 .aside-edit .category .sub_category {
   padding: 0;
@@ -1868,7 +1897,7 @@ form.search {
   background: url("../images/sprite.png") top left no-repeat;
   width: 20px;
   height: 20px;
-  background-position: -10px -725px;
+  background-position: -10px -756px;
   display: inline-block;
   position: relative;
   margin-right: 5px;
@@ -1883,7 +1912,7 @@ form.search {
 .detail .detail-sample-container .sample-buttons li button.btag:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -755px;
+  background-position: -10px -786px;
   top: 5px;
   left: 10px;
   float: left;
@@ -2221,7 +2250,7 @@ form.search {
   background: url("../images/sprite.png") top left no-repeat;
   width: 20px;
   height: 20px;
-  background-position: -10px -695px;
+  background-position: -10px -726px;
   margin: 10px 10px 0 0;
   float: right;
 }
@@ -2260,7 +2289,7 @@ form.search {
 .modal.bad .alertclose {
   width: 20px;
   height: 20px;
-  background-position: -10px -665px;
+  background-position: -10px -696px;
 }
 .modal.bad span {
   background: url(../images/alert.png) 0 -80px;
@@ -2317,20 +2346,21 @@ form.search {
 .icon.new,
 .icon.hash,
 .icon.close-temp,
-.icon.newuser {
+.icon.newuser,
+.icon.newfair {
   width: 140px;
-  float: right;
   line-height: 30px;
 }
 .icon.new:before,
 .icon.hash:before,
 .icon.close-temp:before,
-.icon.newuser:before {
+.icon.newuser:before,
+.icon.newfair:before {
   content: "";
   background: url("../images/sprite.png") top left no-repeat;
   width: 20px;
   height: 20px;
-  background-position: -10px -575px;
+  background-position: -10px -576px;
   display: inline-block;
   position: relative;
   margin-right: 5px;
@@ -2339,16 +2369,26 @@ form.search {
   float: left;
   margin-left: 5px;
 }
+.icon.new,
+.icon.hash,
+.icon.close-temp,
+.icon.newuser {
+  float: right;
+}
 .icon.goback {
   padding-right: 10px;
   position: absolute;
   width: 85px;
 }
+.icon.goback.goback-relative {
+  position: relative;
+  margin-right: 10px;
+}
 .icon.goback:before {
   margin: 3px 0 0 8px;
   width: 15px;
   height: 15px;
-  background-position: -35px -1499px;
+  background-position: -10px -1712px;
 }
 .icon.newuser {
   margin-bottom: 10px;
@@ -2362,7 +2402,7 @@ form.search {
   background: url("../images/sprite.png") top left no-repeat;
   width: 16px;
   height: 17px;
-  background-position: -10px -1445px;
+  background-position: -10px -1559px;
   top: 6px;
   left: 5px;
 }
@@ -2372,7 +2412,7 @@ form.search {
 .icon.close-temp:before {
   width: 15px;
   height: 15px;
-  background-position: -10px -1600px;
+  background-position: -35px -1737px;
 }
 .icon.gotop:after {
   content: "";
@@ -2385,7 +2425,7 @@ form.search {
   background: url("../images/sprite.png") top left no-repeat;
   width: 15px;
   height: 15px;
-  background-position: -10px -1600px;
+  background-position: -35px -1737px;
   margin: 1px -8px 0 10px;
 }
 .icon.finishit {
@@ -2403,7 +2443,7 @@ form.search {
   background: url("../images/sprite.png") top left no-repeat;
   width: 16px;
   height: 12px;
-  background-position: -10px -1675px;
+  background-position: -10px -1762px;
   margin: 3px -8px 0 10px;
 }
 .icon.delete,
@@ -2418,7 +2458,7 @@ form.search {
   background: url("../images/sprite.png") top left no-repeat;
   width: 20px;
   height: 20px;
-  background-position: -10px -545px;
+  background-position: -10px -546px;
   display: inline-block;
   position: relative;
   margin-right: 5px;
@@ -2433,7 +2473,7 @@ form.search {
   background: url("../images/sprite.png") top left no-repeat;
   width: 20px;
   height: 20px;
-  background-position: -10px -545px;
+  background-position: -10px -546px;
   margin: 0 7px 0 0;
 }
 .icon.bgoselect {
@@ -2446,7 +2486,7 @@ form.search {
   background: url("../images/sprite.png") top left no-repeat;
   width: 15px;
   height: 15px;
-  background-position: -35px -1499px;
+  background-position: -10px -1712px;
   display: inline-block;
   position: relative;
   margin-right: 5px;
@@ -2465,7 +2505,7 @@ form.search {
   background: url("../images/sprite.png") top left no-repeat;
   width: 15px;
   height: 15px;
-  background-position: -35px -1575px;
+  background-position: -35px -1687px;
   display: inline-block;
   position: absolute;
   margin-right: 5px;
@@ -2486,7 +2526,7 @@ form.search {
   background: url("../images/sprite.png") top left no-repeat;
   width: 20px;
   height: 20px;
-  background-position: -10px -1025px;
+  background-position: -10px -606px;
   display: inline-block;
   position: relative;
   margin-right: 5px;
@@ -2505,7 +2545,7 @@ form.search {
 .icon.save-temp:before {
   width: 17px;
   height: 17px;
-  background-position: -10px -1472px;
+  background-position: -10px -1532px;
 }
 .icon.edit-big {
   background: none;
@@ -2518,7 +2558,7 @@ form.search {
   background: url("../images/sprite.png") top left no-repeat;
   width: 30px;
   height: 30px;
-  background-position: -10px -290px;
+  background-position: -10px -50px;
   display: block;
   position: relative;
   content: "";
@@ -2536,7 +2576,7 @@ form.search {
   background: url("../images/sprite.png") top left no-repeat;
   width: 30px;
   height: 30px;
-  background-position: -10px -370px;
+  background-position: -10px -10px;
   display: block;
   position: relative;
   content: "";
@@ -2544,13 +2584,13 @@ form.search {
 .icon.fav-big.sel:after {
   width: 30px;
   height: 30px;
-  background-position: -10px -170px;
+  background-position: -10px -210px;
 }
 .icon.trash-big:after {
   background: url("../images/sprite.png") top left no-repeat;
   width: 25px;
   height: 30px;
-  background-position: -10px -10px;
+  background-position: -10px -170px;
   display: block;
   position: relative;
   content: "";
@@ -2580,7 +2620,7 @@ form.search {
   background: url("../images/sprite.png") top left no-repeat;
   width: 9px;
   height: 25px;
-  background-position: -10px -410px;
+  background-position: -10px -445px;
   display: block;
   position: relative;
   content: "";
@@ -2615,7 +2655,7 @@ form.search {
 .icon.bzoom:after {
   width: 15px;
   height: 15px;
-  background-position: -35px -1625px;
+  background-position: -35px -1712px;
   display: block;
   left: 0;
   top: 0;
@@ -2628,7 +2668,7 @@ form.search {
 .icon.bselection:after {
   width: 15px;
   height: 15px;
-  background-position: -10px -1550px;
+  background-position: -10px -1737px;
   display: block;
   left: 0;
   top: 0;
@@ -2638,26 +2678,26 @@ form.search {
 .icon.bselection:hover:after {
   width: 15px;
   height: 15px;
-  background-position: -10px -1625px;
+  background-position: -10px -1662px;
   width: 25px;
 }
 .icon.bselection.sel:after {
   width: 15px;
   height: 15px;
-  background-position: -10px -1625px;
+  background-position: -10px -1662px;
   width: 25px;
 }
 .icon.bselection.sel:hover:after {
   width: 15px;
   height: 15px;
-  background-position: -10px -1550px;
+  background-position: -10px -1737px;
   width: 20px;
   margin-left: 5px;
 }
 .icon.bselection-edit:after {
   width: 15px;
   height: 15px;
-  background-position: -35px -1550px;
+  background-position: -35px -1662px;
   display: block;
   left: 0;
   top: 0;
@@ -2665,17 +2705,17 @@ form.search {
 .icon.bselection-edit:hover:after {
   width: 15px;
   height: 15px;
-  background-position: -10px -1575px;
+  background-position: -10px -1687px;
 }
 .icon.bselection-edit.sel:after {
   width: 15px;
   height: 15px;
-  background-position: -10px -1575px;
+  background-position: -10px -1687px;
 }
 .icon.bselection-edit.sel:hover:after {
   width: 15px;
   height: 15px;
-  background-position: -35px -1550px;
+  background-position: -35px -1662px;
 }
 .caption-icons-icon.justit {
   position: relative;
@@ -2703,17 +2743,17 @@ form.search {
 .caption-icons-icon.bstatus.complet:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -905px;
+  background-position: -10px -996px;
 }
 .caption-icons-icon.bstatus.incomplet:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -995px;
+  background-position: -10px -966px;
 }
 .caption-icons-icon.bemail:after {
   width: 20px;
   height: 15px;
-  background-position: -10px -1525px;
+  background-position: -10px -1637px;
 }
 .caption-icons-icon.bemail.disabled {
   cursor: default;
@@ -2721,27 +2761,27 @@ form.search {
 .caption-icons-icon.bemail.disabled:after {
   width: 20px;
   height: 15px;
-  background-position: -10px -1650px;
+  background-position: -10px -1612px;
 }
 .caption-icons-icon.bhomologado.has:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1235px;
+  background-position: -10px -1296px;
 }
 .caption-icons-icon.bhomologado.has:hover:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1265px;
+  background-position: -10px -1326px;
 }
 .caption-icons-icon.bhomologado.nothas:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1265px;
+  background-position: -10px -1326px;
 }
 .caption-icons-icon.bhomologado.nothas:hover:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1235px;
+  background-position: -10px -1296px;
 }
 .caption-icons-icon.bhomologado.unable:hover {
   cursor: default;
@@ -2749,17 +2789,17 @@ form.search {
 .caption-icons-icon.bhomologado.unable:hover:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1265px;
+  background-position: -10px -1326px;
 }
 .caption-icons-icon.bnote:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -935px;
+  background-position: -10px -1026px;
 }
 .caption-icons-icon.btrash:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1355px;
+  background-position: -10px -1446px;
 }
 .caption-icons-icon.btrash-big {
   cursor: pointer;
@@ -2767,32 +2807,32 @@ form.search {
 .caption-icons-icon.btrash-big:after {
   width: 25px;
   height: 30px;
-  background-position: -10px -10px;
+  background-position: -10px -170px;
 }
 .caption-icons-icon.bsend_receive:after {
   width: 25px;
   height: 20px;
-  background-position: -10px -605px;
+  background-position: -10px -816px;
 }
 .caption-icons-icon.bfisica.has:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1175px;
+  background-position: -10px -1236px;
 }
 .caption-icons-icon.bfisica.has:hover:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1205px;
+  background-position: -10px -1266px;
 }
 .caption-icons-icon.bfisica.nothas:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1205px;
+  background-position: -10px -1266px;
 }
 .caption-icons-icon.bfisica.nothas:hover:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1175px;
+  background-position: -10px -1236px;
 }
 .caption-icons-icon.bfisica.unable:hover {
   cursor: default;
@@ -2800,27 +2840,27 @@ form.search {
 .caption-icons-icon.bfisica.unable:hover:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1205px;
+  background-position: -10px -1266px;
 }
 .caption-icons-icon.bfav.has:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1115px;
+  background-position: -10px -1176px;
 }
 .caption-icons-icon.bfav.has:hover:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1145px;
+  background-position: -10px -1206px;
 }
 .caption-icons-icon.bfav.nothas:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1145px;
+  background-position: -10px -1206px;
 }
 .caption-icons-icon.bfav.nothas:hover:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1115px;
+  background-position: -10px -1176px;
 }
 .caption-icons-icon.bfav.unable:hover {
   cursor: default;
@@ -2828,38 +2868,38 @@ form.search {
 .caption-icons-icon.bfav.unable:hover:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1145px;
+  background-position: -10px -1206px;
 }
 .caption-icons-icon.bedit_mini:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -785px;
+  background-position: -10px -846px;
 }
 .caption-icons-icon.bstar.has:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1325px;
+  background-position: -10px -1386px;
 }
 .caption-icons-icon.bstar.nothas:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1295px;
+  background-position: -10px -1356px;
 }
 .caption-icons-icon.bstar.middle:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -515px;
+  background-position: -10px -636px;
 }
 .caption-icons-icon.bannex_file.has:after {
   width: 16px;
   height: 25px;
-  background-position: -29px -410px;
+  background-position: -29px -445px;
   margin-left: 7px;
 }
 .caption-icons-icon.bannex.has:after {
   width: 9px;
   height: 25px;
-  background-position: -10px -410px;
+  background-position: -10px -445px;
   margin-left: 9px;
 }
 .detail-status .caption-icons-icon.bstatus {
@@ -2911,26 +2951,26 @@ form.search {
 .thumbnail .icon.bselection-edit:after {
   width: 15px;
   height: 15px;
-  background-position: -35px -1550px;
+  background-position: -35px -1662px;
   width: 25px;
   margin-left: 5px;
 }
 .thumbnail .icon.bselection-edit:hover:after {
   width: 15px;
   height: 15px;
-  background-position: -10px -1575px;
+  background-position: -10px -1687px;
   width: 25px;
 }
 .thumbnail .icon.bselection-edit.sel:after {
   width: 15px;
   height: 15px;
-  background-position: -10px -1575px;
+  background-position: -10px -1687px;
   width: 25px;
 }
 .thumbnail .icon.bselection-edit.sel:hover:after {
   width: 15px;
   height: 15px;
-  background-position: -35px -1550px;
+  background-position: -35px -1662px;
   width: 25px;
 }
 .thumbnail .caption-icons-icon {
@@ -3049,17 +3089,17 @@ th {
 .sprite {
   background: url("../images/sprite.png") top left no-repeat;
 }
-.actions-trash_blue {
-  width: 25px;
+.actions-fav-big {
+  width: 30px;
   height: 30px;
   background-position: -10px -10px;
 }
-.menu-logoff {
-  width: 25px;
+.item-edit_big {
+  width: 30px;
   height: 30px;
   background-position: -10px -50px;
 }
-.insiders-less {
+.menu-legend {
   width: 30px;
   height: 30px;
   background-position: -10px -90px;
@@ -3069,13 +3109,13 @@ th {
   height: 30px;
   background-position: -10px -130px;
 }
-.actions-fav-big_selected {
-  width: 30px;
+.actions-trash_blue {
+  width: 25px;
   height: 30px;
   background-position: -10px -170px;
 }
-.menu-send_receive {
-  width: 40px;
+.actions-fav-big_selected {
+  width: 30px;
   height: 30px;
   background-position: -10px -210px;
 }
@@ -3084,285 +3124,300 @@ th {
   height: 30px;
   background-position: -10px -250px;
 }
-.item-edit_big {
-  width: 30px;
+.menu-logoff {
+  width: 25px;
   height: 30px;
   background-position: -10px -290px;
 }
-.menu-legend {
+.insiders-less {
   width: 30px;
   height: 30px;
   background-position: -10px -330px;
 }
-.actions-fav-big {
-  width: 30px;
+.menu-send_receive {
+  width: 40px;
   height: 30px;
   background-position: -10px -370px;
-}
-.status-annex {
-  width: 9px;
-  height: 25px;
-  background-position: -10px -410px;
-}
-.actions_annex {
-  width: 16px;
-  height: 25px;
-  background-position: -29px -410px;
 }
 .actions-export {
   width: 25px;
   height: 25px;
+  background-position: -10px -410px;
+}
+.status-annex {
+  width: 9px;
+  height: 25px;
   background-position: -10px -445px;
+}
+.actions_annex {
+  width: 16px;
+  height: 25px;
+  background-position: -29px -445px;
 }
 .actions-export_hover {
   width: 25px;
   height: 25px;
   background-position: -10px -480px;
 }
-.item-middle_fav {
+.handle_onoff {
   width: 20px;
-  height: 20px;
+  height: 21px;
   background-position: -10px -515px;
 }
 .actions-trash {
   width: 20px;
   height: 20px;
-  background-position: -10px -545px;
+  background-position: -10px -546px;
 }
 .actions-plus {
   width: 20px;
   height: 20px;
-  background-position: -10px -575px;
-}
-.menu-send_receive_mini {
-  width: 25px;
-  height: 20px;
-  background-position: -10px -605px;
-}
-.other_square_notdot_selected {
-  width: 20px;
-  height: 20px;
-  background-position: -10px -635px;
-}
-.badx {
-  width: 20px;
-  height: 20px;
-  background-position: -10px -665px;
-}
-.x {
-  width: 20px;
-  height: 20px;
-  background-position: -10px -695px;
-}
-.actions_sample {
-  width: 20px;
-  height: 20px;
-  background-position: -10px -725px;
-}
-.actions_tag {
-  width: 20px;
-  height: 20px;
-  background-position: -10px -755px;
-}
-.actions-edit-mini {
-  width: 20px;
-  height: 20px;
-  background-position: -10px -785px;
-}
-.other_square_notdot {
-  width: 20px;
-  height: 20px;
-  background-position: -10px -815px;
-}
-.other_notdot {
-  width: 20px;
-  height: 20px;
-  background-position: -10px -845px;
-}
-.other_dot {
-  width: 20px;
-  height: 20px;
-  background-position: -10px -875px;
-}
-.status_check {
-  width: 20px;
-  height: 20px;
-  background-position: -10px -905px;
-}
-.insiders-notepad_black {
-  width: 20px;
-  height: 20px;
-  background-position: -10px -935px;
-}
-.insiders-notepad {
-  width: 20px;
-  height: 20px;
-  background-position: -10px -965px;
-}
-.status-warning {
-  width: 20px;
-  height: 20px;
-  background-position: -10px -995px;
+  background-position: -10px -576px;
 }
 .actions-edit {
   width: 20px;
   height: 20px;
-  background-position: -10px -1025px;
+  background-position: -10px -606px;
 }
-.opt_list {
+.item-middle_fav {
   width: 20px;
   height: 20px;
-  background-position: -10px -1055px;
+  background-position: -10px -636px;
 }
-.opt_images {
+.other_square_notdot_selected {
   width: 20px;
   height: 20px;
-  background-position: -10px -1085px;
+  background-position: -10px -666px;
 }
-.item-heart_selected {
+.badx {
   width: 20px;
   height: 20px;
-  background-position: -10px -1115px;
+  background-position: -10px -696px;
 }
-.item-heart {
+.x {
   width: 20px;
   height: 20px;
-  background-position: -10px -1145px;
+  background-position: -10px -726px;
 }
-.item-fisica_selected {
+.actions_sample {
   width: 20px;
   height: 20px;
-  background-position: -10px -1175px;
+  background-position: -10px -756px;
 }
-.item-fisica {
+.actions_tag {
   width: 20px;
   height: 20px;
-  background-position: -10px -1205px;
+  background-position: -10px -786px;
 }
-.item-homologado_selected {
+.menu-send_receive_mini {
+  width: 25px;
+  height: 20px;
+  background-position: -10px -816px;
+}
+.actions-edit-mini {
   width: 20px;
   height: 20px;
-  background-position: -10px -1235px;
+  background-position: -10px -846px;
 }
-.item-homologado {
+.other_square_notdot {
   width: 20px;
   height: 20px;
-  background-position: -10px -1265px;
+  background-position: -10px -876px;
 }
-.item-not_fav {
+.other_notdot {
   width: 20px;
   height: 20px;
-  background-position: -10px -1295px;
+  background-position: -10px -906px;
 }
-.item-fav {
+.other_dot {
   width: 20px;
   height: 20px;
-  background-position: -10px -1325px;
+  background-position: -10px -936px;
 }
-.item-trash_black {
+.status-warning {
   width: 20px;
   height: 20px;
-  background-position: -10px -1355px;
+  background-position: -10px -966px;
 }
-.insiders-photo {
+.status_check {
   width: 20px;
   height: 20px;
-  background-position: -10px -1385px;
+  background-position: -10px -996px;
+}
+.insiders-notepad_black {
+  width: 20px;
+  height: 20px;
+  background-position: -10px -1026px;
+}
+.insiders-notepad {
+  width: 20px;
+  height: 20px;
+  background-position: -10px -1056px;
 }
 .insiders-camera {
   width: 25px;
   height: 20px;
-  background-position: -10px -1415px;
+  background-position: -10px -1086px;
 }
-.hashtag {
-  width: 16px;
-  height: 17px;
-  background-position: -10px -1445px;
+.opt_list {
+  width: 20px;
+  height: 20px;
+  background-position: -10px -1116px;
+}
+.opt_images {
+  width: 20px;
+  height: 20px;
+  background-position: -10px -1146px;
+}
+.item-heart_selected {
+  width: 20px;
+  height: 20px;
+  background-position: -10px -1176px;
+}
+.item-heart {
+  width: 20px;
+  height: 20px;
+  background-position: -10px -1206px;
+}
+.item-fisica_selected {
+  width: 20px;
+  height: 20px;
+  background-position: -10px -1236px;
+}
+.item-fisica {
+  width: 20px;
+  height: 20px;
+  background-position: -10px -1266px;
+}
+.item-homologado_selected {
+  width: 20px;
+  height: 20px;
+  background-position: -10px -1296px;
+}
+.item-homologado {
+  width: 20px;
+  height: 20px;
+  background-position: -10px -1326px;
+}
+.item-not_fav {
+  width: 20px;
+  height: 20px;
+  background-position: -10px -1356px;
+}
+.item-fav {
+  width: 20px;
+  height: 20px;
+  background-position: -10px -1386px;
+}
+.insiders-photo {
+  width: 20px;
+  height: 20px;
+  background-position: -10px -1416px;
+}
+.item-trash_black {
+  width: 20px;
+  height: 20px;
+  background-position: -10px -1446px;
+}
+.handle_on {
+  width: 30px;
+  height: 18px;
+  background-position: -10px -1476px;
+}
+.handle_off {
+  width: 30px;
+  height: 18px;
+  background-position: -10px -1504px;
 }
 .actions_save {
   width: 17px;
   height: 17px;
-  background-position: -10px -1472px;
+  background-position: -10px -1532px;
+}
+.hashtag {
+  width: 16px;
+  height: 17px;
+  background-position: -10px -1559px;
 }
 .open-down {
   width: 15px;
   height: 16px;
-  background-position: -10px -1499px;
-}
-.actions-arrow_left_left {
-  width: 15px;
-  height: 15px;
-  background-position: -35px -1499px;
-}
-.item-email {
-  width: 20px;
-  height: 15px;
-  background-position: -10px -1525px;
-}
-.item_select {
-  width: 15px;
-  height: 15px;
-  background-position: -10px -1550px;
-}
-.insiders-edit_blue {
-  width: 15px;
-  height: 15px;
-  background-position: -35px -1550px;
-}
-.insiders-edit_gray {
-  width: 15px;
-  height: 15px;
-  background-position: -10px -1575px;
-}
-.actions-arrow_right_right {
-  width: 15px;
-  height: 15px;
-  background-position: -35px -1575px;
-}
-.other-go_top {
-  width: 15px;
-  height: 15px;
-  background-position: -10px -1600px;
+  background-position: -10px -1586px;
 }
 .opt_ordering {
   width: 15px;
   height: 15px;
-  background-position: -35px -1600px;
-}
-.item_selected {
-  width: 15px;
-  height: 15px;
-  background-position: -10px -1625px;
-}
-.actions_zoom {
-  width: 15px;
-  height: 15px;
-  background-position: -35px -1625px;
+  background-position: -35px -1586px;
 }
 .item-email_disabled {
   width: 20px;
   height: 15px;
-  background-position: -10px -1650px;
+  background-position: -10px -1612px;
+}
+.item-email {
+  width: 20px;
+  height: 15px;
+  background-position: -10px -1637px;
+}
+.item_selected {
+  width: 15px;
+  height: 15px;
+  background-position: -10px -1662px;
+}
+.insiders-edit_blue {
+  width: 15px;
+  height: 15px;
+  background-position: -35px -1662px;
+}
+.insiders-edit_gray {
+  width: 15px;
+  height: 15px;
+  background-position: -10px -1687px;
+}
+.actions-arrow_right_right {
+  width: 15px;
+  height: 15px;
+  background-position: -35px -1687px;
+}
+.actions-arrow_left_left {
+  width: 15px;
+  height: 15px;
+  background-position: -10px -1712px;
+}
+.actions_zoom {
+  width: 15px;
+  height: 15px;
+  background-position: -35px -1712px;
+}
+.item_select {
+  width: 15px;
+  height: 15px;
+  background-position: -10px -1737px;
+}
+.other-go_top {
+  width: 15px;
+  height: 15px;
+  background-position: -35px -1737px;
 }
 .opt_search {
   width: 12px;
   height: 12px;
-  background-position: -36px -1445px;
+  background-position: -37px -1532px;
 }
 .check {
   width: 16px;
   height: 12px;
-  background-position: -10px -1675px;
-}
-.other-arrow_right {
-  width: 10px;
-  height: 10px;
-  background-position: -40px -515px;
+  background-position: -10px -1762px;
 }
 .other-arrow_down {
   width: 10px;
   height: 10px;
-  background-position: -40px -545px;
+  background-position: -40px -515px;
+}
+.other-arrow_right {
+  width: 10px;
+  height: 10px;
+  background-position: -40px -546px;
 }
 /***************
 *********************HOME e busca
@@ -3447,6 +3502,16 @@ label {
 .form-control.biggest {
   max-width: 408px;
 }
+.form-control.edit-config {
+  margin-left: 10px;
+  width: 110px;
+  min-width: 50px;
+  max-width: 200px;
+}
+.form-control.edit-config input {
+  background-color: #f3f5f8;
+  width: 80px;
+}
 .white-form .form-control {
   background-color: #fff;
   border: 1px solid #e3eaee;
@@ -3513,7 +3578,7 @@ label {
   background: url("../images/sprite.png") top left no-repeat;
   width: 15px;
   height: 15px;
-  background-position: -35px -1600px;
+  background-position: -35px -1586px;
   position: relative;
   float: left;
   content: "";
@@ -3541,7 +3606,7 @@ label {
 .bdefault.export.disabled:after {
   width: 25px;
   height: 25px;
-  background-position: -10px -445px;
+  background-position: -10px -410px;
 }
 .fake-form {
   position: relative;
@@ -3828,27 +3893,45 @@ form textarea {
   }
 }
 @media only screen and (min-height: 750px) {
-  .supplier .supplier-scroller {
-    height: 500px;
+  .supplier .supplier-scroller,
+  .fornecedor_cadastro .supplier-scroller {
+    height: 480px;
   }
-  .supplier .supplier-scroller section {
-    min-height: 500px;
+  .supplier .supplier-scroller form section,
+  .fornecedor_cadastro .supplier-scroller form section {
+    height: 480px;
+  }
+  .supplier .supplier-scroller form section .supplier-side.dados,
+  .fornecedor_cadastro .supplier-scroller form section .supplier-side.dados {
+    height: 435px;
   }
 }
 @media only screen and (min-height: 800px) {
-  .supplier .supplier-scroller {
+  .supplier .supplier-scroller,
+  .fornecedor_cadastro .supplier-scroller {
     height: 550px;
   }
-  .supplier .supplier-scroller section {
-    min-height: 550px;
+  .supplier .supplier-scroller form section,
+  .fornecedor_cadastro .supplier-scroller form section {
+    height: 550px;
+  }
+  .supplier .supplier-scroller form section .supplier-side.dados,
+  .fornecedor_cadastro .supplier-scroller form section .supplier-side.dados {
+    height: 500px;
   }
 }
 @media only screen and (min-height: 900px) {
-  .supplier .supplier-scroller {
-    height: 650px;
+  .supplier .supplier-scroller,
+  .fornecedor_cadastro .supplier-scroller {
+    height: 700px;
   }
-  .supplier .supplier-scroller section {
-    min-height: 650px;
+  .supplier .supplier-scroller form section,
+  .fornecedor_cadastro .supplier-scroller form section {
+    height: 700px;
+  }
+  .supplier .supplier-scroller form section .supplier-side.dados,
+  .fornecedor_cadastro .supplier-scroller form section .supplier-side.dados {
+    height: 655px;
   }
 }
 /*******************************
@@ -3894,6 +3977,9 @@ form textarea {
 .temp-fake .fake-form.last {
   margin-right: 10px;
 }
+.left10 {
+  margin-left: 10px;
+}
 .open-info {
   background-color: #71abcc;
   border-radius: 50%;
@@ -3908,7 +3994,7 @@ form textarea {
   background: url("../images/sprite.png") top left no-repeat;
   width: 15px;
   height: 16px;
-  background-position: -10px -1499px;
+  background-position: -10px -1586px;
   margin: 2px 0 0 1px ;
 }
 .open-info:hover {
@@ -3933,7 +4019,7 @@ form textarea {
   cursor: pointer;
 }
 .newuser input.form-control {
-  width: 480px;
+  width: 490px;
 }
 .wrapper-config {
   width: 1200px;
@@ -4025,4 +4111,53 @@ form textarea {
   max-width: 260px;
   padding: 0;
   margin-left: -17px;
+}
+.onoff-holder,
+.onoff-holder2 {
+  margin: 5px 0 0 18px;
+  float: left;
+  width: auto;
+  height: 20px;
+}
+.onoff-holder p,
+.onoff-holder2 p {
+  float: left;
+  margin: 4px 0 0 0;
+}
+.onoff-holder2 {
+  margin-left: 60px;
+}
+.onoff {
+  margin-left: 10px;
+  padding: 0;
+  border: none;
+  position: absolute;
+  float: left;
+  background: url("../images/sprite.png") top left no-repeat;
+  width: 30px;
+  height: 18px;
+  background-position: -10px -1504px;
+}
+.onoff span {
+  position: absolute;
+  display: block;
+  top: 0;
+  left: 0;
+  -webkit-transition: left 0.3s;
+  transition: left 0.3s;
+  background: url("../images/sprite.png") top left no-repeat;
+  width: 20px;
+  height: 21px;
+  background-position: -10px -515px;
+}
+.onoff.sel {
+  background: url("../images/sprite.png") top left no-repeat;
+  width: 30px;
+  height: 18px;
+  background-position: -10px -1476px;
+}
+.onoff.sel span {
+  -webkit-transition: left 0.3s;
+  transition: left 0.3s;
+  left: 11px;
 }

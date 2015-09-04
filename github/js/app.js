@@ -38,6 +38,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       //".right-list button":"viewBtn",
       //"button.close":"closeBtn",
       ".login-name":"username",
+      ".login-id":"usersegm"
       //".table-container":"viewList",
       /*".viewport":"viewImage",
       ".bread-box":"breadEl",
@@ -82,7 +83,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       "click .category_button":"showSubCategories",
       "click .sub_category a":"setCompositions",
       "keyup input[name='FEIR_DESC']":"toUpperCaseValue",
-      "keyup input[name='FORN_DESC']":"toUpperCaseValue"
+      "keyup input[name='FORN_DESC']":"toUpperCaseValue",
+      "click .goback-relative":"goBack"
       /*"submit .search":"submit",
       "click button.icon.go_back_default":"goBack",
       "click button.close":"getOut"*/
@@ -102,8 +104,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.itens_by_page=20;
       this.itens_page_default=this.itens_by_page;
       this.ajaxrequest=!1;
-      console.log("INIT DA APP");
-      this.cookiefair=[];
 
       //Var to storage the basic data
       this.fair=[];
@@ -119,6 +119,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.initialTime='2000-01-01';
       this.endTime='2020-10-10';
       this.notcombo=0;
+      this.unable_select=!1;
 
 
 
@@ -131,7 +132,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       if(!this.usr)
         window.location.href = 'login.html';
 
-        console.dir(this.usr);
+      this.cookiefair=[];
 
       //this.modal = new Modal({el:this.modalEl});
       this.detail = new Detail({
@@ -151,12 +152,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
       this.header.addClass("goDown");
       
+      console.dir(this.usr);
       this.username.text(this.usr.USU_NOME);
+      this.usersegm.text(this.usr.SEGM_DESC);
       
       this.el.find("#wrap").removeClass("hide");
 
       this.modal = new Modal({el:this.modalEl,callService:this.proxy(this.callService),usr:this.usr,getPage:this.proxy(this.getPage)});
-      this.content = new Content({el:this.contentEl,usr:this.usr,getStatusSelect:this.proxy(this.getStatusSelect)/*bread:this.breadEl, type:this.usr.TIPO*/});
+      this.content = new Content({el:this.contentEl,usr:this.usr/*bread:this.breadEl, type:this.usr.TIPO*/});
       this.fornecedores = new Fornecedores({
         getloading:this.proxy(this.getloading),
         setloading:this.proxy(this.setloading),
@@ -207,31 +210,70 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           console.log("this.cookiefair");
           $(".zoomContainer").remove();
 
-          /*if(!this.cookiefair.length){
-            this.cookiefair.push(jQuery.parseJSON($.cookie("posscroll")));
-          }*/
-          console.dir(this.cookiefair);
-          if(!this.cookiefair.length){
-            if(jQuery.parseJSON($.cookie("posscroll"))){
-              console.log("ok");
-              console.dir(jQuery.parseJSON($.cookie("posscroll")));
-              console.dir(this.cookiefair);
-              this.cookiefair.push(jQuery.parseJSON($.cookie("posscroll")));
-            }
-            else{
-              console.log("ok2");
-              console.dir(jQuery.parseJSON($.cookie("posscroll")));
-              this.cookiefair.push({"fairval":0,"fornval":0,"amosval":0});
-            }
-          }
           this.fairval = a=res.fairval !== "padrao" ? parseInt(res.fairval) : ""; 
           this.fornval = b=res.fornval !== "padrao" ? res.fornval.replace("_"," ").replace("_"," ").replace("_"," ") : "";
           this.amosval = c=res.amosval !== "padrao" ? res.amosval.replace("_"," ").replace("_"," ").replace("_"," ") : ""; 
-          console.dir(this.cookiefair);
+
+          if(this.cookiefair.length){
+            console.dir(this.cookiefair);
+            if(a == this.cookiefair[0].fairval && b === this.cookiefair[0].fornval  && c === this.cookiefair[0].amosval ){
+              console.log("bateu parametros do cookie");
+              this.initialTime=this.cookiefair[0].initialTime;
+              this.endTime=this.cookiefair[0].endTime;
+            }
+            else{
+              console.log("WINDOW 0");
+              this.cookiefair=[];
+              $.removeCookie('posscroll', { path: '/' });
+              $(window).scrollTop(0);
+            }
+          }
+          else{
+            console.log("nao achou");
+            if(jQuery.parseJSON($.cookie("posscroll"))){
+              this.cookiefair.push(jQuery.parseJSON($.cookie("posscroll")));
+              if(a == this.cookiefair[0].fairval && b === this.cookiefair[0].fornval  && c === this.cookiefair[0].amosval ){
+                console.log("bateu parametros do cookie");
+                this.initialTime=this.cookiefair[0].initialTime;
+                this.endTime=this.cookiefair[0].endTime;
+              }
+              else{
+                console.log("WINDOW 0");
+                this.cookiefair=[];
+                $.removeCookie('posscroll', { path: '/' });
+                $(window).scrollTop(0);
+              }
+            }
+            else{
+              console.log("WINDOW 0");
+              $(window).scrollTop(0);
+            }
+          }
+
+          
+          /*if(!this.cookiefair.length){
+            this.cookiefair.push(jQuery.parseJSON($.cookie("posscroll")));
+          }*/
+          /*if(jQuery.parseJSON($.cookie("posscroll"))){
+            console.log("conseguiu pegar o JSON");
+            this.cookiefair=[];
+            this.cookiefair.push(jQuery.parseJSON($.cookie("posscroll")));
+          }
+          else{
+            if(!this.cookiefair.length){
+              console.log("ok2");
+              console.dir(jQuery.parseJSON($.cookie("posscroll")));
+              this.cookiefair=[];
+              this.cookiefair.push({"fairval":0,"fornval":0,"amosval":0});
+            }
+          }*/
+
+          
+          
           if(this.cookiefair.length){
             //console.log(a+" , "+this.cookiefair[0].fairval+" / "+(a == this.cookiefair[0].fairval));
             //console.dir(this.cookiefair);
-            if(a == this.cookiefair[0].fairval && b === this.cookiefair[0].fornval  && c === this.cookiefair[0].amosval ){
+            /*if(a == this.cookiefair[0].fairval && b === this.cookiefair[0].fornval  && c === this.cookiefair[0].amosval ){
               console.log("bateu parametros do cookie");
               this.initialTime=this.cookiefair[0].initialTime;
               this.endTime=this.cookiefair[0].endTime;
@@ -240,7 +282,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               console.log("NÃO bateu parametros do cookie");
               this.cookiefair=[];
               $.removeCookie('posscroll', { path: '/' });
-            }
+            }*/
           }
           if(b.length){
              if(isNaN(b)){
@@ -283,23 +325,36 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           var a,b,c;
           console.log("ok");
           $(".zoomContainer").remove();
-          //cookiefair=jQuery.parseJSON($.cookie("posscroll"));
+          if(this.cookiefair.length){
+            console.dir(this.cookiefair);
+          }
+          else{
+            console.log("nao achou");
+            this.cookiefair.push(jQuery.parseJSON($.cookie("posscroll")));
+            console.dir(this.cookiefair);
+          }
 
-          if(!this.cookiefair.length){
-            if(jQuery.parseJSON($.cookie("posscroll"))){
+
+          /*if(jQuery.parseJSON($.cookie("posscroll"))){
+            console.log("conseguiu pegar o JSON");
+            console.dir(jQuery.parseJSON($.cookie("posscroll")));
+            this.cookiefair=[];
+            this.cookiefair.push(jQuery.parseJSON($.cookie("posscroll")));
+          }
+          else{
+            if(!this.cookiefair.length){
               console.log("ok2");
-              console.dir(jQuery.parseJSON($.cookie("posscroll")));
               console.dir(this.cookiefair);
-              this.cookiefair.push(jQuery.parseJSON($.cookie("posscroll")));
-            }
-            else{
+              this.cookiefair=[];
               this.cookiefair.push({"fairval":0,"fornval":0,"amosval":0});
             }
-          }
+          }*/
+
+
           this.fairval = a=res.fairval !== "padrao" ? parseInt(res.fairval) : ""; 
           this.fornval = b=res.fornval !== "padrao" ? res.fornval.replace("_"," ").replace("_"," ").replace("_"," ") : "";
           this.amosval = c=res.amosval !== "padrao" ? res.amosval.replace("_"," ").replace("_"," ").replace("_"," ") : ""; 
-          if(this.cookiefair.length){
+          /*if(this.cookiefair.length){
             if(a == this.cookiefair[0].fairval && b === this.cookiefair[0].fornval  && c === this.cookiefair[0].amosval ){
               console.log("bateu parametros do cookie");
               this.initialTime=this.cookiefair[0].initialTime;
@@ -310,7 +365,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               this.cookiefair=[];
               $.removeCookie('posscroll', { path: '/' });
             }
-          } 
+          }*/ 
           if(parseInt(b)){
             b="<FORN_ID>"+b+"</FORN_ID>";
           }
@@ -407,15 +462,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       Logout();
     },
     goBack : function(){
-      if(this.father){
-        window.location.href = './#'+this.loja;
-      }else{
-        var bread = $('.bread-colec').find("a").text();
-        var grupo = this.data[0].GRUPO;
-        var area = this.data[0].TYPE_MAT;
-        this.navigate && this.navigate("artigos-pai", this.loja,area,grupo,!0);        
-      }       
-
+      window.history.go(-1);
     },
     writePage:function(hash,val){
       var context=this;  
@@ -541,10 +588,21 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             break;
           case "local":
             context.bcity=$(".city");
-            if(context.usr.USU_COD !== 1){
+            if(context.usr.SEGM_COD !== "TD"){
               $(".bnew-fair").hide();
+            }
+            if(!context.fair.length){
+              status=setInterval(function(){
+                if(context.fair.length){
+                  context.ajaxrequest=!1;
+                  context.setdata(context.fair,"local");
+                  clearInterval(status);
+                }
+              },100);
+            }
+            else{
+              context.setdata(context.fair,"local");
             }          
-            //context.callService("local",'<FEIR_COD></FEIR_COD>','<PAIS_COD></PAIS_COD>','<REGI_COD></REGI_COD>');
             break;
           case "local_cadastro":
             context.bcity=$(".city");
@@ -557,6 +615,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               });
             }
             else{
+              context.createComponent(context.cities,context.bcity,"cities");
+              context.fair.filter(function(a,b){
+                if((parseInt(a.FEIR_COD) == (parseInt(val)))){
+                  context.popComponent(a);
+                }
+              });
               //Mandar para pagina anterior
             }
             //context.callService(context.page,"<FEIR_COD></FEIR_COD>","<PAIS_COD>BR</PAIS_COD>","<REGI_COD>SP</REGI_COD>");
@@ -609,7 +673,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         $(b).attr("disabled","disabled").val(item[$(b).attr("name")]);
       });
       this.fairval=item;
-      if(this.usr.USU_COD === 1){
+      if(this.usr.SEGM_COD === "TD"){
         $(".edit-fair").trigger('click');
       }
       else{
@@ -750,12 +814,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         });
       }
       $(a.target).toggleClass("sel");
-      if($(a.target).hasClass("bselection-edit")){
+      if($(a.target).attr("bselection-edit")){
         this.action_name="edit";
       }
       else{
         this.action_name="select";
       }
+          console.dir(this.select_items);
+
     },
     setBreadcrumb : function(a, val){
       var loja, area, grupo, artigo, bread_text;
@@ -1319,13 +1385,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                     clearInterval(f);
                     e.setloading(!1);
                     if(e.cookiefair.length){
-                      //console.log("scroll: "+e.cookiefair.posscroll);
+                      console.log("scroll: "+e.cookiefair[0].posscroll);
                       $(window).scrollTop(e.cookiefair[0].posscroll);
-                    }
-                    if(c ==="list"){
-                      /*console.dir($("#table tbody"));
-                      $("#table").DataTable();
-                      console.dir($("#table"));*/
                     }
                 }
 
@@ -1347,6 +1408,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                             view : c,
                             tag : n,
                             usr:e.usr,
+                            unable_select:e.unable_select,
                             // reloadcart : e.proxy(e.reloadcart),
                             detail : e.detail,
                             url : this
@@ -1367,6 +1429,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                             view : c,
                             tag : n,
                             usr:e.usr,
+                            unable_select:e.unable_select,
                             // reloadcart : e.proxy(e.reloadcart),
                             detail : e.detail,
                             url : a
@@ -1396,6 +1459,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                             tag : n,
                             detail : e.detail,
                             usr:e.usr,
+                            unable_select:e.unable_select,
                             modal : e.modal,
                             page: e.page
                         }), e.active.create(g.render()),$('.bread-search').find(".spec").text(k+1+" de "+h[count]+" Resultados / "+countf+" Fornecedores"),l--, $("tbody .bstar").unbind("click").bind("click",function(a){context.starForn(a)}), k++,!1;
@@ -1420,12 +1484,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                 if (!h) {
 
                     clearInterval(f);
-                    e.setloading(!1);
+                    
                     if(e.cookiefair.length){
-                      //console.log("scroll: "+e.cookiefair.posscroll);
+                      console.log("scroll: "+e.cookiefair[0].posscroll);
                       $(window).scrollTop(e.cookiefair[0].posscroll);
                     }
-
+                    e.setloading(!1);
                     if(c ==="list"){
                       /*console.dir($("#table tbody"));
                       $("#table").DataTable();
@@ -1451,6 +1515,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                             view : c,
                             tag : n,
                             usr:e.usr,
+                            unable_select:e.unable_select,
                             // reloadcart : e.proxy(e.reloadcart),
                             detail : e.detail,
                             url : this
@@ -1472,6 +1537,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                             view : c,
                             tag : n,
                             usr:e.usr,
+                            unable_select:e.unable_select,
                             // reloadcart : e.proxy(e.reloadcart),
                             detail : e.detail,
                             url : a
@@ -1487,7 +1553,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                       console.log(countf);
                       countf++;
                     }
-                    $('.bread-search').find(".spec").text(k+1+" de "+h.COUNT_AMOS+" Resultados / "+countf+" Fornecedores");
+                    $('.bread-search').find(".spec").text(k+1);
+                    $('.bread-search').find(".specall").text(h.COUNT_AMOS);
+                     $('.bread-search').find(".specforn").text("/ "+countf+" Fornecedores");
                 } else {
                     var count="COUNT_FORN";
                     if(context.page === "amostras"){
@@ -1507,10 +1575,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                             view : c,
                             tag : n,
                             detail : e.detail,
+                            unable_select:e.unable_select,
                             modal : e.modal,
                             usr:e.usr,
                             page: e.page
-                        }), e.active.create(g.render()),count === "COUNT_FORN" ? $('.bread-search').find(".spec").text(k+1+" de "+h[count]+" Resultados ") : $('.bread-search').find(".spec").text(k+1+" de "+h[count]+" Resultados / "+countf+" Fornecedores"),$("tbody .bstar").unbind("click").bind("click",function(a){context.starForn(a)}),l--, k++,!1;
+                        }), e.active.create(g.render()),$('.bread-search').find(".spec").text(k+1),$('.bread-search').find(".specall").text(h[count]),$('.bread-search').find(".specforn").text("/ "+countf+" Fornecedores"),$("tbody .bstar").unbind("click").bind("click",function(a){context.starForn(a)}),l--, k++,!1;
 
                         //, $('.bread-box').find(".bread-load").text(k+1), l--, k++, !1*/
                     } else {
@@ -1623,10 +1692,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         $(a.target).addClass("sel");
         $(".thumbnail .icon").attr("class","icon").addClass($(a.target).attr("name"));
         $("html").attr("class","amostras").addClass("select");
-        $("html").addClass("edit");
-        /*if($(a.target).hasClass("bedit") && !$(a.target).hasClass('unable')){
+        
+        if($(a.target).hasClass("bedit") && !$(a.target).hasClass('unable')){
           $("html").addClass("edit");
-        }*/
+        }
       }
     },
     changeCountries: function(a){
@@ -1726,7 +1795,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       //this.content.page = 0;
       if(!this.fdata.length){
         this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0);
-        $('.bread-search').find(".spec").text("0 Resultados");
+        $('.bread-search').find(".spec").text("0 Amostras");
         return !1;
       }
       this.createbox(this.fdata, this.content.page, !0);
@@ -1746,7 +1815,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.data=aux;
       if(!this.fdata.length){
         this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0);
-        $('.bread-search').find(".spec").text("0 Resultados");
+        $('.bread-search').find(".spec").text("0 Amostras");
         return !1;
       }
       this.createbox(this.fdata, this.content.page, !0);
@@ -1910,7 +1979,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         a.preventDefault();
       }
       length=this.select_items.length;
-      //this.modal.open("message","Em Desenvolvimento!!!",!1,!0);
+      if(!length){
+        this.modal.open("message","Por favor, selecione ao menos uma amostra para alterar!!!",!1,!0);
+        return !1;
+      }
       this.setloading(!0,!1);
       if(obj.attr("name") === "COMP"){
         status=setInterval(function(){
@@ -1932,10 +2004,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             clearInterval(status);
             context.setloading(!1);
           }
-          
-          /*if(!context.ajaxrequest){
-            clearInterval(status);
-          }*/
         },200);
       }
       else{
@@ -2066,8 +2134,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         this.submit("<FEIR_COD>"+this.fairval+"</FEIR_COD>",!1,!1,!0);
         return !1;
       }
-      this.cookiefair=[];
       this.restartValues();
+      $.removeCookie('posscroll', { path: '/' });
+      $(window).scrollTop(0);
       this.itens_by_page=this.itens_page_default;
       this.resetFilters();
       this.bforn.val("");
@@ -2175,9 +2244,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     setSegm:function(a){
       this.segm=a;
     },
-    getStatusSelect:function(){
-      return this.unable_select;
-    },
     /**
     * `Set the loading state`
     * @memberOf App#
@@ -2263,25 +2329,27 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           case "amostras":
             d = z.scrollTop();
             b = e.content.itens.length;
-            //console.dir(e.content.itens);
-            //c =  20* e.itens.length;  
-            console.log(e.initialTime);
-            var scroll={
-              fornval:''+e.fornval,
-              fairval:''+e.fairval,
-              amosval:""+e.amosval,
-              initialTime:""+e.initialTime,
-              endTime:""+e.endTime,
-              view:""+e.view,
-              posscroll:d,
-              total:b
-            };
-            $.cookie.json = !0;
-            console.dir(scroll);
-            $.cookie("posscroll", scroll, {expires:7, path:"/"});
+            f= $(".container").height()-830;
 
-            d=d+830;
-            f= $(".container").height();
+            if(d<f){
+              console.log("entrou");
+              var scroll={
+                "fornval":''+e.fornval,
+                "fairval":''+e.fairval,
+                "amosval":""+e.amosval,
+                "initialTime":""+e.initialTime,
+                "endTime":""+e.endTime,
+                "view":""+e.view,
+                "posscroll":d,
+                "total":b
+              };
+              $.cookie.json = !0;
+              e.cookiefair=[];
+              e.cookiefair.push(scroll);
+              $.cookie("posscroll", scroll, {expires:7, path:"/"});
+            }
+
+
             console.log(d+" , "+f);
             if (d >= f && b) {
               console.log("chegou");
@@ -2293,25 +2361,26 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           case "fornecedores":
             d = z.scrollTop();
             b = e.content.itens.length;
-            //console.dir(e.content.itens);
-            //c =  20* e.itens.length;  
-            var scroll={
-              fornval:''+e.fornval,
-              fairval:''+e.fairval,
-              amosval:""+e.amosval,
-              initialTime:""+e.initialTime,
-              endTime:""+e.endTime,
-              view:""+e.view,
-              posscroll:d,
-              total:b
-            };
-            console.dir(scroll);
-            $.cookie.json = !0;
-            $.cookie("posscroll", scroll, {expires:7, path:"/"});
+            f= $("table").height()-680;
 
-            d=d+680;
-            f= $("table").height();
-            console.log(d+" , "+f);
+            if(d<f){
+              console.log("entrou");
+              var scroll={
+                "fornval":''+e.fornval,
+                "fairval":''+e.fairval,
+                "amosval":""+e.amosval,
+                "initialTime":""+e.initialTime,
+                "endTime":""+e.endTime,
+                "view":""+e.view,
+                "posscroll":d,
+                "total":b
+              };
+              $.cookie.json = !0;
+              e.cookiefair=[];
+              e.cookiefair.push(scroll);
+              $.cookie("posscroll", scroll, {expires:7, path:"/"});
+            }
+            
             if (d >= f && b) {
               //console.log("chegou");
               e.content.page++;
@@ -2339,6 +2408,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       //Var to storage the basic data
       console.log("restartValues");
       this.unable_select=!1;
+      this.cookiefair=[];
       this.fairval="";
       this.fornval="";
       this.amosval="";
@@ -2346,6 +2416,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.initialTime='2000-01-01';
       this.endTime='2020-10-10';
       this.notcombo=0;
+      $.removeCookie('posscroll', { path: '/' });
     },
     resetFilters:function(){
       //DATE
