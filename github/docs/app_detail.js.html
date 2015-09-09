@@ -254,13 +254,13 @@ open: function(a){
   if(note){
     var segnote=[],result="";
     for(i=item.NOTES.length;i>0;i--){
-      if(item.NOTES[i-1].SEGM_COD === this.usr.SEGM_COD){
+      if(item.NOTES[i-1].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
         segnote.push(item.NOTES[i-1]);
       }
     }
     if(segnote.length){
       for(i=0;i&lt;segnote.length;i++){
-        result+="&lt;li>&lt;article>&lt;div class='notepad-note blockquote'>&lt;p>"+segnote[i].CREATE_DATE+" | "+ segnote[i].USU_NOME+" | "+segnote[i].OBJ_ID+"&lt;/p>&lt;p>"+segnote[i].SEGM_DESC+"&lt;/p>&lt;p>"+segnote[i].NOTA_DESC+"&lt;/p>&lt;/div>&lt;div class='blockquote'>";
+        result+="&lt;li>&lt;article>&lt;div class='notepad-note blockquote'>&lt;p>&lt;b>"+segnote[i].CREATE_DATE+" | "+item.FORN_DESC+" | "+segnote[i].OBJ_ID+"&lt;/b>&lt;/p>&lt;p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"&lt;/p>&lt;p>"+segnote[i].NOTA_DESC+"&lt;/p>&lt;/div>&lt;div class='blockquote'>";
         if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
           result+= "&lt;button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' id='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'>&lt;/button>";
         }
@@ -296,8 +296,8 @@ open: function(a){
   else{
     day=date.getDate();
   }
-  date=""+date.getFullYear()+"-0"+(date.getMonth()+1)+"-"+day;
-  result+="&lt;li>&lt;article>&lt;div class='notepad-note blockquote'>&lt;p>"+date+" | "+ this.usr.USU_NOME+" | "+this.noteid+"&lt;/p>&lt;p>"+this.usr.SEGM_COD+"&lt;/p>&lt;p>"+$(".samplenote").val()+"&lt;/p>&lt;/div>&lt;div class='blockquote'>&lt;button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+this.noteid+"' name='"+this.usr.USU_COD+"'>&lt;/button>&lt;/div>&lt;/article>&lt;/li>";
+  date=day+"/0"+(date.getMonth()+1)+"/"+date.getFullYear();
+  result+="&lt;li>&lt;article>&lt;div class='notepad-note blockquote'>&lt;p>&lt;b>"+date+" | "+this.item.FORN_DESC+" | "+this.noteid+"&lt;/b>&lt;/p>&lt;p>"+this.usr.USU_NOME+" - "+this.usr.SEGM_DESC+"&lt;/p>&lt;p>"+$(".samplenote").val()+"&lt;/p>&lt;/div>&lt;div class='blockquote'>&lt;button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+this.noteid+"' name='"+this.usr.USU_COD+"'>&lt;/button>&lt;/div>&lt;/article>&lt;/li>";
   $(".samplenote").val("");
   $(".description-noteside .note ul").prepend(result);
 },showImage:function(a){
@@ -858,8 +858,8 @@ setFav:function(a){
   else{
     day=date.getDate();
   }
-  date=""+date.getFullYear()+"-0"+(date.getMonth()+1)+"-"+day;
-  result+="&lt;li>&lt;article>&lt;div class='notepad-note blockquote'>&lt;p>"+date+" | "+ this.usr.USU_NOME+" | "+this.noteid+"&lt;/p>&lt;p>"+this.usr.SEGM_COD+"&lt;/p>&lt;p>"+$(".addnote").val()+"&lt;/p>&lt;/div>&lt;div class='blockquote'>&lt;button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+this.noteid+"' name='"+this.usr.USU_COD+"'>&lt;/button>&lt;/div>&lt;/article>&lt;/li>";
+  date=day+"/0"+(date.getMonth()+1)+"/"+date.getFullYear();
+  result+="&lt;li>&lt;article>&lt;div class='notepad-note blockquote'>&lt;p>&lt;b>"+date+" | "+this.item.FORN_DESC +" | "+this.noteid+"&lt;/b>&lt;/p>&lt;p>"+this.usr.USU_NOME+" - "+this.usr.SEGM_DESC+"&lt;/p>&lt;p>"+$(".addnote").val()+"&lt;/p>&lt;/div>&lt;div class='blockquote'>&lt;button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+this.noteid+"' name='"+this.usr.USU_COD+"'>&lt;/button>&lt;/div>&lt;/article>&lt;/li>";
   $(".addnote").val("");
   console.log(result);
   $(".note ul").prepend(result);
@@ -893,7 +893,10 @@ setFav:function(a){
         console.dir(el);
         $(".card-side img").each(function(i, elem) {
           if(el[''+$(elem).attr("name")].length){
-            $(elem).attr("src",'http://192.168.10.100/webfair/ifairimg/'+el[''+$(elem).attr("name")]);
+            $(elem).attr("src",'http://192.168.10.100/webfair/ifairimg/'+el[''+$(elem).attr("name")]).attr("alt",parseInt(el.CONT_ID));
+          }
+          else{
+            $(elem).attr("src",'images/camera.png').attr("alt",parseInt(el.CONT_ID));
           }
         });
       }
@@ -901,7 +904,7 @@ setFav:function(a){
   }
   else{
     $(".card-side img").each(function(i, elem) {
-      $(elem).attr("src",'images/camera.png');
+      $(elem).attr("src",'images/camera.png').attr("alt","");
     });
   }
 },populateForn:function(){
@@ -966,14 +969,14 @@ setFav:function(a){
       var segnote=[];
       var result="";
       for(i=this.item.NOTES.length;i>0;i--){
-        if(this.item.NOTES[i-1].SEGM_COD === this.usr.SEGM_COD){
+        if(this.item.NOTES[i-1].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
           segnote.push(this.item.NOTES[i-1]);
         }
       }
       if(segnote){
         this.setDate(segnote);
         for(i=0;i&lt;segnote.length;i++){
-          result+="&lt;li>&lt;article>&lt;div class='notepad-note blockquote'>&lt;p>&lt;b>"+segnote[i].CREATE_DATE+" | "+ segnote[i].USU_NOME+" | "+segnote[i].OBJ_ID+"&lt;/b>&lt;/p>&lt;p>"+segnote[i].SEGM_DESC+" - Assunto:&lt;/p>&lt;p>"+segnote[i].NOTA_DESC+"&lt;/p>&lt;/div>&lt;div class='blockquote'>";
+          result+="&lt;li>&lt;article>&lt;div class='notepad-note blockquote'>&lt;p>&lt;b>"+segnote[i].CREATE_DATE+" | "+this.item.FORN_DESC+" | "+segnote[i].OBJ_ID+"&lt;/b>&lt;/p>&lt;p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"&lt;/p>&lt;p>"+segnote[i].NOTA_DESC+"&lt;/p>&lt;/div>&lt;div class='blockquote'>";
 
           if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
             result+= "&lt;button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' id='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'>&lt;/button>";
@@ -1003,7 +1006,7 @@ setFav:function(a){
           template+='&lt;img src="http://192.168.10.100/webfair/ifairimg/'+context.item.CONTACTS[i].IMG_PATH_CONTATO+'" width="100%" name="'+context.item.CONTACTS[i].CONT_ID+'">';
         } 
         else{
-          template+='&lt;img src="images/contact.png" width="100%" class="noimage">';
+          template+='&lt;img src="images/contact.png" width="100%" class="noimage" name="'+context.item.CONTACTS[i].CONT_ID+'">';
         } 
         template+='&lt;/div>&lt;/div>&lt;div class="supplier-firstform">&lt;div class="row">&lt;div class="fake-form fake-form-supplier-middle">&lt;div class="form-group">';
         template+='&lt;input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[i].CONT_NOME+'"';
@@ -1049,7 +1052,7 @@ setFav:function(a){
         template1+='&lt;/div>&lt;/div>&lt;div class="supplier-firstform">&lt;div class="row">&lt;div class="fake-form fake-form-supplier-middle">&lt;div class="form-group">&lt;input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off">&lt;/div>&lt;/div>&lt;button type="button" class="icon floatLeft trash-big" name="'+(context.item.CONTACTS.length+1)+'">&lt;/button>&lt;/div>&lt;div class="row">&lt;div class="fake-form">&lt;div class="form-group">&lt;input type="text" class="form-control" name="CONT_EMAIL" placeholder="E-mail" autofocus="" autocomplete="off">&lt;/div>&lt;/div>&lt;/div>&lt;div class="row top-ten">&lt;div class="fake-form fake-form-supplier-equal floatLeft">';
         cont+='&lt;button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bcircle favcontact" name="1">Contato Principal &lt;/button>';
         template2+='&lt;/div>&lt;div class="fake-form fake-form-supplier-equal right">&lt;div class="form-group">&lt;input type="text" class="form-control" name="SEGM_COD" placeholder="Segmento" autofocus="" autocomplete="off" value="'+context.usr.SEGM_DESC+'" title="'+context.usr.SEGM_COD+'" disabled="disabled">&lt;/div>&lt;/div>&lt;/div>&lt;div class="row">&lt;div class="fake-form fake-form-supplier-middle">&lt;div class="form-group">&lt;input type="tel" class="form-control" name="CONT_TEL" placeholder="Tel 1" autofocus="" autocomplete="off">&lt;/div>&lt;/div>&lt;button type="button" class="icon floatLeft bplus-big" name="CONT_TEL2" name="CONT_TEL2" id="'+(context.item.CONTACTS.length+1)+'">&lt;/button>&lt;/div>&lt;div class="row CONT_TEL2 top-ten hide">&lt;div class="fake-form fake-form-supplier-middle">&lt;div class="form-group">&lt;input type="tel" class="form-control" name="CONT_TEL2" placeholder="Tel 2" autofocus="" autocomplete="off">&lt;/div>&lt;/div>&lt;/div>&lt;/div>&lt;/div>';
-      $("#dados .contact-container").append(template+template1+cont+template2);
+        $("#dados .contact-container").append(template+template1+cont+template2);
     }
     else{
       if(context.item.CONTACTS.length){
@@ -1062,7 +1065,7 @@ setFav:function(a){
         template+='&lt;img src="http://192.168.10.100/webfair/ifairimg/'+context.item.CONTACTS[0].IMG_PATH_CONTATO+'" width="100%"  name="'+context.item.CONTACTS[0].CONT_ID+'">';
         template1+='&lt;/div>&lt;/div>&lt;div class="supplier-firstform">&lt;div class="row">&lt;div class="fake-form fake-form-supplier-middle">&lt;div class="form-group">&lt;input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_NOME+'" required="required">&lt;/div>&lt;/div>&lt;button type="button" class="icon floatLeft trash-big" name="1">&lt;/button>&lt;/div>&lt;div class="row">&lt;div class="fake-form">&lt;div class="form-group">&lt;input type="text" class="form-control" name="CONT_EMAIL" placeholder="E-mail" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_EMAIL+'" required="required">&lt;/div>&lt;/div>&lt;/div>&lt;div class="row top-ten">&lt;div class="fake-form fake-form-supplier-equal floatLeft">';
         cont+='&lt;button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bcircle favcontact sel" name="1">Contato Principal &lt;/button>';
-        template2+='&lt;/div>&lt;div class="fake-form fake-form-supplier-equal right">&lt;div class="form-group">&lt;input type="text" class="form-control" name="SEGM_COD" placeholder="Segmento" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].SEGM_COD+'" title="'+context.item.CONTACTS[0].SEGM_DESC+'" disabled="disabled">&lt;/div>&lt;/div>&lt;/div>&lt;div class="row">&lt;div class="fake-form fake-form-supplier-middle">&lt;div class="form-group">&lt;input type="tel" class="form-control" name="CONT_TEL" placeholder="Tel 1" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_TEL+'">&lt;/div>&lt;/div>';
+        template2+='&lt;/div>&lt;div class="fake-form fake-form-supplier-equal right">&lt;div class="form-group">&lt;input type="text" class="form-control" name="SEGM_COD" placeholder="Segmento" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].SEGM_DESC+'" title="'+context.item.CONTACTS[0].SEGM_COD+'" disabled="disabled">&lt;/div>&lt;/div>&lt;/div>&lt;div class="row">&lt;div class="fake-form fake-form-supplier-middle">&lt;div class="form-group">&lt;input type="tel" class="form-control" name="CONT_TEL" placeholder="Tel 1" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_TEL+'">&lt;/div>&lt;/div>';
 
         if(context.item.CONTACTS[0].CONT_TEL2.length){
           template2+='&lt;/div>&lt;div class="row CONT_TEL2 top-ten">&lt;div class="fake-form fake-form-supplier-middle">&lt;div class="form-group">&lt;input type="tel" class="form-control" name="CONT_TEL2" placeholder="Tel 2" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_TEL2+'">&lt;/div>&lt;/div>&lt;/div>&lt;/div>&lt;/div>';
@@ -1071,8 +1074,6 @@ setFav:function(a){
           template2+='&lt;button type="button" class="icon floatLeft bplus-big" name="CONT_TEL2" id="1">&lt;/button>&lt;/div>&lt;div class="row CONT_TEL2 top-ten hide">&lt;div class="fake-form fake-form-supplier-middle">&lt;div class="form-group">&lt;input type="tel" class="form-control" name="CONT_TEL2" placeholder="Tel 2" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_TEL2+'">&lt;/div>&lt;/div>&lt;/div>&lt;/div>&lt;/div>';
         }
 
-
-        
         context.favcontact=0;
         $("#dados .contact-container").prepend(temp+template+template1+cont+template2);
         template='&lt;div class="supplier-photo-side">&lt;div class="photo-container">';
@@ -1107,10 +1108,13 @@ setFav:function(a){
 
     $(".card-side img").each(function(index, el) {
       for(var j=0;j&lt;context.item.CONTACTS.length;j++){
-        if(context.item.CONTACTS[j][''+$(el).attr("name")].length &amp;&amp; context.item.CONTACTS[j]['CONT_PRINCIPAL'] === 1){
-          $(el).attr("src",'http://192.168.10.100/webfair/ifairimg/'+context.item.CONTACTS[j][''+$(el).attr("name")]);
-          
-          //$(el).attr("src",'http://bdb/ifair_img/'+context.item.CONTACTS[j][''+$(el).attr("name")]);
+        if(context.item.CONTACTS[j]['CONT_PRINCIPAL'] === 1){
+          if(context.item.CONTACTS[j][''+$(el).attr("name")].length){
+            $(el).attr("src",'http://192.168.10.100/webfair/ifairimg/'+context.item.CONTACTS[j][''+$(el).attr("name")]).attr('alt', context.item.CONTACTS[j].CONT_ID);;
+          }
+          else{
+            $(el).attr('alt', context.item.CONTACTS[j].CONT_ID);
+          }
         }
       }
     });
@@ -1194,6 +1198,8 @@ setFav:function(a){
     $("#dados .contact-container").append(template);
     $(".favcontact").bind("click",function(a){context.setFavContact(a);});
     $(".photo-container img").bind("click",function(a){context.showCard(a);});
+    $(".cardboard").bind("click",function(a){context.slideCard(a);});
+    $(".closebt").bind("click",function(a){context.slideCard(a);});
     $(".contact1 .favcontact").trigger('click');
     $(".form-control-other").attr('disabled', 'disabled');
   }
@@ -1211,6 +1217,39 @@ setFav:function(a){
   $(".favcontact").bind("click",function(a){context.setFavContact(a);});
   $(".trash-big").bind("click",function(a){context.deleteFornNote(a);});
   $(".photo-container img").bind("click",function(a){context.showCard(a);});
+  $(".cardboard").bind("click",function(a){context.slideCard(a);});
+  $(".closebt").bind("click",function(a){context.closeSlide(a);});
+},slideCard:function(a){
+  if(!this.item.FORN_ID){
+    this.modal.open("message","O fornecedor ainda não foi salvo!!!",!1,!0);
+    return !1;
+  }
+  if(!this.item.CONTACTS.length){
+    this.modal.open("message","Ainda não existem contatos cadastrados!!!",!1,!0);
+    return !1;
+  }
+  this.item.CONTACTS.forEach(function(el,index) {
+    if(parseInt(el.CONT_ID) === parseInt($(a.target).attr("alt"))){
+      $(".supplier-img-containter img").each(function(i, elem) {
+        if(el[''+$(elem).attr("name")].length){
+          $(elem).attr("src",'http://192.168.10.100/webfair/ifairimg/'+el[''+$(elem).attr("name")]);
+        }
+      });
+    }
+  });
+  console.dir($("#"+$(a.target).attr("name")));
+  $("#"+$(a.target).attr("name")).attr("checked","checked");
+  $(".supplier-img-containter").fadeIn();
+},closeSlide:function(){
+  $(".supplier-img-containter").fadeOut();
+  $(".supplier-img-containter .cnt-slide").each(function(index, el) {
+    if($(el).hasClass('cnt-slide1')){
+      $(el).find("img").attr("src","images/camera_biggest.png");
+    }
+    else{
+      $(el).find("img").attr("src","images/camera_big.png");
+    }
+  });
 },saveForn:function(goout){
   var html="",complet=0,context=this,pattern="",complet=!0;
   var addforn=$("html").hasClass('add_forn') ? "I" : "U";
@@ -1616,7 +1655,7 @@ setFav:function(a){
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Tue Sep 8th 2015 using the <a
+		on Wed Sep 9th 2015 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>

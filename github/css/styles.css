@@ -53,6 +53,10 @@ body {
   overflow-x: hidden;
   overflow-y: hidden;
 }
+html.detail,
+body.detail {
+  overflow-y: auto;
+}
 body {
   font-family: 'Open Sans', sans-serif;
   font-size: 12px;
@@ -88,7 +92,8 @@ body #wrap {
   height: 100%;
 }
 .mask,
-.modal_mask {
+.modal_mask,
+.supplier-img-containter {
   position: fixed;
   left: 0;
   top: 0;
@@ -99,7 +104,8 @@ body #wrap {
   display: none;
 }
 .mask .loader,
-.modal_mask .loader {
+.modal_mask .loader,
+.supplier-img-containter .loader {
   position: relative;
   margin: 0 auto;
   display: block;
@@ -1398,6 +1404,7 @@ form.search {
 .container-fullsize.scroller {
   margin: 0 auto 50px;
   padding-bottom: 115px;
+  height: 300px;
   overflow-y: auto;
 }
 .container-fullsize .right-list {
@@ -3036,9 +3043,9 @@ th {
 .sample th {
   max-width: 560px;
 }
-.table-large {
-  width: 1805px;
-}
+/*.table-large{
+	width: 1805px;
+}*/
 .hide {
   display: none;
 }
@@ -4180,13 +4187,6 @@ form textarea {
   -webkit-transition: left 0.3s;
   transition: left 0.3s;
   left: 11px;
-}
-.supplier-img-containter {
-  position: absolute;
-  display: block;
-  width: 100%;
-  height: 100%;
-  background: white;
 }
 .supplier-img-containter ul {
   width: 600px;

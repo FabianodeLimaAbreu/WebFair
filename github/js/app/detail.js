@@ -157,13 +157,13 @@ open: function(a){
   if(note){
     var segnote=[],result="";
     for(i=item.NOTES.length;i>0;i--){
-      if(item.NOTES[i-1].SEGM_COD === this.usr.SEGM_COD){
+      if(item.NOTES[i-1].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
         segnote.push(item.NOTES[i-1]);
       }
     }
     if(segnote.length){
       for(i=0;i<segnote.length;i++){
-        result+="<li><article><div class='notepad-note blockquote'><p>"+segnote[i].CREATE_DATE+" | "+ segnote[i].USU_NOME+" | "+segnote[i].OBJ_ID+"</p><p>"+segnote[i].SEGM_DESC+"</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
+        result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+item.FORN_DESC+" | "+segnote[i].OBJ_ID+"</b></p><p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
         if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
           result+= "<button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' id='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'></button>";
         }
@@ -199,8 +199,8 @@ open: function(a){
   else{
     day=date.getDate();
   }
-  date=""+date.getFullYear()+"-0"+(date.getMonth()+1)+"-"+day;
-  result+="<li><article><div class='notepad-note blockquote'><p>"+date+" | "+ this.usr.USU_NOME+" | "+this.noteid+"</p><p>"+this.usr.SEGM_COD+"</p><p>"+$(".samplenote").val()+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+this.noteid+"' name='"+this.usr.USU_COD+"'></button></div></article></li>";
+  date=day+"/0"+(date.getMonth()+1)+"/"+date.getFullYear();
+  result+="<li><article><div class='notepad-note blockquote'><p><b>"+date+" | "+this.item.FORN_DESC+" | "+this.noteid+"</b></p><p>"+this.usr.USU_NOME+" - "+this.usr.SEGM_DESC+"</p><p>"+$(".samplenote").val()+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+this.noteid+"' name='"+this.usr.USU_COD+"'></button></div></article></li>";
   $(".samplenote").val("");
   $(".description-noteside .note ul").prepend(result);
 },showImage:function(a){
@@ -761,8 +761,8 @@ setFav:function(a){
   else{
     day=date.getDate();
   }
-  date=""+date.getFullYear()+"-0"+(date.getMonth()+1)+"-"+day;
-  result+="<li><article><div class='notepad-note blockquote'><p>"+date+" | "+ this.usr.USU_NOME+" | "+this.noteid+"</p><p>"+this.usr.SEGM_COD+"</p><p>"+$(".addnote").val()+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+this.noteid+"' name='"+this.usr.USU_COD+"'></button></div></article></li>";
+  date=day+"/0"+(date.getMonth()+1)+"/"+date.getFullYear();
+  result+="<li><article><div class='notepad-note blockquote'><p><b>"+date+" | "+this.item.FORN_DESC +" | "+this.noteid+"</b></p><p>"+this.usr.USU_NOME+" - "+this.usr.SEGM_DESC+"</p><p>"+$(".addnote").val()+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+this.noteid+"' name='"+this.usr.USU_COD+"'></button></div></article></li>";
   $(".addnote").val("");
   console.log(result);
   $(".note ul").prepend(result);
@@ -796,7 +796,10 @@ setFav:function(a){
         console.dir(el);
         $(".card-side img").each(function(i, elem) {
           if(el[''+$(elem).attr("name")].length){
-            $(elem).attr("src",'http://192.168.10.100/webfair/ifairimg/'+el[''+$(elem).attr("name")]);
+            $(elem).attr("src",'http://192.168.10.100/webfair/ifairimg/'+el[''+$(elem).attr("name")]).attr("alt",parseInt(el.CONT_ID));
+          }
+          else{
+            $(elem).attr("src",'images/camera.png').attr("alt",parseInt(el.CONT_ID));
           }
         });
       }
@@ -804,7 +807,7 @@ setFav:function(a){
   }
   else{
     $(".card-side img").each(function(i, elem) {
-      $(elem).attr("src",'images/camera.png');
+      $(elem).attr("src",'images/camera.png').attr("alt","");
     });
   }
 },populateForn:function(){
@@ -869,14 +872,14 @@ setFav:function(a){
       var segnote=[];
       var result="";
       for(i=this.item.NOTES.length;i>0;i--){
-        if(this.item.NOTES[i-1].SEGM_COD === this.usr.SEGM_COD){
+        if(this.item.NOTES[i-1].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
           segnote.push(this.item.NOTES[i-1]);
         }
       }
       if(segnote){
         this.setDate(segnote);
         for(i=0;i<segnote.length;i++){
-          result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+ segnote[i].USU_NOME+" | "+segnote[i].OBJ_ID+"</b></p><p>"+segnote[i].SEGM_DESC+" - Assunto:</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
+          result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+this.item.FORN_DESC+" | "+segnote[i].OBJ_ID+"</b></p><p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
 
           if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
             result+= "<button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' id='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'></button>";
@@ -906,7 +909,7 @@ setFav:function(a){
           template+='<img src="http://192.168.10.100/webfair/ifairimg/'+context.item.CONTACTS[i].IMG_PATH_CONTATO+'" width="100%" name="'+context.item.CONTACTS[i].CONT_ID+'">';
         } 
         else{
-          template+='<img src="images/contact.png" width="100%" class="noimage">';
+          template+='<img src="images/contact.png" width="100%" class="noimage" name="'+context.item.CONTACTS[i].CONT_ID+'">';
         } 
         template+='</div></div><div class="supplier-firstform"><div class="row"><div class="fake-form fake-form-supplier-middle"><div class="form-group">';
         template+='<input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[i].CONT_NOME+'"';
@@ -952,7 +955,7 @@ setFav:function(a){
         template1+='</div></div><div class="supplier-firstform"><div class="row"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off"></div></div><button type="button" class="icon floatLeft trash-big" name="'+(context.item.CONTACTS.length+1)+'"></button></div><div class="row"><div class="fake-form"><div class="form-group"><input type="text" class="form-control" name="CONT_EMAIL" placeholder="E-mail" autofocus="" autocomplete="off"></div></div></div><div class="row top-ten"><div class="fake-form fake-form-supplier-equal floatLeft">';
         cont+='<button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bcircle favcontact" name="1">Contato Principal </button>';
         template2+='</div><div class="fake-form fake-form-supplier-equal right"><div class="form-group"><input type="text" class="form-control" name="SEGM_COD" placeholder="Segmento" autofocus="" autocomplete="off" value="'+context.usr.SEGM_DESC+'" title="'+context.usr.SEGM_COD+'" disabled="disabled"></div></div></div><div class="row"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="tel" class="form-control" name="CONT_TEL" placeholder="Tel 1" autofocus="" autocomplete="off"></div></div><button type="button" class="icon floatLeft bplus-big" name="CONT_TEL2" name="CONT_TEL2" id="'+(context.item.CONTACTS.length+1)+'"></button></div><div class="row CONT_TEL2 top-ten hide"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="tel" class="form-control" name="CONT_TEL2" placeholder="Tel 2" autofocus="" autocomplete="off"></div></div></div></div></div>';
-      $("#dados .contact-container").append(template+template1+cont+template2);
+        $("#dados .contact-container").append(template+template1+cont+template2);
     }
     else{
       if(context.item.CONTACTS.length){
@@ -965,7 +968,7 @@ setFav:function(a){
         template+='<img src="http://192.168.10.100/webfair/ifairimg/'+context.item.CONTACTS[0].IMG_PATH_CONTATO+'" width="100%"  name="'+context.item.CONTACTS[0].CONT_ID+'">';
         template1+='</div></div><div class="supplier-firstform"><div class="row"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_NOME+'" required="required"></div></div><button type="button" class="icon floatLeft trash-big" name="1"></button></div><div class="row"><div class="fake-form"><div class="form-group"><input type="text" class="form-control" name="CONT_EMAIL" placeholder="E-mail" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_EMAIL+'" required="required"></div></div></div><div class="row top-ten"><div class="fake-form fake-form-supplier-equal floatLeft">';
         cont+='<button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bcircle favcontact sel" name="1">Contato Principal </button>';
-        template2+='</div><div class="fake-form fake-form-supplier-equal right"><div class="form-group"><input type="text" class="form-control" name="SEGM_COD" placeholder="Segmento" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].SEGM_COD+'" title="'+context.item.CONTACTS[0].SEGM_DESC+'" disabled="disabled"></div></div></div><div class="row"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="tel" class="form-control" name="CONT_TEL" placeholder="Tel 1" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_TEL+'"></div></div>';
+        template2+='</div><div class="fake-form fake-form-supplier-equal right"><div class="form-group"><input type="text" class="form-control" name="SEGM_COD" placeholder="Segmento" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].SEGM_DESC+'" title="'+context.item.CONTACTS[0].SEGM_COD+'" disabled="disabled"></div></div></div><div class="row"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="tel" class="form-control" name="CONT_TEL" placeholder="Tel 1" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_TEL+'"></div></div>';
 
         if(context.item.CONTACTS[0].CONT_TEL2.length){
           template2+='</div><div class="row CONT_TEL2 top-ten"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="tel" class="form-control" name="CONT_TEL2" placeholder="Tel 2" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_TEL2+'"></div></div></div></div></div>';
@@ -974,8 +977,6 @@ setFav:function(a){
           template2+='<button type="button" class="icon floatLeft bplus-big" name="CONT_TEL2" id="1"></button></div><div class="row CONT_TEL2 top-ten hide"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="tel" class="form-control" name="CONT_TEL2" placeholder="Tel 2" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_TEL2+'"></div></div></div></div></div>';
         }
 
-
-        
         context.favcontact=0;
         $("#dados .contact-container").prepend(temp+template+template1+cont+template2);
         template='<div class="supplier-photo-side"><div class="photo-container">';
@@ -1010,10 +1011,13 @@ setFav:function(a){
 
     $(".card-side img").each(function(index, el) {
       for(var j=0;j<context.item.CONTACTS.length;j++){
-        if(context.item.CONTACTS[j][''+$(el).attr("name")].length && context.item.CONTACTS[j]['CONT_PRINCIPAL'] === 1){
-          $(el).attr("src",'http://192.168.10.100/webfair/ifairimg/'+context.item.CONTACTS[j][''+$(el).attr("name")]);
-          
-          //$(el).attr("src",'http://bdb/ifair_img/'+context.item.CONTACTS[j][''+$(el).attr("name")]);
+        if(context.item.CONTACTS[j]['CONT_PRINCIPAL'] === 1){
+          if(context.item.CONTACTS[j][''+$(el).attr("name")].length){
+            $(el).attr("src",'http://192.168.10.100/webfair/ifairimg/'+context.item.CONTACTS[j][''+$(el).attr("name")]).attr('alt', context.item.CONTACTS[j].CONT_ID);;
+          }
+          else{
+            $(el).attr('alt', context.item.CONTACTS[j].CONT_ID);
+          }
         }
       }
     });
@@ -1097,6 +1101,8 @@ setFav:function(a){
     $("#dados .contact-container").append(template);
     $(".favcontact").bind("click",function(a){context.setFavContact(a);});
     $(".photo-container img").bind("click",function(a){context.showCard(a);});
+    $(".cardboard").bind("click",function(a){context.slideCard(a);});
+    $(".closebt").bind("click",function(a){context.slideCard(a);});
     $(".contact1 .favcontact").trigger('click');
     $(".form-control-other").attr('disabled', 'disabled');
   }
@@ -1114,6 +1120,39 @@ setFav:function(a){
   $(".favcontact").bind("click",function(a){context.setFavContact(a);});
   $(".trash-big").bind("click",function(a){context.deleteFornNote(a);});
   $(".photo-container img").bind("click",function(a){context.showCard(a);});
+  $(".cardboard").bind("click",function(a){context.slideCard(a);});
+  $(".closebt").bind("click",function(a){context.closeSlide(a);});
+},slideCard:function(a){
+  if(!this.item.FORN_ID){
+    this.modal.open("message","O fornecedor ainda não foi salvo!!!",!1,!0);
+    return !1;
+  }
+  if(!this.item.CONTACTS.length){
+    this.modal.open("message","Ainda não existem contatos cadastrados!!!",!1,!0);
+    return !1;
+  }
+  this.item.CONTACTS.forEach(function(el,index) {
+    if(parseInt(el.CONT_ID) === parseInt($(a.target).attr("alt"))){
+      $(".supplier-img-containter img").each(function(i, elem) {
+        if(el[''+$(elem).attr("name")].length){
+          $(elem).attr("src",'http://192.168.10.100/webfair/ifairimg/'+el[''+$(elem).attr("name")]);
+        }
+      });
+    }
+  });
+  console.dir($("#"+$(a.target).attr("name")));
+  $("#"+$(a.target).attr("name")).attr("checked","checked");
+  $(".supplier-img-containter").fadeIn();
+},closeSlide:function(){
+  $(".supplier-img-containter").fadeOut();
+  $(".supplier-img-containter .cnt-slide").each(function(index, el) {
+    if($(el).hasClass('cnt-slide1')){
+      $(el).find("img").attr("src","images/camera_biggest.png");
+    }
+    else{
+      $(el).find("img").attr("src","images/camera_big.png");
+    }
+  });
 },saveForn:function(goout){
   var html="",complet=0,context=this,pattern="",complet=!0;
   var addforn=$("html").hasClass('add_forn') ? "I" : "U";

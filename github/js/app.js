@@ -161,7 +161,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       
       this.el.find("#wrap").removeClass("hide");
 
-      this.modal = new Modal({el:this.modalEl,callService:this.proxy(this.callService),usr:this.usr,getPage:this.proxy(this.getPage)});
+      this.modal = new Modal({el:this.modalEl,callService:this.proxy(this.callService),usr:this.usr,getPage:this.proxy(this.getPage),setEmailSent:this.proxy(this.setEmailSent)});
       this.content = new Content({el:this.contentEl,usr:this.usr/*bread:this.breadEl, type:this.usr.TIPO*/});
       this.fornecedores = new Fornecedores({
         getloading:this.proxy(this.getloading),
@@ -225,6 +225,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               this.endTime=this.cookiefair[0].dates[1];
               this.prices=this.cookiefair[0].prices;
               this.fstatus=this.cookiefair[0].fstatus;
+              this.nsort=this.cookiefair[0].nsort;
             }
             else{
               console.log("WINDOW 0");
@@ -243,6 +244,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                 this.endTime=this.cookiefair[0].dates[1];
                 this.prices=this.cookiefair[0].prices;
                 this.fstatus=this.cookiefair[0].fstatus;
+                this.nsort=this.cookiefair[0].nsort;
               }
               else{
                 console.log("WINDOW 0");
@@ -305,6 +307,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             this.endTime=this.cookiefair[0].dates[1];
             this.prices=this.cookiefair[0].prices;
             this.fstatus=this.cookiefair[0].fstatus;
+            this.nsort=this.cookiefair[0].nsort;
           }
           else{
             if(jQuery.parseJSON($.cookie("posscroll"))){
@@ -313,6 +316,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               this.endTime=this.cookiefair[0].dates[1];
               this.prices=this.cookiefair[0].prices;
               this.fstatus=this.cookiefair[0].fstatus;
+              this.nsort=this.cookiefair[0].nsort;
             }
             else{
               this.cookiefair=[];
@@ -576,7 +580,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               });
             }
             else{
-              context.createComponent(context.cities,context.bcity,"cities");
               context.fair.filter(function(a,b){
                 if((parseInt(a.FEIR_COD) == (parseInt(val)))){
                   context.popComponent(a);
@@ -629,7 +632,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       });
     },
     popComponent:function(item){
-      var elem=$(".form-control");
+      console.dir(item);
+      var elem=$(".form-control"),context=this;
       elem.each(function(a,b){
         $(b).attr("disabled","disabled").val(item[$(b).attr("name")]);
       });
@@ -641,6 +645,17 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         console.dir($(".container-fullsize"));
         $(".container-fullsize").hide();
       }
+      this.callService("cities",'<PAIS_COD>'+item.PAIS_COD+'</PAIS_COD>','<PAIS_DESC></PAIS_DESC>','<REGI_COD></REGI_COD>','<REGI_DESC></REGI_DESC>');
+      status=setInterval(function(){
+        if(context.cities.length){
+          $(".city option").each(function(a,b){
+            if($(b).attr("value") === item["REGI_COD"]){
+              $(b).attr("selected","selected");
+            }
+          });
+          clearInterval(status);
+        }
+      },100);
     },
     editFair:function(a){
       $(a.target).addClass("sel");
@@ -700,9 +715,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         return !0;
       }
       this.reset();
+      this.resetFilters();
       this.initialTime=$("input[name='initial_date']").val() || (new Date().getFullYear())+"-01-01";
       this.endTime=$("input[name='end_date']").val() || (new Date().getFullYear())+"-12-30";
-      this.cookiefair[0].posscroll=0;
+      if(this.cookiefair.length){
+        this.cookiefair[0].posscroll=0;
+      }
       switch (this.page){
         case "fornecedores":
           this.callService("fornecedores",'<FORN_DESC>'+this.fornval+'</FORN_DESC>','<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>'+(this.content.page*20+1)+'</LINHA_I>','<LINHA_F>'+((this.content.page+1)*20)+'</LINHA_F>','<CREATE_DATE_I>'+this.initialTime+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTime+'</CREATE_DATE_F>');
@@ -1118,6 +1136,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             "dates":[this.initialTime,this.endTime],
             "prices":this.prices,
             "fstatus":this.fstatus,
+            "nsort":this.nsort,
             "view":""+this.view,
             "posscroll":0,
             "total":20
@@ -1534,6 +1553,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                     if(h.FORN_ID !== a[k-1].FORN_ID){
                       console.log(h.FORN_ID+" = "+a[k-1].FORN_ID);
                       console.log(countf);
+                      
                       countf++;
                     }
                     $('.bread-search').find(".spec").text(k+1);
@@ -1650,7 +1670,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             clearInterval(status);
           }
         },100);
-      }
+      } 
       else{
         context.callService("template_email",'','<TEMP_DESC></TEMP_DESC><SEGM_COD></SEGM_COD>');
       }
@@ -1760,11 +1780,16 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     },
     AmosByStatus:function(ev){
       var aux;
-      aux=this.data;
+      if(this.fdata.length){
+        aux=this.fdata;
+      }
+      else{
+        aux=this.data;
+      }
       this.reset();
       if($(ev.target).hasClass("sel")){
-        this.fdata=aux;
-        this.data=aux;
+        //this.fdata=aux;
+        //this.data=aux;
         this.fstatus=null;
       }
       else{
@@ -1774,7 +1799,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             return a;
           }
         });
-        this.data=aux;
+        // if(this.fdata.length){
+        //   aux=this.fdata;
+        // }
+        // else{
+        //   aux=this.data;
+        // }
+        // this.data=aux;
         this.fstatus=$(ev.target).attr("name").bool();
       }
       $(ev.target).toggleClass("sel");
@@ -1784,12 +1815,22 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         $('.bread-search').find(".spec").text("0 Amostras");
         return !1;
       }
+      console.dir(this.fdata);
       this.createbox(this.fdata, this.content.page, !0);
-      //console.dir(typeof Boolean($(a.target).find("option:selected").val()));
+
+      /*var aux;
+      aux=this.data;
+      this.reset();*/
     },AmosByPrice:function(){
       //AMOS_PRECO
-      var aux,context=this;
-      aux=this.data;
+
+      /*var aux,context=this;
+      if(this.fdata.length){
+        aux=this.fdata;
+      }
+      else{
+        aux=this.data;
+      }
       this.prices=[];
       this.prices.push($("input[name='initial_price']").val() || 0);
       this.prices.push($("input[name='end_price']").val() || 100000);
@@ -1799,13 +1840,17 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           return a;
         }
       });
-      this.data=aux;
+      //this.data=aux;
       if(!this.fdata.length){
         this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0);
         $('.bread-search').find(".spec").text("0 Amostras");
         return !1;
       }
-      this.createbox(this.fdata, this.content.page, !0);
+      this.createbox(this.fdata, this.content.page, !0);*/
+    },
+
+    Componentfilter:function(){
+      //Componente para todos os filtros, vou passar em todo o data e filtrar todos os filtros sempre que o filtro for mudado.
     },
     goDetail:function(a){
       this.navigate("detail/"+$(a.target).attr("name"), !0);
@@ -1848,8 +1893,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         for(i=0;i<=length;i++){
           if(item[0].CONTACTS[i]){
             if(item[0].CONTACTS[i].CONT_PRINCIPAL){
-              email=item[0].CONTACTS[i].CONT_EMAIL;
-              any_principal=!1;
+              if(item[0].CONTACTS[i].CONT_EMAIL.length){
+                email=item[0].CONTACTS[i].CONT_EMAIL;
+                any_principal=!1;
+              }
             }
           }
           else{
@@ -1876,10 +1923,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                 });
             }
             else{
-              for(j=0;j<this.select_items.length;j++){
-                amos_code.push(this.select_items[j].AMOS_ID);
-              }
+              /*for(j=0;j<this.select_items.length;j++){
+                amos_code.push(this.select_items[j].AMOS_DESC);
+              }*/
               console.log("email para: "+email);
+
               context.modal.open("template",[context.email,amos_code,email,item,item[0]],!1,!1);
             }
           }
@@ -2039,6 +2087,94 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
       //this.callService("gravarAmostraComposicao","102004997","<Composition><COMP_COD>CL_1</COMP_COD><COMP_OTHERS></COMP_OTHERS><TP_COMP_ID>1</TP_COMP_ID></Composition>");
     },
+
+
+    setEmailSent:function(a){
+      console.dir(a);
+      /*var length,context=this,l=0,obj;
+      if($(a.target).prop("tagName") ===  "SPAN"){
+        obj=$(a.target).parent();
+      }
+      else{
+        obj=$(a.target);
+        a.preventDefault();
+      }
+      length=this.select_items.length;
+      if(!length){
+        this.modal.open("message","Por favor, selecione ao menos uma amostra para alterar!!!",!1,!0);
+        return !1;
+      }
+      this.setloading(!0,!1);
+      if(obj.attr("name") === "COMP"){
+        status=setInterval(function(){
+          if(l<length){
+            var html="";
+            context.data.filter(function(elem,index){
+              if(elem.AMOS_ID == context.select_items[l].AMOS_ID){
+                elem.COMPOSITIONS.push({"COMP_COD":obj.attr("href").replace("#",""),"COMP_DESC":obj.attr("title")})
+              }
+            });
+            $("#"+context.select_items[l].AMOS_ID+" .caption-downside ul").append("<li><a href='#"+obj.attr('href').replace("#","")+"' name='"+context.select_items[l].AMOS_ID+"'>"+obj.attr('title').toUpperCase()+"</a></li>");
+            $("#"+context.select_items[l].AMOS_ID+" .caption-downside a").each(function(index, el) {
+              html+="<Composition><COMP_COD>"+$(el).attr("href").replace("#","")+"</COMP_COD><COMP_OTHERS></COMP_OTHERS><TP_COMP_ID>1</TP_COMP_ID></Composition>";
+            });
+            context.callService("gravarAmostraComposicao",context.select_items[l].AMOS_ID,html);     
+            l++;
+          }
+          else{
+            clearInterval(status);
+            context.setloading(!1);
+          }
+        },200);
+      }
+      else{
+        status=setInterval(function(){
+          if(l<length){
+            var html="",pattern="";
+            if(!$("#"+context.select_items[l].AMOS_ID+" .caption-downside a[href='"+obj.attr('href')+"']").length){
+              //Fazer identificar se ja tem um para aquele atributo e remover
+              if($("#"+context.select_items[l].AMOS_ID+" .caption-downside a[name='"+obj.attr('name')+"']").length){
+                $("#"+context.select_items[l].AMOS_ID+" .caption-downside a[name='"+obj.attr('name')+"']").parent().remove();
+              }
+              $("#"+context.select_items[l].AMOS_ID+" .caption-downside ul").append("<li><a href='#"+obj.attr('href').replace("#","")+"' name='"+obj.attr('name')+"'>"+obj.attr('title').toUpperCase()+"</a></li>");
+              context.data.filter(function(elem,index){
+                if(elem.AMOS_ID == context.select_items[l].AMOS_ID){
+                  var day,date;
+                  date=new Date();
+                  if(parseInt(date.getDate())<10){
+                    day="0"+date.getDate();
+                  }
+                  else{
+                    day=date.getDate();
+                  }
+                  date=""+date.getFullYear()+"-0"+(date.getMonth()+1)+"-"+day;
+                  //pattern+="<AMOS_ID>"+parseInt(elem.AMOS_ID)+"</AMOS_ID><FORN_ID>"+parseInt(elem.FORN_ID)+"</FORN_ID><FEIR_COD>"+parseInt(elem.FEIR_COD)+"</FEIR_COD><USU_COD>"+parseInt(elem.USU_COD)+"</USU_COD><AMOS_DESC>"+elem.AMOS_DESC+"</AMOS_DESC><AMOS_STATUS>"+elem.AMOS_STATUS+"</AMOS_STATUS><AMOS_ENV_EMAIL>"+elem.AMOS_ENV_EMAIL+"</AMOS_ENV_EMAIL><TECI_COD>"+(elem.TECI_COD || "")+"</TECI_COD><BASE_COD>"+(elem.BASE_COD || "")+"</BASE_COD><GRUP_COD>"+(elem.GRUP_COD || "")+"</GRUP_COD><SUBG_COD>"+(elem.SUBG_COD || "")+"</SUBG_COD><SEGM_COD>"+(elem.SEGM_COD || "")+"</SEGM_COD><FLAG_PRIORIDADE>"+elem.FLAG_PRIORIDADE+"</FLAG_PRIORIDADE><AMOS_HOMOLOGAR>"+elem.AMOS_HOMOLOGAR+"</AMOS_HOMOLOGAR><FLAG_FISICA>"+elem.FLAG_FISICA+"</FLAG_FISICA><CREATE_DATE>"+date+"</CREATE_DATE>";
+                  //html+="<AMOS_PRECO>"+elem.AMOS_PRECO+"</AMOS_PRECO><AMOS_LARGURA_TOTAL>"+elem.AMOS_LARGURA_TOTAL+"</AMOS_LARGURA_TOTAL><AMOS_GRAMATURA_M>"+elem.AMOS_GRAMATURA_M+"</AMOS_GRAMATURA_M><AMOS_COTACAO_M>"+elem.AMOS_COTACAO_M+"</AMOS_COTACAO_M><AMOS_COTACAO_KG>"+elem.AMOS_COTACAO_KG+"</AMOS_COTACAO_KG><AMOS_LARGURA_UTIL>"+elem.AMOS_LARGURA_UTIL+"</AMOS_LARGURA_UTIL><AMOS_GRAMATURA_ML>"+elem.AMOS_GRAMATURA_ML+"</AMOS_GRAMATURA_ML><AMOS_ONCAS>"+elem.AMOS_ONCAS+"</AMOS_ONCAS><AMOS_PRECO_UM>"+elem.AMOS_PRECO_UM+"</AMOS_PRECO_UM>";
+                  
+                  elem[obj.attr("name")]=obj.attr("href").replace("#","");
+                  elem[obj.attr("name").replace("_COD","_DESC")]=obj.attr("title");
+                  console.dir(elem);
+                  pattern+="<AMOS_ID>"+parseInt(elem.AMOS_ID)+"</AMOS_ID><FORN_ID>"+parseInt(elem.FORN_ID)+"</FORN_ID><FEIR_COD>"+parseInt(elem.FEIR_COD)+"</FEIR_COD><USU_COD>"+parseInt(elem.USU_COD)+"</USU_COD><AMOS_DESC>"+elem.AMOS_DESC+"</AMOS_DESC><AMOS_STATUS>"+elem.AMOS_STATUS+"</AMOS_STATUS><AMOS_ENV_EMAIL>"+elem.AMOS_ENV_EMAIL+"</AMOS_ENV_EMAIL><TECI_COD>"+(elem.TECI_COD || "")+"</TECI_COD><BASE_COD>"+(elem.BASE_COD || "")+"</BASE_COD><GRUP_COD>"+(elem.GRUP_COD || "")+"</GRUP_COD><SUBG_COD>"+(elem.SUBG_COD || "")+"</SUBG_COD><SEGM_COD>"+(elem.SEGM_COD || "")+"</SEGM_COD><FLAG_PRIORIDADE>"+elem.FLAG_PRIORIDADE+"</FLAG_PRIORIDADE><AMOS_HOMOLOGAR>"+elem.AMOS_HOMOLOGAR+"</AMOS_HOMOLOGAR><FLAG_FISICA>"+elem.FLAG_FISICA+"</FLAG_FISICA><CREATE_DATE>"+date+"</CREATE_DATE>";
+                  html+="<AMOS_DESC>"+elem.AMOS_DESC+"</AMOS_DESC><AMOS_PRECO>"+elem.AMOS_PRECO+"</AMOS_PRECO><AMOS_LARGURA_TOTAL>"+elem.AMOS_LARGURA_TOTAL+"</AMOS_LARGURA_TOTAL><AMOS_GRAMATURA_M>"+elem.AMOS_GRAMATURA_M+"</AMOS_GRAMATURA_M><AMOS_COTACAO_KG>"+elem.AMOS_COTACAO_KG+"</AMOS_COTACAO_KG><AMOS_LARGURA_UTIL>"+elem.AMOS_LARGURA_UTIL+"</AMOS_LARGURA_UTIL><AMOS_GRAMATURA_ML>"+elem.AMOS_GRAMATURA_ML+"</AMOS_GRAMATURA_ML><AMOS_ONCAS>"+elem.AMOS_ONCAS+"</AMOS_ONCAS><AMOS_PRECO_UM>"+elem.AMOS_PRECO_UM+"</AMOS_PRECO_UM>";
+
+                  context.callService("gravarAmostras",pattern,html,"U");
+                }
+              });
+              
+            }  
+            l++;
+          }
+          else{
+            clearInterval(status);
+            context.setloading(!1);
+          }
+        },200);
+      }*/
+    },
+
+
+
+
     toUpperCaseValue:function(a){
       $(a.target).val($(a.target).val().toUpperCase());
     },
@@ -2334,6 +2470,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                 "prices":e.prices,
                 "fstatus":e.fstatus,
                 "view":""+e.view,
+                "nsort":e.nsort,
                 "posscroll":d,
                 "total":b
               };
@@ -2367,6 +2504,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                 "prices":e.prices,
                 "fstatus":e.fstatus,
                 "view":""+e.view,
+                "nsort":e.nsort,
                 "posscroll":d,
                 "total":b
               };
@@ -2393,6 +2531,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     reopenFilter:function(){
       $("input[name='initial_date']").datepicker('setDate', this.initialTime.slice(0,4)+'-'+this.initialTime.slice(5, 7)+"-"+this.initialTime.slice(8, 10));
       $("input[name='end_date']").datepicker('setDate', this.endTime.slice(0,4)+'-'+this.endTime.slice(5, 7)+"-"+this.endTime.slice(8, 10));
+      console.log(this.nsort);
       /*if(this.prices.length){
         //Fazer o trigger no filtro
         $("input[name='initial_price']").val(this.prices[0]);
@@ -2446,6 +2585,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.prices=[];
 
       this.fstatus=null;
+      this.nsort="AMOS_DESC";
     }
   });
   new App;

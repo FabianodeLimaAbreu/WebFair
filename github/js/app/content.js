@@ -190,7 +190,9 @@ window.Modal = Spine.Controller.sub({
 
     counter=amos_code.join(" ; ").length;
 
+    console.dir(this.email);
     var texto=encodeURIComponent(listemail.TEMP_BODY.replace("##SAMPLES"," "+amos_code.join(" ; ")+" ").replace("##SUPPLIER",supplier.FORN_DESC).replace("##CONTACT",supplier.FORN_DESC).slice(0,(1290 - counter)));
+    this.setEmailSent(amos_code);
     this.close();   
     window.open("mailto:"+address+"?subject="+encodeURIComponent(listemail.TEMP_SUBJECT)+"&body="+texto);
   },
@@ -384,6 +386,12 @@ window.Box = Spine.Controller.sub({init:function() {
       result+="<button type='button' name='"+a.AMOS_ID+"' class='icon'></button>"; //bselection
     }
     else{
+      if($("html").hasClass('edit')){
+        $(".bselect[name='bselection-edit']").addClass('sel');
+      }
+      else{
+        $(".bselect[name='bselection']").addClass('sel');
+      }
       result+="<button type='button' name='"+a.AMOS_ID+"' class='icon bselection'></button>"; //bselection
     }
     //result+="<a href='#detail/"+parseInt(a.FEIR_COD)+"/"+a.AMOS_DESC+"'><div class='thumbnail' id="+a.AMOS_ID+"><button type='button' name='"+a.AMOS_ID+"' class='icon'></button>"; //bselection
@@ -401,7 +409,7 @@ window.Box = Spine.Controller.sub({init:function() {
         this.setDate(segnote);
         result+="<li class='tooltip tooltip-selectable'><button type='button' class='caption-icons-icon justit bnote'></button><ul class='tooltip-content notepad notepadmess rightless'><li class='tooltip-title'><p class='tooltip-item'>Anotações</p></li>";
         for(i=0;i<segnote.length;i++){
-          result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+ segnote[i].USU_NOME+" | "+segnote[i].OBJ_ID+"</b></p><p>"+segnote[i].SEGM_DESC+" - Assunto:</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
+          result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+ a.FORN_DESC+" | "+segnote[i].OBJ_ID+"</b></p><p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
           if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
             result+= "<button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' id='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'></button>";
           }
@@ -463,7 +471,7 @@ window.Box = Spine.Controller.sub({init:function() {
         if(a.CONTACTS.length){
           var scont=[];
           for(i=0;i<a.CONTACTS.length;i++){
-            if(a.CONTACTS[i].SEGM_COD === this.usr.SEGM_COD){
+            if(a.CONTACTS[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
               scont.push(a.CONTACTS[i]);
             }
           }
@@ -531,7 +539,7 @@ window.Box = Spine.Controller.sub({init:function() {
             this.setDate(a.NOTES);
             result+="<td class='tooltip tooltip-selectable'><button type='button' class='caption-icons-icon justit bnote'></button><ul class='tooltip-content notepad notepadmess col-large'><li class='tooltip-title'><p class='tooltip-item'>Anotações</p></li>";
             for(i=0;i<segnote.length;i++){
-              result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+ segnote[i].USU_NOME+" | "+segnote[i].OBJ_ID+"</b></p><p>"+segnote[i].SEGM_DESC+" - Assunto:</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
+              result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+a.FORN_DESC+" | "+segnote[i].OBJ_ID+"</b></p><p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
               if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
                 result+= "<button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' id='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'></button>";
               }
@@ -565,7 +573,7 @@ window.Box = Spine.Controller.sub({init:function() {
         if(note){
           var segnote=[];
           for(i=a.NOTES.length;i>0;i--){
-            if(a.NOTES[i-1].SEGM_COD === this.usr.SEGM_COD){
+            if(a.NOTES[i-1].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
               segnote.push(a.NOTES[i-1]);
             }
           }
@@ -608,7 +616,7 @@ window.Box = Spine.Controller.sub({init:function() {
         break;
       case 'local':
         var result="";
-        result+="<td>"+a.FEIR_DESC+"</td>"+"<td>"+a.REGI_DESC+"</td>"+"<td>"+a.PAIS_DESC+"</td>"+"<td><a href='#local/edit/"+parseInt(a.FEIR_COD)+"' class='icon floatLeft edit-big'></a></td>";
+        result+="<td>"+a.FEIR_DESC+"</td>"+"<td>"+a.PAIS_DESC+"</td>"+"<td>"+a.REGI_DESC+"</td>"+"<td><a href='#local/edit/"+parseInt(a.FEIR_COD)+"' class='icon floatLeft edit-big'></a></td>";
         return result;
         break;
       case 'template_email':

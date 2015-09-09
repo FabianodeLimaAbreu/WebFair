@@ -110,7 +110,44 @@
         <!--16-->
 
       </div>
-      <div ng-show="maskshow" class="mask"> 
+      <div class="supplier-img-containter"> 
+        <ul class="cnt-slides">
+          <input type="radio" name="radio-btn" id="IMG_PATH_VERSO"/> <!--checked-->
+          <li class="cnt-slide-container">
+          <div class="cnt-slide">
+            <img src="images/camera_big.png" name="IMG_PATH_VERSO"/>
+          </div>
+          <div class="cnt-nav">
+            <label for="IMG_PATH_CONTATO" class="cnt-prev"><span></span></label>
+            <label for="IMG_PATH_FRENTE" class="cnt-next"><span></span></label>
+            <label class="closebt cnt-close"><span></span></label>
+          </div>
+          </li>
+          <input type="radio" name="radio-btn" id="IMG_PATH_FRENTE" />
+          <li class="cnt-slide-container">
+            <div class="cnt-slide">
+              <img src="images/camera_big.png" name="IMG_PATH_FRENTE"/>
+            </div>
+          <div class="cnt-nav">
+            <label for="IMG_PATH_VERSO" class="cnt-prev"><span></span></label>
+            <label for="IMG_PATH_CONTATO" class="cnt-next"><span></span></label>
+            <label class="closebt cnt-close"><span></span></label>
+          </div>
+          </li>
+          <input type="radio" name="radio-btn" id="IMG_PATH_CONTATO" />
+          <li class="cnt-slide-container">
+            <div class="cnt-slide cnt-slide1">
+              <img src="images/camera_biggest.png" name="IMG_PATH_CONTATO"/>
+            </div>
+          <div class="cnt-nav">
+            <label for="IMG_PATH_FRENTE" class="cnt-prev"><span></span></label>
+            <label for="IMG_PATH_VERSO" class="cnt-next"><span></span></label>
+            <label class="closebt cnt-close1"><span></span></label>
+          </div>
+          </li>
+        </ul>
+      </div>
+      <div class="mask"> 
         <img src="images/loader.gif" class="loader">
       </div>
       <div class="modal_mask">
