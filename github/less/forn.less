@@ -49,7 +49,7 @@
 		}
 	}
 }
-.newuser{
+.newcnt{
 	input{
 		&.form-control{
 			width:490px;
@@ -193,3 +193,121 @@
 		}
 	}
 }
+.supplier-img-containter{
+	position: absolute;
+	display: block;
+	width: 100%;
+	height:100%;
+	background: white;
+	ul{
+		width:600px;
+		height:600px;
+		margin:20px auto;
+	}
+}
+.cnt-slides {
+    padding: 0;
+    width: 609px;
+    height: 420px;
+    display: block;
+    margin: 0 auto;
+    position: relative;
+    input { display: none; }
+}
+
+.cnt-slides * {
+    cnt-select: none;
+    -ms-cnt-select: none;
+    -moz-cnt-select: none;
+    -khtml-cnt-select: none;
+    -webkit-cnt-select: none;
+    -webkit-touch-callout: none;
+}
+
+
+
+.cnt-slide-container { display: block; }
+
+.cnt-slide{
+    top: 50%;
+    left:47px;
+    margin-top: -143px;
+    opacity: 0;
+    width: 504px;
+    height: 286px;
+    display: block;
+    position: absolute;
+
+    transform: scale(0);
+
+    transition: all .7s ease-in-out;
+}
+.cnt-slide1 {
+	height: 504px;
+	margin-top: -252px;
+}
+.cnt-nav label {
+	border-radius: 50%;
+	top:50%;
+	margin-top: -15px;
+    width: 30px;
+    height: 30px;
+    display: none;
+    position: absolute;
+
+	  opacity: ;
+    z-index: 9;
+    cursor: pointer;
+
+
+    background-color: #71abcc;
+    
+    &:hover { 
+	background-color: @dark-text;
+    }
+    &.cnt-close, &.cnt-close1 { 
+	top:135px;
+	right:40px;
+	span{
+    		margin:8px 0 0 7px; 
+    		display: block;
+    		width: 20px;
+    		height:20px;
+    		.sprite;
+    		.white_x;
+    	}
+    }
+    &.cnt-close1 { 
+	top:25px;
+	}
+    &.cnt-next { 
+    	right: 0; 
+    	span{
+    		margin:8px 0 0 8px; 
+    		display: block;
+    		width: 20px;
+    		height:20px;
+    		.sprite;
+    		.actions-arrow_right_right;
+    	}
+    }
+    &.cnt-prev{
+    	span{
+    		margin:8px 0 0 6px; 
+    		display: block;
+    		width: 20px;
+    		height:20px;
+    		.sprite;
+    		.actions-arrow_left_left;
+    	}
+    }
+}
+input:checked + .cnt-slide-container  .cnt-slide {
+    opacity: 1;
+
+    transform: scale(1);
+
+    transition: opacity 0.3s ease-in-out;
+}
+
+input:checked + .cnt-slide-container .cnt-nav label { display: block; }

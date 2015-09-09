@@ -51,10 +51,6 @@ html,
 body {
   height: 100%;
   overflow-x: hidden;
-  overflow-y: auto;
-}
-html#noscroll,
-body#noscroll {
   overflow-y: hidden;
 }
 body {
@@ -441,13 +437,13 @@ header .logo-print {
 .menu .menu-item a.bmenu-legend:after {
   width: 30px;
   height: 30px;
-  background-position: -10px -90px;
+  background-position: -10px -210px;
   left: 10px;
 }
 .menu .menu-item a.bmenu-settings:after {
   width: 30px;
   height: 30px;
-  background-position: -10px -250px;
+  background-position: -10px -330px;
 }
 .menu .menu-item a.bmenu-send_receive:after {
   width: 40px;
@@ -485,7 +481,7 @@ header .logo-print {
 .tooltip-item.bselect span.icon.bselection:hover:after {
   width: 15px;
   height: 15px;
-  background-position: -10px -1737px;
+  background-position: -35px -1737px;
   width: 25px;
 }
 .tooltip-item.bannex-leg:after {
@@ -517,7 +513,7 @@ header .logo-print {
   background: url("../images/sprite.png") top left no-repeat;
   width: 20px;
   height: 20px;
-  background-position: -10px -906px;
+  background-position: -10px -936px;
 }
 .tooltip-item.bcircle.bcicle-other {
   display: inline;
@@ -527,7 +523,7 @@ header .logo-print {
 .tooltip-item.bcircle:hover:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -936px;
+  background-position: -10px -966px;
 }
 .tooltip-item.bsquare {
   cursor: pointer;
@@ -541,7 +537,7 @@ header .logo-print {
   background: url("../images/sprite.png") top left no-repeat;
   width: 20px;
   height: 20px;
-  background-position: -10px -876px;
+  background-position: -10px -906px;
 }
 .tooltip-item.bsquare.bcicle-other {
   display: inline;
@@ -551,7 +547,7 @@ header .logo-print {
 .tooltip-item.bsquare:hover:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -666px;
+  background-position: -10px -726px;
 }
 .tooltip-item.btrash-big:after {
   left: 10px;
@@ -590,7 +586,7 @@ header .logo-print {
   background: url("../images/sprite.png") top left no-repeat;
   width: 30px;
   height: 30px;
-  background-position: -10px -130px;
+  background-position: -10px -170px;
 }
 .tooltip-item.tooltip-item-supplier.bminus {
   cursor: pointer;
@@ -614,7 +610,7 @@ header .logo-print {
   background: url("../images/sprite.png") top left no-repeat;
   width: 30px;
   height: 30px;
-  background-position: -10px -330px;
+  background-position: -10px -90px;
 }
 .tooltip-content {
   float: left;
@@ -731,7 +727,7 @@ header .logo-print {
 .tooltip-content.filter li a:before {
   margin-top: -5px;
   background: url("../images/sprite.png") top left no-repeat;
-  background-position: -10px -876px;
+  background-position: -10px -906px;
   content: "";
   width: 20px;
   height: 20px;
@@ -742,7 +738,7 @@ header .logo-print {
   background: url("../images/sprite.png") top left no-repeat;
   width: 20px;
   height: 20px;
-  background-position: -10px -666px;
+  background-position: -10px -726px;
 }
 .tooltip-content.filter .filterlist {
   border-right: solid 1px #e6ebf0;
@@ -1190,6 +1186,11 @@ form.search {
   margin: 0 auto 50px;
   padding-bottom: 115px;
 }
+.content.amos {
+  width: 100%;
+  margin: 0 auto 0;
+  padding-bottom: 0;
+}
 .supplier,
 .fornecedor_cadastro {
   overflow-y: hidden;
@@ -1394,6 +1395,11 @@ form.search {
 .container-fullsize .container-fullsize-filter {
   height: auto;
 }
+.container-fullsize.scroller {
+  margin: 0 auto 50px;
+  padding-bottom: 115px;
+  overflow-y: auto;
+}
 .container-fullsize .right-list {
   position: relative;
   float: right;
@@ -1427,17 +1433,17 @@ form.search {
 .container-fullsize .right-list .bimages:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1146px;
+  background-position: -10px -1176px;
 }
 .container-fullsize .right-list .blist:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1116px;
+  background-position: -10px -1146px;
 }
 .container-fullsize .right-list .bedit:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -606px;
+  background-position: -10px -666px;
 }
 .container-fullsize .main_opt {
   position: relative;
@@ -1505,7 +1511,7 @@ form.search {
 .container-fullsize .main_opt .main_opt_item .main_opt_button.btrash:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1446px;
+  background-position: -10px -576px;
 }
 .container-fullsize .main_opt.large .main_opt_item {
   width: 20%;
@@ -1575,7 +1581,7 @@ form.search {
 }
 .aside-edit {
   position: absolute;
-  right: 0;
+  right: 20px;
   top: 210px;
   width: 155px;
   display: inline-block;
@@ -1897,7 +1903,7 @@ form.search {
   background: url("../images/sprite.png") top left no-repeat;
   width: 20px;
   height: 20px;
-  background-position: -10px -756px;
+  background-position: -10px -816px;
   display: inline-block;
   position: relative;
   margin-right: 5px;
@@ -1912,7 +1918,7 @@ form.search {
 .detail .detail-sample-container .sample-buttons li button.btag:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -786px;
+  background-position: -10px -546px;
   top: 5px;
   left: 10px;
   float: left;
@@ -2250,7 +2256,7 @@ form.search {
   background: url("../images/sprite.png") top left no-repeat;
   width: 20px;
   height: 20px;
-  background-position: -10px -726px;
+  background-position: -10px -786px;
   margin: 10px 10px 0 0;
   float: right;
 }
@@ -2289,7 +2295,7 @@ form.search {
 .modal.bad .alertclose {
   width: 20px;
   height: 20px;
-  background-position: -10px -696px;
+  background-position: -10px -756px;
 }
 .modal.bad span {
   background: url(../images/alert.png) 0 -80px;
@@ -2360,7 +2366,7 @@ form.search {
   background: url("../images/sprite.png") top left no-repeat;
   width: 20px;
   height: 20px;
-  background-position: -10px -576px;
+  background-position: -10px -636px;
   display: inline-block;
   position: relative;
   margin-right: 5px;
@@ -2412,7 +2418,7 @@ form.search {
 .icon.close-temp:before {
   width: 15px;
   height: 15px;
-  background-position: -35px -1737px;
+  background-position: -10px -1762px;
 }
 .icon.gotop:after {
   content: "";
@@ -2425,7 +2431,7 @@ form.search {
   background: url("../images/sprite.png") top left no-repeat;
   width: 15px;
   height: 15px;
-  background-position: -35px -1737px;
+  background-position: -10px -1762px;
   margin: 1px -8px 0 10px;
 }
 .icon.finishit {
@@ -2443,7 +2449,7 @@ form.search {
   background: url("../images/sprite.png") top left no-repeat;
   width: 16px;
   height: 12px;
-  background-position: -10px -1762px;
+  background-position: -10px -1787px;
   margin: 3px -8px 0 10px;
 }
 .icon.delete,
@@ -2458,7 +2464,7 @@ form.search {
   background: url("../images/sprite.png") top left no-repeat;
   width: 20px;
   height: 20px;
-  background-position: -10px -546px;
+  background-position: -10px -606px;
   display: inline-block;
   position: relative;
   margin-right: 5px;
@@ -2473,7 +2479,7 @@ form.search {
   background: url("../images/sprite.png") top left no-repeat;
   width: 20px;
   height: 20px;
-  background-position: -10px -546px;
+  background-position: -10px -606px;
   margin: 0 7px 0 0;
 }
 .icon.bgoselect {
@@ -2505,7 +2511,7 @@ form.search {
   background: url("../images/sprite.png") top left no-repeat;
   width: 15px;
   height: 15px;
-  background-position: -35px -1687px;
+  background-position: -10px -1662px;
   display: inline-block;
   position: absolute;
   margin-right: 5px;
@@ -2526,7 +2532,7 @@ form.search {
   background: url("../images/sprite.png") top left no-repeat;
   width: 20px;
   height: 20px;
-  background-position: -10px -606px;
+  background-position: -10px -666px;
   display: inline-block;
   position: relative;
   margin-right: 5px;
@@ -2558,7 +2564,7 @@ form.search {
   background: url("../images/sprite.png") top left no-repeat;
   width: 30px;
   height: 30px;
-  background-position: -10px -50px;
+  background-position: -10px -130px;
   display: block;
   position: relative;
   content: "";
@@ -2576,7 +2582,7 @@ form.search {
   background: url("../images/sprite.png") top left no-repeat;
   width: 30px;
   height: 30px;
-  background-position: -10px -10px;
+  background-position: -10px -50px;
   display: block;
   position: relative;
   content: "";
@@ -2584,13 +2590,13 @@ form.search {
 .icon.fav-big.sel:after {
   width: 30px;
   height: 30px;
-  background-position: -10px -210px;
+  background-position: -10px -250px;
 }
 .icon.trash-big:after {
   background: url("../images/sprite.png") top left no-repeat;
   width: 25px;
   height: 30px;
-  background-position: -10px -170px;
+  background-position: -10px -10px;
   display: block;
   position: relative;
   content: "";
@@ -2599,7 +2605,7 @@ form.search {
   background: url("../images/sprite.png") top left no-repeat;
   width: 30px;
   height: 30px;
-  background-position: -10px -130px;
+  background-position: -10px -170px;
   display: block;
   position: relative;
   content: "";
@@ -2655,7 +2661,7 @@ form.search {
 .icon.bzoom:after {
   width: 15px;
   height: 15px;
-  background-position: -35px -1712px;
+  background-position: -10px -1737px;
   display: block;
   left: 0;
   top: 0;
@@ -2668,7 +2674,7 @@ form.search {
 .icon.bselection:after {
   width: 15px;
   height: 15px;
-  background-position: -10px -1737px;
+  background-position: -35px -1737px;
   display: block;
   left: 0;
   top: 0;
@@ -2678,19 +2684,19 @@ form.search {
 .icon.bselection:hover:after {
   width: 15px;
   height: 15px;
-  background-position: -10px -1662px;
+  background-position: -35px -1712px;
   width: 25px;
 }
 .icon.bselection.sel:after {
   width: 15px;
   height: 15px;
-  background-position: -10px -1662px;
+  background-position: -35px -1712px;
   width: 25px;
 }
 .icon.bselection.sel:hover:after {
   width: 15px;
   height: 15px;
-  background-position: -10px -1737px;
+  background-position: -35px -1737px;
   width: 20px;
   margin-left: 5px;
 }
@@ -2748,7 +2754,7 @@ form.search {
 .caption-icons-icon.bstatus.incomplet:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -966px;
+  background-position: -10px -1116px;
 }
 .caption-icons-icon.bemail:after {
   width: 20px;
@@ -2766,22 +2772,22 @@ form.search {
 .caption-icons-icon.bhomologado.has:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1296px;
+  background-position: -10px -1326px;
 }
 .caption-icons-icon.bhomologado.has:hover:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1326px;
+  background-position: -10px -1356px;
 }
 .caption-icons-icon.bhomologado.nothas:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1326px;
+  background-position: -10px -1356px;
 }
 .caption-icons-icon.bhomologado.nothas:hover:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1296px;
+  background-position: -10px -1326px;
 }
 .caption-icons-icon.bhomologado.unable:hover {
   cursor: default;
@@ -2789,7 +2795,7 @@ form.search {
 .caption-icons-icon.bhomologado.unable:hover:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1326px;
+  background-position: -10px -1356px;
 }
 .caption-icons-icon.bnote:after {
   width: 20px;
@@ -2799,7 +2805,7 @@ form.search {
 .caption-icons-icon.btrash:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1446px;
+  background-position: -10px -576px;
 }
 .caption-icons-icon.btrash-big {
   cursor: pointer;
@@ -2807,32 +2813,32 @@ form.search {
 .caption-icons-icon.btrash-big:after {
   width: 25px;
   height: 30px;
-  background-position: -10px -170px;
+  background-position: -10px -10px;
 }
 .caption-icons-icon.bsend_receive:after {
   width: 25px;
   height: 20px;
-  background-position: -10px -816px;
+  background-position: -10px -846px;
 }
 .caption-icons-icon.bfisica.has:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1236px;
+  background-position: -10px -1266px;
 }
 .caption-icons-icon.bfisica.has:hover:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1266px;
+  background-position: -10px -1296px;
 }
 .caption-icons-icon.bfisica.nothas:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1266px;
+  background-position: -10px -1296px;
 }
 .caption-icons-icon.bfisica.nothas:hover:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1236px;
+  background-position: -10px -1266px;
 }
 .caption-icons-icon.bfisica.unable:hover {
   cursor: default;
@@ -2840,27 +2846,27 @@ form.search {
 .caption-icons-icon.bfisica.unable:hover:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1266px;
+  background-position: -10px -1296px;
 }
 .caption-icons-icon.bfav.has:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1176px;
+  background-position: -10px -1206px;
 }
 .caption-icons-icon.bfav.has:hover:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1206px;
+  background-position: -10px -1236px;
 }
 .caption-icons-icon.bfav.nothas:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1206px;
+  background-position: -10px -1236px;
 }
 .caption-icons-icon.bfav.nothas:hover:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1176px;
+  background-position: -10px -1206px;
 }
 .caption-icons-icon.bfav.unable:hover {
   cursor: default;
@@ -2868,27 +2874,27 @@ form.search {
 .caption-icons-icon.bfav.unable:hover:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1206px;
+  background-position: -10px -1236px;
 }
 .caption-icons-icon.bedit_mini:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -846px;
+  background-position: -10px -876px;
 }
 .caption-icons-icon.bstar.has:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1386px;
+  background-position: -10px -1416px;
 }
 .caption-icons-icon.bstar.nothas:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1356px;
+  background-position: -10px -1386px;
 }
 .caption-icons-icon.bstar.middle:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -636px;
+  background-position: -10px -696px;
 }
 .caption-icons-icon.bannex_file.has:after {
   width: 16px;
@@ -3089,37 +3095,37 @@ th {
 .sprite {
   background: url("../images/sprite.png") top left no-repeat;
 }
-.actions-fav-big {
-  width: 30px;
+.actions-trash_blue {
+  width: 25px;
   height: 30px;
   background-position: -10px -10px;
 }
-.item-edit_big {
+.actions-fav-big {
   width: 30px;
   height: 30px;
   background-position: -10px -50px;
 }
-.menu-legend {
+.insiders-less {
   width: 30px;
   height: 30px;
   background-position: -10px -90px;
 }
-.actions-plus_blue {
+.item-edit_big {
   width: 30px;
   height: 30px;
   background-position: -10px -130px;
 }
-.actions-trash_blue {
-  width: 25px;
+.actions-plus_blue {
+  width: 30px;
   height: 30px;
   background-position: -10px -170px;
 }
-.actions-fav-big_selected {
+.menu-legend {
   width: 30px;
   height: 30px;
   background-position: -10px -210px;
 }
-.menu-settings {
+.actions-fav-big_selected {
   width: 30px;
   height: 30px;
   background-position: -10px -250px;
@@ -3129,7 +3135,7 @@ th {
   height: 30px;
   background-position: -10px -290px;
 }
-.insiders-less {
+.menu-settings {
   width: 30px;
   height: 30px;
   background-position: -10px -330px;
@@ -3139,7 +3145,7 @@ th {
   height: 30px;
   background-position: -10px -370px;
 }
-.actions-export {
+.actions-export_hover {
   width: 25px;
   height: 25px;
   background-position: -10px -410px;
@@ -3154,7 +3160,7 @@ th {
   height: 25px;
   background-position: -29px -445px;
 }
-.actions-export_hover {
+.actions-export {
   width: 25px;
   height: 25px;
   background-position: -10px -480px;
@@ -3164,77 +3170,77 @@ th {
   height: 21px;
   background-position: -10px -515px;
 }
-.actions-trash {
+.actions_tag {
   width: 20px;
   height: 20px;
   background-position: -10px -546px;
 }
-.actions-plus {
+.item-trash_black {
   width: 20px;
   height: 20px;
   background-position: -10px -576px;
 }
-.actions-edit {
+.actions-trash {
   width: 20px;
   height: 20px;
   background-position: -10px -606px;
 }
-.item-middle_fav {
+.actions-plus {
   width: 20px;
   height: 20px;
   background-position: -10px -636px;
 }
-.other_square_notdot_selected {
+.actions-edit {
   width: 20px;
   height: 20px;
   background-position: -10px -666px;
 }
-.badx {
+.item-middle_fav {
   width: 20px;
   height: 20px;
   background-position: -10px -696px;
 }
-.x {
+.other_square_notdot_selected {
   width: 20px;
   height: 20px;
   background-position: -10px -726px;
 }
-.actions_sample {
+.badx {
   width: 20px;
   height: 20px;
   background-position: -10px -756px;
 }
-.actions_tag {
+.x {
   width: 20px;
   height: 20px;
   background-position: -10px -786px;
 }
+.actions_sample {
+  width: 20px;
+  height: 20px;
+  background-position: -10px -816px;
+}
 .menu-send_receive_mini {
   width: 25px;
   height: 20px;
-  background-position: -10px -816px;
+  background-position: -10px -846px;
 }
 .actions-edit-mini {
   width: 20px;
   height: 20px;
-  background-position: -10px -846px;
+  background-position: -10px -876px;
 }
 .other_square_notdot {
   width: 20px;
   height: 20px;
-  background-position: -10px -876px;
+  background-position: -10px -906px;
 }
 .other_notdot {
   width: 20px;
   height: 20px;
-  background-position: -10px -906px;
-}
-.other_dot {
-  width: 20px;
-  height: 20px;
   background-position: -10px -936px;
 }
-.status-warning {
+.other_dot {
   width: 20px;
   height: 20px;
   background-position: -10px -966px;
@@ -3259,72 +3265,72 @@ th {
   height: 20px;
   background-position: -10px -1086px;
 }
-.opt_list {
+.status-warning {
   width: 20px;
   height: 20px;
   background-position: -10px -1116px;
 }
-.opt_images {
+.opt_list {
   width: 20px;
   height: 20px;
   background-position: -10px -1146px;
 }
-.item-heart_selected {
+.opt_images {
   width: 20px;
   height: 20px;
   background-position: -10px -1176px;
 }
-.item-heart {
+.item-heart_selected {
   width: 20px;
   height: 20px;
   background-position: -10px -1206px;
 }
-.item-fisica_selected {
+.item-heart {
   width: 20px;
   height: 20px;
   background-position: -10px -1236px;
 }
-.item-fisica {
+.item-fisica_selected {
   width: 20px;
   height: 20px;
   background-position: -10px -1266px;
 }
-.item-homologado_selected {
+.item-fisica {
   width: 20px;
   height: 20px;
   background-position: -10px -1296px;
 }
-.item-homologado {
+.item-homologado_selected {
   width: 20px;
   height: 20px;
   background-position: -10px -1326px;
 }
-.item-not_fav {
+.item-homologado {
   width: 20px;
   height: 20px;
   background-position: -10px -1356px;
 }
-.item-fav {
+.item-not_fav {
   width: 20px;
   height: 20px;
   background-position: -10px -1386px;
 }
-.insiders-photo {
+.item-fav {
   width: 20px;
   height: 20px;
   background-position: -10px -1416px;
 }
-.item-trash_black {
+.insiders-photo {
   width: 20px;
   height: 20px;
   background-position: -10px -1446px;
 }
-.handle_on {
+.handle_off {
   width: 30px;
   height: 18px;
   background-position: -10px -1476px;
 }
-.handle_off {
+.handle_on {
   width: 30px;
   height: 18px;
   background-position: -10px -1504px;
@@ -3359,7 +3365,7 @@ th {
   height: 15px;
   background-position: -10px -1637px;
 }
-.item_selected {
+.actions-arrow_right_right {
   width: 15px;
   height: 15px;
   background-position: -10px -1662px;
@@ -3374,7 +3380,7 @@ th {
   height: 15px;
   background-position: -10px -1687px;
 }
-.actions-arrow_right_right {
+.white_x {
   width: 15px;
   height: 15px;
   background-position: -35px -1687px;
@@ -3384,20 +3390,25 @@ th {
   height: 15px;
   background-position: -10px -1712px;
 }
-.actions_zoom {
+.item_selected {
   width: 15px;
   height: 15px;
   background-position: -35px -1712px;
 }
-.item_select {
+.actions_zoom {
   width: 15px;
   height: 15px;
   background-position: -10px -1737px;
 }
-.other-go_top {
+.item_select {
   width: 15px;
   height: 15px;
   background-position: -35px -1737px;
+}
+.other-go_top {
+  width: 15px;
+  height: 15px;
+  background-position: -10px -1762px;
 }
 .opt_search {
   width: 12px;
@@ -3407,7 +3418,7 @@ th {
 .check {
   width: 16px;
   height: 12px;
-  background-position: -10px -1762px;
+  background-position: -10px -1787px;
 }
 .other-arrow_down {
   width: 10px;
@@ -3593,7 +3604,7 @@ label {
   background: url("../images/sprite.png") top left no-repeat;
   width: 25px;
   height: 25px;
-  background-position: -10px -480px;
+  background-position: -10px -410px;
   position: relative;
   float: left;
   content: "";
@@ -3606,7 +3617,7 @@ label {
 .bdefault.export.disabled:after {
   width: 25px;
   height: 25px;
-  background-position: -10px -410px;
+  background-position: -10px -480px;
 }
 .fake-form {
   position: relative;
@@ -3893,6 +3904,9 @@ form textarea {
   }
 }
 @media only screen and (min-height: 750px) {
+  .container-fullsize.scroller {
+    height: 400px;
+  }
   .supplier .supplier-scroller,
   .fornecedor_cadastro .supplier-scroller {
     height: 480px;
@@ -3907,6 +3921,9 @@ form textarea {
   }
 }
 @media only screen and (min-height: 800px) {
+  .container-fullsize.scroller {
+    height: 450px;
+  }
   .supplier .supplier-scroller,
   .fornecedor_cadastro .supplier-scroller {
     height: 550px;
@@ -3921,6 +3938,9 @@ form textarea {
   }
 }
 @media only screen and (min-height: 900px) {
+  .container-fullsize.scroller {
+    height: 600px;
+  }
   .supplier .supplier-scroller,
   .fornecedor_cadastro .supplier-scroller {
     height: 700px;
@@ -4018,7 +4038,7 @@ form textarea {
   margin: -25px 20px 0 -10px;
   cursor: pointer;
 }
-.newuser input.form-control {
+.newcnt input.form-control {
   width: 490px;
 }
 .wrapper-config {
@@ -4136,7 +4156,7 @@ form textarea {
   background: url("../images/sprite.png") top left no-repeat;
   width: 30px;
   height: 18px;
-  background-position: -10px -1504px;
+  background-position: -10px -1476px;
 }
 .onoff span {
   position: absolute;
@@ -4154,10 +4174,126 @@ form textarea {
   background: url("../images/sprite.png") top left no-repeat;
   width: 30px;
   height: 18px;
-  background-position: -10px -1476px;
+  background-position: -10px -1504px;
 }
 .onoff.sel span {
   -webkit-transition: left 0.3s;
   transition: left 0.3s;
   left: 11px;
+}
+.supplier-img-containter {
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: white;
+}
+.supplier-img-containter ul {
+  width: 600px;
+  height: 600px;
+  margin: 20px auto;
+}
+.cnt-slides {
+  padding: 0;
+  width: 609px;
+  height: 420px;
+  display: block;
+  margin: 0 auto;
+  position: relative;
+}
+.cnt-slides input {
+  display: none;
+}
+.cnt-slides * {
+  cnt-select: none;
+  -ms-cnt-select: none;
+  -moz-cnt-select: none;
+  -khtml-cnt-select: none;
+  -webkit-cnt-select: none;
+  -webkit-touch-callout: none;
+}
+.cnt-slide-container {
+  display: block;
+}
+.cnt-slide {
+  top: 50%;
+  left: 47px;
+  margin-top: -143px;
+  opacity: 0;
+  width: 504px;
+  height: 286px;
+  display: block;
+  position: absolute;
+  transform: scale(0);
+  transition: all 0.7s ease-in-out;
+}
+.cnt-slide1 {
+  height: 504px;
+  margin-top: -252px;
+}
+.cnt-nav label {
+  border-radius: 50%;
+  top: 50%;
+  margin-top: -15px;
+  width: 30px;
+  height: 30px;
+  display: none;
+  position: absolute;
+  opacity: ;
+  z-index: 9;
+  cursor: pointer;
+  background-color: #71abcc;
+}
+.cnt-nav label:hover {
+  background-color: #414141;
+}
+.cnt-nav label.cnt-close,
+.cnt-nav label.cnt-close1 {
+  top: 135px;
+  right: 40px;
+}
+.cnt-nav label.cnt-close span,
+.cnt-nav label.cnt-close1 span {
+  margin: 8px 0 0 7px;
+  display: block;
+  width: 20px;
+  height: 20px;
+  background: url("../images/sprite.png") top left no-repeat;
+  width: 15px;
+  height: 15px;
+  background-position: -35px -1687px;
+}
+.cnt-nav label.cnt-close1 {
+  top: 25px;
+}
+.cnt-nav label.cnt-next {
+  right: 0;
+}
+.cnt-nav label.cnt-next span {
+  margin: 8px 0 0 8px;
+  display: block;
+  width: 20px;
+  height: 20px;
+  background: url("../images/sprite.png") top left no-repeat;
+  width: 15px;
+  height: 15px;
+  background-position: -10px -1662px;
+}
+.cnt-nav label.cnt-prev span {
+  margin: 8px 0 0 6px;
+  display: block;
+  width: 20px;
+  height: 20px;
+  background: url("../images/sprite.png") top left no-repeat;
+  width: 15px;
+  height: 15px;
+  background-position: -10px -1712px;
+}
+input:checked + .cnt-slide-container .cnt-slide {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.3s ease-in-out;
+}
+input:checked + .cnt-slide-container .cnt-nav label {
+  display: block;
 }
