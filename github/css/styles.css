@@ -2219,6 +2219,19 @@ form.search {
 .local .list .floatThead {
   display: block;
 }
+.local .overview {
+  height: auto;
+}
+.local .container-fullsize.scroller {
+  height: 400px;
+  margin: 0;
+  padding-bottom: 0;
+}
+.local .content {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
 .template_email .list .overview {
   display: block;
 }
@@ -2489,12 +2502,14 @@ form.search {
   background-position: -10px -606px;
   margin: 0 7px 0 0;
 }
-.icon.bgoselect {
+.icon.bgoselect,
+.icon.bprev-detail {
   line-height: 30px;
   text-align: right;
   padding-right: 30px;
 }
-.icon.bgoselect:before {
+.icon.bgoselect:before,
+.icon.bprev-detail:before {
   content: "";
   background: url("../images/sprite.png") top left no-repeat;
   width: 15px;
@@ -2507,6 +2522,9 @@ form.search {
   left: 0;
   float: left;
   margin: 5px 5px 0 10px;
+}
+.icon.bprev-detail {
+  margin-left: 60px;
 }
 .icon.bnext {
   line-height: 30px;
@@ -3914,6 +3932,11 @@ form textarea {
   .container-fullsize.scroller {
     height: 400px;
   }
+  .local .container-fullsize.scroller {
+    height: 500px;
+    margin: 0;
+    padding-bottom: 0;
+  }
   .supplier .supplier-scroller,
   .fornecedor_cadastro .supplier-scroller {
     height: 480px;
@@ -3931,6 +3954,11 @@ form textarea {
   .container-fullsize.scroller {
     height: 450px;
   }
+  .local .container-fullsize.scroller {
+    height: 550px;
+    margin: 0;
+    padding-bottom: 0;
+  }
   .supplier .supplier-scroller,
   .fornecedor_cadastro .supplier-scroller {
     height: 550px;
@@ -3947,6 +3975,11 @@ form textarea {
 @media only screen and (min-height: 900px) {
   .container-fullsize.scroller {
     height: 600px;
+  }
+  .local .container-fullsize.scroller {
+    height: 700px;
+    margin: 0;
+    padding-bottom: 0;
   }
   .supplier .supplier-scroller,
   .fornecedor_cadastro .supplier-scroller {
@@ -4226,6 +4259,12 @@ form textarea {
   position: absolute;
   transform: scale(0);
   transition: all 0.7s ease-in-out;
+}
+.cnt-slide p {
+  position: absolute;
+  float: left;
+  margin: -30px 0 0 0;
+  font-size: 15px;
 }
 .cnt-slide1 {
   height: 504px;

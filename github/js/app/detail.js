@@ -30,6 +30,10 @@ callerEvents:function(){
     context.nextSample();
     return !1;
   });
+  $(".bprev-detail").unbind("click").bind("click",function(){
+    context.previousSample();
+    return !1;
+  });
   $(".btrash-big").bind("click",function(){
     context.deleteNote();
     return !1;
@@ -77,8 +81,8 @@ open: function(a){
   result+='<li class="first"><a href="#'+item.AMOS_ID+'" class="caption-icons-icon setitem bfav '+fav+'" title="Favoritar">Favorita</a></li>';
   result+='<li><a href="#'+item.AMOS_ID+'" class="caption-icons-icon setitem oneline bfisica '+fisica+'" title="Fisica">Amostra<br/>Fisica</a></li>';
   result+='<li><a href="#'+item.AMOS_ID+'" class="caption-icons-icon setitem bhomologado '+homologado+'" title="Homologar">Homologar</a></li>';
-  result+='<li><a href="#bannex_file" class="caption-icons-icon oneline bannex_file has">Anexar<br/> Arquivo</a><input type="file" name="pic" class="hide"></li>';
-  result+='<li><a href="#bannex" class="caption-icons-icon oneline bannex has">Arquivos<br/> Anexos</a></li>';
+  //result+='<li><a href="#bannex_file" class="caption-icons-icon oneline bannex_file has">Anexar<br/> Arquivo</a><input type="file" name="pic" class="hide"></li>';
+  //result+='<li><a href="#bannex" class="caption-icons-icon oneline bannex has">Arquivos<br/> Anexos</a></li>';
   $(".description-overview.description-top ul").html(result);
   
 
@@ -163,7 +167,7 @@ open: function(a){
     }
     if(segnote.length){
       for(i=0;i<segnote.length;i++){
-        result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+item.FORN_DESC+" | "+segnote[i].OBJ_ID+"</b></p><p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
+        result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+item.FORN_ID+" - "+item.FORN_DESC+" | "+segnote[i].NOTA_ID+"</b></p><p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
         if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
           result+= "<button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' id='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'></button>";
         }
@@ -257,12 +261,19 @@ open: function(a){
 },deleteSample:function(){
   this.modal.open("message","Elemento de deletar amostra não ativo no momento!!!",!1,!0);
 },nextSample:function(){
-  $(".sample-buttons button").eq(1).trigger('click');
   if(!this.nextsample){
     this.modal.open("message","Carregue mais itens na busca!!!",!1,!0);
     return !1;
   }
+  $(".sample-buttons button").eq(1).trigger('click');
   this.reload(this.nextsample.FEIR_COD,this.nextsample.AMOS_ID);
+},previousSample:function(){
+  if(!this.previoussample){
+    this.modal.open("message","Este é o primeiro item na busca!!!",!1,!0);
+    return !1;
+  }
+  $(".sample-buttons button").eq(1).trigger('click');
+  this.reload(this.previoussample.FEIR_COD,this.previoussample.AMOS_ID);
 },plusNote:function(a){
   console.log("plus");
   $(a.target).addClass('hide');
@@ -295,7 +306,8 @@ open: function(a){
   $(".show-to-note").find("div").addClass('hide');
   if(result.length){
     this.open(result[0]);
-    this.nextsample=result[1];
+    this.nextsample=result[2];
+    this.previoussample=result[1]
   }
   else{
     //this.open(jQuery.parseJSON('{"AMOS_COD":null,"AMOS_COTACAO_KG":0,"AMOS_COTACAO_M":0,"AMOS_DESC":"TESTE NACIONAL","AMOS_ENV_EMAIL":0,"AMOS_GRAMATURA_M":0,"AMOS_GRAMATURA_ML":0,"AMOS_HOMOLOGAR":0,"AMOS_ID":200000101,"AMOS_LARGURA_TOTAL":0,"AMOS_LARGURA_UTIL":0,"AMOS_ONCAS":0,"AMOS_PRECO":0,"AMOS_PRECO_UM":"","AMOS_STATUS":0,"BASE_COD":null,"BASE_DESC":"","COMPOSITIONS":[{"COMP_COD":"CJ ","COMP_DESC":"JUTE","TP_COMP_ID":0},{"COMP_COD":"CJ ","COMP_DESC":"JUTE","TP_COMP_ID":0}],"CREATE_DATE":"\/Date(1339642800000-0300)\/","FEIR_COD":"1 ","FEIR_DESC":"FOCUS TEXTIL - Sao Paulo\/Brazil","FLAG_FISICA":0,"FLAG_PRIORIDADE":0,"FORN_DESC":"TESTE FORNECEDOR IMPORTADORNECEDOR","FORN_ID":4200083,"GRUP_COD":null,"GRUP_DESC":"","IMG_PATH_SAMPLE":"","IMG_PATH_TICKET":"","NOTES":[],"SEGM_COD":"ML","SEGM_DESC":null,"SUBG_COD":null,"SUBG_DESC":"","TECI_COD":null,"TECI_DESC":"","USU_COD":36}'));
@@ -304,6 +316,7 @@ open: function(a){
 },init:function() {
   this.item = null;
   this.nextsample=null;
+  this.previoussample=null;
   this.on=!1;
 }});
 
@@ -316,10 +329,20 @@ window.Fornecedores = Spine.Controller.sub({
 elements:{
 
 }, events:{
-},close:function() {
+},close:function(a) {
   //this.el.hide();
-  this.on = !1;
-  window.history.go(-1);
+  if(a){
+    if(this.tab === this.lasttab){
+      this.tab="profile";
+    }
+    this.setloading()
+    this.saveForn(!0);
+  }
+  else{
+    this.on = !1;
+    window.history.go(-1);
+  }
+  
   //$(window).scrollTop(this.scrollp);
 }, 
 /**
@@ -352,7 +375,7 @@ callerEvents:function(){
   $(".form-control-bmore").bind("click",function(a){context.stopOnMore(a);});
   $(".form-control-bmore").bind("keyup",function(a){context.setOthers(a);});
   $(".gotop").bind("click",function(a){context.goTop();});
-  $(".goback").bind("click",function(a){context.close();});
+  $(".goback").bind("click",function(a){context.close(a);});
 
   /*if(!$("html").hasClass('view_forn')){
     $("input").removeAttr('disabled');
@@ -400,7 +423,7 @@ open: function(a){
       aux=this.item.CONTACTS;
       this.item.CONTACTS=[];
       for(i=0;i<aux.length;i++){
-        if(aux[i].SEGM_COD === this.usr.SEGM_COD){
+        if(aux[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
           this.item.CONTACTS.push(aux[i]);
         }
       }
@@ -793,7 +816,6 @@ setFav:function(a){
   if($(a.target).attr("name")){
     this.item.CONTACTS.forEach(function(el,index) {
       if(parseInt(el.CONT_ID) === parseInt($(a.target).attr("name"))){
-        console.dir(el);
         $(".card-side img").each(function(i, elem) {
           if(el[''+$(elem).attr("name")].length){
             $(elem).attr("src",'http://192.168.10.100/webfair/ifairimg/'+el[''+$(elem).attr("name")]).attr("alt",parseInt(el.CONT_ID));
@@ -879,7 +901,7 @@ setFav:function(a){
       if(segnote){
         this.setDate(segnote);
         for(i=0;i<segnote.length;i++){
-          result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+this.item.FORN_DESC+" | "+segnote[i].OBJ_ID+"</b></p><p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
+          result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+this.item.FORN_ID+" - "+this.item.FORN_DESC+" | "+segnote[i].NOTA_ID+"</b></p><p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
 
           if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
             result+= "<button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' id='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'></button>";
@@ -904,7 +926,7 @@ setFav:function(a){
         var template="",temp="";
         temp='<div class="supplier-form-container contact contact'+(i+1)+' actived cont"><h2><span>Contato '+(i+1)+'</span></h2>';
         template+='<div class="supplier-photo-side"><div class="photo-container">';
-        if(context.item.CONTACTS[i].IMG_PATH_CONTATO){
+        if(context.item.CONTACTS[i].IMG_PATH_CONTATO.length){
           //template+='<img src="http://bdb/ifair_img/'+context.item.CONTACTS[i].IMG_PATH_CONTATO+'" width="100%">';
           template+='<img src="http://192.168.10.100/webfair/ifairimg/'+context.item.CONTACTS[i].IMG_PATH_CONTATO+'" width="100%" name="'+context.item.CONTACTS[i].CONT_ID+'">';
         } 
@@ -964,8 +986,12 @@ setFav:function(a){
         console.log("Tem apenas 1 contato");
         var template="",temp="",cont="",template2="";
         temp+='<div class="supplier-form-container contact contact1 actived cont"><h2><span>Contato 1</span></h2><div class="supplier-photo-side"><div class="photo-container">';
-        //template+='<img src=http://bdb/ifair_img/'+context.item.CONTACTS[0].IMG_PATH_CONTATO+' width="100%">';
-        template+='<img src="http://192.168.10.100/webfair/ifairimg/'+context.item.CONTACTS[0].IMG_PATH_CONTATO+'" width="100%"  name="'+context.item.CONTACTS[0].CONT_ID+'">';
+        if(context.item.CONTACTS[0].IMG_PATH_CONTATO.length){
+          //template+='<img src="http://bdb/ifair_img/'+context.item.CONTACTS[i].IMG_PATH_CONTATO+'" width="100%">';
+          template+='<img src="http://192.168.10.100/webfair/ifairimg/'+context.item.CONTACTS[0].IMG_PATH_CONTATO+'" width="100%"  name="'+context.item.CONTACTS[0].CONT_ID+'">';        } 
+        else{
+          template+='<img src="images/contact.png" width="100%" class="noimage" name="'+context.item.CONTACTS[0].CONT_ID+'">';
+        } 
         template1+='</div></div><div class="supplier-firstform"><div class="row"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_NOME+'" required="required"></div></div><button type="button" class="icon floatLeft trash-big" name="1"></button></div><div class="row"><div class="fake-form"><div class="form-group"><input type="text" class="form-control" name="CONT_EMAIL" placeholder="E-mail" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_EMAIL+'" required="required"></div></div></div><div class="row top-ten"><div class="fake-form fake-form-supplier-equal floatLeft">';
         cont+='<button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bcircle favcontact sel" name="1">Contato Principal </button>';
         template2+='</div><div class="fake-form fake-form-supplier-equal right"><div class="form-group"><input type="text" class="form-control" name="SEGM_COD" placeholder="Segmento" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].SEGM_DESC+'" title="'+context.item.CONTACTS[0].SEGM_COD+'" disabled="disabled"></div></div></div><div class="row"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="tel" class="form-control" name="CONT_TEL" placeholder="Tel 1" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_TEL+'"></div></div>';
@@ -991,8 +1017,6 @@ setFav:function(a){
         //Nao possui contato
         console.log("Nao possui contato");
         var template="",temp="",cont="",template1="",template2="";
-                console.log("Ok");
-
         temp='<div class="supplier-form-container contact contact1 actived cont"><h2><span>Contato 1</span></h2>';
         template+='<div class="supplier-photo-side"><div class="photo-container">';
         template+='<img src="images/contact.png" width="100%" class="noimage">';
@@ -1123,6 +1147,7 @@ setFav:function(a){
   $(".cardboard").bind("click",function(a){context.slideCard(a);});
   $(".closebt").bind("click",function(a){context.closeSlide(a);});
 },slideCard:function(a){
+  var hasimg=!1;
   if(!this.item.FORN_ID){
     this.modal.open("message","O fornecedor ainda não foi salvo!!!",!1,!0);
     return !1;
@@ -1135,14 +1160,19 @@ setFav:function(a){
     if(parseInt(el.CONT_ID) === parseInt($(a.target).attr("alt"))){
       $(".supplier-img-containter img").each(function(i, elem) {
         if(el[''+$(elem).attr("name")].length){
+          hasimg=!0;
           $(elem).attr("src",'http://192.168.10.100/webfair/ifairimg/'+el[''+$(elem).attr("name")]);
         }
       });
     }
   });
-  console.dir($("#"+$(a.target).attr("name")));
-  $("#"+$(a.target).attr("name")).attr("checked","checked");
-  $(".supplier-img-containter").fadeIn();
+  if(hasimg){
+    $("#"+$(a.target).attr("name")).attr("checked","checked");
+    $(".supplier-img-containter").fadeIn();
+  }
+  else{
+    this.modal.open("message","Este contato não possui imagens salvas!!!",!1,!0);
+  }
 },closeSlide:function(){
   $(".supplier-img-containter").fadeOut();
   $(".supplier-img-containter .cnt-slide").each(function(index, el) {
@@ -1165,14 +1195,15 @@ setFav:function(a){
     day=date.getDate();
   }
   date=""+date.getFullYear()+"-0"+(date.getMonth()+1)+"-"+day;
-  console.log(this.tab);
+  /*console.log(this.tab);
   console.log(this.lasttab);
-  console.log(this.setfair);
+  console.log(this.setfair);*/
   pattern+="<USU_COD>"+this.usr.USU_COD+"</USU_COD>"+"<CREATE_DATE>"+date+"</CREATE_DATE>"+"<FEIR_COD>"+this.setfair+"</FEIR_COD>";
  /*if(this.tab === "dados" && !this.scroller){
     return !1;
   }*/
   if(this.setfair && !$("html").hasClass('view_forn') && (this.lasttab !== this.tab)){
+    console.log("SALVANDO");
     this.setloading(!0,!1);
     switch (this.lasttab){
       case 'dados':
@@ -1248,6 +1279,10 @@ setFav:function(a){
                 context.callService("GravarFornecedorContato",html,pattern,"",'<action>I</action>');
               }
             });
+            if(goout){
+              context.on = !1;
+              window.history.go(-1);
+            }
             clearInterval(status);
           }
         },100);
@@ -1478,6 +1513,7 @@ setFav:function(a){
     });*/
   }
   else{
+    console.log("NAO DEU");
     if(this.lasttab && this.tab !=="dados" && !this.setfair){
       this.modal.open("message","Você deve primeiro salvar um fornecedor!!!",!1,!0);
     }

@@ -25,7 +25,12 @@ window.Spotlight = Spine.Controller.sub({
         name="<FORN_DESC>"+a.val()+"</FORN_DESC>";
       }
       
-      this.setFornVal(a.val());
+      if(isNaN(a.val())){
+        this.setFornVal(a.val());
+      }
+      else{
+        this.setFornVal("alt"+a.val());
+      }
     }
     this.reset();
     if(this.getFairVal()){
@@ -48,7 +53,6 @@ window.Spotlight = Spine.Controller.sub({
     }
     $(window).scrollTop(0);
     if(this.getPage() === "amostras"){
-      console.log(this.getFairVal());
       this.mode="amostras/"+((""+this.getFairVal()).replace(" ","_") || "padrao")+"/"+((""+this.getFornVal()).replace(" ","_") || "padrao")+"/"+((""+this.getAmosVal()).replace(" ","_") || "padrao");
       this.navigate(this.mode, !1);
       this.callService("amostras",fair,name,amos,'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20'+'</LINHA_F>','<CREATE_DATE_I>2000-01-01</CREATE_DATE_I>','<CREATE_DATE_F>2020-01-01</CREATE_DATE_F>');
@@ -181,18 +185,18 @@ window.Modal = Spine.Controller.sub({
     this.callback && this.callback();
   },
   goEmail:function(a){
-    var listemail=[],amos_code=[],address,counter,supplier;
+    var listemail=[],amos_code=[],amos_id=[],address,counter,supplier;
     a.preventDefault();
     listemail=this.email[0][parseInt($(a.target).attr("name"))];
     amos_code=this.email[1];
-    address=this.email[2];
-    supplier=this.email[3][0];
+    amos_id=this.email[2];
+    address=this.email[3];
+    supplier=this.email[4][0];
 
     counter=amos_code.join(" ; ").length;
 
-    console.dir(this.email);
     var texto=encodeURIComponent(listemail.TEMP_BODY.replace("##SAMPLES"," "+amos_code.join(" ; ")+" ").replace("##SUPPLIER",supplier.FORN_DESC).replace("##CONTACT",supplier.FORN_DESC).slice(0,(1290 - counter)));
-    this.setEmailSent(amos_code);
+    this.setEmailSent(amos_id);
     this.close();   
     window.open("mailto:"+address+"?subject="+encodeURIComponent(listemail.TEMP_SUBJECT)+"&body="+texto);
   },
@@ -396,7 +400,7 @@ window.Box = Spine.Controller.sub({init:function() {
     }
     //result+="<a href='#detail/"+parseInt(a.FEIR_COD)+"/"+a.AMOS_DESC+"'><div class='thumbnail' id="+a.AMOS_ID+"><button type='button' name='"+a.AMOS_ID+"' class='icon'></button>"; //bselection
 
-    result+="<div class='caption'><div class='caption-upside'><ul class='caption-icons'><li><button type='button' class='caption-icons-icon justit bstatus "+status+"' title='"+status.capitalize()+"'></button></li><li><button type='button' class='caption-icons-icon justit bemail "+email+"'></button></li>";
+    result+="<div class='caption'><div class='caption-upside'><ul class='caption-icons'><li><button type='button' class='caption-icons-icon justit bstatus "+status+"' title='"+status.capitalize()+"'></button></li><li><button type='button' class='caption-icons-icon justit bemail "+email+"' name='"+a.AMOS_ID+"'></button></li>";
     result+="<li><button type='button' class='caption-icons-icon justit setitem bhomologado "+homologado+"' name='"+a.AMOS_ID+"' title='Homologar'></button></li>"
     if(note){
       var segnote=[];
@@ -409,7 +413,7 @@ window.Box = Spine.Controller.sub({init:function() {
         this.setDate(segnote);
         result+="<li class='tooltip tooltip-selectable'><button type='button' class='caption-icons-icon justit bnote'></button><ul class='tooltip-content notepad notepadmess rightless'><li class='tooltip-title'><p class='tooltip-item'>Anotações</p></li>";
         for(i=0;i<segnote.length;i++){
-          result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+ a.FORN_DESC+" | "+segnote[i].OBJ_ID+"</b></p><p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
+          result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+a.FORN_ID+" - "+ a.FORN_DESC+" | "+segnote[i].OBJ_ID+"</b></p><p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
           if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
             result+= "<button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' id='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'></button>";
           }
@@ -504,6 +508,33 @@ window.Box = Spine.Controller.sub({init:function() {
           result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'></td>";
         }
 
+        if(a.NOTES.length ){
+          var segnote=[];
+          for(i=a.NOTES.length;i>0;i--){
+            console.log(this.usr.USU_COD);
+            if(a.NOTES[i-1].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
+              segnote.push(a.NOTES[i-1]);
+            }
+          }
+          if(segnote.length){
+            this.setDate(a.NOTES);
+            result+="<td class='tooltip tooltip-selectable'><button type='button' class='caption-icons-icon justit bnote'></button><ul class='tooltip-content notepad notepadmess col-large'><li class='tooltip-title'><p class='tooltip-item'>Anotações</p></li>";
+            for(i=0;i<segnote.length;i++){
+              result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+a.FORN_ID+" - "+a.FORN_DESC+" | "+segnote[i].NOTA_ID+"</b></p><p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
+              if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
+                result+= "<button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' id='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'></button>";
+              }
+              result+="</div></article></li>"
+            }
+            result+="</ul></td>"
+          }
+          else{
+            result+="<td></td>";
+          }
+        }
+        else{
+          result+="<td></td>";
+        }
         if(a.FAVORITES.length){
           for(i=0;i<a.FAVORITES.length;i++){
             console.log(a.FAVORITES[i].SEGM_COD+" , "+this.usr.SEGM_COD);
@@ -527,33 +558,6 @@ window.Box = Spine.Controller.sub({init:function() {
           result+="<td><button type='button' class='caption-icons-icon justit bstar nothas' name='"+a.FORN_ID+"'></button></td>";
         }
 
-        if(a.NOTES.length ){
-          var segnote=[];
-          for(i=a.NOTES.length;i>0;i--){
-            console.log(this.usr.USU_COD);
-            if(a.NOTES[i-1].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
-              segnote.push(a.NOTES[i-1]);
-            }
-          }
-          if(segnote.length){
-            this.setDate(a.NOTES);
-            result+="<td class='tooltip tooltip-selectable'><button type='button' class='caption-icons-icon justit bnote'></button><ul class='tooltip-content notepad notepadmess col-large'><li class='tooltip-title'><p class='tooltip-item'>Anotações</p></li>";
-            for(i=0;i<segnote.length;i++){
-              result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+a.FORN_DESC+" | "+segnote[i].OBJ_ID+"</b></p><p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
-              if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
-                result+= "<button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' id='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'></button>";
-              }
-              result+="</div></article></li>"
-            }
-            result+="</ul></td>"
-          }
-          else{
-            result+="<td></td>";
-          }
-        }
-        else{
-          result+="<td></td>";
-        }
         result+="<td><button type='button' class='caption-icons-icon justit bstatus "+status+"' title='"+status.capitalize()+"'>"+status+"</button></td>";
         return result;
         break;
@@ -581,7 +585,7 @@ window.Box = Spine.Controller.sub({init:function() {
             this.setDate(segnote);
             result+="<td class='tooltip tooltip-selectable'><button type='button' class='caption-icons-icon justit bnote'></button><ul class='tooltip-content notepad notepadmess col-large'><li class='tooltip-title'><p class='tooltip-item'>Anotações</p></li>";
             for(i=0;i<segnote.length;i++){
-              result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+ segnote[i].USU_NOME+" | "+segnote[i].OBJ_ID+"</b></p><p>"+segnote[i].SEGM_DESC+" - Assunto:</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
+              result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+ segnote[i].USU_NOME+" | "+segnote[i].NOTA_ID+"</b></p><p>"+segnote[i].SEGM_DESC+" - Assunto:</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
               if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
                 result+= "<button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' id='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'></button>";
               }
@@ -598,7 +602,7 @@ window.Box = Spine.Controller.sub({init:function() {
         }
 
         annex ? result+="<td><button type='button' class='icon bannex'></button></td>" : result+="<td></td>";
-        result+="<td><button type='button' class='caption-icons-icon justit bemail "+email+"'></button></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.TECI_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.BASE_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.GRUP_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.SUBG_DESC+"</a></td>";
+        result+="<td><button type='button' class='caption-icons-icon justit bemail "+email+"' name='"+a.AMOS_ID+"'></button></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.TECI_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.BASE_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.GRUP_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.SUBG_DESC+"</a></td>";
         if(a.COMPOSITIONS.length){
           var concat=[];
           result+="<td>";

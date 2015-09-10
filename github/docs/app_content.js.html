@@ -122,7 +122,12 @@
         name="&lt;FORN_DESC>"+a.val()+"&lt;/FORN_DESC>";
       }
       
-      this.setFornVal(a.val());
+      if(isNaN(a.val())){
+        this.setFornVal(a.val());
+      }
+      else{
+        this.setFornVal("alt"+a.val());
+      }
     }
     this.reset();
     if(this.getFairVal()){
@@ -145,7 +150,6 @@
     }
     $(window).scrollTop(0);
     if(this.getPage() === "amostras"){
-      console.log(this.getFairVal());
       this.mode="amostras/"+((""+this.getFairVal()).replace(" ","_") || "padrao")+"/"+((""+this.getFornVal()).replace(" ","_") || "padrao")+"/"+((""+this.getAmosVal()).replace(" ","_") || "padrao");
       this.navigate(this.mode, !1);
       this.callService("amostras",fair,name,amos,'&lt;LINHA_I>'+'1'+'&lt;/LINHA_I>','&lt;LINHA_F>'+'20'+'&lt;/LINHA_F>','&lt;CREATE_DATE_I>2000-01-01&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>2020-01-01&lt;/CREATE_DATE_F>');
@@ -278,18 +282,18 @@ window.Modal = Spine.Controller.sub({
     this.callback &amp;&amp; this.callback();
   },
   goEmail:function(a){
-    var listemail=[],amos_code=[],address,counter,supplier;
+    var listemail=[],amos_code=[],amos_id=[],address,counter,supplier;
     a.preventDefault();
     listemail=this.email[0][parseInt($(a.target).attr("name"))];
     amos_code=this.email[1];
-    address=this.email[2];
-    supplier=this.email[3][0];
+    amos_id=this.email[2];
+    address=this.email[3];
+    supplier=this.email[4][0];
 
     counter=amos_code.join(" ; ").length;
 
-    console.dir(this.email);
     var texto=encodeURIComponent(listemail.TEMP_BODY.replace("##SAMPLES"," "+amos_code.join(" ; ")+" ").replace("##SUPPLIER",supplier.FORN_DESC).replace("##CONTACT",supplier.FORN_DESC).slice(0,(1290 - counter)));
-    this.setEmailSent(amos_code);
+    this.setEmailSent(amos_id);
     this.close();   
     window.open("mailto:"+address+"?subject="+encodeURIComponent(listemail.TEMP_SUBJECT)+"&amp;body="+texto);
   },
@@ -493,7 +497,7 @@ window.Box = Spine.Controller.sub({init:function() {
     }
     //result+="&lt;a href='#detail/"+parseInt(a.FEIR_COD)+"/"+a.AMOS_DESC+"'>&lt;div class='thumbnail' id="+a.AMOS_ID+">&lt;button type='button' name='"+a.AMOS_ID+"' class='icon'>&lt;/button>"; //bselection
 
-    result+="&lt;div class='caption'>&lt;div class='caption-upside'>&lt;ul class='caption-icons'>&lt;li>&lt;button type='button' class='caption-icons-icon justit bstatus "+status+"' title='"+status.capitalize()+"'>&lt;/button>&lt;/li>&lt;li>&lt;button type='button' class='caption-icons-icon justit bemail "+email+"'>&lt;/button>&lt;/li>";
+    result+="&lt;div class='caption'>&lt;div class='caption-upside'>&lt;ul class='caption-icons'>&lt;li>&lt;button type='button' class='caption-icons-icon justit bstatus "+status+"' title='"+status.capitalize()+"'>&lt;/button>&lt;/li>&lt;li>&lt;button type='button' class='caption-icons-icon justit bemail "+email+"' name='"+a.AMOS_ID+"'>&lt;/button>&lt;/li>";
     result+="&lt;li>&lt;button type='button' class='caption-icons-icon justit setitem bhomologado "+homologado+"' name='"+a.AMOS_ID+"' title='Homologar'>&lt;/button>&lt;/li>"
     if(note){
       var segnote=[];
@@ -506,7 +510,7 @@ window.Box = Spine.Controller.sub({init:function() {
         this.setDate(segnote);
         result+="&lt;li class='tooltip tooltip-selectable'>&lt;button type='button' class='caption-icons-icon justit bnote'>&lt;/button>&lt;ul class='tooltip-content notepad notepadmess rightless'>&lt;li class='tooltip-title'>&lt;p class='tooltip-item'>Anotações&lt;/p>&lt;/li>";
         for(i=0;i&lt;segnote.length;i++){
-          result+="&lt;li>&lt;article>&lt;div class='notepad-note blockquote'>&lt;p>&lt;b>"+segnote[i].CREATE_DATE+" | "+ a.FORN_DESC+" | "+segnote[i].OBJ_ID+"&lt;/b>&lt;/p>&lt;p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"&lt;/p>&lt;p>"+segnote[i].NOTA_DESC+"&lt;/p>&lt;/div>&lt;div class='blockquote'>";
+          result+="&lt;li>&lt;article>&lt;div class='notepad-note blockquote'>&lt;p>&lt;b>"+segnote[i].CREATE_DATE+" | "+a.FORN_ID+" - "+ a.FORN_DESC+" | "+segnote[i].OBJ_ID+"&lt;/b>&lt;/p>&lt;p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"&lt;/p>&lt;p>"+segnote[i].NOTA_DESC+"&lt;/p>&lt;/div>&lt;div class='blockquote'>";
           if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
             result+= "&lt;button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' id='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'>&lt;/button>";
           }
@@ -601,6 +605,33 @@ window.Box = Spine.Controller.sub({init:function() {
           result+="&lt;td>&lt;a href='#fornecedores/edit/"+a.FORN_ID+"'>&lt;/td>";
         }
 
+        if(a.NOTES.length ){
+          var segnote=[];
+          for(i=a.NOTES.length;i>0;i--){
+            console.log(this.usr.USU_COD);
+            if(a.NOTES[i-1].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
+              segnote.push(a.NOTES[i-1]);
+            }
+          }
+          if(segnote.length){
+            this.setDate(a.NOTES);
+            result+="&lt;td class='tooltip tooltip-selectable'>&lt;button type='button' class='caption-icons-icon justit bnote'>&lt;/button>&lt;ul class='tooltip-content notepad notepadmess col-large'>&lt;li class='tooltip-title'>&lt;p class='tooltip-item'>Anotações&lt;/p>&lt;/li>";
+            for(i=0;i&lt;segnote.length;i++){
+              result+="&lt;li>&lt;article>&lt;div class='notepad-note blockquote'>&lt;p>&lt;b>"+segnote[i].CREATE_DATE+" | "+a.FORN_ID+" - "+a.FORN_DESC+" | "+segnote[i].NOTA_ID+"&lt;/b>&lt;/p>&lt;p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"&lt;/p>&lt;p>"+segnote[i].NOTA_DESC+"&lt;/p>&lt;/div>&lt;div class='blockquote'>";
+              if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
+                result+= "&lt;button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' id='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'>&lt;/button>";
+              }
+              result+="&lt;/div>&lt;/article>&lt;/li>"
+            }
+            result+="&lt;/ul>&lt;/td>"
+          }
+          else{
+            result+="&lt;td>&lt;/td>";
+          }
+        }
+        else{
+          result+="&lt;td>&lt;/td>";
+        }
         if(a.FAVORITES.length){
           for(i=0;i&lt;a.FAVORITES.length;i++){
             console.log(a.FAVORITES[i].SEGM_COD+" , "+this.usr.SEGM_COD);
@@ -624,33 +655,6 @@ window.Box = Spine.Controller.sub({init:function() {
           result+="&lt;td>&lt;button type='button' class='caption-icons-icon justit bstar nothas' name='"+a.FORN_ID+"'>&lt;/button>&lt;/td>";
         }
 
-        if(a.NOTES.length ){
-          var segnote=[];
-          for(i=a.NOTES.length;i>0;i--){
-            console.log(this.usr.USU_COD);
-            if(a.NOTES[i-1].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
-              segnote.push(a.NOTES[i-1]);
-            }
-          }
-          if(segnote.length){
-            this.setDate(a.NOTES);
-            result+="&lt;td class='tooltip tooltip-selectable'>&lt;button type='button' class='caption-icons-icon justit bnote'>&lt;/button>&lt;ul class='tooltip-content notepad notepadmess col-large'>&lt;li class='tooltip-title'>&lt;p class='tooltip-item'>Anotações&lt;/p>&lt;/li>";
-            for(i=0;i&lt;segnote.length;i++){
-              result+="&lt;li>&lt;article>&lt;div class='notepad-note blockquote'>&lt;p>&lt;b>"+segnote[i].CREATE_DATE+" | "+a.FORN_DESC+" | "+segnote[i].OBJ_ID+"&lt;/b>&lt;/p>&lt;p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"&lt;/p>&lt;p>"+segnote[i].NOTA_DESC+"&lt;/p>&lt;/div>&lt;div class='blockquote'>";
-              if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
-                result+= "&lt;button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' id='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'>&lt;/button>";
-              }
-              result+="&lt;/div>&lt;/article>&lt;/li>"
-            }
-            result+="&lt;/ul>&lt;/td>"
-          }
-          else{
-            result+="&lt;td>&lt;/td>";
-          }
-        }
-        else{
-          result+="&lt;td>&lt;/td>";
-        }
         result+="&lt;td>&lt;button type='button' class='caption-icons-icon justit bstatus "+status+"' title='"+status.capitalize()+"'>"+status+"&lt;/button>&lt;/td>";
         return result;
         break;
@@ -678,7 +682,7 @@ window.Box = Spine.Controller.sub({init:function() {
             this.setDate(segnote);
             result+="&lt;td class='tooltip tooltip-selectable'>&lt;button type='button' class='caption-icons-icon justit bnote'>&lt;/button>&lt;ul class='tooltip-content notepad notepadmess col-large'>&lt;li class='tooltip-title'>&lt;p class='tooltip-item'>Anotações&lt;/p>&lt;/li>";
             for(i=0;i&lt;segnote.length;i++){
-              result+="&lt;li>&lt;article>&lt;div class='notepad-note blockquote'>&lt;p>&lt;b>"+segnote[i].CREATE_DATE+" | "+ segnote[i].USU_NOME+" | "+segnote[i].OBJ_ID+"&lt;/b>&lt;/p>&lt;p>"+segnote[i].SEGM_DESC+" - Assunto:&lt;/p>&lt;p>"+segnote[i].NOTA_DESC+"&lt;/p>&lt;/div>&lt;div class='blockquote'>";
+              result+="&lt;li>&lt;article>&lt;div class='notepad-note blockquote'>&lt;p>&lt;b>"+segnote[i].CREATE_DATE+" | "+ segnote[i].USU_NOME+" | "+segnote[i].NOTA_ID+"&lt;/b>&lt;/p>&lt;p>"+segnote[i].SEGM_DESC+" - Assunto:&lt;/p>&lt;p>"+segnote[i].NOTA_DESC+"&lt;/p>&lt;/div>&lt;div class='blockquote'>";
               if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
                 result+= "&lt;button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' id='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'>&lt;/button>";
               }
@@ -695,7 +699,7 @@ window.Box = Spine.Controller.sub({init:function() {
         }
 
         annex ? result+="&lt;td>&lt;button type='button' class='icon bannex'>&lt;/button>&lt;/td>" : result+="&lt;td>&lt;/td>";
-        result+="&lt;td>&lt;button type='button' class='caption-icons-icon justit bemail "+email+"'>&lt;/button>&lt;/td>&lt;td>&lt;a href='#detail/"+a.AMOS_ID+"'>"+a.TECI_DESC+"&lt;/a>&lt;/td>&lt;td>&lt;a href='#detail/"+a.AMOS_ID+"'>"+a.BASE_DESC+"&lt;/a>&lt;/td>&lt;td>&lt;a href='#detail/"+a.AMOS_ID+"'>"+a.GRUP_DESC+"&lt;/a>&lt;/td>&lt;td>&lt;a href='#detail/"+a.AMOS_ID+"'>"+a.SUBG_DESC+"&lt;/a>&lt;/td>";
+        result+="&lt;td>&lt;button type='button' class='caption-icons-icon justit bemail "+email+"' name='"+a.AMOS_ID+"'>&lt;/button>&lt;/td>&lt;td>&lt;a href='#detail/"+a.AMOS_ID+"'>"+a.TECI_DESC+"&lt;/a>&lt;/td>&lt;td>&lt;a href='#detail/"+a.AMOS_ID+"'>"+a.BASE_DESC+"&lt;/a>&lt;/td>&lt;td>&lt;a href='#detail/"+a.AMOS_ID+"'>"+a.GRUP_DESC+"&lt;/a>&lt;/td>&lt;td>&lt;a href='#detail/"+a.AMOS_ID+"'>"+a.SUBG_DESC+"&lt;/a>&lt;/td>";
         if(a.COMPOSITIONS.length){
           var concat=[];
           result+="&lt;td>";
@@ -747,7 +751,7 @@ window.Box = Spine.Controller.sub({init:function() {
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Wed Sep 9th 2015 using the <a
+		on Thu Sep 10th 2015 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>

@@ -1,4 +1,4 @@
-.sprite_css{ background:url("sprite.css.png") top left no-repeat; }
+.sprite{ background:url("sprite.png") top left no-repeat; }
 .actions-trash_blue{ width:25px; height:30px; background-position:-10px -10px; }
 .actions-fav-big{ width:30px; height:30px; background-position:-10px -50px; }
 .insiders-less{ width:30px; height:30px; background-position:-10px -90px; }
