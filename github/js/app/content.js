@@ -316,8 +316,9 @@ window.Content = Spine.Controller.sub({
     this.tbody.empty();
     this.table.empty();
   }, images:function(a) {
+    var viewport=$(".viewport");
     $("body").attr("class","").addClass("images");
-    a.appendTo($(".viewport"));
+    a.appendTo($(".viewport").eq(viewport.length-1));
     this.itens = $(".viewport").find(".thumbnail");
   }, list:function(a) {
     $("body").attr("class","").addClass("list");
