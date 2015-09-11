@@ -1573,6 +1573,10 @@ form.search {
   padding-bottom: 80px;
   display: none;
 }
+.overview .overview-container {
+  position: relative;
+  float: left;
+}
 .overview .viewport {
   position: relative;
   float: left;
