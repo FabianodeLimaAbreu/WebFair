@@ -385,7 +385,7 @@ window.Box = Spine.Controller.sub({init:function() {
     email= a.AMOS_ENV_EMAIL? "sent":"disabled";
 
     //Creating result
-    result+="<a href='#detail/"+parseInt(a.FEIR_COD)+"/"+a.AMOS_DESC+"'><div class='thumbnail'>";
+    result+="<a href='#detail/"+parseInt(a.FEIR_COD)+"/"+a.AMOS_DESC+"'><div class='thumbnail' id='"+a.AMOS_ID+"''>";
     if(!this.unable_select){
       result+="<button type='button' name='"+a.AMOS_ID+"' class='icon'></button>"; //bselection
     }
@@ -415,7 +415,7 @@ window.Box = Spine.Controller.sub({init:function() {
         for(i=0;i<segnote.length;i++){
           result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+a.FORN_ID+" - "+ a.FORN_DESC+" | "+segnote[i].OBJ_ID+"</b></p><p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
           if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
-            result+= "<button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' id='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'></button>";
+            result+= "<button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' title='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'></button>";
           }
           result+="</div></article></li>";
         }
@@ -522,7 +522,7 @@ window.Box = Spine.Controller.sub({init:function() {
             for(i=0;i<segnote.length;i++){
               result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+a.FORN_ID+" - "+a.FORN_DESC+" | "+segnote[i].NOTA_ID+"</b></p><p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
               if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
-                result+= "<button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' id='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'></button>";
+                result+= "<button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' title='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'></button>";
               }
               result+="</div></article></li>"
             }
@@ -587,7 +587,7 @@ window.Box = Spine.Controller.sub({init:function() {
             for(i=0;i<segnote.length;i++){
               result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+ segnote[i].USU_NOME+" | "+segnote[i].NOTA_ID+"</b></p><p>"+segnote[i].SEGM_DESC+" - Assunto:</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
               if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
-                result+= "<button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' id='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'></button>";
+                result+= "<button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' title='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'></button>";
               }
               result+="</div></article></li>"
             }

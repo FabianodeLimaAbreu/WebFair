@@ -8,9 +8,14 @@ elements:{
 }, events:{
 },close:function() {
   //this.el.hide();
-  this.on = !1;
-  window.history.go(-1);
+  var cookie;
+  //window.history.go(-1);
   //$(window).scrollTop(this.scrollp);
+
+  cookie=$.cookie("posscroll");
+  this.on = !1;
+  this.mode="amostras/"+(cookie.fairval || "padrao")+"/"+(cookie.fornval || "padrao")+"/"+(cookie.amosval || "padrao");
+  this.navigate(this.mode, !0);
 }, 
 /**
 * `OK Set thed loading state`
@@ -169,7 +174,7 @@ open: function(a){
       for(i=0;i<segnote.length;i++){
         result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+item.FORN_ID+" - "+item.FORN_DESC+" | "+segnote[i].NOTA_ID+"</b></p><p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
         if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
-          result+= "<button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' id='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'></button>";
+          result+= "<button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' title='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'></button>";
         }
         result+="</div></article></li>";
       }
@@ -904,7 +909,7 @@ setFav:function(a){
           result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+this.item.FORN_ID+" - "+this.item.FORN_DESC+" | "+segnote[i].NOTA_ID+"</b></p><p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
 
           if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
-            result+= "<button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' id='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'></button>";
+            result+= "<button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' title='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'></button>";
           }
           result+="</div></article></li>";
         }
