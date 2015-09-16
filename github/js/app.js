@@ -145,7 +145,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       
       this.el.find("#wrap").removeClass("hide");
 
-      this.modal = new Modal({el:this.modalEl,callService:this.proxy(this.callService),usr:this.usr,getPage:this.proxy(this.getPage)});
+      this.modal = new Modal({el:this.modalEl,callService:this.proxy(this.callService),usr:this.usr,getPage:this.proxy(this.getPage),setEmailSent:this.proxy(this.setEmailSent)});
       this.content = new Content({el:this.contentEl,usr:this.usr/*bread:this.breadEl, type:this.usr.TIPO*/});
       this.fornecedores = new Fornecedores({
         getloading:this.proxy(this.getloading),
@@ -1136,13 +1136,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           this.data = a.sortBy(this.nsort);
           this.content.changeview(this.view);
           console.dir(this.data);
-          /*var scroll={
+          var scroll={
             "fornval":''+this.fornval,
             "fairval":''+this.fairval,
             "amosval":""+this.amosval,
             "dates":[this.initialTime,this.endTime],
             "prices":this.prices,
             "fstatus":this.fstatus,
+            "nsort":this.nsort,
             "view":""+this.view,
             "posscroll":0,
             "total":20
@@ -1151,7 +1152,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           this.cookiefair=[];
           this.cookiefair.push(scroll);
           console.dir(scroll);
-          $.cookie("posscroll", scroll, {expires:7, path:"/"});*/
+          $.cookie("posscroll", scroll, {expires:7, path:"/"});
           this.createbox(this.data, this.content.page, !0);
           break;
         case 'template':
@@ -1480,7 +1481,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           }
         }
         else{
-          //console.log("ESCREVENDO SEM SORTBY");
+          console.log("ESCREVENDO SEM SORTBY");
           m=((this.content.page+1)*this.itens_by_page);
           var p, h, q, k = (this.content.page*this.itens_by_page), l = this.itens_by_page, e = this,countf=1;
           if (a[k]) {
@@ -1885,8 +1886,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             if(item[0].CONTACTS[i].CONT_PRINCIPAL){
               if(item[0].CONTACTS[i].CONT_EMAIL.length){
                 email=item[0].CONTACTS[i].CONT_EMAIL;
-              }
-              any_principal=!1;
+                any_principal=!1;
+              }   
             }
           }
           else{
@@ -2407,6 +2408,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                 "dates":[e.initialTime,e.endTime],
                 "prices":e.prices,
                 "fstatus":e.fstatus,
+                "nsort":e.nsort,
                 "view":""+e.view,
                 "posscroll":d,
                 "total":b
@@ -2440,6 +2442,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                 "dates":[e.initialTime,e.endTime],
                 "prices":e.prices,
                 "fstatus":e.fstatus,
+                "nsort":e.nsort,
                 "view":""+e.view,
                 "posscroll":d,
                 "total":b
