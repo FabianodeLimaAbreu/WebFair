@@ -1250,7 +1250,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           this.cookiefair.push(scroll);
           console.dir(scroll);
           $.cookie("posscroll", scroll, {expires:7, path:"/"});
-          this.createbox(this.data, this.content.page, !0);
+
+          //REOPEN
+          //console.log("reopen: "+this.content.page);
+          //this.createbox(this.data, this.content.page, !0);
+          this.reopenFilter(this.data, this.content.page, !0);
+
           break;
         case 'template':
           this.data = a.sortBy("TEMP_ID");
@@ -1338,7 +1343,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               this.setDate(temp);
               this.data=this.data.concat(temp);
               console.dir(this.data);
-              this.createbox(this.data, this.content.page, !0);
+
+              //REOPEN
+              //console.log("reopen: "+this.content.page);
+              //this.createbox(this.data, this.content.page, !0);
+              this.reopenFilter(this.data, this.content.page, !0);
             }
             break;
           case "local":
@@ -1657,7 +1666,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                     // Mostrando (box sendo carregados)
                     if(h.FORN_ID !== a[k-1].FORN_ID){
                       console.log(h.FORN_ID+" = "+a[k-1].FORN_ID);
-                      console.log(countf);
+                      //console.log(countf);
                       countf++;
                     }
                     $('.bread-search').find(".spec").text(k+1);
@@ -1899,13 +1908,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
     Componentfilter:function(data,page,d,view,haslength){
       //Componente para todos os filtros, vou passar em todo o data e filtrar todos os filtros sempre que o filtro for mudado.
-      console.dir(this.data);
+      console.dir(page);
       var aux,context=this,status;
       aux=this.data;
       this.prices=[];
       this.prices.push($("input[name='initial_price']").val() || 0);
       this.prices.push($("input[name='end_price']").val() || 100000);
-      this.reset();
       this.fdata = aux.filter(function(a,b){
         if(parseInt(a["AMOS_PRECO"]) >= parseInt(context.prices[0]) &amp;&amp; parseInt(a["AMOS_PRECO"]) &lt;= parseInt(context.prices[1]) &amp;&amp; (Boolean(a["AMOS_STATUS"]) === context.fstatus || context.fstatus === null)){
           return a;
@@ -1926,9 +1934,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         "prices":this.prices,
         "fstatus":this.fstatus,
         "nsort":this.nsort,
-        "view":""+view,
-        "posscroll":0,
-        "total":20
+        "view":""+this.view,
+        "posscroll":this.posscroll,
+        "total": this.content.itens.length
       };
       $.cookie.json = !0;
       this.cookiefair=[];
@@ -2613,7 +2621,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       if(this.fstatus !==null){
         $(".status[name='"+this.fstatus+"']").addClass('sel');
       }
-      //this.Componentfilter(data,page,d,view,haslength);
+
+      //REOPEN
+      console.log(page);
+      
+      this.Componentfilter(data,page,d,view,haslength);
     },
     reset:function(){
       //console.log("resetou APP");
