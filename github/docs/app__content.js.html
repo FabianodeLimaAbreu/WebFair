@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>DocStrap Source: app/content.js</title>
+	<title>DocStrap Source: app/_content.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -90,7 +90,7 @@
 					
 
 
-		<h1 class="page-title">Source: app/content.js</h1>
+		<h1 class="page-title">Source: app/_content.js</h1>
     
 <section>
 	<article>
@@ -413,8 +413,9 @@ window.Content = Spine.Controller.sub({
     this.tbody.empty();
     this.table.empty();
   }, images:function(a) {
+    var viewport=$(".viewport");
     $("body").attr("class","").addClass("images");
-    a.appendTo($(".viewport"));
+    a.appendTo($(".viewport").eq(viewport.length-1));
     this.itens = $(".viewport").find(".thumbnail");
   }, list:function(a) {
     $("body").attr("class","").addClass("list");
