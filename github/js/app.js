@@ -1133,6 +1133,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
       if (!this.data.length && b !="local") {        
         return this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0), $('.bread-search').find(".spec").text("0 Resultados");
+        //return this.modal.open(),this.breadEl.find('.bread-colec a').text("").removeClass('active'),this.setloading(!1), this.searchEl.find('input').blur();
       }  
       switch(b){
         case 'amostras':
@@ -1392,12 +1393,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                 if (!h) {
                     clearInterval(f);
                     e.setloading(!1);
-                    if(e.page === "amostras"){
-                      var view_container=$(".overview-container");
-                      view_container=$(view_container).eq(view_container.length-1);
-                      view_container.find(".bread-search .spec").text(view_container.find(".viewport .thumbnail").length);
-                    }
-
                     if(e.filterisdone){
                       //e.reopenFilter();
                     }
@@ -1461,7 +1456,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                       console.log(countf);
                       countf++;
                     }
-                    //$('.bread-search').find(".spec").text(k+1+" de "+h.COUNT_AMOS+" Resultados / "+countf+" Fornecedores");
+                    $('.bread-search').find(".spec").text(k+1+" de "+h.COUNT_AMOS+" Resultados / "+countf+" Fornecedores");
                 } else {
                   //console.log("list");
                     if (l > 0) {
@@ -1478,7 +1473,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                             unable_select:e.unable_select,
                             modal : e.modal,
                             page: e.page
-                        }), e.active.create(g.render()),/*$('.bread-search').find(".spec").text(k+1+" de "+h[count]+" Resultados / "+countf+" Fornecedores"),l--, */$("tbody .bstar").unbind("click").bind("click",function(a){context.starForn(a)}), k++,!1;
+                        }), e.active.create(g.render()),$('.bread-search').find(".spec").text(k+1+" de "+h[count]+" Resultados / "+countf+" Fornecedores"),l--, $("tbody .bstar").unbind("click").bind("click",function(a){context.starForn(a)}), k++,!1;
                         //, $('.bread-box').find(".bread-load").text(k+1), l--, k++, !1*/
                     } else {
                         clearInterval(f), e.setloading(!1);
@@ -1501,12 +1496,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
                     clearInterval(f);
                     e.setloading(!1);
-                    if(e.page === "amostras"){
-                      var view_container=$(".overview-container");
-                      view_container=$(view_container).eq(view_container.length-1);
-                      view_container.find(".bread-search .spec").text(view_container.find(".viewport .thumbnail").length);
-                    }
-
                     if(e.filterisdone){
                       //e.reopenFilter();
                     }
@@ -1574,24 +1563,15 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                     }).attr("src", q);
 
                     // Mostrando (box sendo carregados)
-                    if(k === 0){
-                      console.log("forn");
-                      $(".overview").append('<div class="overview-container"><div class="filter-crumb"><p class="bread-search">Mostrando:<span class="spec">0</span><span> de </span><span class="specall">0</span><span> Amostras </span><span class="specforn"> de 0 Fornecedores</span></p></div><ul class="viewport"></ul></div>');
-                    }
-                    else if(h.FORN_ID !== a[k-1].FORN_ID){
+                    if(h.FORN_ID !== a[k-1].FORN_ID){
                       console.log(h.FORN_ID+" = "+a[k-1].FORN_ID);
-                      var view_container=$(".overview-container");
-                      view_container=$(view_container).eq(view_container.length-1);
-                      view_container.find(".bread-search .spec").text(view_container.find(".viewport .thumbnail").length);
-                      $(".overview").append('<div class="overview-container"><div class="filter-crumb"><p class="bread-search">Mostrando:<span class="spec">0</span><span> de </span><span class="specall">0</span><span> Amostras </span><span class="specforn"> de 0 Fornecedores</span></p></div><ul class="viewport"></ul></div>');
+                      console.log(countf);
+                      
                       countf++;
                     }
-
-                    var view_container=$(".overview-container");
-                    view_container=$(view_container).eq(view_container.length-1);
-                    view_container.find(".bread-search .specall").text(h.COUNT_AMOS);
-                    view_container.find(".bread-search .specforn").text("/ "+h.FORN_DESC);
-
+                    $('.bread-search').find(".spec").text(k+1);
+                    $('.bread-search').find(".specall").text(h.COUNT_AMOS);
+                     $('.bread-search').find(".specforn").text("/ "+countf+" Fornecedores");
                 } else {
                     console.log("list");
                     var count="COUNT_FORN";
@@ -1616,8 +1596,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                             modal : e.modal,
                             usr:e.usr,
                             page: e.page
-                        }), e.active.create(g.render()),/*$('.bread-search').find(".spec").text(k+1),$('.bread-search').find(".specall").text(h[count]),$('.bread-search').find(".specforn").text("/ "+countf+" Fornecedores"),*/$("tbody .bstar").unbind("click").bind("click",function(a){context.starForn(a)}),l--, k++,!1;
+                        }), e.active.create(g.render()),$('.bread-search').find(".spec").text(k+1),$('.bread-search').find(".specall").text(h[count]),$('.bread-search').find(".specforn").text("/ "+countf+" Fornecedores"),$("tbody .bstar").unbind("click").bind("click",function(a){context.starForn(a)}),l--, k++,!1;
 
+                        //, $('.bread-box').find(".bread-load").text(k+1), l--, k++, !1*/
                     } else {
                       if(c === "list"){
                         $("button.main_opt_button.bselect.bsel").trigger('click');
@@ -1627,6 +1608,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                 }
             }, 300);
           } else {
+            //    $("tbody .bstar").unbind("click").bind("click",function(a){context.starForn(a)});
+            //return setTimeout(function(){ e.setloading(!1); }, 3000),!1;
             return this.setloading(!1), !1;
           } 
         }
@@ -1840,7 +1823,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       });
       if(!this.fdata.length){
         this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0);
-        //$('.bread-search').find(".spec").text("0 Amostras");
+        $('.bread-search').find(".spec").text("0 Amostras");
         this.data=aux;
         return !1;
       }
@@ -2426,13 +2409,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           case "amostras":
             d = z.scrollTop();
             b = e.content.itens.length;
-            f=0;
             if(e.view === "images"){
-              //f= $(".overview-container").height()-600;
-              $(".overview-container").each(function() {
-                  f += $(this).height();
-              });
-              f-=600;
+              f= $(".viewport").height()-600;
             }
             else{
               f= $("#table").height()-550;
@@ -2459,7 +2437,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             }
 
 
-            //console.log(d+" , "+f);
+            console.log(d+" , "+f);
             if (d >= f && b) {
               console.log("chegou");
               e.content.page++;
