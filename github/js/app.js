@@ -139,7 +139,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
       this.header.addClass("goDown");
       
-      console.dir(this.usr);
       this.username.text(this.usr.USU_NOME);
       this.usersegm.text(this.usr.SEGM_DESC);
       
@@ -1136,23 +1135,26 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           this.data = a.sortBy(this.nsort);
           this.content.changeview(this.view);
           console.dir(this.data);
-          var scroll={
-            "fornval":''+this.fornval,
-            "fairval":''+this.fairval,
-            "amosval":""+this.amosval,
-            "dates":[this.initialTime,this.endTime],
-            "prices":this.prices,
-            "fstatus":this.fstatus,
-            "nsort":this.nsort,
-            "view":""+this.view,
-            "posscroll":0,
-            "total":20
-          };
-          $.cookie.json = !0;
-          this.cookiefair=[];
-          this.cookiefair.push(scroll);
-          console.dir(scroll);
-          $.cookie("posscroll", scroll, {expires:7, path:"/"});
+          if(!this.cookiefair.length){
+            var scroll={
+              "fornval":''+this.fornval,
+              "fairval":''+this.fairval,
+              "amosval":""+this.amosval,
+              "dates":[this.initialTime,this.endTime],
+              "prices":this.prices,
+              "fstatus":this.fstatus,
+              "nsort":this.nsort,
+              "view":""+this.view,
+              "posscroll":(this.posscroll || 0),
+              "total":(this.total || 20)
+            };
+            $.cookie.json = !0;
+            this.cookiefair=[];
+            this.cookiefair.push(scroll);
+            console.dir(scroll);
+            $.cookie("posscroll", scroll, {expires:7, path:"/"});
+          }
+          
 
           //REOPEN
           //console.log("reopen: "+this.content.page);
@@ -1386,7 +1388,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
         if(length){
           var i;
-          //console.log("ENTROU PARA SORTBY");
+          //console.log("ENTROU PARA SORTBY");  
           m=((0+1)*length);
           var p, h, q, k = (0*length), l = length, e = this,countf=1;
           if (a[k]) {
@@ -1396,6 +1398,16 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
                     clearInterval(f);
                     e.setloading(!1);
+                    if(e.page === "amostras"){
+                      if(e.view === "images"){
+                        var view_container=$(".overview-container");
+                        view_container=$(view_container).eq(view_container.length-1);
+                        view_container.find(".bread-search .spec").text(view_container.find(".viewport .thumbnail").length);
+                      }
+                      else{
+                        console.log("listagem");
+                      }
+                    }
                     if(e.filterisdone){
                       //e.reopenFilter();
                     }
@@ -1455,12 +1467,24 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                     }).attr("src", q);
 
                     // Mostrando (box sendo carregados)
-                    if(h.FORN_ID !== a[k-1].FORN_ID){
+                    if(k === 0){
+                      console.log("forn");
+                      $(".overview").append('<div class="overview-container"><div class="filter-crumb"><p class="bread-search">Mostrando:<span class="spec">0</span><span> de </span><span class="specall">0</span><span> Amostras </span><span class="specforn"> de 0 Fornecedores</span></p></div><ul class="viewport"></ul></div>');
+                    }
+                    else if(h.FORN_ID !== a[k-1].FORN_ID){
                       console.log(h.FORN_ID+" = "+a[k-1].FORN_ID);
-                      console.log(countf);
+                      var view_container=$(".overview-container");
+                      view_container=$(view_container).eq(view_container.length-1);
+                      view_container.find(".bread-search .spec").text(view_container.find(".viewport .thumbnail").length);
+                      $(".overview").append('<div class="overview-container"><div class="filter-crumb"><p class="bread-search">Mostrando:<span class="spec">0</span><span> de </span><span class="specall">0</span><span> Amostras </span><span class="specforn"> de 0 Fornecedores</span></p></div><ul class="viewport"></ul></div>');
                       countf++;
                     }
-                    $('.bread-search').find(".spec").text(k+1+" de "+h.COUNT_AMOS+" Resultados / "+countf+" Fornecedores");
+ 
+                    var view_container=$(".overview-container");
+                    view_container=$(view_container).eq(view_container.length-1);
+                    view_container.find(".bread-search .specall").text(h.COUNT_AMOS);
+                    view_container.find(".bread-search .specforn").text("/ "+h.FORN_DESC);
+                    //$('.bread-search').find(".spec").text(k+1+" de "+h.COUNT_AMOS+" Resultados / "+countf+" Fornecedores");
                 } else {
                   //console.log("list");
                     if (l > 0) {
@@ -1477,7 +1501,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                             unable_select:e.unable_select,
                             modal : e.modal,
                             page: e.page
-                        }), e.active.create(g.render()),$('.bread-search').find(".spec").text(k+1+" de "+h[count]+" Resultados / "+countf+" Fornecedores"),l--, $("tbody .bstar").unbind("click").bind("click",function(a){context.starForn(a)}), k++,!1;
+                        }), e.active.create(g.render()),/*$('.bread-search').find(".spec").text(k+1+" de "+h[count]+" Resultados / "+countf+" Fornecedores"),l--,*/ $("tbody .bstar").unbind("click").bind("click",function(a){context.starForn(a)}), k++,!1;
                         //, $('.bread-box').find(".bread-load").text(k+1), l--, k++, !1*/
                     } else {
                         clearInterval(f), e.setloading(!1);
@@ -1493,13 +1517,26 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           console.log("ESCREVENDO SEM SORTBY");
           m=((this.content.page+1)*this.itens_by_page);
           var p, h, q, k = (this.content.page*this.itens_by_page), l = this.itens_by_page, e = this,countf=1;
+          console.dir(k);
           if (a[k]) {
             f = setInterval(function() {
                 h = a[k];   
                 if (!h) {
-
                     clearInterval(f);
                     e.setloading(!1);
+                    if(e.page === "amostras"){
+                      if(e.view === "images"){
+                        var view_container=$(".overview-container");
+                        view_container=$(view_container).eq(view_container.length-1);
+                        view_container.find(".bread-search .spec").text(view_container.find(".viewport .thumbnail").length);
+                      }
+                      else{
+                        console.log("listagem");
+                      }
+                    }
+                    else if(e.page === "local"){
+                      view_container.find(".bread-search .spec").text(k+1);
+                    }
                     if(e.filterisdone){
                       //e.reopenFilter();
                     }
@@ -1567,14 +1604,23 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                     }).attr("src", q);
 
                     // Mostrando (box sendo carregados)
-                    if(h.FORN_ID !== a[k-1].FORN_ID){
+                    if(k === 0){
+                      console.log("forn");
+                      $(".overview").append('<div class="overview-container"><div class="filter-crumb"><p class="bread-search">Mostrando:<span class="spec">0</span><span> de </span><span class="specall">0</span><span> Amostras </span><span class="specforn"> de 0 Fornecedores</span></p></div><ul class="viewport"></ul></div>');
+                    }
+                    else if(h.FORN_ID !== a[k-1].FORN_ID){
                       console.log(h.FORN_ID+" = "+a[k-1].FORN_ID);
-                      //console.log(countf);
+                      var view_container=$(".overview-container");
+                      view_container=$(view_container).eq(view_container.length-1);
+                      view_container.find(".bread-search .spec").text(view_container.find(".viewport .thumbnail").length);
+                      $(".overview").append('<div class="overview-container"><div class="filter-crumb"><p class="bread-search">Mostrando:<span class="spec">0</span><span> de </span><span class="specall">0</span><span> Amostras </span><span class="specforn"> de 0 Fornecedores</span></p></div><ul class="viewport"></ul></div>');
                       countf++;
                     }
-                    $('.bread-search').find(".spec").text(k+1);
-                    $('.bread-search').find(".specall").text(h.COUNT_AMOS);
-                     $('.bread-search').find(".specforn").text("/ "+countf+" Fornecedores");
+ 
+                    var view_container=$(".overview-container");
+                    view_container=$(view_container).eq(view_container.length-1);
+                    view_container.find(".bread-search .specall").text(h.COUNT_AMOS);
+                    view_container.find(".bread-search .specforn").text("/ "+h.FORN_DESC);
                 } else {
                     var count="COUNT_FORN";
                     if(context.page === "amostras"){
@@ -1589,7 +1635,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                       }
                     }
                     if (l > 0) {
-                        return g = new Box({
+                        g = new Box({
                             item : h,
                             view : c,
                             tag : n,
@@ -1598,8 +1644,25 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                             modal : e.modal,
                             usr:e.usr,
                             page: e.page
-                        }), e.active.create(g.render()),$('.bread-search').find(".spec").text(k+1),$('.bread-search').find(".specall").text(h[count]),$('.bread-search').find(".specforn").text("/ "+countf+" Fornecedores"),$("tbody .bstar").unbind("click").bind("click",function(a){context.starForn(a)}),l--, k++,!1;
+                        });
+                        //return 
+                        e.active.create(g.render());
+                        e.page !== "amostras" && (e.page === "local" ? $('.bread-search').find(".spec").text(k+1) : $('.bread-search').find(".spec").text(k+1),$('.bread-search').find(".specall").text(h[count])),$("tbody .bstar").unbind("click").bind("click",function(a){context.starForn(a)});
+                        l--;
+                        k++;
 
+                        if(e.page === "amostras"){
+                          console.log("AMOSTRAS: "+(k-1));
+                          /*var html='<div class="overview-container"><div class="filter-crumb"><p class="bread-search">Mostrando:<span class="spec">0</span><span> de </span><span class="specall">0</span><span> Amostras </span><span class="specforn"> de 0 Fornecedores</span></p></div><table id="table" class="table-striped table-large"><thead><tr><th></th><th>Fornecedor</th><th>Código</th><th>Data</th><th><button type="button" class="caption-icons-icon justit bfisica nothas unable"></button></th><th>Preço Inicial</th><th>M/kg</th><th><button type="button" class="caption-icons-icon justit bfav nothas unable"></button></th><th><button type="button" class="caption-icons-icon justit bhomologado nothas unable"></button></th><th><button type="button" class="caption-icons-icon justit bnote"></button></th><th><button type="button" class="icon bannex"></button></th><th><button type="button" class="caption-icons-icon justit bemail"></button></th><th>Tecimento</th><th>Base</th><th>Grupo</th><th>Sub-Grupo</th><th>Composição</th><th class="tlast">Status</th></tr></thead><tbody></tbody></div>';
+                          if((k-1) === 0){
+                            $(".floatThead").append(html);
+                          }
+                          else{
+                            $(".floatThead").append(html);
+                          }*/
+                        }
+
+                        return !1;
                         //, $('.bread-box').find(".bread-load").text(k+1), l--, k++, !1*/
                     } else {
                       if(c === "list"){
@@ -1655,18 +1718,31 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       type=$(a.target).attr("name");
       $("html").attr("class","amostras");
       this.content.clean();
+      $(".overview-container").remove();
       this.order_box.find("button").removeClass("sel");
       $(a.target).addClass("sel");
       if(type !== "BIGPRICE"){
         this.nsort=type;
-        length= this.data.length;
-        temp = this.data.sortBy(type).unique();
+        if(this.fdata.length){
+          length= this.fdata.length;
+          temp = this.fdata.sortBy(type).unique();
+        }
+        else{
+          length= this.data.length;
+          temp = this.data.sortBy(type).unique();
+        }
         this.createbox(temp, this.content.page,!1,!1,length);
       }
       else{
         this.nsort="AMOS_PRECO";
-        temp = this.data.sortBy(this.nsort).unique();
-        length=this.data.length-1;
+        if(this.fdata.length){
+          length= this.fdata.length-1;
+          temp = this.fdata.sortBy(type).unique();
+        }
+        else{
+          length= this.data.length-1;
+          temp = this.data.sortBy(type).unique();
+        }
         for(i=length;i>=0;i--){
           temp.push(this.data[i]);
         }
@@ -1803,24 +1879,41 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         this.fstatus=$(ev.target).attr("name").bool();
       }
       $(ev.target).toggleClass("sel");
-      this.Componentfilter(this.fdata, this.content.page, !0);
+      this.itens = $([]);
+      this.itens.remove();
+      this.unable_select=!1;
+      this.content.reset();
+      $(".overview-container").remove();
+      this.order_box.find("button").removeClass("sel");
+      this.Componentfilter(this.fdata, 0, !0);
     },AmosByPrice:function(){
       console.dir(this.data);
-      this.Componentfilter(this.data, this.content.page, !0);
+      this.itens = $([]);
+      this.itens.remove();
+      this.unable_select=!1;
+      this.content.reset();
+      this.order_box.find("button").removeClass("sel");
+      $(".overview-container").remove();
+      this.Componentfilter(this.data, 0, !0);
     },
 
     Componentfilter:function(data,page,d,view,haslength){
       //Componente para todos os filtros, vou passar em todo o data e filtrar todos os filtros sempre que o filtro for mudado.
-      console.dir(page);
       var aux,context=this,status;
       aux=this.data;
       this.prices=[];
       this.prices.push($("input[name='initial_price']").val() || 0);
       this.prices.push($("input[name='end_price']").val() || 100000);
+      console.dir(aux);
       this.fdata = aux.filter(function(a,b){
-        if(parseInt(a["AMOS_PRECO"]) >= parseInt(context.prices[0]) && parseInt(a["AMOS_PRECO"]) <= parseInt(context.prices[1]) && (Boolean(a["AMOS_STATUS"]) === context.fstatus || context.fstatus === null)){
-          return a;
+        if(parseInt(a["AMOS_PRECO"]) >= parseInt(context.prices[0]) && parseInt(a["AMOS_PRECO"]) <= parseInt(context.prices[1])){
+          console.log(Boolean(a["AMOS_STATUS"])+" , "+context.fstatus);
+          if(Boolean(a["AMOS_STATUS"]) === context.fstatus || context.fstatus === null){
+            //console.dir(a);
+            return a;
+          }
         }
+        
       });
       if(!this.fdata.length){
         this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0);
@@ -1828,7 +1921,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         this.data=aux;
         return !1;
       }
-      console.dir(aux);
+
       var scroll={
         "fornval":''+this.fornval,
         "fairval":''+this.fairval,
@@ -1838,13 +1931,18 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         "fstatus":this.fstatus,
         "nsort":this.nsort,
         "view":""+this.view,
-        "posscroll":this.posscroll,
-        "total": this.content.itens.length
+        "posscroll":this.cookiefair[0].posscroll,
+        "total": 20
       };
+
+      if(this.prices[0] !== this.cookiefair[0].prices[0] || this.prices[1] !== this.cookiefair[0].prices[1] || context.fstatus !== this.cookiefair[0].fstatus){
+        scroll.posscroll=0;
+      }
+      
       $.cookie.json = !0;
       this.cookiefair=[];
       this.cookiefair.push(scroll);
-      console.dir(scroll);
+      //console.dir(scroll);
       $.cookie("posscroll", scroll, {expires:7, path:"/"});
       this.data=aux;
       this.setloading(!1);
@@ -2210,6 +2308,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.itens_by_page=this.itens_page_default;
       this.resetFilters();
       this.bforn.val("");
+      $(".overview-container").remove();
       this.fairval=$(a.target).find("option:selected").val();
       this.notcombo=!0;
       this.mode=this.page+"/"+(this.fairval.replace(" ","_") || "padrao")+"/"+"padrao"+"/"+"padrao";
@@ -2400,8 +2499,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           case "amostras":
             d = z.scrollTop();
             b = e.content.itens.length;
+            f=0;
             if(e.view === "images"){
-              f= $(".viewport").height()-600;
+              $(".overview-container").each(function() {
+                  f += $(this).height();
+              });
+              f-=600;
             }
             else{
               f= $("#table").height()-550;
@@ -2439,7 +2542,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           case "fornecedores":
             d = z.scrollTop();
             b = e.content.itens.length;
-            f= $("#table").height()-680;
+            f= $("#table").height()-500;
 
             if(d<f){
               console.log("entrou");
@@ -2474,8 +2577,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           case "local":
             d = z.scrollTop();
             b = e.content.itens.length;
-            f= $("#table").height()-550;
- 
+            f= $("#table").height()-680;
+
             /*if(d<f){
               console.log("entrou");
               var scroll={
@@ -2495,7 +2598,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               e.cookiefair.push(scroll);
               $.cookie("posscroll", scroll, {expires:7, path:"/"});
             }*/
-            
             if (d >= f && b) {
               console.log("chegou");
               e.content.page++;
@@ -2525,9 +2627,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         $(".status[name='"+this.fstatus+"']").addClass('sel');
       }
 
-      //REOPEN
-      console.log(page);
-      
+      //REOPEN      
       this.Componentfilter(data,page,d,view,haslength);
     },
     reset:function(){

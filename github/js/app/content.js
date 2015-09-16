@@ -316,11 +316,15 @@ window.Content = Spine.Controller.sub({
     this.tbody.empty();
     this.table.empty();
   }, images:function(a) {
+    var viewport=$(".viewport");
     $("body").attr("class","").addClass("images");
-    a.appendTo($(".viewport"));
-    this.itens = $(".viewport").find(".thumbnail");
+    console.dir(a);
+    a.appendTo($(".viewport").eq(viewport.length-1));
+    this.itens = $(".viewport").find(".col");
   }, list:function(a) {
+    var view=this.itens = $("#table tbody");
     $("body").attr("class","").addClass("list");
+    console.dir(a);
     a.appendTo($("#table tbody"));
     this.itens = $("#table tbody").find('tr');
   }, clean:function() {
