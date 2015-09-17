@@ -249,7 +249,8 @@ window.Modal = Spine.Controller.sub({
   },events:{
     "click .alertclose":"close",
     "click .dialog-save":"save",
-    "click .link":"goEmail"
+    "click .link":"goEmail",
+    "click .question button":"actions"
   },
 
   /**
@@ -281,6 +282,9 @@ window.Modal = Spine.Controller.sub({
     this.clean();
     this.callback &amp;&amp; this.callback();
   },
+  actions:function(a){
+    $(a.target).attr("name") === "yes" ? this.callback() : this.callback=null,this.close();;   
+  },
   goEmail:function(a){
     var listemail=[],amos_code=[],amos_id=[],address,counter,supplier;
     a.preventDefault();
@@ -297,7 +301,6 @@ window.Modal = Spine.Controller.sub({
     this.close();   
     window.open("mailto:"+address+"?subject="+encodeURIComponent(listemail.TEMP_SUBJECT)+"&amp;body="+texto);
   },
-  //this.modal.open("message","Teste Fabiano",this.teste,!0,!0);
   open:function(who,msg,call,isbad,isquest) {
     var a;
     msg= msg || "";
@@ -421,7 +424,6 @@ window.Content = Spine.Controller.sub({
   }, list:function(a) {
     var view=this.itens = $("#table tbody");
     $("body").attr("class","").addClass("list");
-    console.dir(a);
     a.appendTo($("#table tbody"));
     this.itens = $("#table tbody").find('tr');
   }, clean:function() {
@@ -726,8 +728,8 @@ window.Box = Spine.Controller.sub({init:function() {
         break;
       case 'template_email':
         var result="";
-        //result='&lt;td>&lt;button type="button" class="caption-icons-icon justit bnote" name="'+a.TEMP_ID+'">&lt;/button>&lt;/td>&lt;td>'+a.TEMP_ID+"&lt;/td>"+"&lt;td>"+a.SEGM_DESC+"&lt;br/>&lt;div class='template"+a.TEMP_ID+" show-hide hide'>Assunto&lt;/br>"+"Texto"+"&lt;/div>&lt;/td>"+"&lt;td>"+a.TEMP_DESC+"&lt;/br>&lt;div class='template"+a.TEMP_ID+" show-hide hide'>"+a.TEMP_SUBJECT+"&lt;/br>"+a.TEMP_BODY+"&lt;/div>&lt;/td>"+"&lt;td>"+a.TP_TEMP_DESC+"&lt;/br>&lt;div class='template"+a.TEMP_ID+" show-hide hide'>ITENS PERSONALIZADOS"+"&lt;div class='close-size'>&lt;button type='button' class='icon floatLeft s-four edit-temp' alt='list' name='"+a.TEMP_ID+"'>Editar&lt;/button>&lt;button type='button' class='icon floatLeft s-four delete-temp' alt='list' name='"+a.TP_TEMP_ID+"' title='"+a.TEMP_ID+"''>Deletar&lt;/button>&lt;/div>&lt;/div>&lt;/td>";
-        result='&lt;td>&lt;button type="button" class="caption-icons-icon bstar  bnote" name="'+a.TEMP_ID+'">&lt;/button>&lt;/td>&lt;td>'+a.TEMP_ID+"&lt;/td>"+"&lt;td>"+a.SEGM_DESC+"&lt;br/>&lt;div class='template"+a.TEMP_ID+" show-hide hide'>Assunto&lt;/br>"+"Texto"+"&lt;/div>&lt;/td>"+"&lt;td>"+a.TEMP_DESC+"&lt;/br>&lt;div class='template"+a.TEMP_ID+" show-hide hide'>"+a.TEMP_SUBJECT+"&lt;/br>"+a.TEMP_BODY+"&lt;/div>&lt;/td>"+"&lt;td>"+a.TP_TEMP_DESC+"&lt;/br>&lt;div class='template"+a.TEMP_ID+" show-hide hide'>ITENS PERSONALIZADOS"+"&lt;div class='close-size'>"+/*&lt;button type='button' class='icon floatLeft s-four edit-temp' alt='list' name='"+a.TEMP_ID+"'>Editar&lt;/button>&lt;button type='button' class='icon floatLeft s-four delete-temp' alt='list' name='"+a.TP_TEMP_ID+"' title='"+a.TEMP_ID+"''>Deletar&lt;/button>*/"&lt;/div>&lt;/div>&lt;/td>";
+        //result='&lt;td style="max-width:200px;">'+a.TEMP_ID+"&lt;br/>&lt;/td>"+"&lt;td>"+a.SEGM_DESC+"&lt;br/>&lt;div class='template"+a.TEMP_ID+" show-hide hide'>Assunto&lt;/br>"+"Texto"+"&lt;/div>&lt;/td>"+"&lt;td>"+a.TEMP_DESC+"&lt;/br>&lt;div class='template"+a.TEMP_ID+" show-hide hide'>"+a.TEMP_SUBJECT+"&lt;/br>"+a.TEMP_BODY+"&lt;/div>&lt;/td>"+"&lt;td>"+a.TP_TEMP_DESC+"&lt;/br>&lt;div class='template"+a.TEMP_ID+" show-hide hide'>ITENS PERSONALIZADOS"+"&lt;div class='close-size'>"+/*&lt;button type='button' class='icon floatLeft s-four edit-temp' alt='list' name='"+a.TEMP_ID+"'>Editar&lt;/button>&lt;button type='button' class='icon floatLeft s-four delete-temp' alt='list' name='"+a.TP_TEMP_ID+"' title='"+a.TEMP_ID+"''>Deletar&lt;/button>*/'&lt;/div>&lt;/div>&lt;/td>&lt;td>&lt;button type="button" class="caption-icons-icon bstar  bnote" name="'+a.TEMP_ID+'">&lt;/button>&lt;/td>';
+        result='&lt;td style="max-width:200px;">'+a.TEMP_ID+'&lt;br/>&lt;div class="info-template hide item'+a.TEMP_ID+'">&lt;div class="text-template">&lt;p>&lt;b>ASSUNTO&lt;/b>&lt;/p>&lt;br>&lt;form>&lt;textarea disabled="disabled" name="TEMP_SUBJECT">'+a.TEMP_SUBJECT+'&lt;/textarea>&lt;br>&lt;p>&lt;b>TEXTO&lt;/b>&lt;/p>&lt;br>&lt;textarea disabled="disabled" name="TEMP_BODY" class="edit-text">'+a.TEMP_BODY+'&lt;/textarea>&lt;/form>&lt;/div>&lt;ul>&lt;li>&lt;p>&lt;b>ITENS PERSONALIZADOS&lt;/b>&lt;/p>&lt;/li>&lt;li>&lt;button type="button" class="icon floatLeft s-four  hash" alt="list" name="'+a.TEMP_ID+'">Fornecedor&lt;/button>&lt;/li>&lt;li>&lt;button type="button" class="icon floatLeft s-four  hash" alt="list" name="'+a.TEMP_ID+'">Amostras&lt;/button>&lt;/li>&lt;li>&lt;button type="button" class="icon floatLeft s-four  hash " alt="list" name="'+a.TEMP_ID+'">Contatos&lt;/button>&lt;/li>&lt;/ul>&lt;ul class="ulbottom">&lt;li>&lt;button type="button" class="icon floatLeft s-four edit-temp" alt="list" name="'+a.TEMP_ID+'">Editar&lt;/button>&lt;/li>&lt;li>&lt;button type="button" class="icon floatLeft s-four delete-temp" alt="list" title="'+a.TEMP_ID+'" name="'+a.TP_TEMP_ID+'">Excluir&lt;/button>&lt;/li>&lt;li>&lt;button type="button" class="icon floatLeft s-four save-temp hide" alt="list" name="'+a.TEMP_ID+'">Salvar&lt;/button>&lt;/li>&lt;/ul>&lt;button type="button" class="icon s-four close-temp" alt="list" name="'+a.TEMP_ID+'">Fechar&lt;/button>&lt;/div>&lt;/td>&lt;/td>&lt;td>Malharia&lt;/td>&lt;td>FORNECEDOR NOVO - Cotação e Hangers&lt;/td>&lt;td>1 - Cotação de Amostras&lt;/td>&lt;td>&lt;button type="button" class="open-info" name="'+a.TEMP_ID+'">&lt;span>&lt;/span>&lt;/button>&lt;/td>';
         return result;
         break;
       default:
@@ -755,7 +757,7 @@ window.Box = Spine.Controller.sub({init:function() {
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Wed Sep 16th 2015 using the <a
+		on Thu Sep 17th 2015 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>

@@ -75,16 +75,20 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       "click .filter-price":"AmosByPrice",
       "click .thumbnail img":"goDetail",
       "click .main_opt_button.bemail":"sendEmail",
-      "click .bnote":"toggleTemplate",
+      "click .open-info":"toggleTemplate",
+      "click .close-temp":"toggleTemplate",
       "click .delete-temp":"deleteTemplate",
       "click .edit-temp":"editTemplate",
+      "click .save-temp":"saveTemplate",
       "change .type":"filterTemplate",  
       "click .newtemp":"newTemplate",
       "click .category_button":"showSubCategories",
+      "change .SEGM_COD":"filterTemplate",
       "click .sub_category a":"setCompositions",
       "keyup input[name='FEIR_DESC']":"toUpperCaseValue",
       "keyup input[name='FORN_DESC']":"toUpperCaseValue",
-      "click .goback-relative":"goBack"
+      "click .goback-relative":"goBack",
+      "click .hash":"addHash"
       /*"submit .search":"submit",
       "click button.icon.go_back_default":"goBack",
       "click button.close":"getOut"*/
@@ -139,6 +143,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
       this.header.addClass("goDown");
       
+      console.dir(this.usr);
       this.username.text(this.usr.USU_NOME);
       this.usersegm.text(this.usr.SEGM_DESC);
       
@@ -623,14 +628,43 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             if(!context.fair.length){
               status=setInterval(function(){
                 if(context.fair.length){
+                  console.log("ok");
                   context.ajaxrequest=!1;
+                  context.createComponent(context.segm,$(".SEGM_COD"),'segm');
                   context.callService("template_email",'','<TEMP_DESC></TEMP_DESC><SEGM_COD></SEGM_COD>');
                   clearInterval(status);
                 }
               },100);
             }
             else{
-              context.callService("template_email",'','<TEMP_DESC></TEMP_DESC><SEGM_COD></SEGM_COD>');
+              if(context.usr.SEGM_COD === "TD"){
+                status=setInterval(function(){
+                  if(context.fair.length){
+                    context.callService("listarSegmentos");
+                    context.ajaxrequest=!1;
+                    clearInterval(status);
+                  }
+                },100);
+
+                second=setInterval(function(){
+                  if(context.segm.length){
+                    context.ajaxrequest=!1;
+                    context.createComponent(context.segm,$(".SEGM_COD"),'segm');
+                    context.callService("template_email",'','<TEMP_DESC></TEMP_DESC><SEGM_COD></SEGM_COD>');
+                    clearInterval(second);
+                  }
+                },100);
+              }
+              else{
+                $(".SEGM_COD").addClass('hide');
+                second=setInterval(function(){
+                  if(context.fair.length){
+                    context.ajaxrequest=!1;
+                    context.callService("template_email",'','<TEMP_DESC></TEMP_DESC><SEGM_COD></SEGM_COD>');
+                    clearInterval(second);
+                  }
+                },100);
+              }
             }
             break;
           default:
@@ -1030,8 +1064,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             'serviceName':'gravarTemplate',
             'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarEmailTemplate xmlns="http://tempuri.org/"><template>'+a+''+b+'</template>'+c+'</GravarEmailTemplate></soap:Body></soap:Envelope>',
             'callback':function(data,req){
-              console.log(core.ajaxrequest);
-              core.modal.close(core.page);
+              if(c === "<action>D</action>"){
+                core.modal.open("message","Template de email excluído com sucesso!!!",!1,!1);
+              }
+              else{
+                core.modal.open("message","Template de email salvo com sucesso!!!",!1,!1);
+              }
             }
           },
         ];
@@ -2031,59 +2069,144 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         }
       }
     },
-    toggleTemplate:function(a){
-      console.dir($(".template"+$(a.target).attr("name")));
-      if(!$(a.target).hasClass('sel')){
-        $(".show-hide").addClass('hide');
-        $(".bnote").removeClass('sel');
-        $(a.target).addClass('sel');
-        $(".template"+$(a.target).attr("name")).removeClass('hide');
+    enableDisabledTemplate:function(notshow,id){
+      if(notshow){
+        if(notshow === "reload"){
+          console.log("reload");
+          item=this.data.filter(function(a,b){
+            if(parseInt(a.TEMP_ID) == id){
+              console.dir($(".info-template.item"+id).find("textarea[name='TEMP_BODY']"));
+              $(".info-template.item"+id).find("textarea[name='TEMP_BODY']").val(a.TEMP_BODY);
+              $(".info-template.item"+id).find("textarea[name='TEMP_SUBJECT']").val(a.TEMP_SUBJECT);
+            }
+          });
+        }
+        $(".edit-temp").removeClass('sel');
+        $(".info-template.item"+id).find("textarea").attr('disabled','disabled');
       }
       else{
-        $(a.target).removeClass('sel');
-        $(".show-hide").addClass('hide');
+        $(".info-template.item"+id).find("textarea").removeAttr('disabled');
+        $(".info-template.item"+id+" .save-temp").removeClass('hide');
       }
     },
+    toggleTemplate:function(a){
+      var el;
+      if($(a.target).prop("tagName") ===  "SPAN"){
+        el=$(a.target).parent();
+      }
+      else{
+        el=$(a.target);
+      }
+      if(el.hasClass('open-info')){
+        console.log("CERTO");
+        $(".info-template").addClass('hide');
+        $('.open-info').removeClass('hide');
+
+        $(".info-template.item"+el.attr('name')).removeClass('hide');
+        el.addClass('hide');
+        $(".info-template.item"+el.attr('name')+" .delete-temp").addClass('active');
+      }
+      else{
+        if($(".info-template.item"+el.attr('name')+" .edit-temp").hasClass('sel')){
+          this.modal.open("message","Deseja cancelar a edição?", this.proxy(this.requestCancelTemplate),!0, !0);
+        }
+        else{
+          $(".info-template.item"+el.attr('name')+" .delete-temp").removeClass('active');
+          $(".open-info").removeClass('hide');
+          $(".info-template").addClass('hide');
+        }
+        //Remover classe do editar e esconder o save
+      }
+    },
+    
+    requestCancelTemplate:function(){
+      var parent=$(".info-template").not(".hide");
+      parent.find(".delete-temp").removeClass('active');
+      $(".open-info").removeClass('hide');
+      
+      this.enableDisabledTemplate("reload",parent.attr('class').slice(18,parent.attr('class').length));
+      parent.addClass('hide');
+    },
     deleteTemplate:function(a){
-      this.callService("gravarTemplate","<TEMP_ID>"+$(a.target).attr('title')+"</TEMP_ID>","<TP_TEMP_ID>"+$(a.target).attr('name')+"</TP_TEMP_ID>","<action>D</action>");
-      $(a.target).closest('tr').remove();
+      //confirmar exclusão
+      this.modal.open("message","Deseja realmente excluir este template de Email?", this.proxy(this.requestDeleteTemplate),!0, !0);
+    },
+    requestDeleteTemplate:function(){
+      if(!$(".delete-temp.active").length){
+        return !1;
+      }
+      this.callService("gravarTemplate","<TEMP_ID>"+$(".delete-temp.active").attr('title')+"</TEMP_ID>","<TP_TEMP_ID>"+$(".delete-temp.active").attr('name')+"</TP_TEMP_ID>","<action>D</action>");
+      $(".delete-temp.active").closest('tr').remove();
     },
     editTemplate:function(a){
+      console.dir(this.data);
       var item,el=$(a.target);
-      console.dir(this.data)
+      el.toggleClass('sel');
+      if(el.hasClass('sel')){
+        this.enableDisabledTemplate(false,$(a.target).attr('name'));
+      }
+      else{
+        this.enableDisabledTemplate(true,$(a.target).attr('name'));
+      }
+    },
+    saveTemplate:function(a){
+      var item,el=$(a.target),complet=!0;
       item=this.data.filter(function(a,b){
         if(parseInt(a.TEMP_ID) == parseInt(el.attr("name"))){
           return a;
         }
       });
-      this.modal.open("dialog",item);
+      
+      //Validando
+      if(!$(".info-template.item"+el.attr("name")+" textarea[name='TEMP_SUBJECT']").val().length || !$(".info-template.item"+el.attr("name")+" textarea[name='TEMP_BODY']").val().length){
+        complet=!1;
+      }
+      else{
+        //Ja esta salvando
+        this.enableDisabledTemplate(true,el.attr('name'));
+        item[0].TEMP_SUBJECT=$(".info-template.item"+el.attr("name")+" textarea[name='TEMP_SUBJECT']").val();
+        item[0].TEMP_BODY=$(".info-template.item"+el.attr("name")+" textarea[name='TEMP_BODY']").val();
+        this.callService("gravarTemplate","<TEMP_ID>"+item[0].TEMP_ID+"</TEMP_ID>","<TP_TEMP_ID>"+item[0].TP_TEMP_ID+"</TP_TEMP_ID><TEMP_SUBJECT>"+$(".info-template.item"+el.attr("name")+" textarea[name='TEMP_SUBJECT']").val()+"</TEMP_SUBJECT><TEMP_BODY>"+$(".info-template.item"+el.attr("name")+" textarea[name='TEMP_BODY']").val()+"</TEMP_BODY><SEGM_COD>"+item[0].SEGM_COD+"</SEGM_COD>"+"<TEMP_DESC>"+item[0].TEMP_DESC+"</TEMP_DESC>","<action>U</action>");
+      }
     },
+    addHash:function(a){
+      console.dir($(a.target).text());
+      $(".info-template.item"+$(a.target).attr("name")+" textarea").each(function(index, el) {
+        //console.dir($(el).is(":focus"));
+      });
+      //$(".info-template textarea")
+    },
+
+
     filterTemplate:function(ev){
       //console.dir();
-      var aux,val;
-      val=$(ev.target).find("option:selected").val();
+      var aux,type,segm,context=this;
+      type=$(".type option:selected").attr("value");
+      segm=$(".SEGM_COD option:selected").attr("value");
       aux=this.data;
       this.reset();
 
-      if(!val.length){
-        console.dir(this.data); 
-        this.fdata=aux;
-      }
-      else{
-        this.fdata = aux.filter(function(a,b){
-          if(parseInt(a.TP_TEMP_ID) === parseInt(val)){
+      this.fdata = aux.filter(function(a,b){
+        if(parseInt(a.TP_TEMP_ID) === parseInt(type) || !type.length){
+          if(context.usr.SEGM_COD === "TD"){
+            console.log(segm+" , "+a.SEGM_COD);
+            if(segm === a.SEGM_COD || !segm.length){
+              return a;
+            }
+          }
+          else{
             return a;
           }
-        });
-      }
-      
+        }
+      });
+
+      this.data=aux;
+
       if(!this.fdata.length){
         this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0);
         return !1;
       }
-      this.data=aux;
       this.createbox(this.fdata, this.content.page, !0,"list");
-      //country=$(".countries").find("option:selected").val();
     },
     newTemplate:function(){
       this.modal.open("dialog","");

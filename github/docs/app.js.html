@@ -172,16 +172,20 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       "click .filter-price":"AmosByPrice",
       "click .thumbnail img":"goDetail",
       "click .main_opt_button.bemail":"sendEmail",
-      "click .bnote":"toggleTemplate",
+      "click .open-info":"toggleTemplate",
+      "click .close-temp":"toggleTemplate",
       "click .delete-temp":"deleteTemplate",
       "click .edit-temp":"editTemplate",
+      "click .save-temp":"saveTemplate",
       "change .type":"filterTemplate",  
       "click .newtemp":"newTemplate",
       "click .category_button":"showSubCategories",
+      "change .SEGM_COD":"filterTemplate",
       "click .sub_category a":"setCompositions",
       "keyup input[name='FEIR_DESC']":"toUpperCaseValue",
       "keyup input[name='FORN_DESC']":"toUpperCaseValue",
-      "click .goback-relative":"goBack"
+      "click .goback-relative":"goBack",
+      "click .hash":"addHash"
       /*"submit .search":"submit",
       "click button.icon.go_back_default":"goBack",
       "click button.close":"getOut"*/
@@ -236,6 +240,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
       this.header.addClass("goDown");
       
+      console.dir(this.usr);
       this.username.text(this.usr.USU_NOME);
       this.usersegm.text(this.usr.SEGM_DESC);
       
@@ -720,14 +725,43 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             if(!context.fair.length){
               status=setInterval(function(){
                 if(context.fair.length){
+                  console.log("ok");
                   context.ajaxrequest=!1;
+                  context.createComponent(context.segm,$(".SEGM_COD"),'segm');
                   context.callService("template_email",'','&lt;TEMP_DESC>&lt;/TEMP_DESC>&lt;SEGM_COD>&lt;/SEGM_COD>');
                   clearInterval(status);
                 }
               },100);
             }
             else{
-              context.callService("template_email",'','&lt;TEMP_DESC>&lt;/TEMP_DESC>&lt;SEGM_COD>&lt;/SEGM_COD>');
+              if(context.usr.SEGM_COD === "TD"){
+                status=setInterval(function(){
+                  if(context.fair.length){
+                    context.callService("listarSegmentos");
+                    context.ajaxrequest=!1;
+                    clearInterval(status);
+                  }
+                },100);
+
+                second=setInterval(function(){
+                  if(context.segm.length){
+                    context.ajaxrequest=!1;
+                    context.createComponent(context.segm,$(".SEGM_COD"),'segm');
+                    context.callService("template_email",'','&lt;TEMP_DESC>&lt;/TEMP_DESC>&lt;SEGM_COD>&lt;/SEGM_COD>');
+                    clearInterval(second);
+                  }
+                },100);
+              }
+              else{
+                $(".SEGM_COD").addClass('hide');
+                second=setInterval(function(){
+                  if(context.fair.length){
+                    context.ajaxrequest=!1;
+                    context.callService("template_email",'','&lt;TEMP_DESC>&lt;/TEMP_DESC>&lt;SEGM_COD>&lt;/SEGM_COD>');
+                    clearInterval(second);
+                  }
+                },100);
+              }
             }
             break;
           default:
@@ -1127,8 +1161,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             'serviceName':'gravarTemplate',
             'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;GravarEmailTemplate xmlns="http://tempuri.org/">&lt;template>'+a+''+b+'&lt;/template>'+c+'&lt;/GravarEmailTemplate>&lt;/soap:Body>&lt;/soap:Envelope>',
             'callback':function(data,req){
-              console.log(core.ajaxrequest);
-              core.modal.close(core.page);
+              if(c === "&lt;action>D&lt;/action>"){
+                core.modal.open("message","Template de email excluído com sucesso!!!",!1,!1);
+              }
+              else{
+                core.modal.open("message","Template de email salvo com sucesso!!!",!1,!1);
+              }
             }
           },
         ];
@@ -2128,59 +2166,134 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         }
       }
     },
-    toggleTemplate:function(a){
-      console.dir($(".template"+$(a.target).attr("name")));
-      if(!$(a.target).hasClass('sel')){
-        $(".show-hide").addClass('hide');
-        $(".bnote").removeClass('sel');
-        $(a.target).addClass('sel');
-        $(".template"+$(a.target).attr("name")).removeClass('hide');
+    enableDisabledTemplate:function(notshow,id){
+      if(notshow){
+        if(notshow === "reload"){
+          console.log("reload");
+          item=this.data.filter(function(a,b){
+            if(parseInt(a.TEMP_ID) == id){
+              console.dir($(".info-template.item"+id).find("textarea[name='TEMP_BODY']"));
+              $(".info-template.item"+id).find("textarea[name='TEMP_BODY']").val(a.TEMP_BODY);
+              $(".info-template.item"+id).find("textarea[name='TEMP_SUBJECT']").val(a.TEMP_SUBJECT);
+            }
+          });
+        }
+        $(".edit-temp").removeClass('sel');
+        $(".info-template.item"+id).find("textarea").attr('disabled','disabled');
       }
       else{
-        $(a.target).removeClass('sel');
-        $(".show-hide").addClass('hide');
+        $(".info-template.item"+id).find("textarea").removeAttr('disabled');
+        $(".info-template.item"+id+" .save-temp").removeClass('hide');
       }
     },
+    toggleTemplate:function(a){
+      if($(a.target).hasClass('open-info')){
+        $(".info-template.item"+$(a.target).attr('name')).removeClass('hide');
+        $(a.target).addClass('hide');
+        $(".info-template.item"+$(a.target).attr('name')+" .delete-temp").addClass('active');
+       // $(".template"+$(a.target).attr("name")).removeClass('hide');
+      }
+      else{
+        if($(".info-template.item"+$(a.target).attr('name')+" .edit-temp").hasClass('sel')){
+          this.modal.open("message","Deseja cancelar a edição?", this.proxy(this.requestCancelTemplate),!0, !0);
+        }
+        else{
+          $(".info-template.item"+$(a.target).attr('name')+" .delete-temp").removeClass('active');
+          $(".open-info").removeClass('hide');
+          $(".info-template.item"+$(a.target).attr('name')).addClass('hide');
+        }
+        //Remover classe do editar e esconder o save
+      }
+    },
+    
+    requestCancelTemplate:function(){
+      var parent=$(".info-template").not(".hide");
+      parent.find(".delete-temp").removeClass('active');
+      $(".open-info").removeClass('hide');
+      
+      this.enableDisabledTemplate("reload",parent.attr('class').slice(18,parent.attr('class').length));
+      parent.addClass('hide');
+    },
     deleteTemplate:function(a){
-      this.callService("gravarTemplate","&lt;TEMP_ID>"+$(a.target).attr('title')+"&lt;/TEMP_ID>","&lt;TP_TEMP_ID>"+$(a.target).attr('name')+"&lt;/TP_TEMP_ID>","&lt;action>D&lt;/action>");
-      $(a.target).closest('tr').remove();
+      //confirmar exclusão
+      this.modal.open("message","Deseja realmente excluir este template de Email?", this.proxy(this.requestDeleteTemplate),!0, !0);
+    },
+    requestDeleteTemplate:function(){
+      if(!$(".delete-temp.active").length){
+        return !1;
+      }
+      this.callService("gravarTemplate","&lt;TEMP_ID>"+$(".delete-temp.active").attr('title')+"&lt;/TEMP_ID>","&lt;TP_TEMP_ID>"+$(".delete-temp.active").attr('name')+"&lt;/TP_TEMP_ID>","&lt;action>D&lt;/action>");
+      $(".delete-temp.active").closest('tr').remove();
     },
     editTemplate:function(a){
+      console.dir(this.data);
       var item,el=$(a.target);
-      console.dir(this.data)
+      el.toggleClass('sel');
+      if(el.hasClass('sel')){
+        this.enableDisabledTemplate(false,$(a.target).attr('name'));
+      }
+      else{
+        this.enableDisabledTemplate(true,$(a.target).attr('name'));
+      }
+    },
+    saveTemplate:function(a){
+      var item,el=$(a.target),complet=!0;
       item=this.data.filter(function(a,b){
         if(parseInt(a.TEMP_ID) == parseInt(el.attr("name"))){
           return a;
         }
       });
-      this.modal.open("dialog",item);
+      
+      //Validando
+      if(!$(".info-template.item"+el.attr("name")+" textarea[name='TEMP_SUBJECT']").val().length || !$(".info-template.item"+el.attr("name")+" textarea[name='TEMP_BODY']").val().length){
+        complet=!1;
+      }
+      else{
+        //Ja esta salvando
+        this.enableDisabledTemplate(true,el.attr('name'));
+        item[0].TEMP_SUBJECT=$(".info-template.item"+el.attr("name")+" textarea[name='TEMP_SUBJECT']").val();
+        item[0].TEMP_BODY=$(".info-template.item"+el.attr("name")+" textarea[name='TEMP_BODY']").val();
+        this.callService("gravarTemplate","&lt;TEMP_ID>"+item[0].TEMP_ID+"&lt;/TEMP_ID>","&lt;TP_TEMP_ID>"+item[0].TP_TEMP_ID+"&lt;/TP_TEMP_ID>&lt;TEMP_SUBJECT>"+$(".info-template.item"+el.attr("name")+" textarea[name='TEMP_SUBJECT']").val()+"&lt;/TEMP_SUBJECT>&lt;TEMP_BODY>"+$(".info-template.item"+el.attr("name")+" textarea[name='TEMP_BODY']").val()+"&lt;/TEMP_BODY>&lt;SEGM_COD>"+item[0].SEGM_COD+"&lt;/SEGM_COD>"+"&lt;TEMP_DESC>"+item[0].TEMP_DESC+"&lt;/TEMP_DESC>","&lt;action>U&lt;/action>");
+      }
     },
+    addHash:function(a){
+      console.dir($(a.target).text());
+      $(".info-template.item"+$(a.target).attr("name")+" textarea").each(function(index, el) {
+        //console.dir($(el).is(":focus"));
+      });
+      //$(".info-template textarea")
+    },
+
+
     filterTemplate:function(ev){
       //console.dir();
-      var aux,val;
-      val=$(ev.target).find("option:selected").val();
+      var aux,type,segm,context=this;
+      type=$(".type option:selected").attr("value");
+      segm=$(".SEGM_COD option:selected").attr("value");
       aux=this.data;
       this.reset();
 
-      if(!val.length){
-        console.dir(this.data); 
-        this.fdata=aux;
-      }
-      else{
-        this.fdata = aux.filter(function(a,b){
-          if(parseInt(a.TP_TEMP_ID) === parseInt(val)){
+      this.fdata = aux.filter(function(a,b){
+        if(parseInt(a.TP_TEMP_ID) === parseInt(type) || !type.length){
+          if(context.usr.SEGM_COD === "TD"){
+            console.log(segm+" , "+a.SEGM_COD);
+            if(segm === a.SEGM_COD || !segm.length){
+              return a;
+            }
+          }
+          else{
             return a;
           }
-        });
-      }
-      
+        }
+      });
+
+      this.data=aux;
+
       if(!this.fdata.length){
         this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0);
         return !1;
       }
-      this.data=aux;
       this.createbox(this.fdata, this.content.page, !0,"list");
-      //country=$(".countries").find("option:selected").val();
     },
     newTemplate:function(){
       this.modal.open("dialog","");
@@ -2792,7 +2905,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Wed Sep 16th 2015 using the <a
+		on Thu Sep 17th 2015 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>

@@ -152,7 +152,8 @@ window.Modal = Spine.Controller.sub({
   },events:{
     "click .alertclose":"close",
     "click .dialog-save":"save",
-    "click .link":"goEmail"
+    "click .link":"goEmail",
+    "click .question button":"actions"
   },
 
   /**
@@ -184,6 +185,9 @@ window.Modal = Spine.Controller.sub({
     this.clean();
     this.callback && this.callback();
   },
+  actions:function(a){
+    $(a.target).attr("name") === "yes" ? this.callback() : this.callback=null,this.close();;   
+  },
   goEmail:function(a){
     var listemail=[],amos_code=[],amos_id=[],address,counter,supplier;
     a.preventDefault();
@@ -200,7 +204,6 @@ window.Modal = Spine.Controller.sub({
     this.close();   
     window.open("mailto:"+address+"?subject="+encodeURIComponent(listemail.TEMP_SUBJECT)+"&body="+texto);
   },
-  //this.modal.open("message","Teste Fabiano",this.teste,!0,!0);
   open:function(who,msg,call,isbad,isquest) {
     var a;
     msg= msg || "";
@@ -324,7 +327,6 @@ window.Content = Spine.Controller.sub({
   }, list:function(a) {
     var view=this.itens = $("#table tbody");
     $("body").attr("class","").addClass("list");
-    console.dir(a);
     a.appendTo($("#table tbody"));
     this.itens = $("#table tbody").find('tr');
   }, clean:function() {
@@ -629,8 +631,8 @@ window.Box = Spine.Controller.sub({init:function() {
         break;
       case 'template_email':
         var result="";
-        //result='<td><button type="button" class="caption-icons-icon justit bnote" name="'+a.TEMP_ID+'"></button></td><td>'+a.TEMP_ID+"</td>"+"<td>"+a.SEGM_DESC+"<br/><div class='template"+a.TEMP_ID+" show-hide hide'>Assunto</br>"+"Texto"+"</div></td>"+"<td>"+a.TEMP_DESC+"</br><div class='template"+a.TEMP_ID+" show-hide hide'>"+a.TEMP_SUBJECT+"</br>"+a.TEMP_BODY+"</div></td>"+"<td>"+a.TP_TEMP_DESC+"</br><div class='template"+a.TEMP_ID+" show-hide hide'>ITENS PERSONALIZADOS"+"<div class='close-size'><button type='button' class='icon floatLeft s-four edit-temp' alt='list' name='"+a.TEMP_ID+"'>Editar</button><button type='button' class='icon floatLeft s-four delete-temp' alt='list' name='"+a.TP_TEMP_ID+"' title='"+a.TEMP_ID+"''>Deletar</button></div></div></td>";
-        result='<td><button type="button" class="caption-icons-icon bstar  bnote" name="'+a.TEMP_ID+'"></button></td><td>'+a.TEMP_ID+"</td>"+"<td>"+a.SEGM_DESC+"<br/><div class='template"+a.TEMP_ID+" show-hide hide'>Assunto</br>"+"Texto"+"</div></td>"+"<td>"+a.TEMP_DESC+"</br><div class='template"+a.TEMP_ID+" show-hide hide'>"+a.TEMP_SUBJECT+"</br>"+a.TEMP_BODY+"</div></td>"+"<td>"+a.TP_TEMP_DESC+"</br><div class='template"+a.TEMP_ID+" show-hide hide'>ITENS PERSONALIZADOS"+"<div class='close-size'>"+/*<button type='button' class='icon floatLeft s-four edit-temp' alt='list' name='"+a.TEMP_ID+"'>Editar</button><button type='button' class='icon floatLeft s-four delete-temp' alt='list' name='"+a.TP_TEMP_ID+"' title='"+a.TEMP_ID+"''>Deletar</button>*/"</div></div></td>";
+        //result='<td style="max-width:200px;">'+a.TEMP_ID+"<br/></td>"+"<td>"+a.SEGM_DESC+"<br/><div class='template"+a.TEMP_ID+" show-hide hide'>Assunto</br>"+"Texto"+"</div></td>"+"<td>"+a.TEMP_DESC+"</br><div class='template"+a.TEMP_ID+" show-hide hide'>"+a.TEMP_SUBJECT+"</br>"+a.TEMP_BODY+"</div></td>"+"<td>"+a.TP_TEMP_DESC+"</br><div class='template"+a.TEMP_ID+" show-hide hide'>ITENS PERSONALIZADOS"+"<div class='close-size'>"+/*<button type='button' class='icon floatLeft s-four edit-temp' alt='list' name='"+a.TEMP_ID+"'>Editar</button><button type='button' class='icon floatLeft s-four delete-temp' alt='list' name='"+a.TP_TEMP_ID+"' title='"+a.TEMP_ID+"''>Deletar</button>*/'</div></div></td><td><button type="button" class="caption-icons-icon bstar  bnote" name="'+a.TEMP_ID+'"></button></td>';
+        result='<td style="max-width:200px;">'+a.TEMP_ID+'<br/><div class="info-template hide item'+a.TEMP_ID+'"><div class="text-template"><p><b>ASSUNTO</b></p><br><form><textarea disabled="disabled" name="TEMP_SUBJECT">'+a.TEMP_SUBJECT+'</textarea><br><p><b>TEXTO</b></p><br><textarea disabled="disabled" name="TEMP_BODY" class="edit-text">'+a.TEMP_BODY+'</textarea></form></div><ul><li><p><b>ITENS PERSONALIZADOS</b></p></li><li><button type="button" class="icon floatLeft s-four  hash" alt="list" name="'+a.TEMP_ID+'">Fornecedor</button></li><li><button type="button" class="icon floatLeft s-four  hash" alt="list" name="'+a.TEMP_ID+'">Amostras</button></li><li><button type="button" class="icon floatLeft s-four  hash " alt="list" name="'+a.TEMP_ID+'">Contatos</button></li></ul><ul class="ulbottom"><li><button type="button" class="icon floatLeft s-four edit-temp" alt="list" name="'+a.TEMP_ID+'">Editar</button></li><li><button type="button" class="icon floatLeft s-four delete-temp" alt="list" title="'+a.TEMP_ID+'" name="'+a.TP_TEMP_ID+'">Excluir</button></li><li><button type="button" class="icon floatLeft s-four save-temp hide" alt="list" name="'+a.TEMP_ID+'">Salvar</button></li></ul><button type="button" class="icon s-four close-temp" alt="list" name="'+a.TEMP_ID+'">Fechar</button></div></td></td><td>Malharia</td><td>FORNECEDOR NOVO - Cotação e Hangers</td><td>1 - Cotação de Amostras</td><td><button type="button" class="open-info" name="'+a.TEMP_ID+'"><span></span></button></td>';
         return result;
         break;
       default:
