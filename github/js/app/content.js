@@ -238,7 +238,6 @@ window.Modal = Spine.Controller.sub({
     for(i=0;i<msg[0].length;i++){
       html+="<tr><td><a href='#"+i+"' class='link' name='"+i+"'>"+msg[0][i].TEMP_DESC+"</a></td><td><a href='#"+i+"' class='link' name='"+i+"'>"+msg[0][i].TP_TEMP_DESC+"</a></td></tr>";
     }
-    console.log(html);
     this.main.find("tbody").append(html);
     /*counter=msg[1].join(" ; ").length;
     console.log(msg[1].join(" ; "));*/
@@ -276,7 +275,6 @@ window.Modal = Spine.Controller.sub({
         }
         break;
       case 'istemp':
-        console.dir(this.objid);
         this.callService("gravarTemplate","<TEMP_ID>"+(this.objid[0].TEMP_ID || 0)+"</TEMP_ID>"+"<TEMP_DESC>"+$(".dialog input[name='TEMP_DESC']").val()+"</TEMP_DESC><TEMP_SUBJECT>"+$(".dialog input[name='TEMP_SUBJECT']").val()+"</TEMP_SUBJECT><TEMP_BODY>"+$(".dialog textarea").val()+"</TEMP_BODY><SEGM_COD>"+this.objid[0].SEGM_COD+"</SEGM_COD>","<TP_TEMP_ID>"+(this.objid[0].TP_TEMP_ID || 2)+"</TP_TEMP_ID>","<action>U</action>");
         break;
     }
@@ -321,14 +319,22 @@ window.Content = Spine.Controller.sub({
   }, images:function(a) {
     var viewport=$(".viewport");
     $("body").attr("class","").addClass("images");
-    console.dir(a);
     a.appendTo($(".viewport").eq(viewport.length-1));
     this.itens = $(".viewport").find(".col");
   }, list:function(a) {
-    var view=this.itens = $("#table tbody");
-    $("body").attr("class","").addClass("list");
-    a.appendTo($("#table tbody"));
-    this.itens = $("#table tbody").find('tr');
+    if(this.getPage() === "amostras"){
+      var viewport=$(".overview-container tbody");
+      $("body").attr("class","").addClass("list");
+      console.dir($(".overview-container tbody").eq(viewport.length-1));
+      a.appendTo($(".overview-container tbody").eq(viewport.length-1));
+      this.itens = $(".overview-container tbody").find('tr');
+    }
+    else{
+      var view=this.itens = $("#table tbody");
+      $("body").attr("class","").addClass("list");
+      a.appendTo($("#table tbody"));
+      this.itens = $("#table tbody").find('tr');
+    }
   }, clean:function() {
     this.itens.remove();
     this.itens = $([]);
@@ -517,7 +523,6 @@ window.Box = Spine.Controller.sub({init:function() {
         if(a.NOTES.length ){
           var segnote=[];
           for(i=a.NOTES.length;i>0;i--){
-            console.log(this.usr.USU_COD);
             if(a.NOTES[i-1].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
               segnote.push(a.NOTES[i-1]);
             }
@@ -543,13 +548,11 @@ window.Box = Spine.Controller.sub({init:function() {
         }
         if(a.FAVORITES.length){
           for(i=0;i<a.FAVORITES.length;i++){
-            console.log(a.FAVORITES[i].SEGM_COD+" , "+this.usr.SEGM_COD);
             if(middlefav === ""){
               if(a.FAVORITES[i].SEGM_COD === this.usr.SEGM_COD){
                 middlefav="has";
               }
               else{
-                console.log("diferente");
                 middlefav="middle";
               }
             }
@@ -632,7 +635,7 @@ window.Box = Spine.Controller.sub({init:function() {
       case 'template_email':
         var result="";
         //result='<td style="max-width:200px;">'+a.TEMP_ID+"<br/></td>"+"<td>"+a.SEGM_DESC+"<br/><div class='template"+a.TEMP_ID+" show-hide hide'>Assunto</br>"+"Texto"+"</div></td>"+"<td>"+a.TEMP_DESC+"</br><div class='template"+a.TEMP_ID+" show-hide hide'>"+a.TEMP_SUBJECT+"</br>"+a.TEMP_BODY+"</div></td>"+"<td>"+a.TP_TEMP_DESC+"</br><div class='template"+a.TEMP_ID+" show-hide hide'>ITENS PERSONALIZADOS"+"<div class='close-size'>"+/*<button type='button' class='icon floatLeft s-four edit-temp' alt='list' name='"+a.TEMP_ID+"'>Editar</button><button type='button' class='icon floatLeft s-four delete-temp' alt='list' name='"+a.TP_TEMP_ID+"' title='"+a.TEMP_ID+"''>Deletar</button>*/'</div></div></td><td><button type="button" class="caption-icons-icon bstar  bnote" name="'+a.TEMP_ID+'"></button></td>';
-        result='<td style="max-width:200px;">'+a.TEMP_ID+'<br/><div class="info-template hide item'+a.TEMP_ID+'"><div class="text-template"><p><b>ASSUNTO</b></p><br><form><textarea disabled="disabled" name="TEMP_SUBJECT">'+a.TEMP_SUBJECT+'</textarea><br><p><b>TEXTO</b></p><br><textarea disabled="disabled" name="TEMP_BODY" class="edit-text">'+a.TEMP_BODY+'</textarea></form></div><ul class="custombuttons hide"><li><p><b>ITENS PERSONALIZADOS</b></p></li><li><button type="button" class="icon floatLeft s-four  hash" alt="SUPPLIER" name="'+a.TEMP_ID+'">Fornecedor</button></li><li><button type="button" class="icon floatLeft s-four  hash" alt="SAMPLES" name="'+a.TEMP_ID+'">Amostras</button></li><li><button type="button" class="icon floatLeft s-four  hash " alt="CONTACTS" name="'+a.TEMP_ID+'">Contatos</button></li></ul><ul class="ulbottom"><li><button type="button" class="icon floatLeft s-four edit-temp" alt="list" name="'+a.TEMP_ID+'">Editar</button></li><li><button type="button" class="icon floatLeft s-four delete-temp" alt="list" title="'+a.TEMP_ID+'" name="'+a.TP_TEMP_ID+'">Excluir</button></li><li><button type="button" class="icon floatLeft s-four save-temp hide" alt="list" name="'+a.TEMP_ID+'">Salvar</button></li></ul><button type="button" class="icon s-four close-temp" alt="list" name="'+a.TEMP_ID+'">Fechar</button></div></td></td><td>'+a.SEGM_DESC+'</td><td>'+a.TEMP_DESC+'</td><td>'+a.TP_TEMP_DESC+'</td><td><button type="button" class="open-info" name="'+a.TEMP_ID+'"><span></span></button></td>';
+        result='<td style="max-width:200px;">'+a.TEMP_ID+'<br/><div class="info-template hide item'+a.TEMP_ID+'"><div class="text-template"><p><b>ASSUNTO</b></p><br><form><textarea disabled="disabled" name="TEMP_SUBJECT">'+a.TEMP_SUBJECT+'</textarea><br><p><b>TEXTO</b></p><br><textarea disabled="disabled" name="TEMP_BODY" class="edit-text">'+a.TEMP_BODY+'</textarea></form></div><ul class="custombuttons hide"><li><p><b>ITENS PERSONALIZADOS</b></p></li><li><button type="button" class="icon floatLeft s-four  hash" alt="SUPPLIER" name="'+a.TEMP_ID+'">Fornecedor</button></li><li><button type="button" class="icon floatLeft s-four  hash" alt="SAMPLES" name="'+a.TEMP_ID+'">Amostras</button></li></ul><ul class="ulbottom"><li><button type="button" class="icon floatLeft s-four edit-temp" alt="list" name="'+a.TEMP_ID+'">Editar</button></li><li><button type="button" class="icon floatLeft s-four delete-temp" alt="list" title="'+a.TEMP_ID+'" name="'+a.TP_TEMP_ID+'">Excluir</button></li><li><button type="button" class="icon floatLeft s-four save-temp hide" alt="list" name="'+a.TEMP_ID+'">Salvar</button></li></ul><button type="button" class="icon s-four close-temp" alt="list" name="'+a.TEMP_ID+'">Fechar</button></div></td></td><td>'+a.SEGM_DESC+'</td><td>'+a.TEMP_DESC+'</td><td>'+a.TP_TEMP_DESC+'</td><td><button type="button" class="open-info" name="'+a.TEMP_ID+'"><span></span></button></td>';
         return result;
         break;
       default:

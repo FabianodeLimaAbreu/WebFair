@@ -1573,10 +1573,6 @@ form.search {
   padding-bottom: 80px;
   display: none;
 }
-.overview .overview-container {
-  position: relative;
-  float: left;
-}
 .overview .viewport {
   position: relative;
   float: left;
@@ -1589,6 +1585,10 @@ form.search {
 }
 .overview .viewport .col-small {
   width: 33.3%;
+}
+.overview-container {
+  position: relative;
+  float: left;
 }
 .aside-edit {
   position: absolute;
@@ -2223,15 +2223,18 @@ form.search {
 .local .list .floatThead {
   display: block;
 }
-.local .overview {
+.local .overview,
+.template_email .overview {
   height: auto;
 }
-.local .container-fullsize.scroller {
+.local .container-fullsize.scroller,
+.template_email .container-fullsize.scroller {
   height: 400px;
   margin: 0;
   padding-bottom: 0;
 }
-.local .content {
+.local .content,
+.template_email .content {
   width: 100%;
   margin: 0;
   padding: 0;
@@ -3936,7 +3939,8 @@ form textarea {
   .container-fullsize.scroller {
     height: 400px;
   }
-  .local .container-fullsize.scroller {
+  .local .container-fullsize.scroller,
+  .template_email .container-fullsize.scroller {
     height: 500px;
     margin: 0;
     padding-bottom: 0;
@@ -3958,7 +3962,8 @@ form textarea {
   .container-fullsize.scroller {
     height: 450px;
   }
-  .local .container-fullsize.scroller {
+  .local .container-fullsize.scroller,
+  .template_email .container-fullsize.scroller {
     height: 550px;
     margin: 0;
     padding-bottom: 0;
@@ -3980,7 +3985,8 @@ form textarea {
   .container-fullsize.scroller {
     height: 600px;
   }
-  .local .container-fullsize.scroller {
+  .local .container-fullsize.scroller,
+  .template_email .container-fullsize.scroller {
     height: 700px;
     margin: 0;
     padding-bottom: 0;
@@ -4052,6 +4058,7 @@ form textarea {
   border: none;
   position: absolute;
   margin: 2px 0 0 0;
+  cursor: pointer;
 }
 .open-info span {
   display: block;
