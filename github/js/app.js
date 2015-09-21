@@ -2400,7 +2400,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             context.callService("gravarAmostras",pattern,html,"U");
           }
         });
-        el.parent().remove();
+        el.parent().remove(); //
       }
     },
     setEmailSent:function(a){
