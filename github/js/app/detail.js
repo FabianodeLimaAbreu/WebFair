@@ -712,7 +712,7 @@ setFav:function(a){
     }
     this.callService("GravarFornecedorFavorito",'<Forn_ID>'+this.item.FORN_ID+'</Forn_ID>',html);
   }
-  else{
+  else{ 
     if(!this.setfair || !$("input[name='FORN_DESC']").val()){
       this.modal.open("message","Fornecedor e/ou Feira não selecionados",!1,!0);
       return !1;
@@ -731,11 +731,12 @@ setFav:function(a){
 
     context.setloading(!0,!1);
     context.ajaxrequest=!0;
-    this.callService("GravarFornecedor",'<FORN_ID>0</FORN_ID>','<FEIR_COD>'+this.setfair+'</FEIR_COD>',"<FORN_DESC>"+$("input[name='FORN_DESC']").val()+"</FORN_DESC><CREATE_DATE>"+date+"</CREATE_DATE><FORN_STATUS>0</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO><USU_COD>"+this.usr.USU_COD+"</USU_COD>",'<action>I</action>');
+    context.callService("GravarFornecedor",'<FORN_ID>0</FORN_ID>','<FEIR_COD>'+context.setfair+'</FEIR_COD>',"<FORN_DESC>"+$("input[name='FORN_DESC']").val()+"</FORN_DESC><CREATE_DATE>"+date+"</CREATE_DATE><FORN_STATUS>0</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>","<USU_COD>"+context.usr.USU_COD+"</USU_COD>",'<action>I</action>');
     
     status=setInterval(function(){
       if(!context.ajaxrequest){
         context.callService("GravarFornecedorFavorito",'<Forn_ID>'+context.item.FORN_ID+'</Forn_ID>',"<string>"+context.usr.SEGM_COD+"</string>");
+        //this.callService("GravarFornecedor",'<FORN_ID>0</FORN_ID>',',,'<action>I</action>');
         clearInterval(status);
       }
     },100);
@@ -769,12 +770,13 @@ setFav:function(a){
       this.callService("gravarNotes","<OBJ_ID>"+this.item.FORN_ID+"</OBJ_ID><TP_NOTA_ID>2</TP_NOTA_ID><USU_COD>"+this.usr.USU_COD+"</USU_COD>","<NOTA_DESC>"+$(".addnote").val()+"</NOTA_DESC><CREATE_DATE>"+date+"</CREATE_DATE>");
     }
     else{
+      console.log("não tem mesmo");
       context.setloading(!0,!1);
       context.ajaxrequest=!0;
-      this.callService("GravarFornecedor",'<FORN_ID>0</FORN_ID>','<FEIR_COD>'+this.setfair+'</FEIR_COD>',"<FORN_DESC>"+$("input[name='FORN_DESC']").val()+"</FORN_DESC><CREATE_DATE>"+date+"</CREATE_DATE><FORN_STATUS>0</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO><USU_COD>"+this.usr.USU_COD+"</USU_COD>",'<action>I</action>');
-    
+      context.callService("GravarFornecedor",'<FORN_ID>0</FORN_ID>','<FEIR_COD>'+context.setfair+'</FEIR_COD>',"<FORN_DESC>"+$("input[name='FORN_DESC']").val()+"</FORN_DESC><CREATE_DATE>"+date+"</CREATE_DATE><FORN_STATUS>0</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>","<USU_COD>"+context.usr.USU_COD+"</USU_COD>",'<action>I</action>');
       status=setInterval(function(){
         if(!context.ajaxrequest){
+          console.log("call to note");
           context.callService("gravarNotes","<OBJ_ID>"+context.item.FORN_ID+"</OBJ_ID><TP_NOTA_ID>2</TP_NOTA_ID><USU_COD>"+context.usr.USU_COD+"</USU_COD>","<NOTA_DESC>"+$(".addnote").val()+"</NOTA_DESC><CREATE_DATE>"+date+"</CREATE_DATE>");
           clearInterval(status);
         }
@@ -798,7 +800,7 @@ setFav:function(a){
     day=date.getDate();
   }
   date=day+"/0"+(date.getMonth()+1)+"/"+date.getFullYear();
-  result+="<li><article><div class='notepad-note blockquote'><p><b>"+date+" | "+this.item.FORN_DESC +" | "+this.noteid+"</b></p><p>"+this.usr.USU_NOME+" - "+this.usr.SEGM_DESC+"</p><p>"+$(".addnote").val()+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+this.noteid+"' name='"+this.usr.USU_COD+"'></button></div></article></li>";
+  result+="<li><article><div class='notepad-note blockquote'><p><b>"+date+" | "+(this.item.FORN_DESC || $("input[name='FORN_DESC']").val()) +" | "+this.noteid+"</b></p><p>"+this.usr.USU_NOME+" - "+this.usr.SEGM_DESC+"</p><p>"+$(".addnote").val()+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+this.noteid+"' name='"+this.usr.USU_COD+"'></button></div></article></li>";
   $(".addnote").val("");
   console.log(result);
   $(".note ul").prepend(result);
@@ -1282,7 +1284,6 @@ setFav:function(a){
               }
 
               if(!$("html").hasClass('add_forn')){
-                console.log("add-forn: "+goout);
                 if(context.item.CONTACTS[a]){
                   html+="<CONT_ID>"+context.item.CONTACTS[a].CONT_ID+"</CONT_ID><IMG_PATH_FRENTE>"+context.item.CONTACTS[a].IMG_PATH_FRENTE+"</IMG_PATH_FRENTE><IMG_PATH_VERSO>"+context.item.CONTACTS[a].IMG_PATH_VERSO+"</IMG_PATH_VERSO><IMG_PATH_CONTATO>"+context.item.CONTACTS[a].IMG_PATH_CONTATO+"</IMG_PATH_CONTATO>";
                   context.callService("GravarFornecedorContato",html,pattern,"",'<action>U</action>'); 
@@ -1293,8 +1294,10 @@ setFav:function(a){
                 }
               }
               else{
-                html+="<IMG_PATH_FRENTE>0</IMG_PATH_FRENTE><IMG_PATH_VERSO>0</IMG_PATH_VERSO><IMG_PATH_CONTATO>0</IMG_PATH_CONTATO>";
-                context.callService("GravarFornecedorContato",html,pattern,"",'<action>I</action>');
+                if(!goout){
+                  html+="<IMG_PATH_FRENTE>0</IMG_PATH_FRENTE><IMG_PATH_VERSO>0</IMG_PATH_VERSO><IMG_PATH_CONTATO>0</IMG_PATH_CONTATO>";
+                  context.callService("GravarFornecedorContato",html,pattern,"",'<action>I</action>');
+                }
               }
             });
             if(goout){
@@ -1518,15 +1521,16 @@ setFav:function(a){
           if(!context.ajaxrequest){
             context.callService("GravarFornecedorMercado",'<Forn_ID>'+context.item.FORN_ID+'</Forn_ID>',html);
             clearInterval(status);
-            last_request=!0;
+            last_request=!1;
           }
         },100);
 
         last=setInterval(function(){
+          console.log(!context.ajaxrequest && goout && !last_request);
           if(!context.ajaxrequest && goout && !last_request){
             context.setloading(!1);
             context.close();
-            clearInterval(status);
+            clearInterval(last);
           }
         },100);
         break;

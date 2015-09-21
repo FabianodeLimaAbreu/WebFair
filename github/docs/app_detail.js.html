@@ -809,7 +809,7 @@ setFav:function(a){
     }
     this.callService("GravarFornecedorFavorito",'&lt;Forn_ID>'+this.item.FORN_ID+'&lt;/Forn_ID>',html);
   }
-  else{
+  else{ 
     if(!this.setfair || !$("input[name='FORN_DESC']").val()){
       this.modal.open("message","Fornecedor e/ou Feira não selecionados",!1,!0);
       return !1;
@@ -828,11 +828,12 @@ setFav:function(a){
 
     context.setloading(!0,!1);
     context.ajaxrequest=!0;
-    this.callService("GravarFornecedor",'&lt;FORN_ID>0&lt;/FORN_ID>','&lt;FEIR_COD>'+this.setfair+'&lt;/FEIR_COD>',"&lt;FORN_DESC>"+$("input[name='FORN_DESC']").val()+"&lt;/FORN_DESC>&lt;CREATE_DATE>"+date+"&lt;/CREATE_DATE>&lt;FORN_STATUS>0&lt;/FORN_STATUS>&lt;FORN_INATIVO>0&lt;/FORN_INATIVO>&lt;USU_COD>"+this.usr.USU_COD+"&lt;/USU_COD>",'&lt;action>I&lt;/action>');
+    context.callService("GravarFornecedor",'&lt;FORN_ID>0&lt;/FORN_ID>','&lt;FEIR_COD>'+context.setfair+'&lt;/FEIR_COD>',"&lt;FORN_DESC>"+$("input[name='FORN_DESC']").val()+"&lt;/FORN_DESC>&lt;CREATE_DATE>"+date+"&lt;/CREATE_DATE>&lt;FORN_STATUS>0&lt;/FORN_STATUS>&lt;FORN_INATIVO>0&lt;/FORN_INATIVO>","&lt;USU_COD>"+context.usr.USU_COD+"&lt;/USU_COD>",'&lt;action>I&lt;/action>');
     
     status=setInterval(function(){
       if(!context.ajaxrequest){
         context.callService("GravarFornecedorFavorito",'&lt;Forn_ID>'+context.item.FORN_ID+'&lt;/Forn_ID>',"&lt;string>"+context.usr.SEGM_COD+"&lt;/string>");
+        //this.callService("GravarFornecedor",'&lt;FORN_ID>0&lt;/FORN_ID>',',,'&lt;action>I&lt;/action>');
         clearInterval(status);
       }
     },100);
@@ -866,12 +867,13 @@ setFav:function(a){
       this.callService("gravarNotes","&lt;OBJ_ID>"+this.item.FORN_ID+"&lt;/OBJ_ID>&lt;TP_NOTA_ID>2&lt;/TP_NOTA_ID>&lt;USU_COD>"+this.usr.USU_COD+"&lt;/USU_COD>","&lt;NOTA_DESC>"+$(".addnote").val()+"&lt;/NOTA_DESC>&lt;CREATE_DATE>"+date+"&lt;/CREATE_DATE>");
     }
     else{
+      console.log("não tem mesmo");
       context.setloading(!0,!1);
       context.ajaxrequest=!0;
-      this.callService("GravarFornecedor",'&lt;FORN_ID>0&lt;/FORN_ID>','&lt;FEIR_COD>'+this.setfair+'&lt;/FEIR_COD>',"&lt;FORN_DESC>"+$("input[name='FORN_DESC']").val()+"&lt;/FORN_DESC>&lt;CREATE_DATE>"+date+"&lt;/CREATE_DATE>&lt;FORN_STATUS>0&lt;/FORN_STATUS>&lt;FORN_INATIVO>0&lt;/FORN_INATIVO>&lt;USU_COD>"+this.usr.USU_COD+"&lt;/USU_COD>",'&lt;action>I&lt;/action>');
-    
+      context.callService("GravarFornecedor",'&lt;FORN_ID>0&lt;/FORN_ID>','&lt;FEIR_COD>'+context.setfair+'&lt;/FEIR_COD>',"&lt;FORN_DESC>"+$("input[name='FORN_DESC']").val()+"&lt;/FORN_DESC>&lt;CREATE_DATE>"+date+"&lt;/CREATE_DATE>&lt;FORN_STATUS>0&lt;/FORN_STATUS>&lt;FORN_INATIVO>0&lt;/FORN_INATIVO>","&lt;USU_COD>"+context.usr.USU_COD+"&lt;/USU_COD>",'&lt;action>I&lt;/action>');
       status=setInterval(function(){
         if(!context.ajaxrequest){
+          console.log("call to note");
           context.callService("gravarNotes","&lt;OBJ_ID>"+context.item.FORN_ID+"&lt;/OBJ_ID>&lt;TP_NOTA_ID>2&lt;/TP_NOTA_ID>&lt;USU_COD>"+context.usr.USU_COD+"&lt;/USU_COD>","&lt;NOTA_DESC>"+$(".addnote").val()+"&lt;/NOTA_DESC>&lt;CREATE_DATE>"+date+"&lt;/CREATE_DATE>");
           clearInterval(status);
         }
@@ -895,7 +897,7 @@ setFav:function(a){
     day=date.getDate();
   }
   date=day+"/0"+(date.getMonth()+1)+"/"+date.getFullYear();
-  result+="&lt;li>&lt;article>&lt;div class='notepad-note blockquote'>&lt;p>&lt;b>"+date+" | "+this.item.FORN_DESC +" | "+this.noteid+"&lt;/b>&lt;/p>&lt;p>"+this.usr.USU_NOME+" - "+this.usr.SEGM_DESC+"&lt;/p>&lt;p>"+$(".addnote").val()+"&lt;/p>&lt;/div>&lt;div class='blockquote'>&lt;button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+this.noteid+"' name='"+this.usr.USU_COD+"'>&lt;/button>&lt;/div>&lt;/article>&lt;/li>";
+  result+="&lt;li>&lt;article>&lt;div class='notepad-note blockquote'>&lt;p>&lt;b>"+date+" | "+(this.item.FORN_DESC || $("input[name='FORN_DESC']").val()) +" | "+this.noteid+"&lt;/b>&lt;/p>&lt;p>"+this.usr.USU_NOME+" - "+this.usr.SEGM_DESC+"&lt;/p>&lt;p>"+$(".addnote").val()+"&lt;/p>&lt;/div>&lt;div class='blockquote'>&lt;button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+this.noteid+"' name='"+this.usr.USU_COD+"'>&lt;/button>&lt;/div>&lt;/article>&lt;/li>";
   $(".addnote").val("");
   console.log(result);
   $(".note ul").prepend(result);
@@ -1379,7 +1381,6 @@ setFav:function(a){
               }
 
               if(!$("html").hasClass('add_forn')){
-                console.log("add-forn: "+goout);
                 if(context.item.CONTACTS[a]){
                   html+="&lt;CONT_ID>"+context.item.CONTACTS[a].CONT_ID+"&lt;/CONT_ID>&lt;IMG_PATH_FRENTE>"+context.item.CONTACTS[a].IMG_PATH_FRENTE+"&lt;/IMG_PATH_FRENTE>&lt;IMG_PATH_VERSO>"+context.item.CONTACTS[a].IMG_PATH_VERSO+"&lt;/IMG_PATH_VERSO>&lt;IMG_PATH_CONTATO>"+context.item.CONTACTS[a].IMG_PATH_CONTATO+"&lt;/IMG_PATH_CONTATO>";
                   context.callService("GravarFornecedorContato",html,pattern,"",'&lt;action>U&lt;/action>'); 
@@ -1390,8 +1391,10 @@ setFav:function(a){
                 }
               }
               else{
-                html+="&lt;IMG_PATH_FRENTE>0&lt;/IMG_PATH_FRENTE>&lt;IMG_PATH_VERSO>0&lt;/IMG_PATH_VERSO>&lt;IMG_PATH_CONTATO>0&lt;/IMG_PATH_CONTATO>";
-                context.callService("GravarFornecedorContato",html,pattern,"",'&lt;action>I&lt;/action>');
+                if(!goout){
+                  html+="&lt;IMG_PATH_FRENTE>0&lt;/IMG_PATH_FRENTE>&lt;IMG_PATH_VERSO>0&lt;/IMG_PATH_VERSO>&lt;IMG_PATH_CONTATO>0&lt;/IMG_PATH_CONTATO>";
+                  context.callService("GravarFornecedorContato",html,pattern,"",'&lt;action>I&lt;/action>');
+                }
               }
             });
             if(goout){
@@ -1615,15 +1618,16 @@ setFav:function(a){
           if(!context.ajaxrequest){
             context.callService("GravarFornecedorMercado",'&lt;Forn_ID>'+context.item.FORN_ID+'&lt;/Forn_ID>',html);
             clearInterval(status);
-            last_request=!0;
+            last_request=!1;
           }
         },100);
 
         last=setInterval(function(){
+          console.log(!context.ajaxrequest &amp;&amp; goout &amp;&amp; !last_request);
           if(!context.ajaxrequest &amp;&amp; goout &amp;&amp; !last_request){
             context.setloading(!1);
             context.close();
-            clearInterval(status);
+            clearInterval(last);
           }
         },100);
         break;

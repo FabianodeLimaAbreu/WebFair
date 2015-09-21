@@ -557,6 +557,11 @@ window.Box = Spine.Controller.sub({init:function() {
                 middlefav="middle";
               }
             }
+            else{
+              if(a.FAVORITES[i].SEGM_COD === this.usr.SEGM_COD){
+                middlefav="has";
+              }
+            }
           }
           result+="<td class='tooltip'><button type='button' class='caption-icons-icon justit bstar "+middlefav+"' name='"+a.FORN_ID+"'></button><ul class='tooltip-content col-large'>";
           for(i=0;i<a.FAVORITES.length;i++){
