@@ -337,10 +337,13 @@ elements:{
 },close:function(a) {
   //this.el.hide();
   if(a){
+    if(!this.item.FORN_ID){
+      this.modal.open("message","O Fornecedor ainda não foi salvo! Deseja realmente voltar?", this.proxy(this.requestCancel),!0, !0);
+      return !1;
+    }
     if(this.tab === this.lasttab){
       this.tab="profile";
     }
-    this.setloading()
     this.saveForn(!0);
   }
   else{
@@ -449,6 +452,9 @@ open: function(a){
   }
   
 
+},requestCancel:function(){
+  this.on = !1;
+  window.location.hash="fornecedores";
 },stopOnMore:function(ev){
   ev.stopPropagation();
 },changeTab:function(e){
@@ -624,6 +630,8 @@ open: function(a){
   pos_string=name.indexOf("/")+1;
   cod_detalhe=name.substr(pos_string, name.length);
   group=name.substr(0,pos_string-1);
+  console.dir(el);
+  console.log(el.val());
   if(13 === a.keyCode){
     html+='<div class="row row-fixed row-item"><button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bminus" name="'+name+'">'+'<input type="text" class="form-control form-control-bmore" name="'+name+'" placeholder="Other" autocomplete="off" disabled="disabled" value="'+el.val()+'"/></button></div>';
     el.parent().addClass("hide");
@@ -1189,8 +1197,8 @@ setFav:function(a){
     }
   });
 },saveForn:function(goout){
-  var html="",complet=0,context=this,pattern="",complet=!0;
-  var addforn=$("html").hasClass('add_forn') ? "I" : "U";
+  var html="",context=this,pattern="",complet=!0;
+  var addforn=($("html").hasClass('add_forn') && !this.item.FORN_ID) ? "I" : "U";
   var day,date;
   date=new Date();
   if(parseInt(date.getDate())<10){
@@ -1225,10 +1233,12 @@ setFav:function(a){
         $(".fair").attr('disabled', 'disabled');
         status=setInterval(function(){
           if(!context.ajaxrequest){
+            console.log("entrou no interval: "+complet);
             $(".cont.actived").each(function(a,b){
               html="";
               $(b).find("input").each(function(index,el){
                 if($(el).attr("required") && !$(el).val().length && complet){
+                  console.dir($(el));
                   complet=!1;
                 }
 
@@ -1259,10 +1269,12 @@ setFav:function(a){
               }
               else{
                 if(complet){
+                  console.log("cadastro completo 1");
                   $("a[href='#dados'] button").removeClass('incomplet').addClass('complet');
                   context.item.FORN_STATUS=1;
                 }
                 else{
+                  console.log("cadastro incompleto 2 ");
                   $("a[href='#dados'] button").removeClass('complet').addClass('incomplet');
                   context.item.FORN_STATUS=0;
                 }
@@ -1270,6 +1282,7 @@ setFav:function(a){
               }
 
               if(!$("html").hasClass('add_forn')){
+                console.log("add-forn: "+goout);
                 if(context.item.CONTACTS[a]){
                   html+="<CONT_ID>"+context.item.CONTACTS[a].CONT_ID+"</CONT_ID><IMG_PATH_FRENTE>"+context.item.CONTACTS[a].IMG_PATH_FRENTE+"</IMG_PATH_FRENTE><IMG_PATH_VERSO>"+context.item.CONTACTS[a].IMG_PATH_VERSO+"</IMG_PATH_VERSO><IMG_PATH_CONTATO>"+context.item.CONTACTS[a].IMG_PATH_CONTATO+"</IMG_PATH_CONTATO>";
                   context.callService("GravarFornecedorContato",html,pattern,"",'<action>U</action>'); 
@@ -1288,16 +1301,21 @@ setFav:function(a){
               context.on = !1;
               window.history.go(-1);
             }
+            if(complet){
+              console.log("cadastro completo");
+              $("a[href='#dados'] button").removeClass('incomplet').addClass('complet');
+              context.item.FORN_STATUS=1;
+            }
+            else{
+              console.log("cadastro incompleto");
+              $("a[href='#dados'] button").removeClass('complet').addClass('incomplet');
+              context.item.FORN_STATUS=0;
+            }
             clearInterval(status);
           }
         },100);
         
-        if($(".ScrollSpy .nav-item button.complet").length === 5  && this.item.FORN_STATUS === 0){
-          console.log("cadastro completo");
-        }
-        else{
-          console.log("cadastro incompleto");
-        }
+        
         context.setloading(!1);
         // console.log(this.setDate());
         break;
@@ -1378,7 +1396,7 @@ setFav:function(a){
           var el=$(b).find(".bminus").attr("name");
           //html+="<string>"+el.substr(el.indexOf("/")+1, el.length)+"</string>";
           if(el.substr(el.indexOf("/")+1, el.length) === "9999"){
-            others=el.substr(0,el.indexOf("/"));
+            others=$(b).find(".bminus").find("input").val();
           }
           else{
             others="";
@@ -1425,7 +1443,7 @@ setFav:function(a){
         $(".prod-rem .row-item").each(function(a,b){
           var el=$(b).find(".bminus").attr("name"),others="";
           if(el.substr(el.indexOf("/")+1, el.length) === "999"){
-            others=el.substr(0,el.indexOf("/"));
+            others=$(b).find(".bminus").find("input").val();
           }
           else{
             others="";
@@ -1470,7 +1488,7 @@ setFav:function(a){
         $(".mark-rem .row-item").each(function(a,b){
           var el=$(b).find(".bminus").attr("name");
           if(el.substr(el.indexOf("/")+1, el.length) === "999"){
-            others=el.substr(0,el.indexOf("/"));
+            others=$(b).find(".bminus").find("input").val();
           }
           else{
             others="";
@@ -1518,7 +1536,6 @@ setFav:function(a){
     });*/
   }
   else{
-    console.log("NAO DEU");
     if(this.lasttab && this.tab !=="dados" && !this.setfair){
       this.modal.open("message","Você deve primeiro salvar um fornecedor!!!",!1,!0);
     }

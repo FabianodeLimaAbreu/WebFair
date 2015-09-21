@@ -316,6 +316,7 @@ window.Content = Spine.Controller.sub({
     "images" === a ? this.itens && this.bedit.removeClass("unable") && this.clean(): this.itens && this.bedit.addClass("unable") && this.reset();
     this.tbody.empty();
     this.table.empty();
+    $(".overview-container").remove();
   }, images:function(a) {
     var viewport=$(".viewport");
     $("body").attr("class","").addClass("images");

@@ -860,10 +860,19 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         this.modal.open("message","Selecione ao menos uma feira para filtrar!!!",!1,!0);
         return !0;
       }
+      this.initialTime=$("input[name='initial_date']").val();
+      this.endTime=$("input[name='end_date']").val();
       this.reset();
-      this.resetFilters();
-      this.initialTime=$("input[name='initial_date']").val() || (new Date().getFullYear())+"-01-01";
-      this.endTime=$("input[name='end_date']").val() || (new Date().getFullYear())+"-12-30";
+      
+      //PRICE
+      $("input[name='initial_price']").val("");
+      $("input[name='end_price']").val("");
+      this.prices=[];
+
+      this.fstatus=null;
+      $(".status button").removeClass('sel');
+      this.nsort="AMOS_DESC";
+
       if(this.cookiefair.length){
         this.cookiefair[0].posscroll=0;
       }
@@ -1183,7 +1192,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         $.support.cors=true;
         soapRequest.filter(function(a,b){
           if(a['name'] === name){
-            //console.log(a['code']);
+            console.log(a['code']);
             core.callback=a['callback'];
             core.ajaxrequest=!0;                                                                        
             $.ajax({
@@ -1560,12 +1569,15 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                 if ("images" === c &amp;&amp; l > 0) {
                   //console.log("images");
 
-                    if (h &amp;&amp; v === h.AMOS_ID)
+                    if (h &amp;&amp; v === h.AMOS_ID){
+                      l--;
+                      k++;
                       return !1;
+                    }
 
                     v = h.AMOS_ID || null; 
                     //Usando por enquanto o caminho para a imagem large, pois as amostras antigas eram salvas em tamanho muito pequeno
-                    p = new Image, q = "http://bdb/ifair_img/"+h.IMG_PATH_SAMPLE.replace("thumb","large")/*"http://192.168.10.100/webfair/ifairimg/"+h.IMG_PATH_SAMPLE.replace("thumb","large")*/, $(p).load(function() {
+                    p = new Image, q = /*"http://bdb/ifair_img/"+h.IMG_PATH_SAMPLE.replace("thumb","large")*/"http://192.168.10.100/webfair/ifairimg/"+h.IMG_PATH_SAMPLE.replace("thumb","large"), $(p).load(function() {
                         if (!l > 0)
                           return !1;
 
@@ -1672,6 +1684,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           if (a[k]) {
             f = setInterval(function() {
                 h = a[k];   
+                console.dir(h);
                 if (!h) {
                     clearInterval(f);
                     e.setloading(!1);
@@ -1698,14 +1711,18 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                 }
 
                 if ("images" === c &amp;&amp; l > 0) {
-                  //console.log("images");
+                  console.log("images: "+h.AMOS_ID+" , "+v);
 
-                    if (h &amp;&amp; v === h.AMOS_ID)
+                    if (h &amp;&amp; v === h.AMOS_ID){
+                      l--;
+                      k++;
                       return !1;
+                    }
+                      
 
                     v = h.AMOS_ID || null; 
                     //Usando por enquanto o caminho para a imagem large, pois as amostras antigas eram salvas em tamanho muito pequeno
-                    p = new Image, q = "http://bdb/ifair_img/"+h.IMG_PATH_SAMPLE.replace("thumb","large")/*"http://192.168.10.100/webfair/ifairimg/"+h.IMG_PATH_SAMPLE.replace("thumb","large")*/, $(p).load(function() {
+                    p = new Image, q = /*"http://bdb/ifair_img/"+h.IMG_PATH_SAMPLE.replace("thumb","large")*/"http://192.168.10.100/webfair/ifairimg/"+h.IMG_PATH_SAMPLE.replace("thumb","large"), $(p).load(function() {
                         if (!l > 0)
                             return !1;
 
@@ -1943,6 +1960,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       }
     },
     changeCountries: function(a){
+      if(!$(a.target).find("option:selected").val().length){
+        this.createbox(this.fair, this.content.page, !0,"list");
+      }
       this.callService("cities",'&lt;PAIS_COD>'+$(a.target).find("option:selected").val()+'&lt;/PAIS_COD>','&lt;PAIS_DESC>&lt;/PAIS_DESC>','&lt;REGI_COD>&lt;/REGI_COD>','&lt;REGI_DESC>&lt;/REGI_DESC>');
     },
     filterForn:function(ev){
@@ -2092,6 +2112,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       $.cookie("posscroll", scroll, {expires:7, path:"/"});
       this.data=aux;
       this.setloading(!1);
+      console.dir(this.fdata);
       this.createbox(this.fdata, page,d,view,haslength);
     },
 
@@ -2346,6 +2367,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
     },
     setCompositions:function(a){
+      console.log("SET COMPOSITIONS");
       var length,context=this,l=0,obj;
       if($(a.target).prop("tagName") ===  "SPAN"){
         a.preventDefault();
@@ -2372,7 +2394,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             });
             $("#"+context.select_items[l].AMOS_ID+" .caption-downside ul").append("&lt;li>&lt;a href='#"+obj.attr('href').replace("#","")+"' name='"+context.select_items[l].AMOS_ID+"'>"+obj.attr('title').toUpperCase()+"&lt;/a>&lt;/li>");
             $("#"+context.select_items[l].AMOS_ID+" .caption-downside a").each(function(index, el) {
-              html+="&lt;Composition>&lt;COMP_COD>"+obj.attr("href").replace("#","")+"&lt;/COMP_COD>&lt;COMP_OTHERS>&lt;/COMP_OTHERS>&lt;TP_COMP_ID>1&lt;/TP_COMP_ID>&lt;/Composition>";
+              if($(el).attr("href").replace("#","") !== "M" &amp;&amp; $(el).attr("href").replace("#","") !== "P"){
+                html+="&lt;Composition>&lt;COMP_COD>"+$(el).attr("href").replace("#","")+"&lt;/COMP_COD>&lt;COMP_OTHERS>&lt;/COMP_OTHERS>&lt;TP_COMP_ID>1&lt;/TP_COMP_ID>&lt;/Composition>";
+              }
             });
             context.callService("gravarAmostraComposicao",context.select_items[l].AMOS_ID,html);     
             l++;
@@ -2428,6 +2452,54 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
       //this.callService("gravarAmostraComposicao","102004997","&lt;Composition>&lt;COMP_COD>CL_1&lt;/COMP_COD>&lt;COMP_OTHERS>&lt;/COMP_OTHERS>&lt;TP_COMP_ID>1&lt;/TP_COMP_ID>&lt;/Composition>");
     },
+    compChange:function(ev){
+      console.log("COMP CHANGE");
+      ev.preventDefault();
+      var aux,html="",context=this;
+      if(typeof ev === "object"){
+        var el=$(ev.target);
+      }
+      else{
+        var el=ev;
+      }
+      aux=el.closest("ul");
+      if(!isNaN(parseInt(el.attr("name")))){
+        var code=el.attr('name');
+        el.parent().remove();
+        var items=aux.find("a");
+        $("#"+code+" .caption-downside a").each(function(index, el) {
+          if($(el).attr("href").replace("#","") !== "M" &amp;&amp; $(el).attr("href").replace("#","") !== "P"){
+            html+="&lt;Composition>&lt;COMP_COD>"+$(el).attr("href").replace("#","")+"&lt;/COMP_COD>&lt;COMP_OTHERS>&lt;/COMP_OTHERS>&lt;TP_COMP_ID>1&lt;/TP_COMP_ID>&lt;/Composition>";
+          }
+        });
+        //  context.callService("gravarAmostraComposicao",code,html);  
+      }
+      else{
+        var html="",pattern="";
+        el.parent().remove();
+        context.data.filter(function(elem,index){
+          if(elem.AMOS_ID == el.attr("title")){
+            var day;
+            date=new Date();
+            if(parseInt(date.getDate())&lt;10){
+              day="0"+date.getDate();
+            }
+            else{
+              day=date.getDate();
+            }
+            date=""+date.getFullYear()+"-0"+(date.getMonth()+1)+"-"+day;
+            
+            elem[el.attr("name")]=null;
+            elem[el.attr("name").replace("_COD","_DESC")]="";
+            pattern+="&lt;AMOS_ID>"+parseInt(elem.AMOS_ID)+"&lt;/AMOS_ID>&lt;FORN_ID>"+parseInt(elem.FORN_ID)+"&lt;/FORN_ID>&lt;FEIR_COD>"+parseInt(elem.FEIR_COD)+"&lt;/FEIR_COD>&lt;USU_COD>"+parseInt(elem.USU_COD)+"&lt;/USU_COD>&lt;AMOS_DESC>"+elem.AMOS_DESC+"&lt;/AMOS_DESC>&lt;AMOS_STATUS>"+elem.AMOS_STATUS+"&lt;/AMOS_STATUS>&lt;AMOS_ENV_EMAIL>"+elem.AMOS_ENV_EMAIL+"&lt;/AMOS_ENV_EMAIL>&lt;TECI_COD>"+(elem.TECI_COD || "")+"&lt;/TECI_COD>&lt;BASE_COD>"+(elem.BASE_COD || "")+"&lt;/BASE_COD>&lt;GRUP_COD>"+(elem.GRUP_COD || "")+"&lt;/GRUP_COD>&lt;SUBG_COD>"+(elem.SUBG_COD || "")+"&lt;/SUBG_COD>&lt;SEGM_COD>"+(elem.SEGM_COD || "")+"&lt;/SEGM_COD>&lt;FLAG_PRIORIDADE>"+elem.FLAG_PRIORIDADE+"&lt;/FLAG_PRIORIDADE>&lt;AMOS_HOMOLOGAR>"+elem.AMOS_HOMOLOGAR+"&lt;/AMOS_HOMOLOGAR>&lt;FLAG_FISICA>"+elem.FLAG_FISICA+"&lt;/FLAG_FISICA>&lt;CREATE_DATE>"+date+"&lt;/CREATE_DATE>";
+            html+="&lt;AMOS_DESC>"+elem.AMOS_DESC+"&lt;/AMOS_DESC>&lt;AMOS_PRECO>"+elem.AMOS_PRECO+"&lt;/AMOS_PRECO>&lt;AMOS_LARGURA_TOTAL>"+elem.AMOS_LARGURA_TOTAL+"&lt;/AMOS_LARGURA_TOTAL>&lt;AMOS_GRAMATURA_M>"+elem.AMOS_GRAMATURA_M+"&lt;/AMOS_GRAMATURA_M>&lt;AMOS_COTACAO_KG>"+elem.AMOS_COTACAO_KG+"&lt;/AMOS_COTACAO_KG>&lt;AMOS_LARGURA_UTIL>"+elem.AMOS_LARGURA_UTIL+"&lt;/AMOS_LARGURA_UTIL>&lt;AMOS_GRAMATURA_ML>"+elem.AMOS_GRAMATURA_ML+"&lt;/AMOS_GRAMATURA_ML>&lt;AMOS_ONCAS>"+elem.AMOS_ONCAS+"&lt;/AMOS_ONCAS>&lt;AMOS_PRECO_UM>"+elem.AMOS_PRECO_UM+"&lt;/AMOS_PRECO_UM>";
+
+            context.callService("gravarAmostras",pattern,html,"U");
+          }
+        });
+        el.parent().remove();
+      }
+    },
     setEmailSent:function(a){
       var length,context=this,l=0,obj;
       length=a.length;
@@ -2466,51 +2538,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     getPage:function(){
       return this.page;
     },
-    compChange:function(ev){
-      ev.preventDefault();
-      var aux,html="",context=this;
-      if(typeof ev === "object"){
-        var el=$(ev.target);
-      }
-      else{
-        var el=ev;
-      }
-      aux=el.closest("ul");
-      if(aux.find("a").length>1){
-        if(!isNaN(parseInt(el.attr("name")))){
-          el.parent().remove();
-          var items=aux.find("a");
-        }
-        else{
-          var html="",pattern="";
-          el.parent().remove();
-          context.data.filter(function(elem,index){
-            if(elem.AMOS_ID == el.attr("title")){
-              var day;
-              date=new Date();
-              if(parseInt(date.getDate())&lt;10){
-                day="0"+date.getDate();
-              }
-              else{
-                day=date.getDate();
-              }
-              date=""+date.getFullYear()+"-0"+(date.getMonth()+1)+"-"+day;
-              
-              elem[el.attr("name")]=null;
-              elem[el.attr("name").replace("_COD","_DESC")]="";
-              pattern+="&lt;AMOS_ID>"+parseInt(elem.AMOS_ID)+"&lt;/AMOS_ID>&lt;FORN_ID>"+parseInt(elem.FORN_ID)+"&lt;/FORN_ID>&lt;FEIR_COD>"+parseInt(elem.FEIR_COD)+"&lt;/FEIR_COD>&lt;USU_COD>"+parseInt(elem.USU_COD)+"&lt;/USU_COD>&lt;AMOS_DESC>"+elem.AMOS_DESC+"&lt;/AMOS_DESC>&lt;AMOS_STATUS>"+elem.AMOS_STATUS+"&lt;/AMOS_STATUS>&lt;AMOS_ENV_EMAIL>"+elem.AMOS_ENV_EMAIL+"&lt;/AMOS_ENV_EMAIL>&lt;TECI_COD>"+(elem.TECI_COD || "")+"&lt;/TECI_COD>&lt;BASE_COD>"+(elem.BASE_COD || "")+"&lt;/BASE_COD>&lt;GRUP_COD>"+(elem.GRUP_COD || "")+"&lt;/GRUP_COD>&lt;SUBG_COD>"+(elem.SUBG_COD || "")+"&lt;/SUBG_COD>&lt;SEGM_COD>"+(elem.SEGM_COD || "")+"&lt;/SEGM_COD>&lt;FLAG_PRIORIDADE>"+elem.FLAG_PRIORIDADE+"&lt;/FLAG_PRIORIDADE>&lt;AMOS_HOMOLOGAR>"+elem.AMOS_HOMOLOGAR+"&lt;/AMOS_HOMOLOGAR>&lt;FLAG_FISICA>"+elem.FLAG_FISICA+"&lt;/FLAG_FISICA>&lt;CREATE_DATE>"+date+"&lt;/CREATE_DATE>";
-              html+="&lt;AMOS_DESC>"+elem.AMOS_DESC+"&lt;/AMOS_DESC>&lt;AMOS_PRECO>"+elem.AMOS_PRECO+"&lt;/AMOS_PRECO>&lt;AMOS_LARGURA_TOTAL>"+elem.AMOS_LARGURA_TOTAL+"&lt;/AMOS_LARGURA_TOTAL>&lt;AMOS_GRAMATURA_M>"+elem.AMOS_GRAMATURA_M+"&lt;/AMOS_GRAMATURA_M>&lt;AMOS_COTACAO_KG>"+elem.AMOS_COTACAO_KG+"&lt;/AMOS_COTACAO_KG>&lt;AMOS_LARGURA_UTIL>"+elem.AMOS_LARGURA_UTIL+"&lt;/AMOS_LARGURA_UTIL>&lt;AMOS_GRAMATURA_ML>"+elem.AMOS_GRAMATURA_ML+"&lt;/AMOS_GRAMATURA_ML>&lt;AMOS_ONCAS>"+elem.AMOS_ONCAS+"&lt;/AMOS_ONCAS>&lt;AMOS_PRECO_UM>"+elem.AMOS_PRECO_UM+"&lt;/AMOS_PRECO_UM>";
-
-              context.callService("gravarAmostras",pattern,html,"U");
-            }
-          });
-        }
-      }
-      else{
-        this.callService("gravarAmostraComposicao",el.attr("name"),"");
-        el.parent().remove();
-      }
-    },
     changeCity:function(val){
       var country,city,context=this,arr=[];
       country=$(".countries").find("option:selected").val();
@@ -2524,7 +2551,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             }
           }));
           this.ffair=arr[0];
-          context.setdata(arr[0],"local");
+          if(!arr[0].length){
+            this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0);
+            this.content.clean();
+            $('.bread-search').find(".spec").text("0");
+          }
+          else{
+            context.setdata(arr[0],"local");
+          }
         }
         else{
           this.callService("local",'&lt;FEIR_COD>&lt;/FEIR_COD>','&lt;PAIS_COD>'+country+'&lt;/PAIS_COD>','&lt;REGI_COD>'+city+'&lt;/REGI_COD>');
@@ -2902,6 +2936,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.prices=[];
 
       this.fstatus=null;
+      $(".status button").removeClass('sel');
       this.nsort="AMOS_DESC";
     }
   });
@@ -2928,7 +2963,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Fri Sep 18th 2015 using the <a
+		on Mon Sep 21st 2015 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>

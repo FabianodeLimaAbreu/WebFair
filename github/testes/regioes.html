@@ -13,6 +13,8 @@
                   var wsUrl = "../../WebService.asmx?op=ListarRegioes";
                   
                   var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarRegioes xmlns="http://tempuri.org/"><PAIS_COD>BR</PAIS_COD><PAIS_DESC></PAIS_DESC><REGI_COD></REGI_COD><REGI_DESC></REGI_DESC></ListarRegioes></soap:Body></soap:Envelope>';
+
+                  //<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarRegioes xmlns="http://tempuri.org/"><FEIR_COD></FEIR_COD><PAIS_COD></PAIS_COD><PAIS_DESC></PAIS_DESC><REGI_COD></REGI_COD><REGI_DESC></REGI_DESC></ListarRegioes></soap:Body></soap:Envelope>
 //4200000
 
                   $.support.cors=true;
