@@ -185,7 +185,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       "keyup input[name='FORN_DESC']":"toUpperCaseValue",
       "click .goback-relative":"goBack",
       "click .hash":"addHash",
-      "focus .info-template textarea":"focusArea"
+      "focus .info-template textarea":"focusArea",
+      "click .filterlist a":"setComboFilter",
+      "click .combofilter":"makeComboFilter"
       /*"submit .search":"submit",
       "click button.icon.go_back_default":"goBack",
       "click button.close":"getOut"*/
@@ -224,6 +226,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.endTime='2020-10-10';
       this.notcombo=0;
       this.unable_select=!1;
+      this.combofilter={
+        "FLAG_FISICA":0,
+        "FLAG_PRIORIDADE":0,
+        "AMOS_HOMOLOGAR":0,
+        "AMOS_ENV_EMAIL":0,
+        "NOTES":0
+      };
 
 
 
@@ -325,6 +334,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               this.initialTime=this.cookiefair[0].dates[0];
               this.endTime=this.cookiefair[0].dates[1];
               this.prices=this.cookiefair[0].prices;
+              this.combofilter=this.cookiefair[0].combofilter;
               this.fstatus=this.cookiefair[0].fstatus;
               this.nsort=this.cookiefair[0].nsort;
             }
@@ -344,6 +354,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                 this.initialTime=this.cookiefair[0].dates[0];
                 this.endTime=this.cookiefair[0].dates[1];
                 this.prices=this.cookiefair[0].prices;
+                this.combofilter=this.cookiefair[0].combofilter;
                 this.fstatus=this.cookiefair[0].fstatus;
                 this.nsort=this.cookiefair[0].nsort;
               }
@@ -360,6 +371,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             }
           }
 
+          console.dir(this.cookiefair[0]);
           if(b.length){
              if(isNaN(b)){
               b="&lt;FORN_DESC>"+b+"&lt;/FORN_DESC>";
@@ -409,6 +421,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             this.prices=this.cookiefair[0].prices;
             this.fstatus=this.cookiefair[0].fstatus;
             this.nsort=this.cookiefair[0].nsort;
+            this.combofilter=this.cookiefair[0].combofilter;
           }
           else{
             if(jQuery.parseJSON($.cookie("posscroll"))){
@@ -416,6 +429,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               this.initialTime=this.cookiefair[0].dates[0];
               this.endTime=this.cookiefair[0].dates[1];
               this.prices=this.cookiefair[0].prices;
+              this.combofilter=this.cookiefair[0].combofilter;
               this.fstatus=this.cookiefair[0].fstatus;
               this.nsort=this.cookiefair[0].nsort;
             }
@@ -425,7 +439,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               $(".container-fullsize.scroller").scrollTop(0);
             }
           }
-
+          console.dir(this.cookiefair[0]);
           this.fairval = a=res.fairval !== "padrao" ? parseInt(res.fairval) : ""; 
           this.fornval = b=res.fornval !== "padrao" ? res.fornval.replace("_"," ").replace("_"," ").replace("_"," ") : "";
           this.amosval = c=res.amosval !== "padrao" ? res.amosval.replace("_"," ").replace("_"," ").replace("_"," ") : ""; 
@@ -873,6 +887,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       $(".status button").removeClass('sel');
       this.nsort="AMOS_DESC";
 
+      this.combofilter={
+        "FLAG_FISICA":0,
+        "FLAG_PRIORIDADE":0,
+        "AMOS_HOMOLOGAR":0,
+        "AMOS_ENV_EMAIL":0,
+        "NOTES":0
+      };
+
       if(this.cookiefair.length){
         this.cookiefair[0].posscroll=0;
       }
@@ -1294,6 +1316,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               "amosval":""+this.amosval,
               "dates":[this.initialTime,this.endTime],
               "prices":this.prices,
+              "combofilter":this.combofilter,
               "fstatus":this.fstatus,
               "nsort":this.nsort,
               "view":""+this.view,
@@ -1684,7 +1707,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           if (a[k]) {
             f = setInterval(function() {
                 h = a[k];   
-                console.dir(h);
                 if (!h) {
                     clearInterval(f);
                     e.setloading(!1);
@@ -2063,19 +2085,33 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       $(".overview-container").remove();
       this.Componentfilter(this.data, 0, !0);
     },
+    makeComboFilter:function(){
+      this.itens = $([]);
+      this.itens.remove();
+      this.unable_select=!1;
+      this.content.reset();
+      this.order_box.find("button").removeClass("sel");
+      $(".overview-container").remove();
+      this.Componentfilter(this.fdata, 0, !0);
+    },
 
     Componentfilter:function(data,page,d,view,haslength){
       //Componente para todos os filtros, vou passar em todo o data e filtrar todos os filtros sempre que o filtro for mudado.
-      var aux,context=this,status;
+      var aux,context=this,status,i;
       aux=this.data;
       this.prices=[];
       this.prices.push($("input[name='initial_price']").val() || 0);
       this.prices.push($("input[name='end_price']").val() || 100000);
       this.fdata = aux.filter(function(a,b){
         if(parseInt(a["AMOS_PRECO"]) >= parseInt(context.prices[0]) &amp;&amp; parseInt(a["AMOS_PRECO"]) &lt;= parseInt(context.prices[1])){
-          console.log(Boolean(a["AMOS_STATUS"])+" , "+context.fstatus);
           if(Boolean(a["AMOS_STATUS"]) === context.fstatus || context.fstatus === null){
-            //console.dir(a);
+            if(context.combofilter){
+              console.log("esta setado o FILTRO DE COMBO");
+            }
+            /*for(var prop in context.combofilter) {
+                if(context.combofilter.hasOwnProperty(prop))
+                    //doSomethingWith(obj[prop]);
+            }*/
             return a;
           }
         }
@@ -2094,6 +2130,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         "amosval":""+this.amosval,
         "dates":[this.initialTime,this.endTime],
         "prices":this.prices,
+        "combofilter":this.combofilter,
         "fstatus":this.fstatus,
         "nsort":this.nsort,
         "view":""+this.view,
@@ -2101,7 +2138,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         "total": 20
       };
 
-      if(this.prices[0] !== this.cookiefair[0].prices[0] || this.prices[1] !== this.cookiefair[0].prices[1] || context.fstatus !== this.cookiefair[0].fstatus){
+      if(this.prices[0] !== this.cookiefair[0].prices[0] || this.prices[1] !== this.cookiefair[0].prices[1] || context.fstatus !== this.cookiefair[0].fstatus || this.cookiefair[0].combofilter.is_set !== context.combofilter.is_set){
         scroll.posscroll=0;
       }
       
@@ -2319,7 +2356,19 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       $(".info-template textarea").removeClass('focused');
       $(a.target).addClass('focused');
     },
-
+    setComboFilter:function(a){
+      a.preventDefault();
+      var el=$(a.target);
+      if(el.hasClass('sel')){
+        el.removeClass('sel');
+        this.combofilter[el.attr('name')]=0;
+      }
+      else{
+        $(".filterlist."+el.attr("name")).find("a").removeClass('sel');
+        el.addClass('sel');
+        this.combofilter[el.attr('name')]=parseInt(el.attr("href").replace("#",""));
+      }
+    },
 
     filterTemplate:function(){
       if(this.page !== "template_email"){
@@ -2796,6 +2845,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                 "amosval":""+e.amosval,
                 "dates":[e.initialTime,e.endTime],
                 "prices":e.prices,
+                "combofilter":e.combofilter,
                 "fstatus":e.fstatus,
                 "nsort":e.nsort,
                 "view":""+e.view,
@@ -2830,6 +2880,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                 "amosval":""+e.amosval,
                 "dates":[e.initialTime,e.endTime],
                 "prices":e.prices,
+                "combofilter":e.combofilter,
                 "fstatus":e.fstatus,
                 "nsort":e.nsort,
                 "view":""+e.view,
@@ -2921,6 +2972,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.endTime='2020-10-10';
       this.notcombo=0;
       $.removeCookie('posscroll', { path: '/' });
+      this.combofilter={
+        "FLAG_FISICA":0,
+        "FLAG_PRIORIDADE":0,
+        "AMOS_HOMOLOGAR":0,
+        "AMOS_ENV_EMAIL":0,
+        "NOTES":0
+      };
     },
     resetFilters:function(){
       console.log("resetou FILTROS");
@@ -2938,6 +2996,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.fstatus=null;
       $(".status button").removeClass('sel');
       this.nsort="AMOS_DESC";
+
+      this.combofilter={
+        "FLAG_FISICA":0,
+        "FLAG_PRIORIDADE":0,
+        "AMOS_HOMOLOGAR":0,
+        "AMOS_ENV_EMAIL":0,
+        "NOTES":0
+      };
     }
   });
   new App;
@@ -2963,7 +3029,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Mon Sep 21st 2015 using the <a
+		on Tue Sep 22nd 2015 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>

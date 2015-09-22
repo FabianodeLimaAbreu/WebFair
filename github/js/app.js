@@ -88,7 +88,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       "keyup input[name='FORN_DESC']":"toUpperCaseValue",
       "click .goback-relative":"goBack",
       "click .hash":"addHash",
-      "focus .info-template textarea":"focusArea"
+      "focus .info-template textarea":"focusArea",
+      "click .filterlist a":"setComboFilter",
+      "click .combofilter":"makeComboFilter"
       /*"submit .search":"submit",
       "click button.icon.go_back_default":"goBack",
       "click button.close":"getOut"*/
@@ -127,6 +129,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.endTime='2020-10-10';
       this.notcombo=0;
       this.unable_select=!1;
+      this.combofilter={
+        "FLAG_FISICA":{"clicked":0,"code":0},
+        "FLAG_PRIORIDADE":{"clicked":0,"code":0},
+        "AMOS_HOMOLOGAR":{"clicked":0,"code":0},
+        "AMOS_ENV_EMAIL":{"clicked":0,"code":0},
+        "NOTES":{"clicked":0,"code":0},
+        "is_set":0
+      };
 
 
 
@@ -228,6 +238,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               this.initialTime=this.cookiefair[0].dates[0];
               this.endTime=this.cookiefair[0].dates[1];
               this.prices=this.cookiefair[0].prices;
+              this.combofilter=this.cookiefair[0].combofilter;
               this.fstatus=this.cookiefair[0].fstatus;
               this.nsort=this.cookiefair[0].nsort;
             }
@@ -247,6 +258,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                 this.initialTime=this.cookiefair[0].dates[0];
                 this.endTime=this.cookiefair[0].dates[1];
                 this.prices=this.cookiefair[0].prices;
+                this.combofilter=this.cookiefair[0].combofilter;
                 this.fstatus=this.cookiefair[0].fstatus;
                 this.nsort=this.cookiefair[0].nsort;
               }
@@ -263,6 +275,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             }
           }
 
+          console.dir(this.cookiefair[0]);
           if(b.length){
              if(isNaN(b)){
               b="<FORN_DESC>"+b+"</FORN_DESC>";
@@ -312,6 +325,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             this.prices=this.cookiefair[0].prices;
             this.fstatus=this.cookiefair[0].fstatus;
             this.nsort=this.cookiefair[0].nsort;
+            this.combofilter=this.cookiefair[0].combofilter;
           }
           else{
             if(jQuery.parseJSON($.cookie("posscroll"))){
@@ -319,6 +333,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               this.initialTime=this.cookiefair[0].dates[0];
               this.endTime=this.cookiefair[0].dates[1];
               this.prices=this.cookiefair[0].prices;
+              this.combofilter=this.cookiefair[0].combofilter;
               this.fstatus=this.cookiefair[0].fstatus;
               this.nsort=this.cookiefair[0].nsort;
             }
@@ -328,7 +343,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               $(".container-fullsize.scroller").scrollTop(0);
             }
           }
-
+          console.dir(this.cookiefair[0]);
           this.fairval = a=res.fairval !== "padrao" ? parseInt(res.fairval) : ""; 
           this.fornval = b=res.fornval !== "padrao" ? res.fornval.replace("_"," ").replace("_"," ").replace("_"," ") : "";
           this.amosval = c=res.amosval !== "padrao" ? res.amosval.replace("_"," ").replace("_"," ").replace("_"," ") : ""; 
@@ -358,6 +373,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               c="";
             }
           }
+          
           a="<FEIR_COD>"+a+"</FEIR_COD>";
           var context=this;
           this.page ="fornecedores";
@@ -763,8 +779,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         this.modal.open("message","Selecione ao menos uma feira para filtrar!!!",!1,!0);
         return !0;
       }
-      this.initialTime=$("input[name='initial_date']").val();
-      this.endTime=$("input[name='end_date']").val();
+      this.initialTime=$("input[name='initial_date']").val() || (new Date().getFullYear()+"-"+"01"+"-"+"01");
+      this.endTime=$("input[name='end_date']").val() || ("2020-"+"01"+"-"+"01");
       this.reset();
       
       //PRICE
@@ -775,6 +791,16 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.fstatus=null;
       $(".status button").removeClass('sel');
       this.nsort="AMOS_DESC";
+
+      this.combofilter={
+        "FLAG_FISICA":{"clicked":0,"code":0},
+        "FLAG_PRIORIDADE":{"clicked":0,"code":0},
+        "AMOS_HOMOLOGAR":{"clicked":0,"code":0},
+        "AMOS_ENV_EMAIL":{"clicked":0,"code":0},
+        "NOTES":{"clicked":0,"code":0},
+        "is_set":0
+      };
+      $(".filterlist a").removeClass('sel');
 
       if(this.cookiefair.length){
         this.cookiefair[0].posscroll=0;
@@ -1197,6 +1223,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               "amosval":""+this.amosval,
               "dates":[this.initialTime,this.endTime],
               "prices":this.prices,
+              "combofilter":this.combofilter,
               "fstatus":this.fstatus,
               "nsort":this.nsort,
               "view":""+this.view,
@@ -1220,9 +1247,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           this.data = a.sortBy("TEMP_ID");
           this.content.changeview("list");
           this.filterTemplate();
-          
           break;
         case 'fornecedores':
+          $("input[name='initial_date']").datepicker('setDate', this.initialTime.slice(0,4)+'-'+this.initialTime.slice(5, 7)+"-"+this.initialTime.slice(8, 10));
+          $("input[name='end_date']").datepicker('setDate', this.endTime.slice(0,4)+'-'+this.endTime.slice(5, 7)+"-"+this.endTime.slice(8, 10));
+
           this.data = a.sortBy("FORN_ID");
           this.content.changeview("list");
           this.createbox(this.data, this.content.page, !0,"list");
@@ -1587,7 +1616,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           if (a[k]) {
             f = setInterval(function() {
                 h = a[k];   
-                console.dir(h);
                 if (!h) {
                     clearInterval(f);
                     e.setloading(!1);
@@ -1966,20 +1994,44 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       $(".overview-container").remove();
       this.Componentfilter(this.data, 0, !0);
     },
+    makeComboFilter:function(){
+      var is_set=!1;
+      this.itens = $([]);
+      this.itens.remove();
+      this.unable_select=!1;
+      this.content.reset();
+      this.order_box.find("button").removeClass("sel");
+      $(".overview-container").remove();
+      //this.combofilter.is_set=1;
+      for(prop in this.combofilter){
+        if(this.combofilter[prop].clicked){
+          is_set=!0;
+        }
+      }
+      this.combofilter.is_set=is_set;
+      this.Componentfilter(this.fdata, 0, !0);
+    },
 
     Componentfilter:function(data,page,d,view,haslength){
       //Componente para todos os filtros, vou passar em todo o data e filtrar todos os filtros sempre que o filtro for mudado.
-      var aux,context=this,status;
+      var aux,context=this,status,i;
       aux=this.data;
       this.prices=[];
       this.prices.push($("input[name='initial_price']").val() || 0);
       this.prices.push($("input[name='end_price']").val() || 100000);
       this.fdata = aux.filter(function(a,b){
         if(parseInt(a["AMOS_PRECO"]) >= parseInt(context.prices[0]) && parseInt(a["AMOS_PRECO"]) <= parseInt(context.prices[1])){
-          console.log(Boolean(a["AMOS_STATUS"])+" , "+context.fstatus);
           if(Boolean(a["AMOS_STATUS"]) === context.fstatus || context.fstatus === null){
-            //console.dir(a);
-            return a;
+            for(var prop in context.combofilter) {
+              if(context.combofilter.is_set){
+                if(context.combofilter[prop].clicked === 1 && context.combofilter[prop].code === a[prop]){
+                  return a;
+                }
+              }
+              else{
+                return a;
+              }
+            }
           }
         }
         
@@ -1997,6 +2049,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         "amosval":""+this.amosval,
         "dates":[this.initialTime,this.endTime],
         "prices":this.prices,
+        "combofilter":this.combofilter,
         "fstatus":this.fstatus,
         "nsort":this.nsort,
         "view":""+this.view,
@@ -2004,7 +2057,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         "total": 20
       };
 
-      if(this.prices[0] !== this.cookiefair[0].prices[0] || this.prices[1] !== this.cookiefair[0].prices[1] || context.fstatus !== this.cookiefair[0].fstatus){
+      if(this.prices[0] !== this.cookiefair[0].prices[0] || this.prices[1] !== this.cookiefair[0].prices[1] || context.fstatus !== this.cookiefair[0].fstatus || this.cookiefair[0].combofilter.is_set !== context.combofilter.is_set){
         scroll.posscroll=0;
       }
       
@@ -2222,7 +2275,27 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       $(".info-template textarea").removeClass('focused');
       $(a.target).addClass('focused');
     },
-
+    setComboFilter:function(a){
+      a.preventDefault();
+      var el=$(a.target),is_set=!1;
+      if(el.hasClass('sel')){
+        el.removeClass('sel');
+        this.combofilter[el.attr('name')].code=0;
+        this.combofilter[el.attr('name')].clicked=0;
+        for(prop in this.combofilter){
+          if(this.combofilter[prop].clicked){
+            is_set=!0;
+          }
+        }
+        this.combofilter.is_set=is_set;
+      }
+      else{
+        $(".filterlist."+el.attr("name")).find("a").removeClass('sel');
+        el.addClass('sel');
+        this.combofilter[el.attr('name')].code=parseInt(el.attr("href").replace("#",""));
+        this.combofilter[el.attr('name')].clicked=1;
+      }
+    },
 
     filterTemplate:function(){
       if(this.page !== "template_email"){
@@ -2699,6 +2772,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                 "amosval":""+e.amosval,
                 "dates":[e.initialTime,e.endTime],
                 "prices":e.prices,
+                "combofilter":e.combofilter,
                 "fstatus":e.fstatus,
                 "nsort":e.nsort,
                 "view":""+e.view,
@@ -2733,6 +2807,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                 "amosval":""+e.amosval,
                 "dates":[e.initialTime,e.endTime],
                 "prices":e.prices,
+                "combofilter":e.combofilter,
                 "fstatus":e.fstatus,
                 "nsort":e.nsort,
                 "view":""+e.view,
@@ -2792,11 +2867,18 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         $("input[name='initial_price']").val(this.prices[0]);
         $("input[name='end_price']").val(this.prices[1]);
       }
-      console.log(this.fstatus);
       if(this.fstatus !==null){
         $(".status[name='"+this.fstatus+"']").addClass('sel');
       }
+      if(this.combofilter){
+        for(prop in this.combofilter){
+          if(this.combofilter[prop].clicked){
+            $(".filterlist a[name='"+prop+"'][href='"+this.combofilter[prop].code+"']").addClass('sel');
+          }
+        }
+      }
 
+      console.dir(this.combofilter);
       //REOPEN      
       this.Componentfilter(data,page,d,view,haslength);
     },
@@ -2824,6 +2906,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.endTime='2020-10-10';
       this.notcombo=0;
       $.removeCookie('posscroll', { path: '/' });
+      this.combofilter={
+        "FLAG_FISICA":{"clicked":0,"code":0},
+        "FLAG_PRIORIDADE":{"clicked":0,"code":0},
+        "AMOS_HOMOLOGAR":{"clicked":0,"code":0},
+        "AMOS_ENV_EMAIL":{"clicked":0,"code":0},
+        "NOTES":{"clicked":0,"code":0},
+        "is_set":0
+      };
     },
     resetFilters:function(){
       console.log("resetou FILTROS");
@@ -2841,6 +2931,16 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.fstatus=null;
       $(".status button").removeClass('sel');
       this.nsort="AMOS_DESC";
+
+      this.combofilter={
+        "FLAG_FISICA":{"clicked":0,"code":0},
+        "FLAG_PRIORIDADE":{"clicked":0,"code":0},
+        "AMOS_HOMOLOGAR":{"clicked":0,"code":0},
+        "AMOS_ENV_EMAIL":{"clicked":0,"code":0},
+        "NOTES":{"clicked":0,"code":0},
+        "is_set":0
+      };
+      $(".filterlist a").removeClass('sel');
     }
   });
   new App;
