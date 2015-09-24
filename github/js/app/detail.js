@@ -209,6 +209,12 @@ open: function(a){
     day=date.getDate();
   }
   date=day+"/0"+(date.getMonth()+1)+"/"+date.getFullYear();
+  var item={
+    "CREATE_DATE":date,
+    "NOTA_DESC":$(".samplenote").val(),
+    "NOTA_ID":this.noteid
+  };
+  this.item.NOTES.push(item);
   result+="<li><article><div class='notepad-note blockquote'><p><b>"+date+" | "+this.item.FORN_ID+" - "+this.item.FORN_DESC+" | "+this.noteid+" - "+this.item.AMOS_DESC+"</b></p><p>"+this.usr.USU_NOME+" - "+this.usr.SEGM_DESC+"</p><p>"+$(".samplenote").val()+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+this.noteid+"' name='"+this.usr.USU_COD+"'></button></div></article></li>";
   $(".samplenote").val("");
   $(".description-noteside .note ul").prepend(result);
@@ -305,7 +311,6 @@ open: function(a){
   var result;
   this.setloading(!0,!1);
   result=this.getdata(code);
-  console.dir(result);
   $(".description-noteside .note li").remove();
   $(".bplus-big").removeClass('hide');
   $(".show-to-note").find("div").addClass('hide');
