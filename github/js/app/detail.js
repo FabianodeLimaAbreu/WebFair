@@ -165,14 +165,14 @@ open: function(a){
   //ANOTAÇÕES
   if(note){
     var segnote=[],result="";
-    for(i=item.NOTES.length;i>0;i--){
-      if(item.NOTES[i-1].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
-        segnote.push(item.NOTES[i-1]);
+    for(i=0;i<item.NOTES.length;i++){
+      if(item.NOTES[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
+        segnote.push(item.NOTES[i]);
       }
     }
     if(segnote.length){
       for(i=0;i<segnote.length;i++){
-        result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+item.FORN_ID+" - "+item.FORN_DESC+" | "+segnote[i].NOTA_ID+"</b></p><p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
+        result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+item.FORN_ID+" - "+item.FORN_DESC+" | "+segnote[i].NOTA_ID+" - "+item.AMOS_DESC+"</b></p><p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
         if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
           result+= "<button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' title='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'></button>";
         }
@@ -209,7 +209,7 @@ open: function(a){
     day=date.getDate();
   }
   date=day+"/0"+(date.getMonth()+1)+"/"+date.getFullYear();
-  result+="<li><article><div class='notepad-note blockquote'><p><b>"+date+" | "+this.item.FORN_DESC+" | "+this.noteid+"</b></p><p>"+this.usr.USU_NOME+" - "+this.usr.SEGM_DESC+"</p><p>"+$(".samplenote").val()+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+this.noteid+"' name='"+this.usr.USU_COD+"'></button></div></article></li>";
+  result+="<li><article><div class='notepad-note blockquote'><p><b>"+date+" | "+this.item.FORN_ID+" - "+this.item.FORN_DESC+" | "+this.noteid+" - "+this.item.AMOS_DESC+"</b></p><p>"+this.usr.USU_NOME+" - "+this.usr.SEGM_DESC+"</p><p>"+$(".samplenote").val()+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+this.noteid+"' name='"+this.usr.USU_COD+"'></button></div></article></li>";
   $(".samplenote").val("");
   $(".description-noteside .note ul").prepend(result);
 },showImage:function(a){
@@ -885,6 +885,7 @@ setFav:function(a){
   //Gravar dados nos campos
 
 },inputValues:function(){
+  console.dir(this.item);
   var context=this,complet=!0;
   if(this.item.FORN_ID){
     $(".fair option").each(function(a,b){
@@ -908,13 +909,13 @@ setFav:function(a){
     if(this.item.NOTES.length){
       var segnote=[];
       var result="";
-      for(i=this.item.NOTES.length;i>0;i--){
-        if(this.item.NOTES[i-1].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
-          segnote.push(this.item.NOTES[i-1]);
+      for(i=0;i<this.item.NOTES.length;i++){
+        if(this.item.NOTES[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
+          segnote.push(this.item.NOTES[i]);
         }
       }
       if(segnote){
-        this.setDate(segnote);
+        //this.setDate(segnote);
         for(i=0;i<segnote.length;i++){
           result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+this.item.FORN_ID+" - "+this.item.FORN_DESC+" | "+segnote[i].NOTA_ID+"</b></p><p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
 

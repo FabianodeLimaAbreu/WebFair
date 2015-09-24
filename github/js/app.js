@@ -86,6 +86,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       "click .sub_category a":"setCompositions",
       "keyup input[name='FEIR_DESC']":"toUpperCaseValue",
       "keyup input[name='FORN_DESC']":"toUpperCaseValue",
+      "keyup input[name='AMOS_DESC']":"toUpperCaseValue",
       "click .goback-relative":"goBack",
       "click .hash":"addHash",
       "focus .info-template textarea":"focusArea",
@@ -975,8 +976,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             'serviceName':'ListarFornecedores',
             'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedores xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+''+e+''+f+'</ListarFornecedores></soap:Body></soap:Envelope>',
             callback:function(data,req){
+              console.log(core.notcombo);
               if(core.notcombo){
                 core.convertData(data,req,name,!0);
+                return !0;
               }
               core.convertData(data,req,name);
             }
@@ -1254,6 +1257,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
           this.data = a.sortBy("FORN_ID");
           this.content.changeview("list");
+          console.dir(this.data);
           this.createbox(this.data, this.content.page, !0,"list");
           break;
         case 'local':
@@ -2610,15 +2614,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       else{
         if(3 < a.target.value.length){
           this.spotlight.input=$(a.target);
-          if(48 <= a.keyCode && 90 >= a.keyCode || 8 == a.keyCode) {
-                this.notcombo=!1;
-                this.callService("fornecedores",'<FORN_DESC>'+a.target.value+'</FORN_DESC>','<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'60'+'</LINHA_F>','<CREATE_DATE_I>1900-10-17</CREATE_DATE_I>','');
-              }
+          if(40 === a.keyCode || 38 === a.keyCode) {
+            return this.spotlight.arrow(a), !1;
+            //return this.arrow(a), !1;
+          }
           else{
-            if(40 === a.keyCode || 38 === a.keyCode) {
-              return this.spotlight.arrow(a), !1;
-              //return this.arrow(a), !1;
-            }
+            this.notcombo=!1;
+            $(".spotlight").html("<li>Carregando...</li>").show();
+            this.callService("fornecedores",'<FORN_DESC>'+a.target.value+'</FORN_DESC>','<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'60'+'</LINHA_F>','<CREATE_DATE_I>1900-10-17</CREATE_DATE_I>','');
           }
         }
         else{
@@ -2673,6 +2676,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     setloading: function(a, b) {
       if (!b) {
         if (a) {
+          this.spotlight.close();
           this.maskEl.fadeIn();
           //$("html").attr("id",'noscroll');
           this.loading = !0;
@@ -2683,6 +2687,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         }
       } else {
         if (a) {
+          this.spotlight.close();
           this.loader.fadeOut();
           this.maskEl.fadeIn();
           //$("html").attr("id",'noscroll');
@@ -2745,6 +2750,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         if (e.loading || e.page === "detail") {
           return!1;
         }
+        e.spotlight.close();
 
         switch (e.page){
           case "amostras":
@@ -2758,6 +2764,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               f-=600;
             }
             else{
+              /*var $table = $('#table').eq(0);
+              $table.floatThead({
+                  scrollContainer: function($table){
+                  return $table.closest('.scroller');
+                }
+              });*/
               $(".overview-container").each(function() {
                   f += $(this).height();
               });
@@ -2795,12 +2807,18 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             }
             break;
           case "fornecedores":
+            var $table = $('#table');
+            $table.floatThead({
+                scrollContainer: function($table){
+                return $table.closest('.scroller');
+              }
+            });
+
             d = z.scrollTop();
             b = e.content.itens.length;
             f= $("#table").height()-500;
 
             if(d<f){
-              console.log("entrou");
               var scroll={
                 "fornval":''+e.fornval,
                 "fairval":''+e.fairval,
@@ -2831,6 +2849,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             console.log("SCROLL CADASTRO");
             break;
           case "local":
+            var $table = $('#table');
+            $table.floatThead({
+                scrollContainer: function($table){
+                return $table.closest('.scroller');
+              }
+            });
+            $(".floatThead-container").css({'left':"50%","margin-left":"-458px"});
+            //$(".floatThead-table").css({'left':"50%","margin-left":"502px"});
             d = z.scrollTop();
             b = e.content.itens.length;
             f= $("#table").height()-680;
@@ -2842,6 +2868,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             }
             break;
           case "template_email":
+            var $table = $('#table');
+            $table.floatThead({
+                scrollContainer: function($table){
+                return $table.closest('.scroller');
+              }
+            });
+            $(".floatThead-container").css({'left':"50%","margin-left":"-458px"});
             d = z.scrollTop();
             b = e.content.itens.length;
             f= $("#table").height()-700;
@@ -2890,6 +2923,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.itens.remove();
       this.unable_select=!1;
       this.content.reset();
+      //$("#table").floatThead('destroy');
     },
     restartValues:function(){
       //Var to storage the basic data
@@ -2914,6 +2948,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         "NOTES":{"clicked":0,"code":0},
         "is_set":0
       };
+      //$table.floatThead('destroy');
     },
     resetFilters:function(){
       console.log("resetou FILTROS");

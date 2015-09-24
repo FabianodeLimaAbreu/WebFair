@@ -14,7 +14,7 @@ window.Spotlight = Spine.Controller.sub({
     }
     if(a.attr("type") === "button"){
       name+=a.attr("name")+"</FORN_ID>";
-      this.setFornVal(a.attr("name"));
+      this.setFornVal(a.text());
       $(".forn").val(a.text());
     }
     else{
@@ -71,6 +71,7 @@ window.Spotlight = Spine.Controller.sub({
 }, close:function(a) {
   this.list = "";
   this.id = -1;
+  this.setNotCombo(!0);
   this.doc.unbind("click");
   this.el.empty().fadeOut();
   return!1;
@@ -78,9 +79,9 @@ window.Spotlight = Spine.Controller.sub({
   var i,length,html="";
   length=this.forn.length;
   this.doc.unbind("click").bind("click", this.proxy(this.close));
-  if(2 > length) {
-      this.close();
-      return!1;
+  if(1 > length) {
+    this.close();
+    return!1;
   }
   for(i=0;i<length;i++){
     html+="<li><button type='button' name='"+this.forn[i].FORN_ID+"'>"+this.forn[i].FORN_DESC+"</button></li>";
@@ -417,16 +418,16 @@ window.Box = Spine.Controller.sub({init:function() {
     result+="<li><button type='button' class='caption-icons-icon justit setitem bhomologado "+homologado+"' name='"+a.AMOS_ID+"' title='Homologar'></button></li>"
     if(note){
       var segnote=[];
-      for(i=a.NOTES.length;i>0;i--){
-        if(a.NOTES[i-1].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
-          segnote.push(a.NOTES[i-1]);
+      for(i=0;i<a.NOTES.length;i++){
+        if(a.NOTES[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
+          segnote.push(a.NOTES[i]);
         }
       }
       if(segnote.length){
         this.setDate(segnote);
         result+="<li class='tooltip tooltip-selectable'><button type='button' class='caption-icons-icon justit bnote'></button><ul class='tooltip-content notepad notepadmess rightless'><li class='tooltip-title'><p class='tooltip-item'>Anotações</p></li>";
         for(i=0;i<segnote.length;i++){
-          result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+a.FORN_ID+" - "+ a.FORN_DESC+" | "+segnote[i].OBJ_ID+"</b></p><p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
+          result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+a.FORN_ID+" - "+ a.FORN_DESC+" | "+segnote[i].OBJ_ID+" - "+a.AMOS_DESC+"</b></p><p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
           if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
             result+= "<button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' title='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'></button>";
           }
@@ -523,9 +524,9 @@ window.Box = Spine.Controller.sub({init:function() {
 
         if(a.NOTES.length ){
           var segnote=[];
-          for(i=a.NOTES.length;i>0;i--){
-            if(a.NOTES[i-1].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
-              segnote.push(a.NOTES[i-1]);
+          for(i=0;i<a.NOTES.length;i++){
+            if(a.NOTES[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
+              segnote.push(a.NOTES[i]);
             }
           }
           if(segnote.length){
@@ -591,9 +592,9 @@ window.Box = Spine.Controller.sub({init:function() {
         result+="<td><button type='button' name='"+a.AMOS_ID+"' class='icon bselection'></button></td><td><a href='#detail/"+parseInt(a.FEIR_COD)+"/"+a.AMOS_ID+"'>"+a.FORN_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.AMOS_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.CREATE_DATE+"</a></td><td><button type='button' class='caption-icons-icon justit setitem bfisica "+fisica+"' name='"+a.AMOS_ID+"' title='Fisica'></button></td><td>"+a.AMOS_PRECO+"</td><td>"+a.AMOS_COTACAO_KG+"</td><td><button type='button' class='caption-icons-icon justit setitem bfav "+fav+"' name='"+a.AMOS_ID+"' title='Favoritar'></button></td><td><button type='button' class='caption-icons-icon justit setitem bhomologado "+homologado+"' name='"+a.AMOS_ID+"' title='Homologar'></button></td>";
         if(note){
           var segnote=[];
-          for(i=a.NOTES.length;i>0;i--){
-            if(a.NOTES[i-1].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
-              segnote.push(a.NOTES[i-1]);
+          for(i=0;i<a.NOTES.length;i++){
+            if(a.NOTES[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
+              segnote.push(a.NOTES[i]);
             }
           }
           if(segnote){
