@@ -670,6 +670,12 @@ header .logo-print {
 .tooltip-content.notepad:before {
   margin-left: 230px;
 }
+.tooltip-content.notepad.otherbefore:before {
+  position: absolute;
+  bottom: -12px;
+  top: auto;
+  background: url(../images/pointer_background_inverse.png) no-repeat;
+}
 .tooltip-content.notepadmess {
   top: 50px;
   right: -93px;

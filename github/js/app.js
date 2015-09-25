@@ -49,6 +49,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     events: {      
       "click .justit.bnote":"preventAction",
       "click .justit.bemail":"preventAction",
+      "hover .tooltip-selectable":"positionNote",
       "click .ai-holder button":"ChangeStatusFair",
       "click .changeview button":"changeview",
       "click .tooltip.borderby .tooltip-item":"sortItems",
@@ -104,7 +105,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     init:function(){
       this.view = "images";
       this.page = "amostras";
-      this.nsort="AMOS_DESC";
+      this.nsort="CREATE_DATE";
       this.itens = $([]);
       this.data=[];
       this.fdata = [];
@@ -467,12 +468,21 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     preventAction:function(a){
       a.preventDefault();
     },
+    positionNote:function(a){
+      var tablesize=$(".scroller").outerHeight();
+      console.log(tablesize);
+      if(($(a.target).position().top+$(a.target).height()+50 )> tablesize){
+        var el=$(a.target).find(".notepadmess");
+        el.css("top","-"+el.height()+"px").addClass('otherbefore');
+      }
+    },
     writePage:function(hash,val){
       var context=this;  
       if(this.page !== "detail" && this.page !== "fornecedor_cadastro"){
         context.reset();
       }
 
+      $(".nav-menu a").removeClass('sel');
       this.container.load("pages/"+hash+".html",function( response, status, xhr){
         switch(context.page){
           case "amostras":
@@ -484,6 +494,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             context.spotlight.el=$(".spotlight");
             this.view = "images";
             $("body").removeAttr("class");
+            $(".nav-menu a[href='#amostras']").addClass('sel');
             if(!context.fair.length){
               status=setInterval(function(){
                 if(context.fair.length){
@@ -546,6 +557,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             context.bfair=$(".fair");
             context.bforn=$(".forn");
             context.spotlight.el=$(".spotlight");
+            $(".nav-menu a[href='#fornecedores']").addClass('sel');
             if(!context.fair.length){
               status=setInterval(function(){
                 if(context.fair.length){
@@ -602,6 +614,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             //console.dir(context.fair);
             break;
           case "local":
+            $(".nav-menu a[href='#local']").addClass('sel');
             context.bcity=$(".city");
             if(context.usr.SEGM_COD !== "TD"){
               $(".bnew-fair").hide();
@@ -620,6 +633,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             }          
             break;
           case "local_cadastro":
+            $(".nav-menu a[href='#local']").addClass('sel');
             $(".ai-holder").hide();
             context.bcity=$(".city");
             if(context.ffair.length){
@@ -643,10 +657,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             //context.callService(context.page,"<FEIR_COD></FEIR_COD>","<PAIS_COD>BR</PAIS_COD>","<REGI_COD>SP</REGI_COD>");
             break;
           case "detail":
+            $(".nav-menu a[href='#amostras']").addClass('sel');
             $("html").attr("class","").addClass(context.page);
             context.detail.reload(context.fairval,context.amosval);
             break;
           case "fornecedor_cadastro":
+            $(".nav-menu a[href='#fornecedores']").addClass('sel');
             context.bfair=$(".fair");
             context.bcity=$(".city");
             console.log("fornecedor cadastro");
@@ -666,6 +682,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             context.fornecedores.reload(val);
             break;
           case "template_email":
+            $(".nav-menu a[href='#template_email']").addClass('sel');
             if(!context.fair.length){
               status=setInterval(function(){
                 if(context.fair.length){
@@ -709,6 +726,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             }
             break;
           case "template_cadastro":
+            $(".nav-menu a[href='#template_email']").addClass('sel');
             $(".usr_segm").text(context.usr.SEGM_DESC);
 
             break;   
@@ -1269,6 +1287,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       }  
       switch(b){
         case 'amostras':
+          //this.data = a.sortBy(this.nsort);
           this.data = a.sortBy(this.nsort);
           this.content.changeview(this.view);
           if(!this.cookiefair.length){

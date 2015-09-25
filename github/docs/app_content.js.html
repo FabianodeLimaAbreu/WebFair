@@ -630,11 +630,13 @@ window.Box = Spine.Controller.sub({init:function() {
             this.setDate(a.NOTES);
             result+="&lt;td class='tooltip tooltip-selectable'>&lt;button type='button' class='caption-icons-icon justit bnote'>&lt;/button>&lt;ul class='tooltip-content notepad notepadmess col-large'>&lt;li class='tooltip-title'>&lt;p class='tooltip-item'>Anotações&lt;/p>&lt;/li>";
             for(i=0;i&lt;segnote.length;i++){
-              result+="&lt;li>&lt;article>&lt;div class='notepad-note blockquote'>&lt;p>&lt;b>"+segnote[i].CREATE_DATE+" | "+a.FORN_ID+" - "+a.FORN_DESC+" | "+segnote[i].NOTA_ID+"&lt;/b>&lt;/p>&lt;p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"&lt;/p>&lt;p>"+segnote[i].NOTA_DESC+"&lt;/p>&lt;/div>&lt;div class='blockquote'>";
-              if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
-                result+= "&lt;button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' title='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'>&lt;/button>";
+              if(i&lt;5){
+                result+="&lt;li>&lt;article>&lt;div class='notepad-note blockquote'>&lt;p>&lt;b>"+segnote[i].CREATE_DATE+" | "+a.FORN_ID+" - "+a.FORN_DESC+" | "+segnote[i].NOTA_ID+"&lt;/b>&lt;/p>&lt;p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"&lt;/p>&lt;p>"+segnote[i].NOTA_DESC+"&lt;/p>&lt;/div>&lt;div class='blockquote'>";
+                if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
+                  result+= "&lt;button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' title='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'>&lt;/button>";
+                }
+                result+="&lt;/div>&lt;/article>&lt;/li>"
               }
-              result+="&lt;/div>&lt;/article>&lt;/li>"
             }
             result+="&lt;/ul>&lt;/td>"
           }
@@ -698,11 +700,13 @@ window.Box = Spine.Controller.sub({init:function() {
             this.setDate(segnote);
             result+="&lt;td class='tooltip tooltip-selectable'>&lt;button type='button' class='caption-icons-icon justit bnote'>&lt;/button>&lt;ul class='tooltip-content notepad notepadmess col-large'>&lt;li class='tooltip-title'>&lt;p class='tooltip-item'>Anotações&lt;/p>&lt;/li>";
             for(i=0;i&lt;segnote.length;i++){
-              result+="&lt;li>&lt;article>&lt;div class='notepad-note blockquote'>&lt;p>&lt;b>"+segnote[i].CREATE_DATE+" | "+ segnote[i].USU_NOME+" | "+segnote[i].NOTA_ID+"&lt;/b>&lt;/p>&lt;p>"+segnote[i].SEGM_DESC+" - Assunto:&lt;/p>&lt;p>"+segnote[i].NOTA_DESC+"&lt;/p>&lt;/div>&lt;div class='blockquote'>";
-              if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
-                result+= "&lt;button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' title='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'>&lt;/button>";
+              if(i&lt;5){
+                result+="&lt;li>&lt;article>&lt;div class='notepad-note blockquote'>&lt;p>&lt;b>"+segnote[i].CREATE_DATE+" | "+ segnote[i].USU_NOME+" | "+segnote[i].NOTA_ID+"&lt;/b>&lt;/p>&lt;p>"+segnote[i].SEGM_DESC+" - Assunto:&lt;/p>&lt;p>"+segnote[i].NOTA_DESC+"&lt;/p>&lt;/div>&lt;div class='blockquote'>";
+                if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
+                  result+= "&lt;button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' title='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'>&lt;/button>";
+                }
+                result+="&lt;/div>&lt;/article>&lt;/li>";
               }
-              result+="&lt;/div>&lt;/article>&lt;/li>";
             }
             result+="&lt;/ul>&lt;/td>";
           }
