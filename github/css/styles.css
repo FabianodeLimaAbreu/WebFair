@@ -764,14 +764,21 @@ header .logo-print {
   left: 15px;
 }
 .tooltip-content.date {
-  right: -110px;
   top: 55px;
   height: 45px;
+  right: -280px;
+}
+.tooltip-content.date:before {
+  margin-left: 110px;
 }
 .tooltip-content.date2 {
-  right: -150px;
+  right: -370px;
   top: 50px;
   height: 45px;
+  margin-left: 35px;
+}
+.tooltip-content.date2:before {
+  margin-left: 40px;
 }
 .tooltip-content.refine {
   width: 720px;
@@ -2368,6 +2375,17 @@ form.search {
 .modal .dialog textarea {
   height: 140px;
 }
+.ai-holder {
+  margin: 20px 0 0 0;
+  float: left;
+  width: 250px;
+  height: 40px;
+  display: block;
+}
+.ai-holder button {
+  margin: 0 0px 0 30px;
+  text-align: left;
+}
 .icon {
   padding: 0px;
   position: relative;
@@ -3910,6 +3928,18 @@ form textarea {
   .edit .holder {
     float: none;
     margin: 0 auto;
+  }
+  .tooltip-content.date {
+    right: -110px;
+  }
+  .tooltip-content.date:before {
+    margin-left: auto;
+  }
+  .tooltip-content.date2 {
+    right: -150px;
+  }
+  .tooltip-content.date2:before {
+    margin-left: auto;
   }
 }
 @media only screen and (min-width: 1440px) {
