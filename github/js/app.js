@@ -160,7 +160,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
       this.header.addClass("goDown");
       
-      console.dir(this.usr);
       this.username.text(this.usr.USU_NOME);
       this.usersegm.text(this.usr.SEGM_DESC);
       
@@ -223,7 +222,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           var context=this;
           this.page ="amostras";
           this.view = "images";
-          console.log("AMOSTRAS NORMAL");
+          //console.log("AMOSTRAS NORMAL");
           $("html").attr("class","").addClass(this.page);
           $(".zoomContainer").remove();
           this.restartValues();
@@ -231,7 +230,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         },
         "amostras/*fairval/*fornval/*amosval":function(res){
           var a,b,c;
-          console.log("this.cookiefair");
+          //console.log("this.cookiefair");
           $(".zoomContainer").remove();
           this.filterisdone=!0;
           this.fairval = a=res.fairval !== "padrao" ? parseInt(res.fairval) : ""; 
@@ -239,9 +238,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           this.amosval = c=res.amosval !== "padrao" ? res.amosval.replace("_"," ").replace("_"," ").replace("_"," ") : ""; 
 
           if(this.cookiefair.length){
-            console.dir(this.cookiefair);
+            //console.dir(this.cookiefair);
             if(a == this.cookiefair[0].fairval && b === this.cookiefair[0].fornval  && c === this.cookiefair[0].amosval ){
-              console.log("bateu parametros do cookie");
+              //console.log("bateu parametros do cookie");
               this.initialTime=this.cookiefair[0].dates[0];
               this.endTime=this.cookiefair[0].dates[1];
               this.prices=this.cookiefair[0].prices;
@@ -250,18 +249,18 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               this.nsort=this.cookiefair[0].nsort;
             }
             else{
-              console.log("WINDOW 0");
+              //console.log("WINDOW 0");
               this.cookiefair=[];
               $.removeCookie('posscroll', { path: '/' });
               $(".container-fullsize.scroller").scrollTop(0);
             }
           }
           else{
-            console.log("nao achou");
+            //console.log("nao achou");
             if(jQuery.parseJSON($.cookie("posscroll"))){
               this.cookiefair.push(jQuery.parseJSON($.cookie("posscroll")));
               if(a == this.cookiefair[0].fairval && b === this.cookiefair[0].fornval  && c === this.cookiefair[0].amosval ){
-                console.log("bateu parametros do cookie");
+                //console.log("bateu parametros do cookie");
                 this.initialTime=this.cookiefair[0].dates[0];
                 this.endTime=this.cookiefair[0].dates[1];
                 this.prices=this.cookiefair[0].prices;
@@ -270,19 +269,19 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                 this.nsort=this.cookiefair[0].nsort;
               }
               else{
-                console.log("WINDOW 0");
+                //console.log("WINDOW 0");
                 this.cookiefair=[];
                 $.removeCookie('posscroll', { path: '/' });
                 $(".container-fullsize.scroller").scrollTop(0);
               }
             }
             else{
-              console.log("WINDOW 0");
+              //console.log("WINDOW 0");
               $(".container-fullsize.scroller").scrollTop(0);
             }
           }
 
-          console.dir(this.cookiefair[0]);
+          //console.dir(this.cookiefair[0]);
           if(parseInt(b)){
             b="<FORN_ID>"+b+"</FORN_ID>";
           }
@@ -327,7 +326,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           $(".zoomContainer").remove();
 
           if(this.cookiefair.length){
-            console.dir(this.cookiefair);
+            //console.dir(this.cookiefair);
             this.initialTime=this.cookiefair[0].dates[0];
             this.endTime=this.cookiefair[0].dates[1];
             this.prices=this.cookiefair[0].prices;
@@ -351,7 +350,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               $(".container-fullsize.scroller").scrollTop(0);
             }
           }
-          console.dir(this.cookiefair[0]);
+          //console.dir(this.cookiefair[0]);
           this.fairval = a=res.fairval !== "padrao" ? parseInt(res.fairval) : ""; 
           this.fornval = b=res.fornval !== "padrao" ? res.fornval.replace("_"," ").replace("_"," ").replace("_"," ") : "";
           this.amosval = c=res.amosval !== "padrao" ? res.amosval.replace("_"," ").replace("_"," ").replace("_"," ") : ""; 
@@ -399,7 +398,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         },
         "fornecedores/*func":function(a){
           var context=this;
-          console.log("criar novo fornecedor");
+          //console.log("criar novo fornecedor");
           this.page ="fornecedor_cadastro";
           $("html").attr("class","fornecedor_cadastro add_forn");
           $(".zoomContainer").remove();
@@ -469,7 +468,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     },
     positionNote:function(a){
       var tablesize=$(".scroller").outerHeight();
-      console.log(tablesize);
+      //console.log(tablesize);
       if(($(a.target).position().top+$(a.target).height()+50 )> tablesize){
         var el=$(a.target).find(".notepadmess");
         el.css("top","-"+el.height()+"px").addClass('otherbefore');
@@ -485,7 +484,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.container.load("pages/"+hash+".html",function( response, status, xhr){
         switch(context.page){
           case "amostras":
-            console.log(context.fairval);
+            //console.log(context.fairval);
             context.viewBtn=$(".changeview button");
             context.order_box=$(".tooltip.borderby");
             context.bfair=$(".fair");
@@ -685,7 +684,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             if(!context.fair.length){
               status=setInterval(function(){
                 if(context.fair.length){
-                  console.log("ok");
                   context.ajaxrequest=!1;
                   context.createComponent(context.segm,$(".SEGM_COD"),'segm');
                   context.callService("template_email",'','<TEMP_DESC></TEMP_DESC><SEGM_COD></SEGM_COD>');
@@ -877,7 +875,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       $(".date-filter").removeClass("sel");
     },
     SetItemAmos:function(ev){
-      console.log("CLICOU EM UM JUSTIT");
+      //console.log("CLICOU EM UM JUSTIT");
       var el=$(ev.target);
       var item=[],result,pattern="",html="";
       if(this.page === "amostras"){
@@ -915,7 +913,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           html+="<FLAG_PRIORIDADE>"+result+"</FLAG_PRIORIDADE><AMOS_HOMOLOGAR>"+item.AMOS_HOMOLOGAR+"</AMOS_HOMOLOGAR><FLAG_FISICA>"+item.FLAG_FISICA+"</FLAG_FISICA>";
           break;
         default:
-          console.log("ALGO DE ERRADO OCORREU!!!");
+          //console.log("ALGO DE ERRADO OCORREU!!!");
           return !1;
       }
       pattern="<AMOS_ID>"+item.AMOS_ID+"</AMOS_ID><FORN_ID>"+item.FORN_ID+"</FORN_ID><FEIR_COD>"+parseInt(item.FEIR_COD)+"</FEIR_COD><USU_COD>"+item.USU_COD+"</USU_COD><AMOS_DESC>"+item.AMOS_DESC+"</AMOS_DESC><AMOS_LARGURA_TOTAL>"+item.AMOS_LARGURA_TOTAL+"</AMOS_LARGURA_TOTAL><AMOS_LARGURA_UTIL>"+item.AMOS_LARGURA_UTIL+"</AMOS_LARGURA_UTIL><AMOS_GRAMATURA_M>"+item.AMOS_GRAMATURA_M+"</AMOS_GRAMATURA_M><AMOS_GRAMATURA_ML>"+item.AMOS_GRAMATURA_ML+"</AMOS_GRAMATURA_ML><AMOS_ONCAS>"+item.AMOS_ONCAS+"</AMOS_ONCAS><AMOS_COTACAO_M>"+item.AMOS_COTACAO_M+"</AMOS_COTACAO_M><AMOS_COTACAO_KG>"+item.AMOS_COTACAO_KG+"</AMOS_COTACAO_KG><AMOS_STATUS>"+item.AMOS_STATUS+"</AMOS_STATUS><AMOS_ENV_EMAIL>"+item.AMOS_ENV_EMAIL+"</AMOS_ENV_EMAIL><AMOS_PRECO_UM>"+item.AMOS_PRECO_UM+"</AMOS_PRECO_UM><AMOS_PRECO>"+item.AMOS_PRECO+"</AMOS_PRECO><TECI_COD>"+(item.TECI_COD || "")+"</TECI_COD><BASE_COD>"+(item.BASE_COD || "")+"</BASE_COD><GRUP_COD>"+(item.GRUP_COD || "")+"</GRUP_COD><SUBG_COD>"+(item.SUBG_COD || "")+"</SUBG_COD><SEGM_COD>"+item.SEGM_COD+"</SEGM_COD><CREATE_DATE>"+"2015-01-01"+"</CREATE_DATE>";
@@ -931,7 +929,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         });
       }
       else{
-        console.log("aqui");
         this.data.filter(function(element,i){
           if(element.AMOS_ID === parseInt($(a.target).attr("name"))){
             context.select_items.push({"AMOS_ID":parseInt(element.AMOS_ID),"AMOS_DESC":element.AMOS_DESC,"FORN_ID":element.FORN_ID,"FORN_DESC":element.FORN_DESC});
@@ -1036,7 +1033,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             'serviceName':'ListarFornecedores',
             'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedores xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+''+e+''+f+'</ListarFornecedores></soap:Body></soap:Envelope>',
             callback:function(data,req){
-              console.log(core.notcombo);
               if(core.notcombo){
                 core.convertData(data,req,name,!0);
                 return !0;
@@ -1184,7 +1180,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         $.support.cors=true;
         soapRequest.filter(function(a,b){
           if(a['name'] === name){
-            console.log(a['code']);
+            //console.log(a['code']);
             core.callback=a['callback'];
             core.ajaxrequest=!0;                                                                        
             $.ajax({
@@ -1276,7 +1272,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       }
     },
     processError:function(data, status, req){
-      console.log("DEU ERRO");
+      //console.log("DEU ERRO");
       this.ajaxrequest=!1;
       this.fornecedores.ajaxrequest=!1;
     },
@@ -1335,7 +1331,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
           this.data = a.sortBy("FORN_ID");
           this.content.changeview("list");
-          console.dir(this.data);
+         // console.dir(this.data);
           this.createbox(this.data, this.content.page, !0,"list");
           break;
         case 'local':
@@ -1343,7 +1339,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           this.createbox(a, this.content.page, !0,"list");
           break;
         default:
-          console.log("ALGO ERRADO");
+          //console.log("ALGO ERRADO");
       }
       ("images" !== this.view) ? this.scroll($("table tbody")) : this.scroll();
       /*if(b){
@@ -1366,9 +1362,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         this.fornecedores.ajaxrequest=!1;
         if (status == "success") {
           if(this.page === "fornecedor_cadastro" && jQuery.parseJSON($(req.responseXML).text()).OBJ_ID){
-            console.log("salvou: "+jQuery.parseJSON($(req.responseXML).text()).OBJ_ID);
+            //console.log("salvou: "+jQuery.parseJSON($(req.responseXML).text()).OBJ_ID);
             query=data.URL.replace("http://192.168.10.100/WebService.asmx?op=","");
-            console.log(query === "GravarAnotacao");
+            //console.log(query === "GravarAnotacao");
             if(query === "GravarFornecedor"){
               if(!this.fornecedores.item){
                 this.fornecedores.item={};
@@ -1461,7 +1457,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             break;
           case "template_email":
             var context=this;
-            console.log("convert");
+            //console.log("convert");
             if(this.page === "template_email"){
               this.data=jQuery.parseJSON($(req.responseXML).text());//.sortBy('FEIR_DESC').unique();
               this.data=this.data.filter(function(a,b){
@@ -1484,7 +1480,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         }
     },
     showComboTemplateEmail:function(){
-      console.log("show");
+      //console.log("show");
     },
     setDate:function(list){
       var i,length;
@@ -1572,7 +1568,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                       else{
                         var view_container=$(".overview-container");
                         view_container=$(view_container).eq(view_container.length-1);
-                        console.dir(view_container.find("tbody tr"));
+                        //console.dir(view_container.find("tbody tr"));
                         view_container.find(".bread-search .spec").text(view_container.find("tbody tr").length);
                       }
                     }
@@ -1694,7 +1690,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           }
         }
         else{
-          console.log("ESCREVENDO SEM SORTBY");
+          //console.log("ESCREVENDO SEM SORTBY");
           m=((this.content.page+1)*this.itens_by_page);
           var p, h, q, k = (this.content.page*this.itens_by_page), l = this.itens_by_page, e = this,countf=1;
           if (a[k]) {
@@ -1800,9 +1796,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                       count="COUNT_AMOS";
 
                       if(a[k-1]){
-                        console.log(h.FORN_ID+" , "+a[k-1].FORN_ID);
+                        //console.log(h.FORN_ID+" , "+a[k-1].FORN_ID);
                         if(h.FORN_ID !== a[k-1].FORN_ID){
-                          console.log(h.FORN_ID+" = "+a[k-1].FORN_ID);
+                          //console.log(h.FORN_ID+" = "+a[k-1].FORN_ID);
                           countf++;
                         }
                       }
@@ -1935,11 +1931,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       }
     },
     enableSelect : function(a){
-      console.log("ok");
+      //console.log("ok");
       var context=this;
       if(!context.email.length){
         status=setInterval(function(){
-          console.log("enable select");
+          //console.log("enable select");
           if(context.fair.length && !context.email.length){
             context.ajaxrequest=!1;
             context.callService("template_email",'','<TEMP_DESC></TEMP_DESC><SEGM_COD></SEGM_COD>');
@@ -2015,19 +2011,19 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       });
       if(el.length){
         if($(ev.target).hasClass('has')){
-          console.log("entrou has");
+          //console.log("entrou has");
           for(i=0;i<el[0].FAVORITES.length;i++){
             if(el[0].FAVORITES[i].SEGM_COD !== this.usr.SEGM_COD){
-              console.log("diferente");
+              //console.log("diferente");
               html+="<string>"+el[0].FAVORITES[i].SEGM_COD+"</string>";
               diff=!0;
             }
             else{
-              console.log("igual");
+              //console.log("igual");
               el[0].FAVORITES.slice(i, 1);
               //item.push({"SEGM_COD":this.usr.SEGM_COD,"SEGM_DESC":this.usr.SEGM_DESC});
               if(el[0].FAVORITES[i].length >=1){
-                console.log("mais que 1");
+                //console.log("mais que 1");
                 diff=!0;
               }
               else{
@@ -2044,7 +2040,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         }
 
         else if($(ev.target).hasClass('middle')){
-          console.log("middle");
+          //console.log("middle");
           for(i=0;i<el[0].FAVORITES.length;i++){
             html+="<string>"+el[0].FAVORITES[i].SEGM_COD+"</string>";
           }
@@ -2052,7 +2048,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           $(ev.target).removeClass('nothas').removeClass('middle').addClass('has');
         }
         else{
-          console.log("nova");
+          //console.log("nova");
           html+="<string>"+this.usr.SEGM_COD+"</string>";
           item.push({"SEGM_COD":this.usr.SEGM_COD,"SEGM_DESC":this.usr.SEGM_DESC});
           $(ev.target).removeClass('nothas').removeClass('middle').addClass('has');
@@ -2077,7 +2073,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.content.reset();
       $(".overview-container").remove();
       this.order_box.find("button").removeClass("sel");
-      console.dir($(".tooltip-content.status button"));
+      //console.dir($(".tooltip-content.status button"));
       if($(".tooltip-content.status button").hasClass('sel')){
         $(".status.tooltip-selectable").addClass('has');
       }
@@ -2175,7 +2171,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       //$.cookie("posscroll", scroll, {expires:7, path:"/"});
       this.data=aux;
       this.setloading(!1);
-      console.dir(this.fdata);
+      //console.dir(this.fdata);
       this.createbox(this.fdata, page,d,view,haslength);
     },
 
@@ -2183,7 +2179,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.navigate("detail/"+$(a.target).attr("name"), !0);
     },
     sendEmail:function(){
-      console.log("clicou");
+      //console.log("clicou");
       var i,context=this,error=!1;
       if(!this.select_items.length){
         this.modal.open("message","Selecione ao menos um item",!1,!0);
@@ -2234,11 +2230,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             if(any_principal){
               //this.modal.open("message","O Fornecedor não possui um contato principal Cadastrado",!1,!0);
                 item[0].CONTACTS.forEach(function(element,index){
-                  console.log(!email.length);
+                  //console.log(!email.length);
                   if(element.CONT_EMAIL.length && !email.length){
                     email=element.CONT_EMAIL;
 
-                    console.log("entrou");
+                    //console.log("entrou");
                     context.modal.open("template",[context.email,amos_code,amos_id,element.CONT_EMAIL,item,item[0]],!1,!1);
                     return !1;
                   }
@@ -2254,7 +2250,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               /*for(j=0;j<this.select_items.length;j++){
                 amos_code.push(this.select_items[j].AMOS_DESC);
               }*/
-              console.log("email para: "+email);
+              //console.log("email para: "+email);
               context.modal.open("template",[context.email,amos_code,amos_id,email,item,item[0]],!1,!1);
             }
           }
@@ -2430,7 +2426,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.fdata = aux.filter(function(a,b){
         if(parseInt(a.TP_TEMP_ID) === parseInt(type) || !type.length){
           if(context.usr.SEGM_COD === "TD"){
-            console.log(segm+" , "+a.SEGM_COD);
+            //console.log(segm+" , "+a.SEGM_COD);
             if(segm === a.SEGM_COD || !segm.length){
               return a;
             }
@@ -2463,7 +2459,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
     },
     setCompositions:function(a){
-      console.log("SET COMPOSITIONS");
+      //console.log("SET COMPOSITIONS");
       var length,context=this,l=0,obj;
       if($(a.target).prop("tagName") ===  "SPAN"){
         a.preventDefault();
@@ -2549,7 +2545,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       //this.callService("gravarAmostraComposicao","102004997","<Composition><COMP_COD>CL_1</COMP_COD><COMP_OTHERS></COMP_OTHERS><TP_COMP_ID>1</TP_COMP_ID></Composition>");
     },
     compChange:function(ev){
-      console.log("COMP CHANGE");
+      //console.log("COMP CHANGE");
       ev.preventDefault();
       var aux,html="",context=this;
       if(typeof ev === "object"){
@@ -2669,7 +2665,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       }
     },
     changeFair:function(a){
-      console.log("mudou feira, RESETOU COOKIE")
+      //console.log("mudou feira, RESETOU COOKIE")
       /*this.initialTime='2000-01-01';
       this.endTime='2020-10-10';*/
       //this.scroller=0;
@@ -2917,17 +2913,17 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               $(".overview-container").each(function() {
                   f += $(this).height();
               });
-              f-=600;
+              f-=$(".scroller").outerHeight();
             }
             else{
               $(".overview-container").each(function() {
                   f += $(this).height();
               });
-              f-=600;
+              f-=$(".scroller").outerHeight();
             }
 
             if(d<f){
-              console.log("entrou");
+              //console.log("entrou");
               var scroll={
                 "fornval":''+e.fornval,
                 "fairval":''+e.fairval,
@@ -2944,14 +2940,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               $.cookie.json = !0;
               e.cookiefair=[];
               e.cookiefair.push(scroll);
-              console.dir(e.cookiefair);
+              //console.dir(e.cookiefair);
               $.cookie("posscroll", scroll, {expires:7, path:"/"});
             }
 
 
-            console.log(d+" , "+f);
+            //console.log(d+" , "+f);
             if (d >= f && b) {
-              console.log("chegou");
+              //console.log("chegou");
               e.content.page++;
               e.setloading(!0,!1);
               e.submit("<FEIR_COD>"+(e.fairval || "")+"</FEIR_COD>","<FORN_DESC>"+(e.fornval || "")+"</FORN_DESC>",(e.amosval || ""),!0);
@@ -2967,7 +2963,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
             d = z.scrollTop();
             b = e.content.itens.length;
-            f= $("#table").height()-500;
+            f= $("#table").height()-$(".scroller").outerHeight();
 
             if(d<f){
               var scroll={
@@ -2997,7 +2993,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             }
             break;
           case "fornecedor_cadastro":
-            console.log("SCROLL CADASTRO");
+            //console.log("SCROLL CADASTRO");
             break;
           case "local":
             var $table = $('#table');
@@ -3010,8 +3006,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             //$(".floatThead-table").css({'left':"50%","margin-left":"502px"});
             d = z.scrollTop();
             b = e.content.itens.length;
-            f= $("#table").height()-720;
-            console.log(d+" , "+f);
+            //f= $("#table").height()-720;
+            f= $("#table").height()-$(".scroller").outerHeight();
+
+            //console.log(d+" , "+f);
             if (d >= f && b) {
               e.content.page++;
               e.setloading(!0,!1);
@@ -3033,9 +3031,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             $(".floatThead-container").css({'left':"50%","margin-left":"-458px"});
             d = z.scrollTop();
             b = e.content.itens.length;
-            f= $("#table").height()-700;
+            f= $("#table").height()-$(".scroller").outerHeight();
             if (d >= f && b) {
-              console.log("chegou");
+              //console.log("chegou");
               e.content.page++;
               e.setloading(!0,!1);
               e.createbox(e.fdata, e.content.page, !1,"list");
@@ -3087,7 +3085,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     },
     restartValues:function(){
       //Var to storage the basic data
-      console.log("restartValues");
+      //console.log("restartValues");
       this.unable_select=!1;
       this.cookiefair=[];
       this.prices=[];
@@ -3111,7 +3109,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       //$table.floatThead('destroy');
     },
     resetFilters:function(){  
-      console.log("resetou FILTROS");
+      //console.log("resetou FILTROS");
       //DATE
       $("input[name='initial_date']").val("");
       $("input[name='end_date']").val("");

@@ -266,8 +266,6 @@ open: function(a){
     $(".detail-status .bstatus").removeClass('complet').addClass('incomplet');
   }
   this.setloading(!0,!1);
-  console.log(html);
-  console.log(pattern);
   this.callService("gravarAmostras",pattern,html,'U');
 },deleteSample:function(){
   this.modal.open("message","Elemento de deletar amostra não ativo no momento!!!",!1,!0);
@@ -286,7 +284,6 @@ open: function(a){
   $(".sample-buttons button").eq(1).trigger('click');
   this.reload(this.previoussample.FEIR_COD,this.previoussample.AMOS_ID);
 },plusNote:function(a){
-  console.log("plus");
   $(a.target).addClass('hide');
   $(".show-to-note").find("div").removeClass('hide');
   //this.callService("gravarNotes");
@@ -440,7 +437,6 @@ open: function(a){
           this.item.CONTACTS.push(aux[i]);
         }
       }
-      console.dir(this.item.CONTACTS);
       if(this.item.CONTACTS.length){
         this.populateForn();
       }
@@ -502,7 +498,6 @@ open: function(a){
 },scrollTab:function(a){
 
 },deleteFornNote:function(a){
-  console.log("APAGOU");
   $(".contact"+$(a.target).attr("name")).addClass('hide');
   
 },showSomething:function(a){
@@ -514,16 +509,13 @@ open: function(a){
   switch (a.attr("name")){
     case 'CONT_TEL2':
       // id="'+(length+1)+'"
-      console.dir($(".contact"+a.attr("id")).find(".CONT_TEL2"));
       $(".contact"+a.attr("id")).find(".CONT_TEL2").removeClass('hide');
       //$("."+a.attr("name")).removeClass('hide');
       break;
     case 'showcontact':
-      console.log("SHOW CONTACT");
       var context=this;length=$(".cont.actived").length;
       $(".contact"+(length+1)).addClass('actived');
       var template="";
-      console.log(length+1);
       template+='<div class="supplier-photo-side"><div class="photo-container">';
       template+='<img src="images/contact.png" width="100%" class="noimage">';
       template+='</div></div><div class="supplier-firstform"><div class="row"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off"></div></div><button type="button" class="icon floatLeft trash-big" name="'+(length+2)+'"></button></div><div class="row"><div class="fake-form"><div class="form-group"><input type="text" class="form-control" name="CONT_EMAIL" placeholder="E-mail" autofocus="" autocomplete="off"></div></div></div><div class="row top-ten"><div class="fake-form fake-form-supplier-equal floatLeft">';
@@ -537,18 +529,15 @@ open: function(a){
       $(".photo-container img").bind("click",function(a){context.showCard(a);});
       break;
     case 'shownote':
-      console.log("show");
       $(".show-to-note").find("div").removeClass('hide');
       break;
   }
 },setTopProfile:function(a){
-  console.log("ok");
   if($("html").hasClass('view_forn')){
     return !1;
   }
   var el=$(a.target);
   if(el.attr("name") === "3"){
-    console.log("CLICOU NA FABRICA");
     if(el.hasClass('sel')){
       $("#profile .row-top .bcircle").removeClass('sel');
       $(".sel-factory.is-sel").addClass("hide");
@@ -635,12 +624,9 @@ open: function(a){
   pos_string=name.indexOf("/")+1;
   cod_detalhe=name.substr(pos_string, name.length);
   group=name.substr(0,pos_string-1);
-  console.dir(el);
-  console.log(el.val());
   if(13 === a.keyCode){
     html+='<div class="row row-fixed row-item"><button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bminus" name="'+name+'">'+'<input type="text" class="form-control form-control-bmore" name="'+name+'" placeholder="Other" autocomplete="off" disabled="disabled" value="'+el.val()+'"/></button></div>';
     el.parent().addClass("hide");
-    console.dir($("."+group+"-rem"));
     $("."+group+"-rem").append(html);
     $(".bminus").bind("click",function(a){context.remElem(a);});
   }
@@ -650,7 +636,6 @@ open: function(a){
   }
   var el=$(a.target);
   $('.'+el.attr('name')+"-rem").find(".row-item").remove();
-  console.dir($("."+el.attr('name')+"-add .row .hide"))
   $("."+el.attr('name')+"-add .row .hide").each(function(a,b){
     $(b).removeClass('hide').parent().removeClass('hide');
   });
@@ -664,7 +649,6 @@ remElem:function(a){
   pos_string=name.indexOf("/")+1;
   cod_detalhe=name.substr(pos_string, name.length);
   group=name.substr(0,pos_string-1);
-  console.dir($("."+group+"-add .row .hide"));
   $("."+group+"-add .row .hide").each(function(a,b){
     if($(b).attr("name").substr($(b).attr("name").indexOf("/")+1, $(b).attr("name").length) == cod_detalhe){
       $(b).removeClass('hide').parent().removeClass('hide');
@@ -693,7 +677,6 @@ setFav:function(a){
     this.ajaxrequest=!0;
     if(this.item.FAVORITES.length){
       if(!el.hasClass('sel')){
-        console.log("has");
         for(i=0;i<this.item.FAVORITES.length;i++){
           if(this.item.FAVORITES[i].SEGM_COD !== this.usr.SEGM_COD){
             html+="<string>"+this.item.FAVORITES[i].SEGM_COD+"</string>";
@@ -775,13 +758,11 @@ setFav:function(a){
       this.callService("gravarNotes","<OBJ_ID>"+this.item.FORN_ID+"</OBJ_ID><TP_NOTA_ID>2</TP_NOTA_ID><USU_COD>"+this.usr.USU_COD+"</USU_COD>","<NOTA_DESC>"+$(".addnote").val()+"</NOTA_DESC><CREATE_DATE>"+date+"</CREATE_DATE>");
     }
     else{
-      console.log("não tem mesmo");
       context.setloading(!0,!1);
       context.ajaxrequest=!0;
       context.callService("GravarFornecedor",'<FORN_ID>0</FORN_ID>','<FEIR_COD>'+context.setfair+'</FEIR_COD>',"<FORN_DESC>"+$("input[name='FORN_DESC']").val()+"</FORN_DESC><CREATE_DATE>"+date+"</CREATE_DATE><FORN_STATUS>0</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>","<USU_COD>"+context.usr.USU_COD+"</USU_COD>",'<action>I</action>');
       status=setInterval(function(){
         if(!context.ajaxrequest){
-          console.log("call to note");
           context.callService("gravarNotes","<OBJ_ID>"+context.item.FORN_ID+"</OBJ_ID><TP_NOTA_ID>2</TP_NOTA_ID><USU_COD>"+context.usr.USU_COD+"</USU_COD>","<NOTA_DESC>"+$(".addnote").val()+"</NOTA_DESC><CREATE_DATE>"+date+"</CREATE_DATE>");
           clearInterval(status);
         }
@@ -794,7 +775,6 @@ setFav:function(a){
     this.modal.open("message","Digite o texto da anotação!!!",!1,!0);
   }
 },writeNote:function(){
-  console.log("entrou");
   var result="";
   var day,date;
   date=new Date();
@@ -807,7 +787,6 @@ setFav:function(a){
   date=day+"/0"+(date.getMonth()+1)+"/"+date.getFullYear();
   result+="<li><article><div class='notepad-note blockquote'><p><b>"+date+" | "+(this.item.FORN_DESC || $("input[name='FORN_DESC']").val()) +" | "+this.noteid+"</b></p><p>"+this.usr.USU_NOME+" - "+this.usr.SEGM_DESC+"</p><p>"+$(".addnote").val()+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+this.noteid+"' name='"+this.usr.USU_COD+"'></button></div></article></li>";
   $(".addnote").val("");
-  console.log(result);
   $(".note ul").prepend(result);
 },finishForn:function(){
   this.tab="dados";
@@ -818,7 +797,6 @@ setFav:function(a){
     return !1;
   }
   var el=$(a.target);
-  console.dir(this.favcontact);
   if(el.hasClass('sel')){;
     this.favcontact=null;
     $(".favcontact").removeClass('sel');
@@ -827,11 +805,8 @@ setFav:function(a){
     this.favcontact=parseInt(el.attr("name"))-1;
     $(".favcontact").removeClass('sel');
     el.addClass('sel');
-    console.dir(el);
   }
 
-  console.log("clicado no FAVORITO");
-  console.dir(this.favcontact);
 },showCard:function(a){
   if($(a.target).attr("name")){
     this.item.CONTACTS.forEach(function(el,index) {
@@ -853,7 +828,6 @@ setFav:function(a){
     });
   }
 },populateForn:function(){
-  console.log("POPULATE");
   var context=this;
   if(!this.getSegm().length){
     status=setInterval(function(){
@@ -890,7 +864,6 @@ setFav:function(a){
   //Gravar dados nos campos
 
 },inputValues:function(){
-  console.dir(this.item);
   var context=this,complet=!0;
   if(this.item.FORN_ID){
     $(".fair option").each(function(a,b){
@@ -942,7 +915,7 @@ setFav:function(a){
 
     if(context.item.CONTACTS.length>1){
       //Mais de um contato
-      console.log("tem Mais de um contato");
+      //console.log("tem Mais de um contato");
       for(var i=(context.item.CONTACTS.length-1);i>=0;i--){
         var template="",temp="";
         temp='<div class="supplier-form-container contact contact'+(i+1)+' actived cont"><h2><span>Contato '+(i+1)+'</span></h2>';
@@ -1004,7 +977,7 @@ setFav:function(a){
       if(context.item.CONTACTS.length){
         var template="",temp="",cont="",template1="",template2="";
         //Tem apenas 1 contato
-        console.log("Tem apenas 1 contato");
+        //console.log("Tem apenas 1 contato");
         var template="",temp="",cont="",template2="";
         temp+='<div class="supplier-form-container contact contact1 actived cont"><h2><span>Contato 1</span></h2><div class="supplier-photo-side"><div class="photo-container">';
         if(context.item.CONTACTS[0].IMG_PATH_CONTATO.length){
@@ -1036,7 +1009,7 @@ setFav:function(a){
       }
       else{
         //Nao possui contato
-        console.log("Nao possui contato");
+        //console.log("Nao possui contato");
         var template="",temp="",cont="",template1="",template2="";
         temp='<div class="supplier-form-container contact contact1 actived cont"><h2><span>Contato 1</span></h2>';
         template+='<div class="supplier-photo-side"><div class="photo-container">';
@@ -1070,7 +1043,7 @@ setFav:function(a){
     if(context.item.PROFILES.length){
       $("a[href='#profile'] button").removeClass('incomplet').addClass('complet');
       for(var i=0;i<context.item.PROFILES.length;i++){
-        console.log("profiles: "+context.item.PROFILES[i].PERF_COD);
+        //console.log("profiles: "+context.item.PROFILES[i].PERF_COD);
         if(context.item.PROFILES[i].PERF_COD == 3){
           if(!$("#profile button.sel-factory").hasClass('sel')){
             $("#profile button.sel-factory").trigger('click');
@@ -1112,7 +1085,7 @@ setFav:function(a){
     if(context.item.PRODUCTS.length){
       $("a[href='#products'] button").removeClass('incomplet').addClass('complet');
       for(var i=0;i<context.item.PRODUCTS.length;i++){
-        console.log($(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").attr("name"));
+        //console.log($(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").attr("name"));
         if($(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").attr("name") === "prod/999"){
           $(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").find("input").val(context.item.PRODUCTS[i].PROD_OTHERS);
         }
@@ -1130,7 +1103,7 @@ setFav:function(a){
     }
   }
   else{
-    console.log("ELSE ELSE");
+    //console.log("ELSE ELSE");
     var template="",temp="",cont="",template1="",template2="";
     temp+='<div class="supplier-form-container contact contact1 actived cont"><h2><span>Contato 1</span></h2>';
     template+='<div class="supplier-photo-side"><div class="photo-container"><img src="images/contact.png" width="100%" class="noimage">';
@@ -1153,7 +1126,7 @@ setFav:function(a){
   }
 
   $("#dados input[required='required']").each(function(index,el){
-    console.log($(el).val().length+" , "+$(el).val()+" , "+$(el).val().length === true);
+    //console.log($(el).val().length+" , "+$(el).val()+" , "+$(el).val().length === true);
     if(!$(el).val().length && complet){
       complet=!1;
     }
@@ -1224,15 +1197,15 @@ setFav:function(a){
     return !1;
   }*/
   if(this.setfair && !$("html").hasClass('view_forn') && (this.lasttab !== this.tab)){
-    console.log("SALVANDO");
+    //console.log("SALVANDO");
     this.setloading(!0,!1);
     switch (this.lasttab){
       case 'dados':
         var isFinished=0;
-        console.log(this.tab);
-        console.log(this.lasttab);
+        //console.log(this.tab);
+        //console.log(this.lasttab);
 
-        console.log(($(".ScrollSpy .nav-item button.complet").length >= 4)+" , "+$("input[name='FORN_DESC']").val().length+" , "+$(".contact1 input[name='CONT_NOME']").val().length+" , "+$(".contact1 input[name='CONT_EMAIL']").val().length);
+        //console.log(($(".ScrollSpy .nav-item button.complet").length >= 4)+" , "+$("input[name='FORN_DESC']").val().length+" , "+$(".contact1 input[name='CONT_NOME']").val().length+" , "+$(".contact1 input[name='CONT_EMAIL']").val().length);
         if($(".ScrollSpy .nav-item button.complet").length >= 4 && $("input[name='FORN_DESC']").val().length && $(".contact1 input[name='CONT_NOME']").val().length && $(".contact1 input[name='CONT_EMAIL']").val().length){
           isFinished=1
         }
@@ -1241,17 +1214,17 @@ setFav:function(a){
         $(".fair").attr('disabled', 'disabled');
         status=setInterval(function(){
           if(!context.ajaxrequest){
-            console.log("entrou no interval: "+complet);
+            //console.log("entrou no interval: "+complet);
             $(".cont.actived").each(function(a,b){
               html="";
               $(b).find("input").each(function(index,el){
                 if($(el).attr("required") && !$(el).val().length && complet){
-                  console.dir($(el));
+                  //console.dir($(el));
                   complet=!1;
                 }
 
                 if($(el).attr("name") === "SEGM_COD"){
-                  console.log("segmento");
+                  //console.log("segmento");
                   html+="<"+$(el).attr("name")+">"+$(el).attr("title")+"</"+$(el).attr("name")+">";
                 }
                 else{
@@ -1277,12 +1250,12 @@ setFav:function(a){
               }
               else{
                 if(complet){
-                  console.log("cadastro completo 1");
+                  //console.log("cadastro completo 1");
                   $("a[href='#dados'] button").removeClass('incomplet').addClass('complet');
                   context.item.FORN_STATUS=1;
                 }
                 else{
-                  console.log("cadastro incompleto 2 ");
+                  //console.log("cadastro incompleto 2 ");
                   $("a[href='#dados'] button").removeClass('complet').addClass('incomplet');
                   context.item.FORN_STATUS=0;
                 }
@@ -1311,12 +1284,12 @@ setFav:function(a){
               window.history.go(-1);
             }
             if(complet){
-              console.log("cadastro completo");
+              //console.log("cadastro completo");
               $("a[href='#dados'] button").removeClass('incomplet').addClass('complet');
               context.item.FORN_STATUS=1;
             }
             else{
-              console.log("cadastro incompleto");
+              //console.log("cadastro incompleto");
               $("a[href='#dados'] button").removeClass('complet').addClass('incomplet');
               context.item.FORN_STATUS=0;
             }
@@ -1335,8 +1308,8 @@ setFav:function(a){
           return !1;
         }
         var html="",other="",complet=!0;
-        console.log(this.tab);
-        console.log(this.lasttab);
+        //console.log(this.tab);
+        //console.log(this.lasttab);
         if($("#profile .row-top .bcircle").hasClass('sel')){
           if($("#profile .row-top .bcircle.sel").attr("name") !== "3"){
             html+="<Profile><FAB_COD>0</FAB_COD><PERF_COD>"+$("#profile .row-top .bcircle.sel").attr("name")+"</PERF_COD><TP_FAB_COD>0</TP_FAB_COD><PERF_OTHERS></PERF_OTHERS></Profile>";
@@ -1355,7 +1328,7 @@ setFav:function(a){
           }
         }
         else{
-          console.log("nenhum profile selecionado encima");
+          //console.log("nenhum profile selecionado encima");
           complet=!1;
         }
 
@@ -1373,12 +1346,12 @@ setFav:function(a){
         }
 
         if($(".ScrollSpy .nav-item button.complet").length === 5){
-          console.log("cadastro completo");
+          //console.log("cadastro completo");
           context.ajaxrequest=!0;
           this.callService("GravarFornecedor",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+context.item.FORN_DESC+"</FORN_DESC>",'<FORN_STATUS>1</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>U</action>');
         }
         else{
-          console.log("cadastro incompleto");
+          //console.log("cadastro incompleto");
           context.ajaxrequest=!0;
           this.callService("GravarFornecedor",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+context.item.FORN_DESC+"</FORN_DESC>",'<FORN_STATUS>0</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>U</action>');
         }
@@ -1398,8 +1371,8 @@ setFav:function(a){
           return !1;
         }
         var html="",others="";
-        console.log(this.tab);
-        console.log(this.lasttab);
+        //console.log(this.tab);
+       // console.log(this.lasttab);
 
         $(".comp-rem .row-item").each(function(a,b){
           var el=$(b).find(".bminus").attr("name");
@@ -1420,12 +1393,12 @@ setFav:function(a){
         }
 
         if($(".ScrollSpy .nav-item button.complet").length === 5){
-          console.log("cadastro completo");
+          //console.log("cadastro completo");
           context.ajaxrequest=!0;
           this.callService("GravarFornecedor",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+context.item.FORN_DESC+"</FORN_DESC>",'<FORN_STATUS>1</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>U</action>');
         }
         else{
-          console.log("cadastro incompleto");
+          //console.log("cadastro incompleto");
           context.ajaxrequest=!0;
           this.callService("GravarFornecedor",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+context.item.FORN_DESC+"</FORN_DESC>",'<FORN_STATUS>0</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>U</action>');
         }
@@ -1444,11 +1417,11 @@ setFav:function(a){
           context.setloading(!1);
           return !1;
         }
-        console.log(this.tab);
-        console.log(this.lasttab);
+        //console.log(this.tab);
+        //console.log(this.lasttab);
         var html="";
-        console.log(this.tab);
-        console.log(this.lasttab);
+        //console.log(this.tab);
+        //console.log(this.lasttab);
         $(".prod-rem .row-item").each(function(a,b){
           var el=$(b).find(".bminus").attr("name"),others="";
           if(el.substr(el.indexOf("/")+1, el.length) === "999"){
@@ -1467,12 +1440,12 @@ setFav:function(a){
         }
 
         if($(".ScrollSpy .nav-item button.complet").length === 5){
-          console.log("cadastro completo");
+          //console.log("cadastro completo");
           context.ajaxrequest=!0;
           this.callService("GravarFornecedor",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+context.item.FORN_DESC+"</FORN_DESC>",'<FORN_STATUS>1</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>U</action>');
         }
         else{
-          console.log("cadastro incompleto");
+          //console.log("cadastro incompleto");
           context.ajaxrequest=!0;
           this.callService("GravarFornecedor",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+context.item.FORN_DESC+"</FORN_DESC>",'<FORN_STATUS>0</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>U</action>');
         }
@@ -1491,8 +1464,8 @@ setFav:function(a){
           context.setloading(!1);
           return !1;
         }
-        console.log(this.tab);
-        console.log(this.lasttab);
+        //console.log(this.tab);
+        //console.log(this.lasttab);
         var html="",others="",last_request=!1;
         $(".mark-rem .row-item").each(function(a,b){
           var el=$(b).find(".bminus").attr("name");
@@ -1512,12 +1485,12 @@ setFav:function(a){
         }
 
         if($(".ScrollSpy .nav-item button.complet").length === 5){
-          console.log("cadastro completo");
+          //console.log("cadastro completo");
           context.ajaxrequest=!0;
           this.callService("GravarFornecedor",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+context.item.FORN_DESC+"</FORN_DESC>",'<FORN_STATUS>1</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>U</action>');
         }
         else{
-          console.log("cadastro incompleto");
+          //console.log("cadastro incompleto");
           context.ajaxrequest=!0;
           this.callService("GravarFornecedor",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+context.item.FORN_DESC+"</FORN_DESC>",'<FORN_STATUS>0</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>U</action>');
         }
@@ -1532,7 +1505,7 @@ setFav:function(a){
         },100);
 
         last=setInterval(function(){
-          console.log(!context.ajaxrequest && goout && !last_request);
+          //console.log(!context.ajaxrequest && goout && !last_request);
           if(!context.ajaxrequest && goout && !last_request){
             context.setloading(!1);
             context.close();
