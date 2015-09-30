@@ -421,7 +421,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         },
         "fornecedores/*fairval/*fornval/*amosval":function(res){
           var a,b,c;
-          console.log("ok");
           $(".zoomContainer").remove();
 
           if(this.cookiefair.length){
@@ -869,6 +868,15 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     },
     saveFair:function(){
       var elem=$(".form-control"),html="";
+      var day,date;
+      date=new Date();
+      if(parseInt(date.getDate())&lt;10){
+        day="0"+date.getDate();
+      }
+      else{
+        day=date.getDate();
+      }
+      date=""+date.getFullYear()+"-0"+(date.getMonth()+1)+"-"+day;
       if($("html").hasClass("edit-fair")){
         html+="&lt;FEIR_COD>"+parseInt(this.fairval.FEIR_COD)+"&lt;/FEIR_COD>";
         elem.each(function(a,b){
@@ -881,8 +889,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             html+="&lt;FEIR_DESC>"+$(b).val()+"&lt;/FEIR_DESC>";
           }9
         });
-        //html+="&lt;CREATE_DATE>"+new Date().toLocaleDateString().replace("/","-").replace("/","-")+"&lt;/CREATE_DATE>";
-        html+="&lt;CREATE_DATE>"+"2015-12-12"+"&lt;/CREATE_DATE>";
+        html+="&lt;CREATE_DATE>"+date+"&lt;/CREATE_DATE>";
         html+="&lt;FEIR_INATIVO>"+$(".ai-holder .sel").attr("name")+"&lt;/FEIR_INATIVO>";
         this.callService("gravarLocal",html,"U");
       }
@@ -899,7 +906,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           }
         });
         //html+="&lt;CREATE_DATE>"+new Date().toLocaleDateString().replace("/","-").replace("/","-")+"&lt;/CREATE_DATE>";
-        html+="&lt;CREATE_DATE>"+"2015-12-12"+"&lt;/CREATE_DATE>";
+        html+="&lt;CREATE_DATE>"+date+"&lt;/CREATE_DATE>";
         this.callService("gravarLocal",html,"I");
       }
     },
@@ -1745,13 +1752,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                     if (l > 0) {
                       if(e.page === "amostras"){
                         if(k === 0){
-                          $(".floatThead").append('&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;/div>&lt;table id="table" class="table-striped table-large">&lt;thead>&lt;tr>&lt;th>&lt;/th>&lt;th>Fornecedor&lt;/th>&lt;th>Código&lt;/th>&lt;th>Data&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfisica nothas unable">&lt;/button>&lt;/th>&lt;th>Preço Inicial&lt;/th>&lt;th>M/kg&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfav nothas unable">&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bhomologado nothas unable">&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bnote">&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="icon bannex">&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bemail">&lt;/button>&lt;/th>&lt;th>Tecimento&lt;/th>&lt;th>Base&lt;/th>&lt;th>Grupo&lt;/th>&lt;th>Sub-Grupo&lt;/th>&lt;th>Composição&lt;/th>&lt;th class="tlast">Status&lt;/th>&lt;/tr>&lt;/thead>&lt;tbody>&lt;/tbody>&lt;/div>');
+                          $(".floatThead").append('&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;/div>&lt;table id="table" class="table-striped table-large">&lt;thead>&lt;tr>&lt;th>&lt;/th>&lt;th>Fornecedor&lt;/th>&lt;th>Código&lt;/th>&lt;th>Data&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfisica nothas unable">Fisica&lt;/button>&lt;/th>&lt;th>Preco Inicial&lt;/th>&lt;th>M/kg&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfav nothas unable">Favorita&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bhomologado nothas unable">Homologada&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bnote">Anotacoes&lt;/button>&lt;/th>'+/*&lt;th>&lt;button type="button" class="icon bannex">Anexo&lt;/button>&lt;/th>*/'&lt;th>&lt;button type="button" class="caption-icons-icon justit bemail">Email&lt;/button>&lt;/th>&lt;th>Tecimento&lt;/th>&lt;th>Base&lt;/th>&lt;th>Grupo&lt;/th>&lt;th>Sub-Grupo&lt;/th>&lt;th>Composicao&lt;/th>&lt;th class="tlast">Status&lt;/th>&lt;/tr>&lt;/thead>&lt;tbody>&lt;/tbody>&lt;/div>');
                         }
                         else if(h.FORN_ID !== a[k-1].FORN_ID){
                           var view_container=$(".overview-container");
                           view_container=$(view_container).eq(view_container.length-1);
                           view_container.find(".bread-search .spec").text(view_container.find("tbody tr").length);
-                          $(".floatThead").append('&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;/div>&lt;table id="table" class="table-striped table-large">&lt;thead>&lt;tr>&lt;th>&lt;/th>&lt;th>Fornecedor&lt;/th>&lt;th>Código&lt;/th>&lt;th>Data&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfisica nothas unable">&lt;/button>&lt;/th>&lt;th>Preço Inicial&lt;/th>&lt;th>M/kg&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfav nothas unable">&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bhomologado nothas unable">&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bnote">&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="icon bannex">&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bemail">&lt;/button>&lt;/th>&lt;th>Tecimento&lt;/th>&lt;th>Base&lt;/th>&lt;th>Grupo&lt;/th>&lt;th>Sub-Grupo&lt;/th>&lt;th>Composição&lt;/th>&lt;th class="tlast">Status&lt;/th>&lt;/tr>&lt;/thead>&lt;tbody>&lt;/tbody>&lt;/div>');
+                          $(".floatThead").append('&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;/div>&lt;table id="table" class="table-striped table-large">&lt;thead>&lt;tr>&lt;th>&lt;/th>&lt;th>Fornecedor&lt;/th>&lt;th>Código&lt;/th>&lt;th>Data&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfisica nothas unable">Fisica&lt;/button>&lt;/th>&lt;th>Preco Inicial&lt;/th>&lt;th>M/kg&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfav nothas unable">Favorita&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bhomologado nothas unable">Homologada&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bnote">Anotacoes&lt;/button>&lt;/th>'+/*&lt;th>&lt;button type="button" class="icon bannex">Anexo&lt;/button>&lt;/th>*/'&lt;th>&lt;button type="button" class="caption-icons-icon justit bemail">Email&lt;/button>&lt;/th>&lt;th>Tecimento&lt;/th>&lt;th>Base&lt;/th>&lt;th>Grupo&lt;/th>&lt;th>Sub-Grupo&lt;/th>&lt;th>Composicao&lt;/th>&lt;th class="tlast">Status&lt;/th>&lt;/tr>&lt;/thead>&lt;tbody>&lt;/tbody>&lt;/div>');
                           countf++;
                         }
                         var view_container=$(".overview-container");
@@ -1900,13 +1907,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                     if (l > 0) {
                         if(e.page === "amostras"){
                           if(k === 0){
-                            $(".floatThead").append('&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;/div>&lt;table id="table" class="table-striped table-large">&lt;thead>&lt;tr>&lt;th>&lt;/th>&lt;th>Fornecedor&lt;/th>&lt;th>Código&lt;/th>&lt;th>Data&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfisica nothas unable">&lt;/button>&lt;/th>&lt;th>Preço Inicial&lt;/th>&lt;th>M/kg&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfav nothas unable">&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bhomologado nothas unable">&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bnote">&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="icon bannex">&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bemail">&lt;/button>&lt;/th>&lt;th>Tecimento&lt;/th>&lt;th>Base&lt;/th>&lt;th>Grupo&lt;/th>&lt;th>Sub-Grupo&lt;/th>&lt;th>Composição&lt;/th>&lt;th class="tlast">Status&lt;/th>&lt;/tr>&lt;/thead>&lt;tbody>&lt;/tbody>&lt;/div>');
+                            $(".floatThead").append('&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;/div>&lt;table id="table" class="table-striped table-large">&lt;thead>&lt;tr>&lt;th>&lt;/th>&lt;th>Fornecedor&lt;/th>&lt;th>Codigo&lt;/th>&lt;th>Data&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfisica nothas unable">Fisica&lt;/button>&lt;/th>&lt;th>Preco Inicial&lt;/th>&lt;th>M/kg&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfav nothas unable">Favorita&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bhomologado nothas unable">Homologada&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bnote">Anotacoes&lt;/button>&lt;/th>'+/*&lt;th>&lt;button type="button" class="icon bannex">Anexo&lt;/button>&lt;/th>*/'&lt;th>&lt;button type="button" class="caption-icons-icon justit bemail">Email&lt;/button>&lt;/th>&lt;th>Tecimento&lt;/th>&lt;th>Base&lt;/th>&lt;th>Grupo&lt;/th>&lt;th>Sub-Grupo&lt;/th>&lt;th>Composicao&lt;/th>&lt;th class="tlast">Status&lt;/th>&lt;/tr>&lt;/thead>&lt;tbody>&lt;/tbody>&lt;/div>');
                           }
                           else if(h.FORN_ID !== a[k-1].FORN_ID){
                             var view_container=$(".overview-container");
                             view_container=$(view_container).eq(view_container.length-1);
                             view_container.find(".bread-search .spec").text(view_container.find("tbody tr").length);
-                            $(".floatThead").append('&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;/div>&lt;table id="table" class="table-striped table-large">&lt;thead>&lt;tr>&lt;th>&lt;/th>&lt;th>Fornecedor&lt;/th>&lt;th>Código&lt;/th>&lt;th>Data&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfisica nothas unable">&lt;/button>&lt;/th>&lt;th>Preço Inicial&lt;/th>&lt;th>M/kg&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfav nothas unable">&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bhomologado nothas unable">&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bnote">&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="icon bannex">&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bemail">&lt;/button>&lt;/th>&lt;th>Tecimento&lt;/th>&lt;th>Base&lt;/th>&lt;th>Grupo&lt;/th>&lt;th>Sub-Grupo&lt;/th>&lt;th>Composição&lt;/th>&lt;th class="tlast">Status&lt;/th>&lt;/tr>&lt;/thead>&lt;tbody>&lt;/tbody>&lt;/div>');
+                            $(".floatThead").append('&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;/div>&lt;table id="table" class="table-striped table-large">&lt;thead>&lt;tr>&lt;th>&lt;/th>&lt;th>Fornecedor&lt;/th>&lt;th>Codigo&lt;/th>&lt;th>Data&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfisica nothas unable">Fisica&lt;/button>&lt;/th>&lt;th>Preco Inicial&lt;/th>&lt;th>M/kg&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfav nothas unable">Favorita&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bhomologado nothas unable">Homologada&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bnote">Anotacoes&lt;/button>&lt;/th>'+/*&lt;th>&lt;button type="button" class="icon bannex">Anexo&lt;/button>&lt;/th>*/'&lt;th>&lt;button type="button" class="caption-icons-icon justit bemail">Email&lt;/button>&lt;/th>&lt;th>Tecimento&lt;/th>&lt;th>Base&lt;/th>&lt;th>Grupo&lt;/th>&lt;th>Sub-Grupo&lt;/th>&lt;th>Composicao&lt;/th>&lt;th class="tlast">Status&lt;/th>&lt;/tr>&lt;/thead>&lt;tbody>&lt;/tbody>&lt;/div>');
                             countf++;
                           }
                           var view_container=$(".overview-container");
@@ -2338,20 +2345,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       }
     },
     CleanFilter:function(){
-      /*this.restartValues();
-      $.removeCookie('posscroll', { path: '/' });
-      $(".container-fullsize.scroller").scrollTop(0);
-      //this.reopenFilter();
-      this.itens_by_page=this.itens_page_default;
-      this.resetFilters();
-      this.bforn.val("");
-      $(".overview-container").remove();
-      this.fairval=$(a.target).find("option:selected").val();
-      this.notcombo=!0;
-      this.mode=this.page+"/"+(this.fairval.replace(" ","_") || "padrao")+"/"+"padrao"+"/"+"padrao";
-      this.navigate(this.mode, !1);
-      this.submit("&lt;FEIR_COD>"+this.fairval+"&lt;/FEIR_COD>");*/
-
       var scroll;
       this.resetFilters();
       this.mode="amostras/"+(this.fairval || "padrao")+"/"+(this.fornval.replace(" ","_") || "padrao")+"/"+(this.amosval.replace(" ","_") || "padrao");
@@ -2785,18 +2778,37 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     },
     exportExcel:function(){
       //Extracted from: http://stackoverflow.com/questions/22317951/export-html-table-data-to-excel-using-javascript-jquery-is-not-working-properl/24081343#24081343
-
       
       var tab_text="&lt;table border='2px'>&lt;tr bgcolor='#71abcc'>";
       var textRange; var j=0;
-      tab = document.getElementById('table'); // id of table
 
-      for(j = 0 ; j &lt; tab.rows.length ; j++) 
-      {     
-          tab_text=tab_text+tab.rows[j].innerHTML+"&lt;/tr>";
-          //tab_text=tab_text+"&lt;/tr>";
+      if(this.page === "fornecedores"){
+        tab = document.getElementById('table'); // id of table
+        for(j = 0 ; j &lt; tab.rows.length ; j++) 
+        {     
+            tab_text=tab_text+tab.rows[j].innerHTML+"&lt;/tr>";            
+            //tab_text=tab_text+"&lt;/tr>";
+        }
       }
+      else{
+        tab = document.getElementsByClassName('table-large');  
+        for(i=0;i&lt;tab.length;i++){
+          for(j = 0 ; j &lt; tab[i].rows.length ; j++) 
+          {     
+            if(i>0 &amp;&amp; j === 0){
 
+            }
+            else{
+              tab_text=tab_text+tab[i].rows[j].innerHTML+"&lt;/tr>";
+            }
+              
+              //tab_text=tab_text+"&lt;/tr>";
+          }
+          
+        }
+      } 
+      
+      
       tab_text=tab_text+"&lt;/table>";
       tab_text= tab_text.replace(/&lt;A[^>]*>|&lt;\/A>/g, "");//remove if u want links in your table
       tab_text= tab_text.replace(/&lt;img[^>]*>/gi,""); // remove if u want images in your table
@@ -2804,18 +2816,17 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
       var ua = window.navigator.userAgent;
       var msie = ua.indexOf("MSIE "); 
-
       if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
-      {
-          txtArea1.document.open("txt/html","replace");
-          txtArea1.document.write(tab_text);
-          txtArea1.document.close();
-          txtArea1.focus(); 
-          sa=txtArea1.document.execCommand("SaveAs",true,"WebFair Report.xls");
-      }  
-      else                 //other browser not tested on IE 11
-          sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));  
-
+        {
+            txtArea1.document.open("txt/html","replace");
+            txtArea1.document.write(tab_text);
+            txtArea1.document.close();
+            txtArea1.focus(); 
+            sa=txtArea1.document.execCommand("SaveAs",true,"WebFair Report.xls");
+        }  
+        else                 //other browser not tested on IE 11
+          sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+      
       return (sa);
     },
     getSpot:function(a){
@@ -3228,7 +3239,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Fri Sep 25th 2015 using the <a
+		on Wed Sep 30th 2015 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>

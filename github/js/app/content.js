@@ -314,7 +314,7 @@ window.Content = Spine.Controller.sub({
       this.bedit=$(".bedit");
     }
     this.create = this[a];
-    "images" === a ? this.itens && this.bedit.removeClass("unable") && this.clean(): this.itens && this.bedit.addClass("unable") && this.reset();
+    "images" === a ? this.itens && this.clean(): this.itens && this.reset();
     this.tbody.empty();
     this.table.empty();
     $(".overview-container").remove();
@@ -591,7 +591,7 @@ window.Box = Spine.Controller.sub({init:function() {
         email= a.AMOS_ENV_EMAIL? "sent":"disabled";
 
         //Creating result
-        result+="<td><button type='button' name='"+a.AMOS_ID+"' class='icon bselection'></button></td><td><a href='#detail/"+parseInt(a.FEIR_COD)+"/"+a.AMOS_ID+"'>"+a.FORN_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.AMOS_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.CREATE_DATE+"</a></td><td><button type='button' class='caption-icons-icon justit setitem bfisica "+fisica+"' name='"+a.AMOS_ID+"' title='Fisica'></button></td><td>"+a.AMOS_PRECO+"</td><td>"+a.AMOS_COTACAO_KG+"</td><td><button type='button' class='caption-icons-icon justit setitem bfav "+fav+"' name='"+a.AMOS_ID+"' title='Favoritar'></button></td><td><button type='button' class='caption-icons-icon justit setitem bhomologado "+homologado+"' name='"+a.AMOS_ID+"' title='Homologar'></button></td>";
+        result+="<td><button type='button' name='"+a.AMOS_ID+"' class='icon bselection'></button></td><td><a href='#detail/"+parseInt(a.FEIR_COD)+"/"+a.AMOS_ID+"'>"+a.FORN_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.AMOS_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.CREATE_DATE+"</a></td><td><button type='button' class='caption-icons-icon justit setitem bfisica "+fisica+"' name='"+a.AMOS_ID+"' title='Fisica'>"+(fisica === "has" ? "Sim" : "Nao")+"</button></td><td>"+a.AMOS_PRECO+"</td><td>"+a.AMOS_COTACAO_KG+"</td><td><button type='button' class='caption-icons-icon justit setitem bfav "+fav+"' name='"+a.AMOS_ID+"' title='Favoritar'>"+(fav === "has" ? "Sim" : "Nao")+"</button></td><td><button type='button' class='caption-icons-icon justit setitem bhomologado "+homologado+"' name='"+a.AMOS_ID+"' title='Homologar'>"+(homologado === "has" ? "Sim" : "Nao")+"</button></td>";
         if(note){
           var segnote=[];
           for(i=0;i<a.NOTES.length;i++){
@@ -621,8 +621,8 @@ window.Box = Spine.Controller.sub({init:function() {
           result+="<td></td>";
         }
 
-        annex ? result+="<td><button type='button' class='icon bannex'></button></td>" : result+="<td></td>";
-        result+="<td><button type='button' class='caption-icons-icon justit bemail "+email+"' name='"+a.AMOS_ID+"'></button></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.TECI_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.BASE_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.GRUP_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.SUBG_DESC+"</a></td>";
+        //annex ? result+="<td><button type='button' class='icon bannex'>Sim/button></td>" : result+="<td></td>";
+        result+="<td><button type='button' class='caption-icons-icon justit bemail "+email+"' name='"+a.AMOS_ID+"'>"+(email === "sent" ? "Sim" : "Nao")+"</button></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.TECI_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.BASE_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.GRUP_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.SUBG_DESC+"</a></td>";
         if(a.COMPOSITIONS.length){
           var concat=[];
           result+="<td>";

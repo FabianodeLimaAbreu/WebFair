@@ -324,7 +324,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         },
         "fornecedores/*fairval/*fornval/*amosval":function(res){
           var a,b,c;
-          console.log("ok");
           $(".zoomContainer").remove();
 
           if(this.cookiefair.length){
@@ -772,6 +771,15 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     },
     saveFair:function(){
       var elem=$(".form-control"),html="";
+      var day,date;
+      date=new Date();
+      if(parseInt(date.getDate())<10){
+        day="0"+date.getDate();
+      }
+      else{
+        day=date.getDate();
+      }
+      date=""+date.getFullYear()+"-0"+(date.getMonth()+1)+"-"+day;
       if($("html").hasClass("edit-fair")){
         html+="<FEIR_COD>"+parseInt(this.fairval.FEIR_COD)+"</FEIR_COD>";
         elem.each(function(a,b){
@@ -784,8 +792,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             html+="<FEIR_DESC>"+$(b).val()+"</FEIR_DESC>";
           }9
         });
-        //html+="<CREATE_DATE>"+new Date().toLocaleDateString().replace("/","-").replace("/","-")+"</CREATE_DATE>";
-        html+="<CREATE_DATE>"+"2015-12-12"+"</CREATE_DATE>";
+        html+="<CREATE_DATE>"+date+"</CREATE_DATE>";
         html+="<FEIR_INATIVO>"+$(".ai-holder .sel").attr("name")+"</FEIR_INATIVO>";
         this.callService("gravarLocal",html,"U");
       }
@@ -802,7 +809,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           }
         });
         //html+="<CREATE_DATE>"+new Date().toLocaleDateString().replace("/","-").replace("/","-")+"</CREATE_DATE>";
-        html+="<CREATE_DATE>"+"2015-12-12"+"</CREATE_DATE>";
+        html+="<CREATE_DATE>"+date+"</CREATE_DATE>";
         this.callService("gravarLocal",html,"I");
       }
     },
@@ -1648,13 +1655,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                     if (l > 0) {
                       if(e.page === "amostras"){
                         if(k === 0){
-                          $(".floatThead").append('<div class="overview-container"><div class="filter-crumb"><p class="bread-search">Mostrando:<span class="spec">0</span><span> de </span><span class="specall">0</span><span> Amostras </span><span class="specforn"> de 0 Fornecedores</span></p></div><table id="table" class="table-striped table-large"><thead><tr><th></th><th>Fornecedor</th><th>Código</th><th>Data</th><th><button type="button" class="caption-icons-icon justit bfisica nothas unable"></button></th><th>Preço Inicial</th><th>M/kg</th><th><button type="button" class="caption-icons-icon justit bfav nothas unable"></button></th><th><button type="button" class="caption-icons-icon justit bhomologado nothas unable"></button></th><th><button type="button" class="caption-icons-icon justit bnote"></button></th><th><button type="button" class="icon bannex"></button></th><th><button type="button" class="caption-icons-icon justit bemail"></button></th><th>Tecimento</th><th>Base</th><th>Grupo</th><th>Sub-Grupo</th><th>Composição</th><th class="tlast">Status</th></tr></thead><tbody></tbody></div>');
+                          $(".floatThead").append('<div class="overview-container"><div class="filter-crumb"><p class="bread-search">Mostrando:<span class="spec">0</span><span> de </span><span class="specall">0</span><span> Amostras </span><span class="specforn"> de 0 Fornecedores</span></p></div><table id="table" class="table-striped table-large"><thead><tr><th></th><th>Fornecedor</th><th>Código</th><th>Data</th><th><button type="button" class="caption-icons-icon justit bfisica nothas unable">Fisica</button></th><th>Preco Inicial</th><th>M/kg</th><th><button type="button" class="caption-icons-icon justit bfav nothas unable">Favorita</button></th><th><button type="button" class="caption-icons-icon justit bhomologado nothas unable">Homologada</button></th><th><button type="button" class="caption-icons-icon justit bnote">Anotacoes</button></th>'+/*<th><button type="button" class="icon bannex">Anexo</button></th>*/'<th><button type="button" class="caption-icons-icon justit bemail">Email</button></th><th>Tecimento</th><th>Base</th><th>Grupo</th><th>Sub-Grupo</th><th>Composicao</th><th class="tlast">Status</th></tr></thead><tbody></tbody></div>');
                         }
                         else if(h.FORN_ID !== a[k-1].FORN_ID){
                           var view_container=$(".overview-container");
                           view_container=$(view_container).eq(view_container.length-1);
                           view_container.find(".bread-search .spec").text(view_container.find("tbody tr").length);
-                          $(".floatThead").append('<div class="overview-container"><div class="filter-crumb"><p class="bread-search">Mostrando:<span class="spec">0</span><span> de </span><span class="specall">0</span><span> Amostras </span><span class="specforn"> de 0 Fornecedores</span></p></div><table id="table" class="table-striped table-large"><thead><tr><th></th><th>Fornecedor</th><th>Código</th><th>Data</th><th><button type="button" class="caption-icons-icon justit bfisica nothas unable"></button></th><th>Preço Inicial</th><th>M/kg</th><th><button type="button" class="caption-icons-icon justit bfav nothas unable"></button></th><th><button type="button" class="caption-icons-icon justit bhomologado nothas unable"></button></th><th><button type="button" class="caption-icons-icon justit bnote"></button></th><th><button type="button" class="icon bannex"></button></th><th><button type="button" class="caption-icons-icon justit bemail"></button></th><th>Tecimento</th><th>Base</th><th>Grupo</th><th>Sub-Grupo</th><th>Composição</th><th class="tlast">Status</th></tr></thead><tbody></tbody></div>');
+                          $(".floatThead").append('<div class="overview-container"><div class="filter-crumb"><p class="bread-search">Mostrando:<span class="spec">0</span><span> de </span><span class="specall">0</span><span> Amostras </span><span class="specforn"> de 0 Fornecedores</span></p></div><table id="table" class="table-striped table-large"><thead><tr><th></th><th>Fornecedor</th><th>Código</th><th>Data</th><th><button type="button" class="caption-icons-icon justit bfisica nothas unable">Fisica</button></th><th>Preco Inicial</th><th>M/kg</th><th><button type="button" class="caption-icons-icon justit bfav nothas unable">Favorita</button></th><th><button type="button" class="caption-icons-icon justit bhomologado nothas unable">Homologada</button></th><th><button type="button" class="caption-icons-icon justit bnote">Anotacoes</button></th>'+/*<th><button type="button" class="icon bannex">Anexo</button></th>*/'<th><button type="button" class="caption-icons-icon justit bemail">Email</button></th><th>Tecimento</th><th>Base</th><th>Grupo</th><th>Sub-Grupo</th><th>Composicao</th><th class="tlast">Status</th></tr></thead><tbody></tbody></div>');
                           countf++;
                         }
                         var view_container=$(".overview-container");
@@ -1803,13 +1810,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                     if (l > 0) {
                         if(e.page === "amostras"){
                           if(k === 0){
-                            $(".floatThead").append('<div class="overview-container"><div class="filter-crumb"><p class="bread-search">Mostrando:<span class="spec">0</span><span> de </span><span class="specall">0</span><span> Amostras </span><span class="specforn"> de 0 Fornecedores</span></p></div><table id="table" class="table-striped table-large"><thead><tr><th></th><th>Fornecedor</th><th>Código</th><th>Data</th><th><button type="button" class="caption-icons-icon justit bfisica nothas unable"></button></th><th>Preço Inicial</th><th>M/kg</th><th><button type="button" class="caption-icons-icon justit bfav nothas unable"></button></th><th><button type="button" class="caption-icons-icon justit bhomologado nothas unable"></button></th><th><button type="button" class="caption-icons-icon justit bnote"></button></th><th><button type="button" class="icon bannex"></button></th><th><button type="button" class="caption-icons-icon justit bemail"></button></th><th>Tecimento</th><th>Base</th><th>Grupo</th><th>Sub-Grupo</th><th>Composição</th><th class="tlast">Status</th></tr></thead><tbody></tbody></div>');
+                            $(".floatThead").append('<div class="overview-container"><div class="filter-crumb"><p class="bread-search">Mostrando:<span class="spec">0</span><span> de </span><span class="specall">0</span><span> Amostras </span><span class="specforn"> de 0 Fornecedores</span></p></div><table id="table" class="table-striped table-large"><thead><tr><th></th><th>Fornecedor</th><th>Codigo</th><th>Data</th><th><button type="button" class="caption-icons-icon justit bfisica nothas unable">Fisica</button></th><th>Preco Inicial</th><th>M/kg</th><th><button type="button" class="caption-icons-icon justit bfav nothas unable">Favorita</button></th><th><button type="button" class="caption-icons-icon justit bhomologado nothas unable">Homologada</button></th><th><button type="button" class="caption-icons-icon justit bnote">Anotacoes</button></th>'+/*<th><button type="button" class="icon bannex">Anexo</button></th>*/'<th><button type="button" class="caption-icons-icon justit bemail">Email</button></th><th>Tecimento</th><th>Base</th><th>Grupo</th><th>Sub-Grupo</th><th>Composicao</th><th class="tlast">Status</th></tr></thead><tbody></tbody></div>');
                           }
                           else if(h.FORN_ID !== a[k-1].FORN_ID){
                             var view_container=$(".overview-container");
                             view_container=$(view_container).eq(view_container.length-1);
                             view_container.find(".bread-search .spec").text(view_container.find("tbody tr").length);
-                            $(".floatThead").append('<div class="overview-container"><div class="filter-crumb"><p class="bread-search">Mostrando:<span class="spec">0</span><span> de </span><span class="specall">0</span><span> Amostras </span><span class="specforn"> de 0 Fornecedores</span></p></div><table id="table" class="table-striped table-large"><thead><tr><th></th><th>Fornecedor</th><th>Código</th><th>Data</th><th><button type="button" class="caption-icons-icon justit bfisica nothas unable"></button></th><th>Preço Inicial</th><th>M/kg</th><th><button type="button" class="caption-icons-icon justit bfav nothas unable"></button></th><th><button type="button" class="caption-icons-icon justit bhomologado nothas unable"></button></th><th><button type="button" class="caption-icons-icon justit bnote"></button></th><th><button type="button" class="icon bannex"></button></th><th><button type="button" class="caption-icons-icon justit bemail"></button></th><th>Tecimento</th><th>Base</th><th>Grupo</th><th>Sub-Grupo</th><th>Composição</th><th class="tlast">Status</th></tr></thead><tbody></tbody></div>');
+                            $(".floatThead").append('<div class="overview-container"><div class="filter-crumb"><p class="bread-search">Mostrando:<span class="spec">0</span><span> de </span><span class="specall">0</span><span> Amostras </span><span class="specforn"> de 0 Fornecedores</span></p></div><table id="table" class="table-striped table-large"><thead><tr><th></th><th>Fornecedor</th><th>Codigo</th><th>Data</th><th><button type="button" class="caption-icons-icon justit bfisica nothas unable">Fisica</button></th><th>Preco Inicial</th><th>M/kg</th><th><button type="button" class="caption-icons-icon justit bfav nothas unable">Favorita</button></th><th><button type="button" class="caption-icons-icon justit bhomologado nothas unable">Homologada</button></th><th><button type="button" class="caption-icons-icon justit bnote">Anotacoes</button></th>'+/*<th><button type="button" class="icon bannex">Anexo</button></th>*/'<th><button type="button" class="caption-icons-icon justit bemail">Email</button></th><th>Tecimento</th><th>Base</th><th>Grupo</th><th>Sub-Grupo</th><th>Composicao</th><th class="tlast">Status</th></tr></thead><tbody></tbody></div>');
                             countf++;
                           }
                           var view_container=$(".overview-container");
@@ -2070,6 +2077,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.content.reset();
       $(".overview-container").remove();
       this.order_box.find("button").removeClass("sel");
+      console.dir($(".tooltip-content.status button"));
+      if($(".tooltip-content.status button").hasClass('sel')){
+        $(".status.tooltip-selectable").addClass('has');
+      }
+      else{
+        $(".status.tooltip-selectable").removeClass('has');
+      }
       this.Componentfilter(this.fdata, 0, !0);
     },AmosByPrice:function(){
       this.itens = $([]);
@@ -2078,6 +2092,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.content.reset();
       this.order_box.find("button").removeClass("sel");
       $(".overview-container").remove();
+      $(".main_opt_item.tooltip.tooltip-selectable").eq(0).addClass('has');
       this.Componentfilter(this.data, 0, !0);
     },
     makeComboFilter:function(){
@@ -2095,6 +2110,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         }
       }
       this.combofilter.is_set=is_set;
+      if(is_set){
+        $(".tooltip-filter").addClass('has');
+      }
+      else{
+         $(".tooltip-filter").removeClass('has');
+      }
       this.Componentfilter(this.fdata, 0, !0);
     },
 
@@ -2241,20 +2262,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       }
     },
     CleanFilter:function(){
-      /*this.restartValues();
-      $.removeCookie('posscroll', { path: '/' });
-      $(".container-fullsize.scroller").scrollTop(0);
-      //this.reopenFilter();
-      this.itens_by_page=this.itens_page_default;
-      this.resetFilters();
-      this.bforn.val("");
-      $(".overview-container").remove();
-      this.fairval=$(a.target).find("option:selected").val();
-      this.notcombo=!0;
-      this.mode=this.page+"/"+(this.fairval.replace(" ","_") || "padrao")+"/"+"padrao"+"/"+"padrao";
-      this.navigate(this.mode, !1);
-      this.submit("<FEIR_COD>"+this.fairval+"</FEIR_COD>");*/
-
       var scroll;
       this.resetFilters();
       this.mode="amostras/"+(this.fairval || "padrao")+"/"+(this.fornval.replace(" ","_") || "padrao")+"/"+(this.amosval.replace(" ","_") || "padrao");
@@ -2688,18 +2695,37 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     },
     exportExcel:function(){
       //Extracted from: http://stackoverflow.com/questions/22317951/export-html-table-data-to-excel-using-javascript-jquery-is-not-working-properl/24081343#24081343
-
       
       var tab_text="<table border='2px'><tr bgcolor='#71abcc'>";
       var textRange; var j=0;
-      tab = document.getElementById('table'); // id of table
 
-      for(j = 0 ; j < tab.rows.length ; j++) 
-      {     
-          tab_text=tab_text+tab.rows[j].innerHTML+"</tr>";
-          //tab_text=tab_text+"</tr>";
+      if(this.page === "fornecedores"){
+        tab = document.getElementById('table'); // id of table
+        for(j = 0 ; j < tab.rows.length ; j++) 
+        {     
+            tab_text=tab_text+tab.rows[j].innerHTML+"</tr>";            
+            //tab_text=tab_text+"</tr>";
+        }
       }
+      else{
+        tab = document.getElementsByClassName('table-large');  
+        for(i=0;i<tab.length;i++){
+          for(j = 0 ; j < tab[i].rows.length ; j++) 
+          {     
+            if(i>0 && j === 0){
 
+            }
+            else{
+              tab_text=tab_text+tab[i].rows[j].innerHTML+"</tr>";
+            }
+              
+              //tab_text=tab_text+"</tr>";
+          }
+          
+        }
+      } 
+      
+      
       tab_text=tab_text+"</table>";
       tab_text= tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
       tab_text= tab_text.replace(/<img[^>]*>/gi,""); // remove if u want images in your table
@@ -2707,18 +2733,17 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
       var ua = window.navigator.userAgent;
       var msie = ua.indexOf("MSIE "); 
-
       if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
-      {
-          txtArea1.document.open("txt/html","replace");
-          txtArea1.document.write(tab_text);
-          txtArea1.document.close();
-          txtArea1.focus(); 
-          sa=txtArea1.document.execCommand("SaveAs",true,"WebFair Report.xls");
-      }  
-      else                 //other browser not tested on IE 11
-          sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));  
-
+        {
+            txtArea1.document.open("txt/html","replace");
+            txtArea1.document.write(tab_text);
+            txtArea1.document.close();
+            txtArea1.focus(); 
+            sa=txtArea1.document.execCommand("SaveAs",true,"WebFair Report.xls");
+        }  
+        else                 //other browser not tested on IE 11
+          sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+      
       return (sa);
     },
     getSpot:function(a){
@@ -3028,13 +3053,18 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       
       if(this.prices.length){
         //Fazer o trigger no filtro
+        $(".main_opt_item.tooltip.tooltip-selectable").eq(0).addClass('has');
         $("input[name='initial_price']").val(this.prices[0]);
         $("input[name='end_price']").val(this.prices[1]);
       }
       if(this.fstatus !==null){
+        $(".status.tooltip-selectable").addClass('has');
         $(".status[name='"+this.fstatus+"']").addClass('sel');
       }
       if(this.combofilter){
+        if(this.combofilter.is_set){
+          $(".tooltip-filter").addClass('has');
+        }
         for(prop in this.combofilter){
           if(this.combofilter[prop].clicked){
             $(".filterlist a[name='"+prop+"'][href='"+this.combofilter[prop].code+"']").addClass('sel');
@@ -3080,7 +3110,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       };
       //$table.floatThead('destroy');
     },
-    resetFilters:function(){
+    resetFilters:function(){  
       console.log("resetou FILTROS");
       //DATE
       $("input[name='initial_date']").val("");
@@ -3092,9 +3122,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       $("input[name='initial_price']").val("");
       $("input[name='end_price']").val("");
       this.prices=[];
+      $(".main_opt_item.tooltip.tooltip-selectable").eq(0).removeClass('has');
 
       this.fstatus=null;
       $(".status button").removeClass('sel');
+      $(".status.tooltip-selectable").removeClass('has');
       this.nsort="AMOS_DESC";
 
       this.combofilter={
@@ -3106,6 +3138,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         "is_set":0
       };
       $(".filterlist a").removeClass('sel');
+      $(".tooltip-filter").removeClass('has');
     }
   });
   new App;

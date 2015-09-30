@@ -77,6 +77,9 @@ body{
 		}
 	}	*/
 }
+.showexport{
+	display: none;
+}
 .mask,.modal_mask,.supplier-img-containter{
 	position: fixed;
 	left: 0;
@@ -1516,6 +1519,15 @@ form.search{
 			&.first{
 				min-width: 75px;
 			}
+			&.has{
+				span{
+					width: 10px;
+					height: 10px;
+					background-color: #71abcc;
+					position: absolute;
+					border-radius: 50%;
+				}
+			}
 			.main_opt_button{
 				text-decoration: none;
 				display: inline-block;
@@ -2294,6 +2306,12 @@ form.search{
 	.overview {
 		display: block;
 	}
+	.showedit{
+		display: block;
+	}
+	.showexport{
+		display: none;
+	}
 }
 
 .list{
@@ -2301,6 +2319,12 @@ form.search{
 		display: none;
 	}
 	.floatThead{
+		display: block;
+	}
+	.showedit{
+		display: none;
+	}
+	.showexport{
 		display: block;
 	}
 }
