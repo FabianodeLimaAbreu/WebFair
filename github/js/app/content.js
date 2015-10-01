@@ -170,7 +170,7 @@ window.Modal = Spine.Controller.sub({
       if(a === "detail"){
         var date,result="";
         date=new Date();
-        date=date.getDate()+"/0"+(date.getMonth()+1)+"/"+date.getFullYear();
+        date=date.getDate()+"/"+(date.getMonth()+1)+"/"+date.getFullYear();
         result+='<div class="supplier-form-container note contact actived"><ul class="notepad supplier-note-side">';
         result+="<li><article><div class='notepad-note blockquote'><p>"+date+" | "+ this.usr.USU_NOME+" | "+this.objid+"</p><p>"+this.usr.SEGM_COD+"</p><p>"+$(".notebook textarea").val()+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+this.noteid+"' name='"+this.usr.USU_COD+"'></button></div></article></li>"
         result+="</ul></div>";
@@ -260,7 +260,7 @@ window.Modal = Spine.Controller.sub({
           else{
             TEMP_ID=2;
           }
-          var day,date;
+          var day,date,month;
           date=new Date();
           if(parseInt(date.getDate())<10){
             day="0"+date.getDate();
@@ -268,7 +268,14 @@ window.Modal = Spine.Controller.sub({
           else{
             day=date.getDate();
           }
-          date=""+date.getFullYear()+"-0"+(date.getMonth()+1)+"-"+day;
+
+          if((parseInt(date.getMonth())+1)<10){
+            month="0"+date.getMonth()+1;
+          }
+          else{
+            month=date.getMonth()+1;
+          }
+          date=""+date.getFullYear()+"-"+month+"-"+day;
           this.callService("gravarNotes","<OBJ_ID>"+this.objid+"</OBJ_ID><TP_NOTA_ID>"+TEMP_ID+"</TP_NOTA_ID><USU_COD>"+this.usr.USU_COD+"</USU_COD>","<NOTA_DESC>"+$(".notebook textarea").val()+"</NOTA_DESC><CREATE_DATE>"+date+"</CREATE_DATE>");
         }
         else{

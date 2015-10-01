@@ -769,7 +769,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     },
     saveFair:function(){
       var elem=$(".form-control"),html="";
-      var day,date;
+      var day,date,month;
       date=new Date();
       if(parseInt(date.getDate())<10){
         day="0"+date.getDate();
@@ -777,7 +777,15 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       else{
         day=date.getDate();
       }
-      date=""+date.getFullYear()+"-0"+(date.getMonth()+1)+"-"+day;
+
+      if((parseInt(date.getMonth())+1)<10){
+        month="0"+date.getMonth()+1;
+      }
+      else{
+        month=date.getMonth()+1;
+      }
+
+      date=""+date.getFullYear()+"-"+month+"-"+day;
       if($("html").hasClass("edit-fair")){
         html+="<FEIR_COD>"+parseInt(this.fairval.FEIR_COD)+"</FEIR_COD>";
         elem.each(function(a,b){
@@ -1180,7 +1188,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         $.support.cors=true;
         soapRequest.filter(function(a,b){
           if(a['name'] === name){
-            //console.log(a['code']);
+            console.log(a['code']);
             core.callback=a['callback'];
             core.ajaxrequest=!0;                                                                        
             $.ajax({
@@ -1397,6 +1405,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                 }
               });
               this.setDate(this.data);
+              console.dir(this.data);
               this.setdata(this.data,"amostras");
             }
             else{
@@ -2511,7 +2520,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               $("#"+context.select_items[l].AMOS_ID+" .caption-downside ul").append("<li><a href='#"+obj.attr('href').replace("#","")+"' name='"+obj.attr('name')+"'>"+obj.attr('title').toUpperCase()+"</a></li>");
               context.data.filter(function(elem,index){
                 if(elem.AMOS_ID == context.select_items[l].AMOS_ID){
-                  var day,date;
+                  var day,date,month;
                   date=new Date();
                   if(parseInt(date.getDate())<10){
                     day="0"+date.getDate();
@@ -2519,7 +2528,15 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                   else{
                     day=date.getDate();
                   }
-                  date=""+date.getFullYear()+"-0"+(date.getMonth()+1)+"-"+day;
+
+                  if((parseInt(date.getMonth())+1)<10){
+                    month="0"+date.getMonth()+1;
+                  }
+                  else{
+                    month=date.getMonth()+1;
+                  }
+
+                  date=""+date.getFullYear()+"-"+month+"-"+day;
                   //pattern+="<AMOS_ID>"+parseInt(elem.AMOS_ID)+"</AMOS_ID><FORN_ID>"+parseInt(elem.FORN_ID)+"</FORN_ID><FEIR_COD>"+parseInt(elem.FEIR_COD)+"</FEIR_COD><USU_COD>"+parseInt(elem.USU_COD)+"</USU_COD><AMOS_DESC>"+elem.AMOS_DESC+"</AMOS_DESC><AMOS_STATUS>"+elem.AMOS_STATUS+"</AMOS_STATUS><AMOS_ENV_EMAIL>"+elem.AMOS_ENV_EMAIL+"</AMOS_ENV_EMAIL><TECI_COD>"+(elem.TECI_COD || "")+"</TECI_COD><BASE_COD>"+(elem.BASE_COD || "")+"</BASE_COD><GRUP_COD>"+(elem.GRUP_COD || "")+"</GRUP_COD><SUBG_COD>"+(elem.SUBG_COD || "")+"</SUBG_COD><SEGM_COD>"+(elem.SEGM_COD || "")+"</SEGM_COD><FLAG_PRIORIDADE>"+elem.FLAG_PRIORIDADE+"</FLAG_PRIORIDADE><AMOS_HOMOLOGAR>"+elem.AMOS_HOMOLOGAR+"</AMOS_HOMOLOGAR><FLAG_FISICA>"+elem.FLAG_FISICA+"</FLAG_FISICA><CREATE_DATE>"+date+"</CREATE_DATE>";
                   //html+="<AMOS_PRECO>"+elem.AMOS_PRECO+"</AMOS_PRECO><AMOS_LARGURA_TOTAL>"+elem.AMOS_LARGURA_TOTAL+"</AMOS_LARGURA_TOTAL><AMOS_GRAMATURA_M>"+elem.AMOS_GRAMATURA_M+"</AMOS_GRAMATURA_M><AMOS_COTACAO_M>"+elem.AMOS_COTACAO_M+"</AMOS_COTACAO_M><AMOS_COTACAO_KG>"+elem.AMOS_COTACAO_KG+"</AMOS_COTACAO_KG><AMOS_LARGURA_UTIL>"+elem.AMOS_LARGURA_UTIL+"</AMOS_LARGURA_UTIL><AMOS_GRAMATURA_ML>"+elem.AMOS_GRAMATURA_ML+"</AMOS_GRAMATURA_ML><AMOS_ONCAS>"+elem.AMOS_ONCAS+"</AMOS_ONCAS><AMOS_PRECO_UM>"+elem.AMOS_PRECO_UM+"</AMOS_PRECO_UM>";
                   
@@ -2571,7 +2588,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         el.parent().remove();
         context.data.filter(function(elem,index){
           if(elem.AMOS_ID == el.attr("title")){
-            var day;
+            var day,date,month;
             date=new Date();
             if(parseInt(date.getDate())<10){
               day="0"+date.getDate();
@@ -2579,7 +2596,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             else{
               day=date.getDate();
             }
-            date=""+date.getFullYear()+"-0"+(date.getMonth()+1)+"-"+day;
+
+            if((parseInt(date.getMonth())+1)<10){
+              month="0"+date.getMonth()+1;
+            }
+            else{
+              month=date.getMonth()+1;
+            }
+            date=""+date.getFullYear()+"-"+month+"-"+day;
             
             elem[el.attr("name")]=null;
             elem[el.attr("name").replace("_COD","_DESC")]="";
@@ -2601,7 +2625,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             var html="",pattern="";
             context.data.filter(function(elem,index){
               if(elem.AMOS_ID == a[l]){
-                var day,date;
+                var day,date,month;
                 date=new Date();
                 if(parseInt(date.getDate())<10){
                   day="0"+date.getDate();
@@ -2609,7 +2633,15 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                 else{
                   day=date.getDate();
                 }
-                date=""+date.getFullYear()+"-0"+(date.getMonth()+1)+"-"+day;
+
+                if((parseInt(date.getMonth())+1)<10){
+                  month="0"+date.getMonth()+1;
+                }
+                else{
+                  month=date.getMonth()+1;
+                }
+
+                date=""+date.getFullYear()+"-"+month+"-"+day;
                 $(".bemail[name='"+elem.AMOS_ID+"']").removeClass('disabled');
                 pattern+="<AMOS_ID>"+parseInt(elem.AMOS_ID)+"</AMOS_ID><FORN_ID>"+parseInt(elem.FORN_ID)+"</FORN_ID><FEIR_COD>"+parseInt(elem.FEIR_COD)+"</FEIR_COD><USU_COD>"+parseInt(elem.USU_COD)+"</USU_COD><AMOS_DESC>"+elem.AMOS_DESC+"</AMOS_DESC><AMOS_STATUS>"+elem.AMOS_STATUS+"</AMOS_STATUS><AMOS_ENV_EMAIL>1</AMOS_ENV_EMAIL><TECI_COD>"+(elem.TECI_COD || "")+"</TECI_COD><BASE_COD>"+(elem.BASE_COD || "")+"</BASE_COD><GRUP_COD>"+(elem.GRUP_COD || "")+"</GRUP_COD><SUBG_COD>"+(elem.SUBG_COD || "")+"</SUBG_COD><SEGM_COD>"+(elem.SEGM_COD || "")+"</SEGM_COD><FLAG_PRIORIDADE>"+elem.FLAG_PRIORIDADE+"</FLAG_PRIORIDADE><AMOS_HOMOLOGAR>"+elem.AMOS_HOMOLOGAR+"</AMOS_HOMOLOGAR><FLAG_FISICA>"+elem.FLAG_FISICA+"</FLAG_FISICA><CREATE_DATE>"+date+"</CREATE_DATE>";
                 html+="<AMOS_DESC>"+elem.AMOS_DESC+"</AMOS_DESC><AMOS_PRECO>"+elem.AMOS_PRECO+"</AMOS_PRECO><AMOS_LARGURA_TOTAL>"+elem.AMOS_LARGURA_TOTAL+"</AMOS_LARGURA_TOTAL><AMOS_GRAMATURA_M>"+elem.AMOS_GRAMATURA_M+"</AMOS_GRAMATURA_M><AMOS_COTACAO_KG>"+elem.AMOS_COTACAO_KG+"</AMOS_COTACAO_KG><AMOS_LARGURA_UTIL>"+elem.AMOS_LARGURA_UTIL+"</AMOS_LARGURA_UTIL><AMOS_GRAMATURA_ML>"+elem.AMOS_GRAMATURA_ML+"</AMOS_GRAMATURA_ML><AMOS_ONCAS>"+elem.AMOS_ONCAS+"</AMOS_ONCAS><AMOS_PRECO_UM>"+elem.AMOS_PRECO_UM+"</AMOS_PRECO_UM>";
@@ -2834,7 +2866,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           this.loading = !0;
         } else {
           this.maskEl.fadeOut();
-          $("html").removeAttr("id");
+          //$("html").removeAttr("id");
           this.loading = !1;
         }
       } else {

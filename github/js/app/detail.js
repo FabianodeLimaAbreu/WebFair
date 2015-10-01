@@ -200,7 +200,7 @@ open: function(a){
 
 },writeNote:function(){
   var result="";
-  var day,date;
+  var day,date,month;
   date=new Date();
   if(parseInt(date.getDate())<10){
     day="0"+date.getDate();
@@ -208,7 +208,16 @@ open: function(a){
   else{
     day=date.getDate();
   }
-  date=day+"/0"+(date.getMonth()+1)+"/"+date.getFullYear();
+
+  if((parseInt(date.getMonth())+1)<10){
+    month="0"+date.getMonth()+1;
+  }
+  else{
+    month=date.getMonth()+1;
+  }
+
+  date=day+"/"+month+"/"+date.getFullYear();
+
   var item={
     "CREATE_DATE":date,
     "NOTA_DESC":$(".samplenote").val(),
@@ -289,7 +298,7 @@ open: function(a){
   //this.callService("gravarNotes");
 },saveNote:function(){
   if($(".samplenote").val().length){
-    var day,date;
+    var day,date,month;
     date=new Date();
     if(parseInt(date.getDate())<10){
       day="0"+date.getDate();
@@ -297,7 +306,14 @@ open: function(a){
     else{
       day=date.getDate();
     }
-    date=""+date.getFullYear()+"-0"+(date.getMonth()+1)+"-"+day;
+
+    if((parseInt(date.getMonth())+1)<10){
+      month="0"+date.getMonth()+1;
+    }
+    else{
+      month=date.getMonth()+1;
+    }
+    date=""+date.getFullYear()+"-"+month+"-"+day;
     this.callService("gravarNotes","<OBJ_ID>"+this.item.AMOS_ID+"</OBJ_ID><TP_NOTA_ID>1</TP_NOTA_ID><USU_COD>"+this.usr.USU_COD+"</USU_COD>","<NOTA_DESC>"+$(".samplenote").val()+"</NOTA_DESC><CREATE_DATE>"+date+"</CREATE_DATE>");
   }
   else{
@@ -707,7 +723,7 @@ setFav:function(a){
     }
 
     var context=this;
-    var day,date;
+    var day,date,month;
     date=new Date();
     if(parseInt(date.getDate())<10){
       day="0"+date.getDate();
@@ -715,7 +731,15 @@ setFav:function(a){
     else{
       day=date.getDate();
     }
-    date=""+date.getFullYear()+"-0"+(date.getMonth()+1)+"-"+day;
+
+    if((parseInt(date.getMonth())+1)<10){
+      month="0"+date.getMonth()+1;
+    }
+    else{
+      month=date.getMonth()+1;
+    }
+
+    date=""+date.getFullYear()+"-"+month+"-"+day;
 
     context.setloading(!0,!1);
     context.ajaxrequest=!0;
@@ -743,7 +767,7 @@ setFav:function(a){
   }
 
   var context=this;
-  var day,date;
+  var day,date,month;
   date=new Date();
   if(parseInt(date.getDate())<10){
     day="0"+date.getDate();
@@ -751,7 +775,14 @@ setFav:function(a){
   else{
     day=date.getDate();
   }
-  date=""+date.getFullYear()+"-0"+(date.getMonth()+1)+"-"+day;
+
+  if((parseInt(date.getMonth())+1)<10){
+    month="0"+date.getMonth()+1;
+  }
+  else{
+    month=date.getMonth()+1;
+  }
+  date=""+date.getFullYear()+"-"+month+"-"+day;
 
   if($(".addnote").val().length){
     if(this.item.FORN_ID){
@@ -776,7 +807,7 @@ setFav:function(a){
   }
 },writeNote:function(){
   var result="";
-  var day,date;
+  var day,date,month;
   date=new Date();
   if(parseInt(date.getDate())<10){
     day="0"+date.getDate();
@@ -784,7 +815,14 @@ setFav:function(a){
   else{
     day=date.getDate();
   }
-  date=day+"/0"+(date.getMonth()+1)+"/"+date.getFullYear();
+
+  if((parseInt(date.getMonth())+1)<10){
+    month="0"+date.getMonth()+1;
+  }
+  else{
+    month=date.getMonth()+1;
+  }
+  date=day+"/"+month+"/"+date.getFullYear();
   result+="<li><article><div class='notepad-note blockquote'><p><b>"+date+" | "+(this.item.FORN_DESC || $("input[name='FORN_DESC']").val()) +" | "+this.noteid+"</b></p><p>"+this.usr.USU_NOME+" - "+this.usr.SEGM_DESC+"</p><p>"+$(".addnote").val()+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+this.noteid+"' name='"+this.usr.USU_COD+"'></button></div></article></li>";
   $(".addnote").val("");
   $(".note ul").prepend(result);
@@ -1180,7 +1218,7 @@ setFav:function(a){
 },saveForn:function(goout){
   var html="",context=this,pattern="",complet=!0;
   var addforn=($("html").hasClass('add_forn') && !this.item.FORN_ID) ? "I" : "U";
-  var day,date;
+  var day,date,month;
   date=new Date();
   if(parseInt(date.getDate())<10){
     day="0"+date.getDate();
@@ -1188,7 +1226,14 @@ setFav:function(a){
   else{
     day=date.getDate();
   }
-  date=""+date.getFullYear()+"-0"+(date.getMonth()+1)+"-"+day;
+
+  if((parseInt(date.getMonth())+1)<10){
+    month="0"+date.getMonth()+1;
+  }
+  else{
+    month=date.getMonth()+1;
+  }
+  date=""+date.getFullYear()+"-"+month+"-"+day;
   /*console.log(this.tab);
   console.log(this.lasttab);
   console.log(this.setfair);*/
