@@ -1,0 +1,162 @@
+<div class="content">
+  <div class="container-fullsize">
+    <div class="container-fullsize-filter holder">
+      <div class="form-container">
+        <div class="fake-form m-ten">
+          <div class="form-group styled-select">
+            <select class="form-control bselect fair">
+              <!--PAISES-->
+
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="right-list">
+        <button type="button" class="icon new floatLeft" alt="list" onclick="javascript:window.location.href='#fornecedores/new'">Novo Fornecedor</button>
+      </div>
+      <div class="form-container">
+        <div class="fake-form m-ten">
+          <div class="form-group">
+            <input type="text" class="form-control forn" name="login" placeholder="Fornecedores" autocomplete="off">
+            <ul class="spotlight">
+              <!--<li><button type="button">Teste</button></li>
+              <li><button type="button">Teste</button></li>-->
+            </dl>
+          </div>
+        </div>
+        <!--<div class="fake-form m-ten">
+          <div class="form-group styled-select">
+            <select class="form-control bselect contato">
+            </select>
+          </div>
+        </div>-->
+      </div>
+      <div class="form-container">
+        <!--<div class="fake-form medium">
+          <div class="form-group main_opt_item tooltip">
+            <button type="button" class="main_opt_button date-filter">Data do Cadastro</button>
+            <div class="tooltip-content price col-largest" style="right: -100px;top: 32px;">
+              <form class="form-inline">
+                <div class="form-group">
+                  <label for="initial_date">Data Inicial</label>
+                  <input type="text" class="form-control" name="initial_date" autocomplete="off">
+                </div>
+                <div class="form-group">
+                  <label for="end_date">Data Final</label>
+                  <input type="text" class="form-control" name="end_date" autocomplete="off">
+                </div>
+                <button type="button" class="icon s-five floatLeft save-date-filter">Ok</button>
+              </form>
+            </div>
+          </div>
+        </div>-->
+        <div class="fake-form medium">
+          <div class="form-group tooltip">
+            <button type="button" class=" bdefault s-four m-ten date-filter">Data do Cadastro</button>
+            <div class="tooltip-content date col-largest">
+              <form class="form-inline">
+                <div class="form-group">
+                  <label for="initial_date">Data Inicial</label>
+                  <input type="date" class="form-control" name="initial_date" autocomplete="off">
+                </div>
+                <div class="form-group">
+                  <label for="end_date">Data Final</label>
+                  <input type="date" class="form-control" name="end_date" autocomplete="off">
+                </div>
+                <button type="button" class="icon s-five floatLeft save-date-filter">Ok</button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!--<div class="fake-form medium">
+          <div class="form-group styled-select">
+            <select class="form-control bselect filter-data">
+              <option value="">Status de Prioridade</option>
+              <option value="true" name='FAVORITES'>Favoritos</option>
+              <option value="false" name='FAVORITES'>Não Favoritos</option>
+            </select>
+          </div>
+        </div>-->
+        <div class="fake-form medium last floatRight">
+          <div class="form-group styled-select">
+            <select class="form-control bselect filter-data">
+              <option value="false">Status do Cadastro</option>
+              <option value="true" name="FORN_STATUS">Cadastro Completo</option>
+              <option value="false" name="FORN_STATUS">Cadastro Incompleto</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="right-list">
+        <button type="button" class="bdefault s-four m-ten export" alt="list">Exportar Excel</button>
+      </div>
+    </div>
+  </div>
+  <div class="container-fullsize scroller">
+    <div class="floatThead wrapper">
+      <div class="filter-crumb table-large">
+        <p class="bread-search">Mostrando:<span class="spec">0</span><span> de </span><span class="specall">0</span><span>Fornecedoes</span><span class="specforn hide"></span>
+        </p>
+      </div>
+      <table id="table" class="table-striped table-large">
+        <thead>
+            <tr>
+                <th>Fornecedor</th><th>Local da coleta</th><th>Data do Cadastro</th><th>Contatos</th><th>Segmentos</th><th class="hasicon">Anotacoes</th><th class="hasicon">Favoritos</th><th class="hasicon">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+          <!--<tr><td>HEINTEXTIL</td><td>XAOXING</td><td>CHINA</td><td>HEINTEXTIL</td><td>HEINTEXTIL</td>
+            <td class="tooltip">
+              <button type="button" class="caption-icons-icon justit bstar has"></button>
+              <ul class="tooltip-content col-large">
+                <li>
+                  <button type="button" class="tooltip-item caption-icons-icon bstar has">Jeans</button>
+                </li>
+                <li>
+                  <button type="button" class="tooltip-item caption-icons-icon bstar has">Masculino</button>
+                </li>
+              </ul>
+              </td>
+            <td class="tooltip tooltip-selectable">
+              <button type="button" class="caption-icons-icon justit bnote"></button>
+              <ul class="tooltip-content notepad col-large">
+                <li class="tooltip-title">
+                  <p class="tooltip-item ">Anotações</p>
+                </li>
+                <li>
+                  <article>
+                    <div class="notepad-note blockquote">
+                      <p>12/03/2015 | xaou xing | 890938746</p>
+                      <p>Usuário - Assunto:</p>
+                      <p>Lorem ipsum consecteturdolor sit amet, consectetur adipiscing Lorem dolor sit amet, consectetuadipiscing...</p>
+                    </div>
+                    <div class="blockquote">
+                      <button type="button" class="tooltip-item caption-icons-icon btrash-big"></button>
+                    </div>
+                  </article>
+                </li>
+                <li>
+                  <article>
+                    <div class="notepad-note blockquote">
+                      <p>12/03/2015 | xaou xing | 890938746</p>
+                      <p>Usuário - Assunto:</p>
+                      <p>Lorem ipsum consecteturdolor sit amet, consectetur adipiscing Lorem dolor sit amet, consectetuadipiscing...</p>
+                    </div>
+                    <div class="blockquote">
+                      <button type="button" class="tooltip-item caption-icons-icon btrash-big"></button>
+                    </div>
+                  </article>
+                </li>
+              </ul>
+            </td>
+            <td>
+              <button type="button" class="caption-icons-icon justit bstatus complet"></button>
+            </td>
+          </tr>-->
+        </tbody>
+      </table>
+    </div> 
+  </div>
+</div>

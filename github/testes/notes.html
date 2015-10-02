@@ -12,7 +12,7 @@
               $("#btnCallWebService").click(function (event) {
                   var wsUrl = "../../WebService.asmx?op=GravarAnotacao";
                   var data=new Date();
-                  var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarAnotacao xmlns="http://tempuri.org/"><note><NOTA_ID>0</NOTA_ID><OBJ_ID>102003408</OBJ_ID><TP_NOTA_ID>1</TP_NOTA_ID><USU_COD>1</USU_COD><PLAT_ID>2</PLAT_ID><NOTA_DESC>ffs</NOTA_DESC><CREATE_DATE>2015-10-01</CREATE_DATE></note><action>I</action></GravarAnotacao></soap:Body></soap:Envelope>';
+                  var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarAnotacao xmlns="http://tempuri.org/"><note><NOTA_ID>0</NOTA_ID><OBJ_ID>102003408</OBJ_ID><TP_NOTA_ID>1</TP_NOTA_ID><USU_COD>2</USU_COD><PLAT_ID>2</PLAT_ID><NOTA_DESC>ffs</NOTA_DESC><SEGM_COD>MC</SEGM_COD><CREATE_DATE>2015-10-01</CREATE_DATE></note><action>I</action></GravarAnotacao></soap:Body></soap:Envelope>';
                   $.support.cors=true;
                   $.ajax({
                            type: "POST",

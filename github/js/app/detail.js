@@ -156,6 +156,7 @@ open: function(a){
     $(b).val(item[$(b).attr("name").replace(".",",")]);
   });
   $(".AMOS_PRECO_UM option").each(function(a,b){
+    console.dir(item["AMOS_PRECO_UM"]);
     if($(b).attr("value") === item["AMOS_PRECO_UM"]){
       $(b).attr("selected","selected");
     }
@@ -314,7 +315,7 @@ open: function(a){
       month=date.getMonth()+1;
     }
     date=""+date.getFullYear()+"-"+month+"-"+day;
-    this.callService("gravarNotes","<OBJ_ID>"+this.item.AMOS_ID+"</OBJ_ID><TP_NOTA_ID>1</TP_NOTA_ID><USU_COD>"+this.usr.USU_COD+"</USU_COD>","<NOTA_DESC>"+$(".samplenote").val()+"</NOTA_DESC><CREATE_DATE>"+date+"</CREATE_DATE>");
+    this.callService("gravarNotes","<OBJ_ID>"+this.item.AMOS_ID+"</OBJ_ID><TP_NOTA_ID>1</TP_NOTA_ID><USU_COD>"+this.usr.USU_COD+"</USU_COD>","<NOTA_DESC>"+$(".samplenote").val()+"</NOTA_DESC><SEGM_COD>"+this.usr.SEGM_COD+"</SEGM_COD><CREATE_DATE>"+date+"</CREATE_DATE>");
   }
   else{
     this.modal.open("message","Digite o texto da anotação!!!",!1,!0);
@@ -744,7 +745,7 @@ setFav:function(a){
     context.setloading(!0,!1);
     context.ajaxrequest=!0;
     context.callService("GravarFornecedor",'<FORN_ID>0</FORN_ID>','<FEIR_COD>'+context.setfair+'</FEIR_COD>',"<FORN_DESC>"+$("input[name='FORN_DESC']").val()+"</FORN_DESC><CREATE_DATE>"+date+"</CREATE_DATE><FORN_STATUS>0</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>","<USU_COD>"+context.usr.USU_COD+"</USU_COD>",'<action>I</action>');
-    
+    var status;
     status=setInterval(function(){
       if(!context.ajaxrequest){
         context.callService("GravarFornecedorFavorito",'<Forn_ID>'+context.item.FORN_ID+'</Forn_ID>',"<string>"+context.usr.SEGM_COD+"</string>");
@@ -767,7 +768,7 @@ setFav:function(a){
   }
 
   var context=this;
-  var day,date,month;
+  var day,date,month,status;
   date=new Date();
   if(parseInt(date.getDate())<10){
     day="0"+date.getDate();
@@ -786,7 +787,7 @@ setFav:function(a){
 
   if($(".addnote").val().length){
     if(this.item.FORN_ID){
-      this.callService("gravarNotes","<OBJ_ID>"+this.item.FORN_ID+"</OBJ_ID><TP_NOTA_ID>2</TP_NOTA_ID><USU_COD>"+this.usr.USU_COD+"</USU_COD>","<NOTA_DESC>"+$(".addnote").val()+"</NOTA_DESC><CREATE_DATE>"+date+"</CREATE_DATE>");
+      this.callService("gravarNotes","<OBJ_ID>"+this.item.FORN_ID+"</OBJ_ID><TP_NOTA_ID>2</TP_NOTA_ID><USU_COD>"+this.usr.USU_COD+"</USU_COD>","<NOTA_DESC>"+$(".addnote").val()+"</NOTA_DESC><SEGM_COD>"+this.usr.SEGM_COD+"</SEGM_COD><CREATE_DATE>"+date+"</CREATE_DATE>");
     }
     else{
       context.setloading(!0,!1);
@@ -866,18 +867,26 @@ setFav:function(a){
     });
   }
 },populateForn:function(){
-  var context=this;
+  var context=this,status,statusfair;
   if(!this.getSegm().length){
     status=setInterval(function(){
-      if(context.getSegm().length){
+      /*if(context.getSegm().length){
         context.ajaxrequest=!1;
         //context.createComponent(context.getSegm(),$(".SEGM_COD"),'segm');
         if(context.fair.length){
           context.setloading(!1);
-          context.inputValues();
+          //context.inputValues();
         }
         clearInterval(status);
+      }*/
+
+      context.ajaxrequest=!1;
+      //context.createComponent(context.getSegm(),$(".SEGM_COD"),'segm');
+      if(context.fair.length){
+        context.setloading(!1);
+        context.inputValues();
       }
+      clearInterval(status);
     },100);
   }
   else{
@@ -902,6 +911,7 @@ setFav:function(a){
   //Gravar dados nos campos
 
 },inputValues:function(){
+  console.dir(this.item);
   var context=this,complet=!0;
   if(this.item.FORN_ID){
     $(".fair option").each(function(a,b){
@@ -950,10 +960,9 @@ setFav:function(a){
     }
     $(".note ul").append(result);
 
-
     if(context.item.CONTACTS.length>1){
-      //Mais de um contato
-      //console.log("tem Mais de um contato");
+      //Mais de um contato/
+      console.log("tem Mais de um contato");
       for(var i=(context.item.CONTACTS.length-1);i>=0;i--){
         var template="",temp="";
         temp='<div class="supplier-form-container contact contact'+(i+1)+' actived cont"><h2><span>Contato '+(i+1)+'</span></h2>';
@@ -1015,7 +1024,7 @@ setFav:function(a){
       if(context.item.CONTACTS.length){
         var template="",temp="",cont="",template1="",template2="";
         //Tem apenas 1 contato
-        //console.log("Tem apenas 1 contato");
+        console.log("Tem apenas 1 contato");
         var template="",temp="",cont="",template2="";
         temp+='<div class="supplier-form-container contact contact1 actived cont"><h2><span>Contato 1</span></h2><div class="supplier-photo-side"><div class="photo-container">';
         if(context.item.CONTACTS[0].IMG_PATH_CONTATO.length){
@@ -1047,9 +1056,9 @@ setFav:function(a){
       }
       else{
         //Nao possui contato
-        //console.log("Nao possui contato");
+        console.log("Nao possui contato");
         var template="",temp="",cont="",template1="",template2="";
-        temp='<div class="supplier-form-container contact contact1 actived cont"><h2><span>Contato 1</span></h2>';
+        temp='<div class="supplier-form-container contact contact1 cont"><h2><span>Contato 1</span><button type="button" class="icon floatLeft bplus-big" name="showcontact"></button></h2>';
         template+='<div class="supplier-photo-side"><div class="photo-container">';
         template+='<img src="images/contact.png" width="100%" class="noimage">';
         template1+='</div></div><div class="supplier-firstform"><div class="row"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off" required="required"></div></div><button type="button" class="icon floatLeft trash-big" name="1"></button></div><div class="row"><div class="fake-form"><div class="form-group"><input type="text" class="form-control" name="CONT_EMAIL" placeholder="E-mail" autofocus="" autocomplete="off" required="required"></div></div></div><div class="row top-ten"><div class="fake-form fake-form-supplier-equal floatLeft">';
@@ -1062,6 +1071,23 @@ setFav:function(a){
         cont='<button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bcircle favcontact" name="2">Contato Principal </button>';
         template='<div class="supplier-form-container contact contact2 cont"><h2><span>Contato 2</span><button type="button" class="icon floatLeft bplus-big" name="showcontact"></button></h2>'+template+template1+cont+template2+'</div>';
         $("#dados .contact-container").append(template);
+
+        $(".contact2").remove();
+
+        /*var template="",temp="",cont="",template1="",template2="";
+        temp='<div class="supplier-form-container contact contact1 actived cont"><h2><span>Contato 1</span></h2>';
+        template+='<div class="supplier-photo-side"><div class="photo-container">';
+        template+='<img src="images/contact.png" width="100%" class="noimage">';
+        template1+='</div></div><div class="supplier-firstform"><div class="row"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off" required="required"></div></div><button type="button" class="icon floatLeft trash-big" name="1"></button></div><div class="row"><div class="fake-form"><div class="form-group"><input type="text" class="form-control" name="CONT_EMAIL" placeholder="E-mail" autofocus="" autocomplete="off" required="required"></div></div></div><div class="row top-ten"><div class="fake-form fake-form-supplier-equal floatLeft">';
+        cont+='<button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bcircle favcontact" name="1">Contato Principal </button>';
+        template2+='</div><div class="fake-form fake-form-supplier-equal right"><div class="form-group"><input type="text" class="form-control" name="SEGM_COD" placeholder="Segmento" autofocus="" autocomplete="off" value="'+context.usr.SEGM_DESC+'" title="'+context.usr.SEGM_COD+'" disabled="disabled"></div></div></div><div class="row"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="tel" class="form-control" name="CONT_TEL" placeholder="Tel 1" autofocus="" autocomplete="off"></div></div><button type="button" class="icon floatLeft bplus-big" name="CONT_TEL2" name="CONT_TEL2"></button></div><div class="row CONT_TEL2 top-ten hide"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="tel" class="form-control" name="CONT_TEL2" placeholder="Tel 2" autofocus="" autocomplete="off"></div></div></div></div></div>';
+        context.favcontact=null;
+        $("#dados .contact-container").prepend(temp+template+template1+cont+template2);
+
+        template1='</div></div><div class="supplier-firstform"><div class="row"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off"></div></div><button type="button" class="icon floatLeft trash-big" name="2"></button></div><div class="row"><div class="fake-form"><div class="form-group"><input type="text" class="form-control" name="CONT_EMAIL" placeholder="E-mail" autofocus="" autocomplete="off"></div></div></div><div class="row top-ten"><div class="fake-form fake-form-supplier-equal floatLeft">';
+        cont='<button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bcircle favcontact" name="2">Contato Principal </button>';
+        template='<div class="supplier-form-container contact contact2 cont"><h2><span>Contato 2</span><button type="button" class="icon floatLeft bplus-big" name="showcontact"></button></h2>'+template+template1+cont+template2+'</div>';
+        $("#dados .contact-container").append(template);*/
       }      
     }
 
@@ -1141,9 +1167,9 @@ setFav:function(a){
     }
   }
   else{
-    //console.log("ELSE ELSE");
+    console.log("ELSE ELSE");
     var template="",temp="",cont="",template1="",template2="";
-    temp+='<div class="supplier-form-container contact contact1 actived cont"><h2><span>Contato 1</span></h2>';
+    temp+='<div class="supplier-form-container contact contact1 cont"><h2><span>Contato 1</span><button type="button" class="icon floatLeft bplus-big" name="showcontact"></button></h2>';
     template+='<div class="supplier-photo-side"><div class="photo-container"><img src="images/contact.png" width="100%" class="noimage">';
     template1+='</div></div><div class="supplier-firstform"><div class="row"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="text" class="form-control" name="CONT_NOME" placeholder="Nome" autofocus="" autocomplete="off" required="required"></div></div><button type="button" class="icon floatLeft trash-big" name="1"></button></div><div class="row"><div class="fake-form"><div class="form-group"><input type="text" class="form-control" name="CONT_EMAIL" placeholder="E-mail" autofocus="" autocomplete="off" required="required"></div></div></div><div class="row top-ten"><div class="fake-form fake-form-supplier-equal floatLeft">';
     cont+='<button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bcircle favcontact" name="1">Contato Principal </button>';
@@ -1155,6 +1181,8 @@ setFav:function(a){
     template2='</div><div class="fake-form fake-form-supplier-equal right"><div class="form-group"><input type="text" class="form-control" name="SEGM_COD" placeholder="Segmento" autofocus="" autocomplete="off" value="'+context.usr.SEGM_DESC+'" title="'+context.usr.SEGM_COD+'" disabled="disabled" disabled="disabled"></div></div></div><div class="row"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="tel" class="form-control" name="CONT_TEL" placeholder="Tel 1" autofocus="" autocomplete="off"></div></div><button type="button" class="icon floatLeft bplus-big" name="CONT_TEL2" id="2"></button></div><div class="row CONT_TEL2 top-ten hide"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="tel" class="form-control" name="CONT_TEL2" placeholder="Tel 2" autofocus="" autocomplete="off"></div></div></div></div></div>';
     template='<div class="supplier-form-container contact contact2 cont"><h2><span>Contato 2</span><button type="button" class="icon floatLeft bplus-big" name="showcontact"></button></h2>'+template+temp+cont+template2+'</div>';
     $("#dados .contact-container").append(template);
+    $(".contact2").remove();
+    
     $(".favcontact").bind("click",function(a){context.setFavContact(a);});
     $(".photo-container img").bind("click",function(a){context.showCard(a);});
     $(".cardboard").bind("click",function(a){context.slideCard(a);});
@@ -1216,7 +1244,7 @@ setFav:function(a){
     }
   });
 },saveForn:function(goout){
-  var html="",context=this,pattern="",complet=!0;
+  var html="",context=this,pattern="",complet=!0,status;
   var addforn=($("html").hasClass('add_forn') && !this.item.FORN_ID) ? "I" : "U";
   var day,date,month;
   date=new Date();
@@ -1259,7 +1287,7 @@ setFav:function(a){
         $(".fair").attr('disabled', 'disabled');
         status=setInterval(function(){
           if(!context.ajaxrequest){
-            //console.log("entrou no interval: "+complet);
+            console.log("entrou no interval: "+complet);
             $(".cont.actived").each(function(a,b){
               html="";
               $(b).find("input").each(function(index,el){
@@ -1401,6 +1429,7 @@ setFav:function(a){
           this.callService("GravarFornecedor",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+context.item.FORN_DESC+"</FORN_DESC>",'<FORN_STATUS>0</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>U</action>');
         }
 
+        var status;
         status=setInterval(function(){
           if(!context.ajaxrequest){
             context.callService("GravarFornecedorProfile",'<Forn_ID>'+context.item.FORN_ID+'</Forn_ID>',html);
@@ -1447,7 +1476,7 @@ setFav:function(a){
           context.ajaxrequest=!0;
           this.callService("GravarFornecedor",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+context.item.FORN_DESC+"</FORN_DESC>",'<FORN_STATUS>0</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>U</action>');
         }
-
+        var status;
         status=setInterval(function(){
           if(!context.ajaxrequest){
             context.callService("GravarFornecedorComposicao",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html);
@@ -1494,7 +1523,7 @@ setFav:function(a){
           context.ajaxrequest=!0;
           this.callService("GravarFornecedor",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+context.item.FORN_DESC+"</FORN_DESC>",'<FORN_STATUS>0</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>U</action>');
         }
-
+        var status;
         status=setInterval(function(){
           if(!context.ajaxrequest){
             context.callService("GravarFornecedorProduto",'<Forn_ID>'+context.item.FORN_ID+'</Forn_ID>',html);
@@ -1539,7 +1568,7 @@ setFav:function(a){
           context.ajaxrequest=!0;
           this.callService("GravarFornecedor",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+context.item.FORN_DESC+"</FORN_DESC>",'<FORN_STATUS>0</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>U</action>');
         }
-
+        var status;
         status=setInterval(function(){
           last_request=!0;
           if(!context.ajaxrequest){

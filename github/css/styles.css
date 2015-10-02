@@ -776,6 +776,7 @@ header .logo-print {
   top: 55px;
   height: 45px;
   right: -280px;
+  z-index: 9999;
 }
 .tooltip-content.date:before {
   margin-left: 110px;
@@ -4239,7 +4240,7 @@ form textarea {
 }
 .edit-description {
   margin: 2px 0 0 0;
-  position: absolute;
+  position: relative;
   min-width: 290px;
   max-width: 290px;
   min-height: 30px;

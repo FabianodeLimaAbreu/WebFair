@@ -105,7 +105,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     init:function(){
       this.view = "images";
       this.page = "amostras";
-      this.nsort="CREATE_DATE";
+      this.nsort="";
       this.itens = $([]);
       this.data=[];
       this.fdata = [];
@@ -156,6 +156,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       if(!this.usr)
         window.location.href = 'login.html';
 
+      console.dir(this.usr)
       this.cookiefair=[];
 
       this.header.addClass("goDown");
@@ -238,7 +239,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           this.amosval = c=res.amosval !== "padrao" ? res.amosval.replace("_"," ").replace("_"," ").replace("_"," ") : ""; 
 
           if(this.cookiefair.length){
-            //console.dir(this.cookiefair);
             if(a == this.cookiefair[0].fairval && b === this.cookiefair[0].fornval  && c === this.cookiefair[0].amosval ){
               //console.log("bateu parametros do cookie");
               this.initialTime=this.cookiefair[0].dates[0];
@@ -484,6 +484,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.container.load("pages/"+hash+".html",function( response, status, xhr){
         switch(context.page){
           case "amostras":
+            var status;
             //console.log(context.fairval);
             context.viewBtn=$(".changeview button");
             context.order_box=$(".tooltip.borderby");
@@ -526,6 +527,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             $( "input[name='initial_date']" ).datepicker({
               //defaultDate: "+1w",
               changeMonth: true,
+              changeYear: true,
               numberOfMonths: 1,
               //defaultDate:'01-01-01',
               monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
@@ -539,6 +541,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             $( "input[name='end_date']" ).datepicker({
               //defaultDate: "+1w",
               changeMonth: true,
+              changeYear: true,
               numberOfMonths: 1,
               //defaultDate:context.endTime,
               monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
@@ -588,6 +591,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             $( "input[name='initial_date']" ).datepicker({
               defaultDate: "+1w",
               changeMonth: true,
+              changeYear: true,
               numberOfMonths: 1,
               monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
               monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
@@ -600,6 +604,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             $( "input[name='end_date']" ).datepicker({
               defaultDate: "+1w",
               changeMonth: true,
+              changeYear: true,
               numberOfMonths: 1,
               monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
               monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
@@ -612,9 +617,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             //console.dir(context.fair);
             break;
           case "local":
+            var status;
             $(".nav-menu a[href='#local']").addClass('sel');
             context.bcity=$(".city");
-            if(context.usr.SEGM_COD !== "TD"){
+            if(context.usr.USU_COD !== 1){
               $(".bnew-fair").hide();
             }
             if(!context.fair.length){
@@ -657,13 +663,25 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           case "detail":
             $(".nav-menu a[href='#amostras']").addClass('sel');
             $("html").attr("class","").addClass(context.page);
+
+            if(context.usr.SEGM_COD === 'TD'){
+              //Usuario TD não pode inserir na primeira etapa do projeto
+              $(".bplus-big").hide();
+            }
+            
             context.detail.reload(context.fairval,context.amosval);
             break;
           case "fornecedor_cadastro":
+            var second,status;
             $(".nav-menu a[href='#fornecedores']").addClass('sel');
             context.bfair=$(".fair");
             context.bcity=$(".city");
+            if(context.usr.SEGM_COD === 'TD'){
+              //Usuario TD não pode inserir na primeira etapa do projeto
+              $(".bplus-big[name='shownote']").hide();
+            }
             console.log("fornecedor cadastro");
+
             //$.getScript("js/lib/external-script.js");
             if(!context.fair.length){
               status=setInterval(function(){
@@ -681,6 +699,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             break;
           case "template_email":
             $(".nav-menu a[href='#template_email']").addClass('sel');
+            if(context.usr.SEGM_COD === 'TD'){
+              //Usuario TD não pode inserir na primeira etapa do projeto
+              $(".newtemp").hide();
+            }
             if(!context.fair.length){
               status=setInterval(function(){
                 if(context.fair.length){
@@ -733,16 +755,17 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       });
     },
     popComponent:function(item){
-      var elem=$(".form-control"),context=this;
+      var status,elem=$(".form-control"),context=this;
       elem.each(function(a,b){
         $(b).attr("disabled","disabled").val(item[$(b).attr("name")]);
       });
       this.fairval=item;
-      if(this.usr.SEGM_COD === "TD"){
+      if(this.usr.USU_COD === 1){
         $(".edit-fair").trigger('click');
       }
       else{
-        $(".container-fullsize").hide();
+        $(".bnew-fair").hide();
+        $(".delete-fair").hide();
       }
       $(".ai-holder button[name='"+item.FEIR_INATIVO+"']").trigger('click');
       this.callService("cities",'<PAIS_COD>'+item.PAIS_COD+'</PAIS_COD>','<PAIS_DESC></PAIS_DESC>','<REGI_COD></REGI_COD>','<REGI_DESC></REGI_DESC>');
@@ -847,7 +870,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
       this.fstatus=null;
       $(".status button").removeClass('sel');
-      this.nsort="AMOS_DESC";
+      //this.nsort="AMOS_DESC";
+      this.nsort="";
 
       this.combofilter={
         "FLAG_FISICA":{"clicked":0,"code":0},
@@ -1122,7 +1146,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           {
             'name':'GravarFornecedorFavorito',
             'serviceName':'GravarFornecedorFavorito',
-            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFornecedorFavorito xmlns="http://tempuri.org/">'+a+'<segments>'+b+'</segments></GravarFornecedorFavorito></soap:Body></soap:Envelope>',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFornecedorFavorito xmlns="http://tempuri.org/">'+a+'<USU_COD>'+core.usr.USU_COD+'</USU_COD><segments>'+b+'</segments></GravarFornecedorFavorito></soap:Body></soap:Envelope>',
             'callback':function(data,req){
               core.setloading(!1);
             }
@@ -1299,8 +1323,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       switch(b){
         case 'amostras':
           //this.data = a.sortBy(this.nsort);
-          this.data = a.sortBy(this.nsort);
+          this.data = a;
           this.content.changeview(this.view);
+          //$(".changeview button.b"+this.view);
+          if(!$(".changeview button.sel").hasClass('b'+this.view)){
+            $(".changeview button").removeClass('sel');
+            $(".changeview button.b"+this.view).addClass('sel');
+          }
           if(!this.cookiefair.length){
             var scroll={
               "fornval":''+this.fornval,
@@ -1878,14 +1907,32 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     },
     deleteNote:function(a){
       a.preventDefault();
-      var i,obj=$(a.target);
+      var i,obj=$(a.target),how;
+      if(this.page === "amostras"){
+        how="AMOS_ID";
+      }
+      else{
+        how="FORN_ID";
+      }
       this.callService("delete",obj.attr("title"),obj.attr("name"));
       obj.closest("li").fadeOut();
-      for(i=0;i<this.detail.item.NOTES.length;i++){
+      this.data.filter(function(item,index) {
+        if(item[how] === parseInt(obj.attr("alt"))){
+          console.dir(item);
+          for(i=0;i<item.NOTES.length;i++){
+            if(item.NOTES[i].NOTA_ID === parseInt(obj.attr("title"))){
+              item.NOTES.splice(i, 1);
+            }
+          }
+        }
+      });
+
+      /*for(i=0;i<this.detail.item.NOTES.length;i++){
+        console.log(this.detail.item.NOTES[i].NOTA_ID+" , "+parseInt(obj.attr("title")));
         if(this.detail.item.NOTES[i].NOTA_ID === parseInt(obj.attr("title"))){
           this.detail.item.NOTES.splice(i, 1);
         }
-      }
+      }*/
     },
     actionHeart:function(a){
       a.preventDefault();
@@ -1940,7 +1987,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       }
     },
     enableSelect : function(a){
-      //console.log("ok");
+      var status;
       var context=this;
       if(!context.email.length){
         status=setInterval(function(){
@@ -2014,7 +2061,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       el=this.data.filter(function(a,b) {
         if(parseInt(a.FORN_ID) == parseInt($(ev.target).attr('name'))){
           item=a.FAVORITES;
-          //a.FAVORITES.push({"SEGM_COD":context.usr.SEGM_COD,"SEGM_DESC":context.usr.SEGM_DESC});
+          //a.FAVORITES.push({"S'EGM_COD":context.usr.SEGM_COD,"SEGM_DESC":context.usr.SEGM_DESC});
           return a;
         }
       });
@@ -2023,28 +2070,35 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           //console.log("entrou has");
           for(i=0;i<el[0].FAVORITES.length;i++){
             if(el[0].FAVORITES[i].SEGM_COD !== this.usr.SEGM_COD){
-              //console.log("diferente");
+              console.log("diferente");
               html+="<string>"+el[0].FAVORITES[i].SEGM_COD+"</string>";
               diff=!0;
             }
             else{
-              //console.log("igual");
-              el[0].FAVORITES.slice(i, 1);
+              //console.dir(item[i]);
+              item.slice(i, 1);
+              //console.dir(item[i]);
               //item.push({"SEGM_COD":this.usr.SEGM_COD,"SEGM_DESC":this.usr.SEGM_DESC});
               if(el[0].FAVORITES[i].length >=1){
-                //console.log("mais que 1");
+                console.log("mais que 1");
                 diff=!0;
               }
               else{
+                console.log("apenas 1");
+                $(ev.target).parent().removeClass('tooltip').find("ul").remove();
                 diff=!1;
               }
             }
           }
           if(diff){
+            console.log("middle o favorito");
             $(ev.target).removeClass('nothas').removeClass('has').addClass('middle');
+
           }
           else{
+            console.log("limpou o favorito");
             $(ev.target).removeClass('middle').removeClass('has').addClass('nothas');
+            item.length=0;
           }
         }
 
@@ -2054,6 +2108,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             html+="<string>"+el[0].FAVORITES[i].SEGM_COD+"</string>";
           }
           html+="<string>"+this.usr.SEGM_COD+"</string>";
+          item.push({"SEGM_COD":this.usr.SEGM_COD,"SEGM_DESC":this.usr.SEGM_DESC});
           $(ev.target).removeClass('nothas').removeClass('middle').addClass('has');
         }
         else{
@@ -2061,9 +2116,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           html+="<string>"+this.usr.SEGM_COD+"</string>";
           item.push({"SEGM_COD":this.usr.SEGM_COD,"SEGM_DESC":this.usr.SEGM_DESC});
           $(ev.target).removeClass('nothas').removeClass('middle').addClass('has');
+          $(ev.target).parent().addClass('tooltip').append('<ul class="tooltip-content col-large"><li><button type="button" class="tooltip-item caption-icons-icon bstar has">'+this.usr.SEGM_DESC+'</button></li></ul>')
         }
       }
-
+      console.dir(item);
+      console.dir(this.data);
       this.callService("GravarFornecedorFavorito","<Forn_ID>"+parseInt($(ev.target).attr("name"))+"</Forn_ID>",html);
 
     },
@@ -2469,7 +2526,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     },
     setCompositions:function(a){
       //console.log("SET COMPOSITIONS");
-      var length,context=this,l=0,obj;
+      var length,context=this,l=0,obj,status;
       if($(a.target).prop("tagName") ===  "SPAN"){
         a.preventDefault();
         obj=$(a.target).parent();
@@ -2617,7 +2674,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       }
     },
     setEmailSent:function(a){
-      var length,context=this,l=0,obj;
+      var length,context=this,l=0,obj,status;
       length=a.length;
       this.setloading(!0,!1);
       status=setInterval(function(){
@@ -2723,7 +2780,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     },
     exportExcel:function(){
       //Extracted from: http://stackoverflow.com/questions/22317951/export-html-table-data-to-excel-using-javascript-jquery-is-not-working-properl/24081343#24081343
-      
       var tab_text="<table border='2px'><tr bgcolor='#71abcc'>";
       var textRange; var j=0;
 
@@ -2860,6 +2916,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     setloading: function(a, b) {
       if (!b) {
         if (a) {
+          if($(".date-filter").hasClass('sel')){
+            $(".date-filter").trigger('click');
+          }
           this.spotlight.close();
           this.maskEl.fadeIn();
           //$("html").attr("id",'noscroll');
@@ -2871,9 +2930,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         }
       } else {
         if (a) {
+          if($(".date-filter").hasClass('sel')){
+            $(".date-filter").trigger('click');
+          }
           this.spotlight.close();
           this.loader.fadeOut();
           this.maskEl.fadeIn();
+
           //$("html").attr("id",'noscroll');
           this.loading = !0;
         } else {
@@ -3125,7 +3188,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.fairval="";
       this.fornval="";
       this.amosval="";
-      this.nsort="AMOS_DESC";
+      //this.nsort="AMOS_DESC";
+      this.nsort="";
       this.initialTime='2000-01-01';
       this.endTime='2020-10-10';
       this.notcombo=0;
@@ -3157,7 +3221,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.fstatus=null;
       $(".status button").removeClass('sel');
       $(".status.tooltip-selectable").removeClass('has');
-      this.nsort="AMOS_DESC";
+      //this.nsort="AMOS_DESC";
+      this.nsort="";
 
       this.combofilter={
         "FLAG_FISICA":{"clicked":0,"code":0},
