@@ -49,6 +49,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     events: {      
       "click .justit.bnote":"preventAction",
       "click .justit.bemail":"preventAction",
+      "click .fornecedor_cadastro .nav-menu a":"preventAction",
       "hover .tooltip-selectable":"positionNote",
       "click .ai-holder button":"ChangeStatusFair",
       "click .changeview button":"changeview",
@@ -465,6 +466,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     },
     preventAction:function(a){
       a.preventDefault();
+      if(this.page === "fornecedor_cadastro"){
+        this.redirect_val=$(a.target).attr('href').replace("#","");
+        this.modal.open("message","Sair sem salvar as alterações nesta aba?<br> Para salvar, basta trocar de aba", this.proxy(this.redirect),!0, !0);
+      }
+    },
+    redirect:function(a){
+      window.location.hash=this.redirect_val;
     },
     positionNote:function(a){
       var tablesize=$(".scroller").outerHeight();
@@ -855,10 +863,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       $(a.target).addClass("sel");
     },
     submitDateFilter:function(a){
-      if(!this.fairval && !this.fornval){
-        this.modal.open("message","Selecione ao menos uma feira para filtrar!!!",!1,!0);
-        return !0;
-      }
       this.initialTime=$("input[name='initial_date']").val() || (new Date().getFullYear()+"-"+"01"+"-"+"01");
       this.endTime=$("input[name='end_date']").val() || ("2020-"+"01"+"-"+"01");
       this.reset();
@@ -891,6 +895,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           this.callService("fornecedores",'<FORN_DESC>'+this.fornval+'</FORN_DESC>','<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>'+(this.content.page*20+1)+'</LINHA_I>','<LINHA_F>'+((this.content.page+1)*20)+'</LINHA_F>','<CREATE_DATE_I>'+this.initialTime+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTime+'</CREATE_DATE_F>');
           break;
         case "amostras":
+          if(!this.fairval && !this.fornval){
+            this.callService("amostras",'<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>1</LINHA_I>','<LINHA_F>20</LINHA_F>','<CREATE_DATE_I>'+this.initialTime+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTime+'</CREATE_DATE_F>');
+            //this.modal.open("message","Selecione ao menos uma feira para filtrar!!!",!1,!0);
+            return !0;
+          }
           var FORN_DESC=this.fornval;
           if(FORN_DESC){
             if(FORN_DESC.slice(0, 3) === "alt"){
@@ -1212,7 +1221,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         $.support.cors=true;
         soapRequest.filter(function(a,b){
           if(a['name'] === name){
-            //console.log(a['code']);
+            console.log(a['code']);
             core.callback=a['callback'];
             core.ajaxrequest=!0;                                                                        
             $.ajax({
@@ -1324,6 +1333,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         case 'amostras':
           //this.data = a.sortBy(this.nsort);
           this.data = a;
+          console.dir(this.data);
           this.content.changeview(this.view);
           //$(".changeview button.b"+this.view);
           if(!$(".changeview button.sel").hasClass('b'+this.view)){
@@ -1368,7 +1378,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
           this.data = a.sortBy("FORN_ID");
           this.content.changeview("list");
-         // console.dir(this.data);
+         console.dir(this.data);
           this.createbox(this.data, this.content.page, !0,"list");
           break;
         case 'local':
@@ -1400,7 +1410,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         if (status == "success") {
           if(this.page === "fornecedor_cadastro" && jQuery.parseJSON($(req.responseXML).text()).OBJ_ID){
             //console.log("salvou: "+jQuery.parseJSON($(req.responseXML).text()).OBJ_ID);
-            query=data.URL.replace("http://192.168.10.100/WebService.asmx?op=","");
+            query=data.URL.replace(stringServer,"");
             //console.log(query === "GravarAnotacao");
             if(query === "GravarFornecedor"){
               if(!this.fornecedores.item){
@@ -1627,7 +1637,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
                     v = h.AMOS_ID || null; 
                     //Usando por enquanto o caminho para a imagem large, pois as amostras antigas eram salvas em tamanho muito pequeno
-                    p = new Image, q = /*"http://bdb/ifair_img/"+h.IMG_PATH_SAMPLE.replace("thumb","large")*/"http://192.168.10.100/webfair/ifairimg/"+h.IMG_PATH_SAMPLE.replace("thumb","large"), $(p).load(function() {
+                    p = new Image, q = imgPath+h.IMG_PATH_SAMPLE.replace("thumb","large"), $(p).load(function() {
                         if (!l > 0)
                           return !1;
 
@@ -1770,7 +1780,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
                     v = h.AMOS_ID || null; 
                     //Usando por enquanto o caminho para a imagem large, pois as amostras antigas eram salvas em tamanho muito pequeno
-                    p = new Image, q = /*"http://bdb/ifair_img/"+h.IMG_PATH_SAMPLE.replace("thumb","large")*/"http://192.168.10.100/webfair/ifairimg/"+h.IMG_PATH_SAMPLE.replace("thumb","large"), $(p).load(function() {
+                    p = new Image, q =imgPath+h.IMG_PATH_SAMPLE.replace("thumb","large"), $(p).load(function() {
                         if (!l > 0)
                             return !1;
 
@@ -2271,7 +2281,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             return !1;
           }
           else{
-            this.callService("email_fornecedor","<FEIR_COD></FEIR_COD>","<FORN_ID>"+this.select_items[0].FORN_ID+"</FORN_ID>",'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20'+'</LINHA_F>','<CREATE_DATE_I>2010-04-10</CREATE_DATE_I>','<CREATE_DATE_F>2050-04-10</CREATE_DATE_F>');
+            this.callService("email_fornecedor","<FEIR_COD></FEIR_COD>","<FORN_ID>"+this.select_items[0].FORN_ID+"</FORN_ID>",'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20'+'</LINHA_F>','<CREATE_DATE_I>2000-04-10</CREATE_DATE_I>','<CREATE_DATE_F>2050-04-10</CREATE_DATE_F>');
           }
         } 
       }
@@ -2279,7 +2289,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     },
     sendEmailGo:function(item){
       var i,j,length,amos_code=[],amos_id=[],counter,any_principal=!0,email="",context=this;
-
+      console.dir(item);
       length=item[0].CONTACTS.length;
       if(!length){
         this.modal.open("message","O Fornecedor não possui contatos cadastrados",!1,!0);
@@ -2301,14 +2311,27 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               amos_id.push(this.select_items[j].AMOS_ID);
             }
             if(any_principal){
-              //this.modal.open("message","O Fornecedor não possui um contato principal Cadastrado",!1,!0);
-                item[0].CONTACTS.forEach(function(element,index){
-                  //console.log(!email.length);
+                /*No dia 07/10/2015 o Issac solicitou que caso o contato principal não tenha email, verificar se os outros contatos possuem email
+                Caso possuam, abrir o outlook com o campo de receiver vazio.*/
+
+                /*item[0].CONTACTS.forEach(function(element,index){
                   if(element.CONT_EMAIL.length && !email.length){
                     email=element.CONT_EMAIL;
-
-                    //console.log("entrou");
                     context.modal.open("template",[context.email,amos_code,amos_id,element.CONT_EMAIL,item,item[0]],!1,!1);
+                    return !1;
+                  }
+                  else{
+                    if(!email.length){
+                      context.modal.open("message","Os Contatos deste fornecedor não possuem email cadastrado",!1,!0);
+                    }
+                  }
+
+                });*/
+
+                item[0].CONTACTS.forEach(function(element,index){
+                  if(element.CONT_EMAIL.length && !email.length){
+                    email="";
+                    context.modal.open("template",[context.email,amos_code,amos_id,email,item,item[0]],!1,!1);
                     return !1;
                   }
                   else{
@@ -2334,13 +2357,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       var scroll;
       this.resetFilters();
       this.mode="amostras/"+(this.fairval || "padrao")+"/"+(this.fornval.replace(" ","_") || "padrao")+"/"+(this.amosval.replace(" ","_") || "padrao");
-      scroll=this.cookiefair[0];
+      /*scroll=this.cookiefair[0];
       this.restartValues();
       $.cookie.json = !0;
       this.cookiefair=[];
       this.cookiefair.push(scroll);
-      $.cookie("posscroll", scroll, {expires:7, path:"/"});
-      this.navigate(this.mode, !0);
+      $.cookie("posscroll", scroll, {expires:7, path:"/"});*/
+      window.location.reload();
+      //this.navigate("ok", !0);
     },
 
     enableDisabledTemplate:function(notshow,id){
@@ -2871,10 +2895,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             this.callService("fornecedores",'<FORN_DESC>'+a.target.value+'</FORN_DESC>','<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'60'+'</LINHA_F>','<CREATE_DATE_I>1900-10-17</CREATE_DATE_I>','');
           }
         }
-        else{
+        /*else{
           this.fornval=a.target.value;
           this.spotlight.close();
-        }
+        }*/
       }
       return !1;
     },

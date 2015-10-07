@@ -281,7 +281,7 @@ window.Modal = Spine.Controller.sub({
     this.content.addClass('hide');
     this.buttons_container.addClass('hide');
     this.clean();
-    this.callback &amp;&amp; this.callback();
+    //this.callback &amp;&amp; this.callback();
   },
   actions:function(a){
     $(a.target).attr("name") === "yes" ? this.callback() : this.callback=null,this.close();;   
@@ -431,7 +431,7 @@ window.Content = Spine.Controller.sub({
     if(this.getPage() === "amostras"){
       var viewport=$(".overview-container tbody");
       $("body").attr("class","").addClass("list");
-      console.dir($(".overview-container tbody").eq(viewport.length-1));
+      //console.dir($(".overview-container tbody").eq(viewport.length-1));
       a.appendTo($(".overview-container tbody").eq(viewport.length-1));
       this.itens = $(".overview-container tbody").find('tr');
     }
@@ -448,12 +448,12 @@ window.Content = Spine.Controller.sub({
     /*this.table.hide();
     this.tbody.hide();*/
     //this.bread.fadeOut();
-    console.log("RESETOU");
+    //console.log("RESETOU");
     this.page = 0;
     this.clean();
   }, init:function() {
     // (this.type !== "CLIENTE" &amp;&amp; this.type !== "VISITANTE") ? this.table.addClass('cseven') : this.table.addClass('cfive');
-    console.log("RESETOU");
+    //console.log("RESETOU");
     this.itens = $([]);
     this.page = 0;
     // this.el.disableSelection &amp;&amp; this.el.disableSelection();
@@ -521,8 +521,6 @@ window.Box = Spine.Controller.sub({init:function() {
     result+="&lt;div class='caption'>&lt;div class='caption-upside'>&lt;ul class='caption-icons'>&lt;li>&lt;button type='button' class='caption-icons-icon justit bstatus "+status+"' title='"+status.capitalize()+"'>&lt;/button>&lt;/li>&lt;li>&lt;button type='button' class='caption-icons-icon justit bemail "+email+"' name='"+a.AMOS_ID+"'>&lt;/button>&lt;/li>";
     result+="&lt;li>&lt;button type='button' class='caption-icons-icon justit setitem bhomologado "+homologado+"' name='"+a.AMOS_ID+"' title='Homologar'>&lt;/button>&lt;/li>"
     if(note){
-                 console.dir(a.NOTES);
-
       var segnote=[];
       for(i=0;i&lt;a.NOTES.length;i++){
         if(a.NOTES[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
@@ -587,104 +585,107 @@ window.Box = Spine.Controller.sub({init:function() {
   }, list:function(a) {
     switch (this.page){
       case "fornecedores":
-        var result="",i,status,nome_contato,segmento=[],middlefav="";
-        status= a.FORN_STATUS ? "complet":"incomplet";
-        result+="&lt;td>&lt;a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.FORN_DESC+"&lt;/a>&lt;/td>"+"&lt;td>&lt;a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.FEIR_DESC+"&lt;/a>&lt;/td>"+"&lt;td>&lt;a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.CREATE_DATE+"&lt;/a>&lt;/td>";
-        
+        if(a){
+          var result="",i,status,nome_contato,segmento=[],middlefav="";
+          console.dir(a); 
+          status= a.FORN_STATUS ? "complet":"incomplet";
+          result+="&lt;td>&lt;a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.FORN_DESC+"&lt;/a>&lt;/td>"+"&lt;td>&lt;a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.FEIR_DESC+"&lt;/a>&lt;/td>"+"&lt;td>&lt;a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.CREATE_DATE+"&lt;/a>&lt;/td>";
+          
 
-        if(a.CONTACTS.length){
-          var scont=[];
-          for(i=0;i&lt;a.CONTACTS.length;i++){
-            if(a.CONTACTS[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
-              scont.push(a.CONTACTS[i]);
-            }
-          }
-          if(scont.length){
-            result+="&lt;td>&lt;a href='#fornecedores/edit/"+a.FORN_ID+"'>";
-            for(i=0;i&lt;scont.length;i++){
-              if(scont[i].CONT_NOME.length){
-                nome_contato=scont[i].CONT_NOME;
+          if(a.CONTACTS.length){
+            var scont=[];
+            for(i=0;i&lt;a.CONTACTS.length;i++){
+              if(a.CONTACTS[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
+                scont.push(a.CONTACTS[i]);
               }
-              else{
-                nome_contato="SEM NOME";
-              }
-              segmento.push(scont[i].SEGM_DESC);
-              result+=""+nome_contato+"&lt;br/>";
             }
-            result+="&lt;/a>&lt;/td>";
+            if(scont.length){
+              result+="&lt;td>&lt;a href='#fornecedores/edit/"+a.FORN_ID+"'>";
+              for(i=0;i&lt;scont.length;i++){
+                if(scont[i].CONT_NOME.length){
+                  nome_contato=scont[i].CONT_NOME;
+                }
+                else{
+                  nome_contato="SEM NOME";
+                }
+                segmento.push(scont[i].SEGM_DESC);
+                result+=""+nome_contato+"&lt;br/>";
+              }
+              result+="&lt;/a>&lt;/td>";
+            }
+            else{
+               result+="&lt;td>&lt;a href='#fornecedores/edit/"+a.FORN_ID+"'>&lt;/a>&lt;/td>";
+            }
           }
           else{
-             result+="&lt;td>&lt;a href='#fornecedores/edit/"+a.FORN_ID+"'>&lt;/a>&lt;/td>";
+            result+="&lt;td>&lt;a href='#fornecedores/edit/"+a.FORN_ID+"'>&lt;/a>&lt;/td>";
           }
-        }
-        else{
-          result+="&lt;td>&lt;a href='#fornecedores/edit/"+a.FORN_ID+"'>&lt;/a>&lt;/td>";
-        }
 
-        if(segmento.length){
-          result+="&lt;td>&lt;a href='#fornecedores/edit/"+a.FORN_ID+"'>"+segmento.join("&lt;br/>")+"&lt;/a>&lt;/td>";
-        }
-        else{
-          result+="&lt;td>&lt;a href='#fornecedores/edit/"+a.FORN_ID+"'>&lt;/td>";
-        }
-
-        if(a.NOTES.length ){
-          var segnote=[];
-
-          for(i=0;i&lt;a.NOTES.length;i++){
-            if(a.NOTES[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
-              segnote.push(a.NOTES[i]);
-            }
+          if(segmento.length){
+            result+="&lt;td>&lt;a href='#fornecedores/edit/"+a.FORN_ID+"'>"+segmento.join("&lt;br/>")+"&lt;/a>&lt;/td>";
           }
-          if(segnote.length){
-            this.setDate(a.NOTES);
-            result+="&lt;td class='tooltip tooltip-selectable'>&lt;button type='button' class='caption-icons-icon justit bnote'>&lt;/button>&lt;ul class='tooltip-content notepad notepadmess col-large'>&lt;li class='tooltip-title'>&lt;p class='tooltip-item'>Anotações&lt;/p>&lt;/li>";
-            for(i=0;i&lt;segnote.length;i++){
-              if(i&lt;5){
-                result+="&lt;li>&lt;article>&lt;div class='notepad-note blockquote'>&lt;p>&lt;b>"+segnote[i].CREATE_DATE+" | "+a.FORN_ID+" - "+a.FORN_DESC+" | "+segnote[i].NOTA_ID+"&lt;/b>&lt;/p>&lt;p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"&lt;/p>&lt;p>"+segnote[i].NOTA_DESC+"&lt;/p>&lt;/div>&lt;div class='blockquote'>";
-                if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
-                  result+= "&lt;button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' title='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"' alt='"+segnote[i].OBJ_ID+"'>&lt;/button>";
-                }
-                result+="&lt;/div>&lt;/article>&lt;/li>"
+          else{
+            result+="&lt;td>&lt;a href='#fornecedores/edit/"+a.FORN_ID+"'>&lt;/td>";
+          }
+
+          if(a.NOTES.length ){
+            var segnote=[];
+
+            for(i=0;i&lt;a.NOTES.length;i++){
+              if(a.NOTES[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
+                segnote.push(a.NOTES[i]);
               }
             }
-            result+="&lt;/ul>&lt;/td>"
+            if(segnote.length){
+              this.setDate(a.NOTES);
+              result+="&lt;td class='tooltip tooltip-selectable'>&lt;button type='button' class='caption-icons-icon justit bnote'>&lt;/button>&lt;ul class='tooltip-content notepad notepadmess col-large'>&lt;li class='tooltip-title'>&lt;p class='tooltip-item'>Anotações&lt;/p>&lt;/li>";
+              for(i=0;i&lt;segnote.length;i++){
+                if(i&lt;5){
+                  result+="&lt;li>&lt;article>&lt;div class='notepad-note blockquote'>&lt;p>&lt;b>"+segnote[i].CREATE_DATE+" | "+a.FORN_ID+" - "+a.FORN_DESC+" | "+segnote[i].NOTA_ID+"&lt;/b>&lt;/p>&lt;p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"&lt;/p>&lt;p>"+segnote[i].NOTA_DESC+"&lt;/p>&lt;/div>&lt;div class='blockquote'>";
+                  if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
+                    result+= "&lt;button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' title='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"' alt='"+segnote[i].OBJ_ID+"'>&lt;/button>";
+                  }
+                  result+="&lt;/div>&lt;/article>&lt;/li>"
+                }
+              }
+              result+="&lt;/ul>&lt;/td>"
+            }
+            else{
+              result+="&lt;td>&lt;/td>";
+            }
           }
           else{
             result+="&lt;td>&lt;/td>";
           }
-        }
-        else{
-          result+="&lt;td>&lt;/td>";
-        }
-        if(a.FAVORITES.length){
-          for(i=0;i&lt;a.FAVORITES.length;i++){
-            if(middlefav === ""){
-              if(a.FAVORITES[i].SEGM_COD === this.usr.SEGM_COD){
-                middlefav="has";
+          if(a.FAVORITES.length){
+            for(i=0;i&lt;a.FAVORITES.length;i++){
+              if(middlefav === ""){
+                if(a.FAVORITES[i].SEGM_COD === this.usr.SEGM_COD){
+                  middlefav="has";
+                }
+                else{
+                  middlefav="middle";
+                }
               }
               else{
-                middlefav="middle";
+                if(a.FAVORITES[i].SEGM_COD === this.usr.SEGM_COD){
+                  middlefav="has";
+                }
               }
             }
-            else{
-              if(a.FAVORITES[i].SEGM_COD === this.usr.SEGM_COD){
-                middlefav="has";
-              }
+            result+="&lt;td class='tooltip'>&lt;button type='button' class='caption-icons-icon justit bstar "+middlefav+"' name='"+a.FORN_ID+"'>&lt;/button>&lt;ul class='tooltip-content col-large'>";
+            for(i=0;i&lt;a.FAVORITES.length;i++){
+              result+="&lt;li>&lt;button type='button' class='tooltip-item caption-icons-icon bstar has' name='"+a.FAVORITES[i].SEGM_COD+"'>"+a.FAVORITES[i].SEGM_DESC+"&lt;/li>";
             }
+            result+="&lt;/ul>&lt;/td>";
           }
-          result+="&lt;td class='tooltip'>&lt;button type='button' class='caption-icons-icon justit bstar "+middlefav+"' name='"+a.FORN_ID+"'>&lt;/button>&lt;ul class='tooltip-content col-large'>";
-          for(i=0;i&lt;a.FAVORITES.length;i++){
-            result+="&lt;li>&lt;button type='button' class='tooltip-item caption-icons-icon bstar has' name='"+a.FAVORITES[i].SEGM_COD+"'>"+a.FAVORITES[i].SEGM_DESC+"&lt;/li>";
+          else{
+            result+="&lt;td>&lt;button type='button' class='caption-icons-icon justit bstar nothas' name='"+a.FORN_ID+"'>&lt;/button>&lt;/td>";
           }
-          result+="&lt;/ul>&lt;/td>";
-        }
-        else{
-          result+="&lt;td>&lt;button type='button' class='caption-icons-icon justit bstar nothas' name='"+a.FORN_ID+"'>&lt;/button>&lt;/td>";
-        }
 
-        result+="&lt;td>&lt;button type='button' class='caption-icons-icon justit bstatus "+status+"' title='"+status.capitalize()+"'>"+status+"&lt;/button>&lt;/td>";
-        return result;
+          result+="&lt;td>&lt;button type='button' class='caption-icons-icon justit bstatus "+status+"' title='"+status.capitalize()+"'>"+status+"&lt;/button>&lt;/td>";
+          return result;
+        }
         break;
       case 'amostras':
         var homologado,note,fisica,fav,email,annex,status,result="",i;
@@ -781,7 +782,7 @@ window.Box = Spine.Controller.sub({init:function() {
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Fri Oct 2nd 2015 using the <a
+		on Wed Oct 7th 2015 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>

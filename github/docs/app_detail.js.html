@@ -253,7 +253,7 @@ open: function(a){
     $(b).val(item[$(b).attr("name").replace(".",",")]);
   });
   $(".AMOS_PRECO_UM option").each(function(a,b){
-    console.dir(item["AMOS_PRECO_UM"]);
+    //console.dir(item["AMOS_PRECO_UM"]);
     if($(b).attr("value") === item["AMOS_PRECO_UM"]){
       $(b).attr("selected","selected");
     }
@@ -334,7 +334,7 @@ open: function(a){
     html='&lt;button class="icon bzoom">&lt;/button>';
     if(item[name]){
       //html+='&lt;img id="zoom" src="//bdb/ifair_img/'+item[name].replace("thumb","large")+'" data-zoom-image="//bdb/ifair_img/'+item[name].replace("thumb","large")+'"/>';
-      html+='&lt;img id="zoom" src="http://192.168.10.100/webfair/ifairimg/'+item[name].replace("thumb","large")+'" data-zoom-image="http://192.168.10.100/webfair/ifairimg/'+item[name].replace("thumb","large")+'"/>';
+      html+='&lt;img id="zoom" src="'+imgPath+item[name].replace("thumb","large")+'" data-zoom-image="'+imgPath+item[name].replace("thumb","large")+'"/>';
     }
     else{
       html+='&lt;img id="zoom_01" src="http://189.126.197.169/img/large/large_NONE.jpg" data-zoom-image="http://189.126.197.169/img/large/large_NONE.jpg"/>';
@@ -458,13 +458,13 @@ elements:{
       return !1;
     }
     if(this.tab === this.lasttab){
-      console.log("profile");
+      //console.log("profile");
       this.tab="profile";
     }
     this.saveForn(!0);
   }
   else{
-    console.log("saiu");
+    //console.log("saiu");
     this.on = !1;
     window.history.go(-1);
   }
@@ -951,7 +951,7 @@ setFav:function(a){
       if(parseInt(el.CONT_ID) === parseInt($(a.target).attr("name"))){
         $(".card-side img").each(function(i, elem) {
           if(el[''+$(elem).attr("name")].length){
-            $(elem).attr("src",'http://192.168.10.100/webfair/ifairimg/'+el[''+$(elem).attr("name")]).attr("alt",parseInt(el.CONT_ID));
+            $(elem).attr("src",imgPath+el[''+$(elem).attr("name")]).attr("alt",parseInt(el.CONT_ID));
           }
           else{
             $(elem).attr("src",'images/camera.png').attr("alt",parseInt(el.CONT_ID));
@@ -1010,7 +1010,7 @@ setFav:function(a){
   //Gravar dados nos campos
 
 },inputValues:function(){
-  console.dir(this.item);
+  //console.dir(this.item);
   var context=this,complet=!0;
   if(this.item.FORN_ID){
     $(".fair option").each(function(a,b){
@@ -1061,14 +1061,14 @@ setFav:function(a){
 
     if(context.item.CONTACTS.length>1){
       //Mais de um contato/
-      console.log("tem Mais de um contato");
+      //console.log("tem Mais de um contato");
       for(var i=(context.item.CONTACTS.length-1);i>=0;i--){
         var template="",temp="";
         temp='&lt;div class="supplier-form-container contact contact'+(i+1)+' actived cont">&lt;h2>&lt;span>Contato '+(i+1)+'&lt;/span>&lt;/h2>';
         template+='&lt;div class="supplier-photo-side">&lt;div class="photo-container">';
         if(context.item.CONTACTS[i].IMG_PATH_CONTATO.length){
           //template+='&lt;img src="http://bdb/ifair_img/'+context.item.CONTACTS[i].IMG_PATH_CONTATO+'" width="100%">';
-          template+='&lt;img src="http://192.168.10.100/webfair/ifairimg/'+context.item.CONTACTS[i].IMG_PATH_CONTATO+'" width="100%" name="'+context.item.CONTACTS[i].CONT_ID+'">';
+          template+='&lt;img src="'+imgPath+context.item.CONTACTS[i].IMG_PATH_CONTATO+'" width="100%" name="'+context.item.CONTACTS[i].CONT_ID+'">';
         } 
         else{
           template+='&lt;img src="images/contact.png" width="100%" class="noimage" name="'+context.item.CONTACTS[i].CONT_ID+'">';
@@ -1123,12 +1123,12 @@ setFav:function(a){
       if(context.item.CONTACTS.length){
         var template="",temp="",cont="",template1="",template2="";
         //Tem apenas 1 contato
-        console.log("Tem apenas 1 contato");
+        //console.log("Tem apenas 1 contato");
         var template="",temp="",cont="",template2="";
         temp+='&lt;div class="supplier-form-container contact contact1 actived cont">&lt;h2>&lt;span>Contato 1&lt;/span>&lt;/h2>&lt;div class="supplier-photo-side">&lt;div class="photo-container">';
         if(context.item.CONTACTS[0].IMG_PATH_CONTATO.length){
           //template+='&lt;img src="http://bdb/ifair_img/'+context.item.CONTACTS[i].IMG_PATH_CONTATO+'" width="100%">';
-          template+='&lt;img src="http://192.168.10.100/webfair/ifairimg/'+context.item.CONTACTS[0].IMG_PATH_CONTATO+'" width="100%"  name="'+context.item.CONTACTS[0].CONT_ID+'">';        } 
+          template+='&lt;img src="'+imgPath+context.item.CONTACTS[0].IMG_PATH_CONTATO+'" width="100%"  name="'+context.item.CONTACTS[0].CONT_ID+'">';        } 
         else{
           template+='&lt;img src="images/contact.png" width="100%" class="noimage" name="'+context.item.CONTACTS[0].CONT_ID+'">';
         } 
@@ -1155,7 +1155,7 @@ setFav:function(a){
       }
       else{
         //Nao possui contato
-        console.log("Nao possui contato");
+        //console.log("Nao possui contato");
         var template="",temp="",cont="",template1="",template2="";
         temp='&lt;div class="supplier-form-container contact contact1 cont">&lt;h2>&lt;span>Contato 1&lt;/span>&lt;button type="button" class="icon floatLeft bplus-big" name="showcontact">&lt;/button>&lt;/h2>';
         template+='&lt;div class="supplier-photo-side">&lt;div class="photo-container">';
@@ -1194,7 +1194,7 @@ setFav:function(a){
       for(var j=0;j&lt;context.item.CONTACTS.length;j++){
         if(context.item.CONTACTS[j]['CONT_PRINCIPAL'] === 1){
           if(context.item.CONTACTS[j][''+$(el).attr("name")].length){
-            $(el).attr("src",'http://192.168.10.100/webfair/ifairimg/'+context.item.CONTACTS[j][''+$(el).attr("name")]).attr('alt', context.item.CONTACTS[j].CONT_ID);;
+            $(el).attr("src",imgPath+context.item.CONTACTS[j][''+$(el).attr("name")]).attr('alt', context.item.CONTACTS[j].CONT_ID);;
           }
           else{
             $(el).attr('alt', context.item.CONTACTS[j].CONT_ID);
@@ -1266,7 +1266,7 @@ setFav:function(a){
     }
   }
   else{
-    console.log("ELSE ELSE");
+    //console.log("ELSE ELSE");
     var template="",temp="",cont="",template1="",template2="";
     temp+='&lt;div class="supplier-form-container contact contact1 cont">&lt;h2>&lt;span>Contato 1&lt;/span>&lt;button type="button" class="icon floatLeft bplus-big" name="showcontact">&lt;/button>&lt;/h2>';
     template+='&lt;div class="supplier-photo-side">&lt;div class="photo-container">&lt;img src="images/contact.png" width="100%" class="noimage">';
@@ -1320,7 +1320,7 @@ setFav:function(a){
       $(".supplier-img-containter img").each(function(i, elem) {
         if(el[''+$(elem).attr("name")].length){
           hasimg=!0;
-          $(elem).attr("src",'http://192.168.10.100/webfair/ifairimg/'+el[''+$(elem).attr("name")]);
+          $(elem).attr("src",imgPath+el[''+$(elem).attr("name")]);
         }
       });
     }
@@ -1362,7 +1362,7 @@ setFav:function(a){
   }
   date=""+date.getFullYear()+"-"+month+"-"+day;
   //console.log(this.tab);
-  console.log(this.lasttab);
+  //console.log(this.lasttab);
   //console.log(this.setfair);
   pattern+="&lt;USU_COD>"+this.usr.USU_COD+"&lt;/USU_COD>"+"&lt;CREATE_DATE>"+date+"&lt;/CREATE_DATE>"+"&lt;FEIR_COD>"+this.setfair+"&lt;/FEIR_COD>";
  /*if(this.tab === "dados" &amp;&amp; !this.scroller){
@@ -1386,7 +1386,7 @@ setFav:function(a){
         $(".fair").attr('disabled', 'disabled');
         status=setInterval(function(){
           if(!context.ajaxrequest){
-            console.log("entrou no interval: "+complet);
+            //console.log("entrou no interval: "+complet);
             $(".cont.actived").each(function(a,b){
               html="";
               $(b).find("input").each(function(index,el){
@@ -1598,7 +1598,7 @@ setFav:function(a){
           last_request=!0;
           if(!context.ajaxrequest){
             context.callService("GravarFornecedorComposicao",'&lt;FORN_ID>'+context.item.FORN_ID+'&lt;/FORN_ID>',html);
-            console.log(goout);
+            //console.log(goout);
             if(goout){
               context.on = !1;
               clearInterval(status);
@@ -1825,7 +1825,7 @@ setFav:function(a){
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Fri Oct 2nd 2015 using the <a
+		on Wed Oct 7th 2015 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>

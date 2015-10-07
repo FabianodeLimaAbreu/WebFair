@@ -237,7 +237,7 @@ open: function(a){
     html='<button class="icon bzoom"></button>';
     if(item[name]){
       //html+='<img id="zoom" src="//bdb/ifair_img/'+item[name].replace("thumb","large")+'" data-zoom-image="//bdb/ifair_img/'+item[name].replace("thumb","large")+'"/>';
-      html+='<img id="zoom" src="http://192.168.10.100/webfair/ifairimg/'+item[name].replace("thumb","large")+'" data-zoom-image="http://192.168.10.100/webfair/ifairimg/'+item[name].replace("thumb","large")+'"/>';
+      html+='<img id="zoom" src="'+imgPath+item[name].replace("thumb","large")+'" data-zoom-image="'+imgPath+item[name].replace("thumb","large")+'"/>';
     }
     else{
       html+='<img id="zoom_01" src="http://189.126.197.169/img/large/large_NONE.jpg" data-zoom-image="http://189.126.197.169/img/large/large_NONE.jpg"/>';
@@ -582,7 +582,7 @@ open: function(a){
     return !1;
   }
   var el=$(a.target);
-  if(el.attr("name") === "999"){
+  if(el.attr("name") === "9999"){
     if(el.hasClass('sel')){
       el.removeClass('sel');
       $(".form-control-other").attr('disabled', 'disabled');
@@ -854,7 +854,7 @@ setFav:function(a){
       if(parseInt(el.CONT_ID) === parseInt($(a.target).attr("name"))){
         $(".card-side img").each(function(i, elem) {
           if(el[''+$(elem).attr("name")].length){
-            $(elem).attr("src",'http://192.168.10.100/webfair/ifairimg/'+el[''+$(elem).attr("name")]).attr("alt",parseInt(el.CONT_ID));
+            $(elem).attr("src",imgPath+el[''+$(elem).attr("name")]).attr("alt",parseInt(el.CONT_ID));
           }
           else{
             $(elem).attr("src",'images/camera.png').attr("alt",parseInt(el.CONT_ID));
@@ -913,7 +913,7 @@ setFav:function(a){
   //Gravar dados nos campos
 
 },inputValues:function(){
-  //console.dir(this.item);
+  console.dir(this.item);
   var context=this,complet=!0;
   if(this.item.FORN_ID){
     $(".fair option").each(function(a,b){
@@ -971,7 +971,7 @@ setFav:function(a){
         template+='<div class="supplier-photo-side"><div class="photo-container">';
         if(context.item.CONTACTS[i].IMG_PATH_CONTATO.length){
           //template+='<img src="http://bdb/ifair_img/'+context.item.CONTACTS[i].IMG_PATH_CONTATO+'" width="100%">';
-          template+='<img src="http://192.168.10.100/webfair/ifairimg/'+context.item.CONTACTS[i].IMG_PATH_CONTATO+'" width="100%" name="'+context.item.CONTACTS[i].CONT_ID+'">';
+          template+='<img src="'+imgPath+context.item.CONTACTS[i].IMG_PATH_CONTATO+'" width="100%" name="'+context.item.CONTACTS[i].CONT_ID+'">';
         } 
         else{
           template+='<img src="images/contact.png" width="100%" class="noimage" name="'+context.item.CONTACTS[i].CONT_ID+'">';
@@ -1031,7 +1031,7 @@ setFav:function(a){
         temp+='<div class="supplier-form-container contact contact1 actived cont"><h2><span>Contato 1</span></h2><div class="supplier-photo-side"><div class="photo-container">';
         if(context.item.CONTACTS[0].IMG_PATH_CONTATO.length){
           //template+='<img src="http://bdb/ifair_img/'+context.item.CONTACTS[i].IMG_PATH_CONTATO+'" width="100%">';
-          template+='<img src="http://192.168.10.100/webfair/ifairimg/'+context.item.CONTACTS[0].IMG_PATH_CONTATO+'" width="100%"  name="'+context.item.CONTACTS[0].CONT_ID+'">';        } 
+          template+='<img src="'+imgPath+context.item.CONTACTS[0].IMG_PATH_CONTATO+'" width="100%"  name="'+context.item.CONTACTS[0].CONT_ID+'">';        } 
         else{
           template+='<img src="images/contact.png" width="100%" class="noimage" name="'+context.item.CONTACTS[0].CONT_ID+'">';
         } 
@@ -1097,7 +1097,7 @@ setFav:function(a){
       for(var j=0;j<context.item.CONTACTS.length;j++){
         if(context.item.CONTACTS[j]['CONT_PRINCIPAL'] === 1){
           if(context.item.CONTACTS[j][''+$(el).attr("name")].length){
-            $(el).attr("src",'http://192.168.10.100/webfair/ifairimg/'+context.item.CONTACTS[j][''+$(el).attr("name")]).attr('alt', context.item.CONTACTS[j].CONT_ID);;
+            $(el).attr("src",imgPath+context.item.CONTACTS[j][''+$(el).attr("name")]).attr('alt', context.item.CONTACTS[j].CONT_ID);;
           }
           else{
             $(el).attr('alt', context.item.CONTACTS[j].CONT_ID);
@@ -1124,7 +1124,7 @@ setFav:function(a){
         else{
           $(".form-control-other").attr('disabled', 'disabled');
           $("#profile button[name='"+context.item.PROFILES[i].PERF_COD+"']").addClass('sel');
-          if(context.item.PROFILES[i].PERF_COD === 999){
+          if(context.item.PROFILES[i].PERF_COD === 9999){
             $(".form-control-other").removeAttr('disabled').val(context.item.PROFILES[i].PERF_OTHERS);
           }
         }
@@ -1152,7 +1152,7 @@ setFav:function(a){
       $("a[href='#products'] button").removeClass('incomplet').addClass('complet');
       for(var i=0;i<context.item.PRODUCTS.length;i++){
         //console.log($(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").attr("name"));
-        if($(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").attr("name") === "prod/999"){
+        if($(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").attr("name") === "prod/9999"){
           $(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").find("input").val(context.item.PRODUCTS[i].PROD_OTHERS);
         }
         $(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").trigger('click');
@@ -1161,7 +1161,7 @@ setFav:function(a){
     if(context.item.MARKETS.length){
       $("a[href='#markets'] button").removeClass('incomplet').addClass('complet');
       for(var i=0;i<context.item.MARKETS.length;i++){
-        if($(".mark-add button[name='mark/"+parseInt(context.item.MARKETS[i].MERC_COD)+"']").attr("name") === "mark/999"){
+        if($(".mark-add button[name='mark/"+parseInt(context.item.MARKETS[i].MERC_COD)+"']").attr("name") === "mark/9999"){
           $(".mark-add button[name='mark/"+parseInt(context.item.MARKETS[i].MERC_COD)+"']").find("input").val(context.item.MARKETS[i].MERC_OTHERS);
         }
         $(".mark-add button[name='mark/"+parseInt(context.item.MARKETS[i].MERC_COD)+"']").trigger('click');
@@ -1223,7 +1223,7 @@ setFav:function(a){
       $(".supplier-img-containter img").each(function(i, elem) {
         if(el[''+$(elem).attr("name")].length){
           hasimg=!0;
-          $(elem).attr("src",'http://192.168.10.100/webfair/ifairimg/'+el[''+$(elem).attr("name")]);
+          $(elem).attr("src",imgPath+el[''+$(elem).attr("name")]);
         }
       });
     }
@@ -1265,7 +1265,7 @@ setFav:function(a){
   }
   date=""+date.getFullYear()+"-"+month+"-"+day;
   //console.log(this.tab);
-  console.log(this.lasttab);
+  //console.log(this.lasttab);
   //console.log(this.setfair);
   pattern+="<USU_COD>"+this.usr.USU_COD+"</USU_COD>"+"<CREATE_DATE>"+date+"</CREATE_DATE>"+"<FEIR_COD>"+this.setfair+"</FEIR_COD>";
  /*if(this.tab === "dados" && !this.scroller){
@@ -1408,7 +1408,7 @@ setFav:function(a){
         }
 
         $("#profile .row-down .bsquare.sel").each(function(a,b){
-          if($(b).attr("name") == "999"){
+          if($(b).attr("name") == "9999"){
             other=$(b).parent().find("input").val();
           }
           html+="<Profile><FAB_COD>0</FAB_COD><PERF_COD>"+$(b).attr("name")+"</PERF_COD><TP_FAB_COD>0</TP_FAB_COD><PERF_OTHERS>"+other+"</PERF_OTHERS></Profile>";
@@ -1536,7 +1536,7 @@ setFav:function(a){
         //console.log(this.lasttab);
         $(".prod-rem .row-item").each(function(a,b){
           var el=$(b).find(".bminus").attr("name"),others="";
-          if(el.substr(el.indexOf("/")+1, el.length) === "999"){
+          if(el.substr(el.indexOf("/")+1, el.length) === "9999"){
             others=$(b).find(".bminus").find("input").val();
           }
           else{
@@ -1598,7 +1598,7 @@ setFav:function(a){
         var html="",others="",last_request=!1;
         $(".mark-rem .row-item").each(function(a,b){
           var el=$(b).find(".bminus").attr("name");
-          if(el.substr(el.indexOf("/")+1, el.length) === "999"){
+          if(el.substr(el.indexOf("/")+1, el.length) === "9999"){
             others=$(b).find(".bminus").find("input").val();
           }
           else{
