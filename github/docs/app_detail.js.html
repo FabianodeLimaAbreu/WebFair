@@ -458,11 +458,13 @@ elements:{
       return !1;
     }
     if(this.tab === this.lasttab){
+      console.log("profile");
       this.tab="profile";
     }
     this.saveForn(!0);
   }
   else{
+    console.log("saiu");
     this.on = !1;
     window.history.go(-1);
   }
@@ -1359,9 +1361,9 @@ setFav:function(a){
     month=date.getMonth()+1;
   }
   date=""+date.getFullYear()+"-"+month+"-"+day;
-  /*console.log(this.tab);
+  //console.log(this.tab);
   console.log(this.lasttab);
-  console.log(this.setfair);*/
+  //console.log(this.setfair);
   pattern+="&lt;USU_COD>"+this.usr.USU_COD+"&lt;/USU_COD>"+"&lt;CREATE_DATE>"+date+"&lt;/CREATE_DATE>"+"&lt;FEIR_COD>"+this.setfair+"&lt;/FEIR_COD>";
  /*if(this.tab === "dados" &amp;&amp; !this.scroller){
     return !1;
@@ -1477,7 +1479,7 @@ setFav:function(a){
           context.setloading(!1);
           return !1;
         }
-        var html="",other="",complet=!0;
+        var html="",other="",complet=!0,last_request=!1;
         //console.log(this.tab);
         //console.log(this.lasttab);
         if($("#profile .row-top .bcircle").hasClass('sel')){
@@ -1526,11 +1528,28 @@ setFav:function(a){
           this.callService("GravarFornecedor",'&lt;FORN_ID>'+context.item.FORN_ID+'&lt;/FORN_ID>',html+""+pattern,"&lt;FORN_DESC>"+context.item.FORN_DESC+"&lt;/FORN_DESC>",'&lt;FORN_STATUS>0&lt;/FORN_STATUS>&lt;FORN_INATIVO>0&lt;/FORN_INATIVO>','&lt;action>U&lt;/action>');
         }
 
-        var status;
+        var status,last;
         status=setInterval(function(){
+          last_request=!0;
           if(!context.ajaxrequest){
             context.callService("GravarFornecedorProfile",'&lt;Forn_ID>'+context.item.FORN_ID+'&lt;/Forn_ID>',html);
-            clearInterval(status);
+            if(goout){
+              context.on = !1;
+              clearInterval(status);
+              last_request=!1;
+            }
+            else{
+              clearInterval(status);
+            }
+          }
+        },100);
+
+        last=setInterval(function(){
+          //console.log(!context.ajaxrequest &amp;&amp; goout &amp;&amp; !last_request);
+          if(!context.ajaxrequest &amp;&amp; goout &amp;&amp; !last_request){
+            context.on = !1;
+            window.history.go(-1);
+            clearInterval(last);
           }
         },100);
 
@@ -1541,7 +1560,7 @@ setFav:function(a){
           context.setloading(!1);
           return !1;
         }
-        var html="",others="";
+        var html="",others="",last_request=!1;
         //console.log(this.tab);
        // console.log(this.lasttab);
 
@@ -1553,6 +1572,7 @@ setFav:function(a){
           }
           else{
             others="";
+
           }
           html+="&lt;Composition>&lt;COMP_COD>"+el.substr(el.indexOf("/")+1)+"&lt;/COMP_COD>&lt;COMP_OTHERS>"+others+"&lt;/COMP_OTHERS>&lt;TP_COMP_ID>2&lt;/TP_COMP_ID>&lt;/Composition>";
         });
@@ -1573,11 +1593,29 @@ setFav:function(a){
           context.ajaxrequest=!0;
           this.callService("GravarFornecedor",'&lt;FORN_ID>'+context.item.FORN_ID+'&lt;/FORN_ID>',html+""+pattern,"&lt;FORN_DESC>"+context.item.FORN_DESC+"&lt;/FORN_DESC>",'&lt;FORN_STATUS>0&lt;/FORN_STATUS>&lt;FORN_INATIVO>0&lt;/FORN_INATIVO>','&lt;action>U&lt;/action>');
         }
-        var status;
+        var status,last;
         status=setInterval(function(){
+          last_request=!0;
           if(!context.ajaxrequest){
             context.callService("GravarFornecedorComposicao",'&lt;FORN_ID>'+context.item.FORN_ID+'&lt;/FORN_ID>',html);
-            clearInterval(status);
+            console.log(goout);
+            if(goout){
+              context.on = !1;
+              clearInterval(status);
+              last_request=!1;
+            }
+            else{
+              clearInterval(status);
+            }
+          }
+        },100);
+
+        last=setInterval(function(){
+          //console.log(!context.ajaxrequest &amp;&amp; goout &amp;&amp; !last_request);
+          if(!context.ajaxrequest &amp;&amp; goout &amp;&amp; !last_request){
+            context.on = !1;
+            window.history.go(-1);
+            clearInterval(last);
           }
         },100);
 
@@ -1590,7 +1628,7 @@ setFav:function(a){
         }
         //console.log(this.tab);
         //console.log(this.lasttab);
-        var html="";
+        var html="",last_request=!1;
         //console.log(this.tab);
         //console.log(this.lasttab);
         $(".prod-rem .row-item").each(function(a,b){
@@ -1620,11 +1658,28 @@ setFav:function(a){
           context.ajaxrequest=!0;
           this.callService("GravarFornecedor",'&lt;FORN_ID>'+context.item.FORN_ID+'&lt;/FORN_ID>',html+""+pattern,"&lt;FORN_DESC>"+context.item.FORN_DESC+"&lt;/FORN_DESC>",'&lt;FORN_STATUS>0&lt;/FORN_STATUS>&lt;FORN_INATIVO>0&lt;/FORN_INATIVO>','&lt;action>U&lt;/action>');
         }
-        var status;
+        var status,last;
         status=setInterval(function(){
+          last_request=!0;
           if(!context.ajaxrequest){
             context.callService("GravarFornecedorProduto",'&lt;Forn_ID>'+context.item.FORN_ID+'&lt;/Forn_ID>',html);
-            clearInterval(status);
+            if(goout){
+              context.on = !1;
+              clearInterval(status);
+              last_request=!1;
+            }
+            else{
+              clearInterval(status);
+            }
+          }
+        },100);
+
+        last=setInterval(function(){
+          //console.log(!context.ajaxrequest &amp;&amp; goout &amp;&amp; !last_request);
+          if(!context.ajaxrequest &amp;&amp; goout &amp;&amp; !last_request){
+            context.on = !1;
+            window.history.go(-1);
+            clearInterval(last);
           }
         },100);
 
@@ -1665,7 +1720,7 @@ setFav:function(a){
           context.ajaxrequest=!0;
           this.callService("GravarFornecedor",'&lt;FORN_ID>'+context.item.FORN_ID+'&lt;/FORN_ID>',html+""+pattern,"&lt;FORN_DESC>"+context.item.FORN_DESC+"&lt;/FORN_DESC>",'&lt;FORN_STATUS>0&lt;/FORN_STATUS>&lt;FORN_INATIVO>0&lt;/FORN_INATIVO>','&lt;action>U&lt;/action>');
         }
-        var status;
+        var status,last;
         status=setInterval(function(){
           last_request=!0;
           if(!context.ajaxrequest){

@@ -2154,7 +2154,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       //console.dir(typeof Boolean($(a.target).find("option:selected").val()));
     },
     starForn:function(ev){
-      var el,i,html="",diff=!1,item;
+      var el,i,html="",diff=!1,item,context=this;
       el=this.data.filter(function(a,b) {
         if(parseInt(a.FORN_ID) == parseInt($(ev.target).attr('name'))){
           item=a.FAVORITES;
@@ -2173,24 +2173,33 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             }
             else{
               //console.dir(item[i]);
-              item.slice(i, 1);
+              
               //console.dir(item[i]);
               //item.push({"SEGM_COD":this.usr.SEGM_COD,"SEGM_DESC":this.usr.SEGM_DESC});
-              if(el[0].FAVORITES[i].length >=1){
+              if(el[0].FAVORITES.length >1){
                 console.log("mais que 1");
                 diff=!0;
+                item.splice(i, 1);
               }
               else{
                 console.log("apenas 1");
                 $(ev.target).parent().removeClass('tooltip').find("ul").remove();
                 diff=!1;
+                item.splice(i, 1);
               }
             }
           }
           if(diff){
+            var parent=$(ev.target).parent();
             console.log("middle o favorito");
             $(ev.target).removeClass('nothas').removeClass('has').addClass('middle');
-
+            parent.find("ul li").each(function(index, el) {
+              console.dir($(el));
+              if($(el).find("button").attr('name') === context.usr.SEGM_COD){
+                $(el).remove();
+              }
+            });
+            //parent.find("ul").prepend('&lt;li>&lt;button type="button" class="tooltip-item caption-icons-icon bstar has">'+this.usr.SEGM_DESC+'&lt;/button>&lt;/li>');
           }
           else{
             console.log("limpou o favorito");
@@ -2216,8 +2225,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           $(ev.target).parent().addClass('tooltip').append('&lt;ul class="tooltip-content col-large">&lt;li>&lt;button type="button" class="tooltip-item caption-icons-icon bstar has">'+this.usr.SEGM_DESC+'&lt;/button>&lt;/li>&lt;/ul>')
         }
       }
-      console.dir(item);
-      console.dir(this.data);
       this.callService("GravarFornecedorFavorito","&lt;Forn_ID>"+parseInt($(ev.target).attr("name"))+"&lt;/Forn_ID>",html);
 
     },

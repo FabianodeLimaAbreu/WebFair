@@ -28,6 +28,20 @@
       <!--[if lt IE 9]><html id="ie8"><![endif]-->
     </head>
   <body>
+    <div class="modalie modaldefault">       
+      <div class="bg">
+        <div class="head">
+          <p>Atualize seu navegador:</p>
+          <img src="images/logo-up-ie.png"/>
+          <!--<a class="close" href=""><span></span></a>-->
+        </div>
+        <div class="content">
+          <span></span>
+          <p>Para utilizar o sistema solicite a <b>atualização do Internet Explorer</b> instalado em sua máquina para a versão 10 ou superior.</p>
+          <!--<a target="_blank" href="http://download.microsoft.com/download/7/B/D/7BD95543-D8A7-474F-8A79-34DE266AAC27/IE9-Windows7-x86-ptb.exe"><p>Atualizar</p></a>-->
+        </div>
+      </div>
+    </div>
     <div id="wrap">
       <header>
         <div class="header-collum header-top">
@@ -217,5 +231,11 @@
     <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
     <script type="text/javascript" src="js/lib/floatThead.min.js"></script>
     <script type="text/javascript" src="js/lib/dataTables.js"></script>
+    <script type="text/javascript">
+      /*********Working with update for ie8*********************/
+      if($("html").attr('id') === "ie9" || $("html").attr('id') === "ie8"){
+        $("div.modalie").fadeIn("slow");
+      }
+    </script>
   </body>
 </html>

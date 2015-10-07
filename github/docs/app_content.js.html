@@ -521,6 +521,8 @@ window.Box = Spine.Controller.sub({init:function() {
     result+="&lt;div class='caption'>&lt;div class='caption-upside'>&lt;ul class='caption-icons'>&lt;li>&lt;button type='button' class='caption-icons-icon justit bstatus "+status+"' title='"+status.capitalize()+"'>&lt;/button>&lt;/li>&lt;li>&lt;button type='button' class='caption-icons-icon justit bemail "+email+"' name='"+a.AMOS_ID+"'>&lt;/button>&lt;/li>";
     result+="&lt;li>&lt;button type='button' class='caption-icons-icon justit setitem bhomologado "+homologado+"' name='"+a.AMOS_ID+"' title='Homologar'>&lt;/button>&lt;/li>"
     if(note){
+                 console.dir(a.NOTES);
+
       var segnote=[];
       for(i=0;i&lt;a.NOTES.length;i++){
         if(a.NOTES[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
@@ -628,6 +630,7 @@ window.Box = Spine.Controller.sub({init:function() {
 
         if(a.NOTES.length ){
           var segnote=[];
+
           for(i=0;i&lt;a.NOTES.length;i++){
             if(a.NOTES[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
               segnote.push(a.NOTES[i]);

@@ -156,7 +156,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       if(!this.usr)
         window.location.href = 'login.html';
 
-      console.dir(this.usr)
+      //console.dir(this.usr)
       this.cookiefair=[];
 
       this.header.addClass("goDown");
@@ -680,7 +680,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               //Usuario TD não pode inserir na primeira etapa do projeto
               $(".bplus-big[name='shownote']").hide();
             }
-            console.log("fornecedor cadastro");
+            //console.log("fornecedor cadastro");
 
             //$.getScript("js/lib/external-script.js");
             if(!context.fair.length){
@@ -1212,7 +1212,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         $.support.cors=true;
         soapRequest.filter(function(a,b){
           if(a['name'] === name){
-            console.log(a['code']);
+            //console.log(a['code']);
             core.callback=a['callback'];
             core.ajaxrequest=!0;                                                                        
             $.ajax({
@@ -1434,7 +1434,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                 }
               });
               this.setDate(this.data);
-              console.dir(this.data);
+              //console.dir(this.data);
               this.setdata(this.data,"amostras");
             }
             else{
@@ -1918,7 +1918,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       obj.closest("li").fadeOut();
       this.data.filter(function(item,index) {
         if(item[how] === parseInt(obj.attr("alt"))){
-          console.dir(item);
+          //console.dir(item);
           for(i=0;i<item.NOTES.length;i++){
             if(item.NOTES[i].NOTA_ID === parseInt(obj.attr("title"))){
               item.NOTES.splice(i, 1);
@@ -2057,7 +2057,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       //console.dir(typeof Boolean($(a.target).find("option:selected").val()));
     },
     starForn:function(ev){
-      var el,i,html="",diff=!1,item;
+      var el,i,html="",diff=!1,item,context=this;
       el=this.data.filter(function(a,b) {
         if(parseInt(a.FORN_ID) == parseInt($(ev.target).attr('name'))){
           item=a.FAVORITES;
@@ -2070,33 +2070,42 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           //console.log("entrou has");
           for(i=0;i<el[0].FAVORITES.length;i++){
             if(el[0].FAVORITES[i].SEGM_COD !== this.usr.SEGM_COD){
-              console.log("diferente");
+              //console.log("diferente");
               html+="<string>"+el[0].FAVORITES[i].SEGM_COD+"</string>";
               diff=!0;
             }
             else{
               //console.dir(item[i]);
-              item.slice(i, 1);
+              
               //console.dir(item[i]);
               //item.push({"SEGM_COD":this.usr.SEGM_COD,"SEGM_DESC":this.usr.SEGM_DESC});
-              if(el[0].FAVORITES[i].length >=1){
-                console.log("mais que 1");
+              if(el[0].FAVORITES.length >1){
+                //console.log("mais que 1");
                 diff=!0;
+                item.splice(i, 1);
               }
               else{
-                console.log("apenas 1");
+                //console.log("apenas 1");
                 $(ev.target).parent().removeClass('tooltip').find("ul").remove();
                 diff=!1;
+                item.splice(i, 1);
               }
             }
           }
           if(diff){
-            console.log("middle o favorito");
+            var parent=$(ev.target).parent();
+            //console.log("middle o favorito");
             $(ev.target).removeClass('nothas').removeClass('has').addClass('middle');
-
+            parent.find("ul li").each(function(index, el) {
+              //console.dir($(el));
+              if($(el).find("button").attr('name') === context.usr.SEGM_COD){
+                $(el).remove();
+              }
+            });
+            //parent.find("ul").prepend('<li><button type="button" class="tooltip-item caption-icons-icon bstar has">'+this.usr.SEGM_DESC+'</button></li>');
           }
           else{
-            console.log("limpou o favorito");
+            //console.log("limpou o favorito");
             $(ev.target).removeClass('middle').removeClass('has').addClass('nothas');
             item.length=0;
           }
@@ -2119,8 +2128,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           $(ev.target).parent().addClass('tooltip').append('<ul class="tooltip-content col-large"><li><button type="button" class="tooltip-item caption-icons-icon bstar has">'+this.usr.SEGM_DESC+'</button></li></ul>')
         }
       }
-      console.dir(item);
-      console.dir(this.data);
       this.callService("GravarFornecedorFavorito","<Forn_ID>"+parseInt($(ev.target).attr("name"))+"</Forn_ID>",html);
 
     },

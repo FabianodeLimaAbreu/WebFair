@@ -2415,6 +2415,93 @@ form.search {
   margin: 0 0px 0 30px;
   text-align: left;
 }
+/********************************
+***************************************  IE update  *****************************/
+div.modalie {
+  background: url(../images/modalbackground.png) repeat;
+  height: 100%;
+  width: 100%;
+  padding-left: 50%;
+  z-index: 99;
+  position: absolute;
+  display: none;
+  font-family: "Arial";
+}
+.modalie.bg {
+  position: absolute;
+  color: #717171;
+  z-index: 999;
+  margin: 150px -200px auto;
+  background-image: url(../images/bg.png);
+  width: 400px;
+  height: 360px;
+  border: 1px solid #c9c9c9;
+  border-radius: 3px;
+}
+/*header*/
+.modalie.head {
+  height: 80px;
+}
+.modalie.head img {
+  margin-top: 30px;
+  margin-left: 55px;
+  float: left;
+}
+.modalie.head p {
+  font-size: 15px;
+  margin: 20px;
+  float: left;
+  width: 40px;
+}
+.modalie.head a span {
+  margin: 20px;
+  float: right;
+  display: block;
+  background-image: url(../images/gui-ie.png);
+  width: 20px;
+  height: 20px;
+}
+.modalie.head a:hover span {
+  background-position: -20px 0px;
+}
+/*Content*/
+.modalie.content span {
+  margin-top: 20px;
+  float: left;
+  display: block;
+  background: url(../images/gui-ie.png) no-repeat;
+  background-position: 25px -45px;
+  width: 400px;
+  height: 140px;
+}
+.modalie.content p {
+  line-height: 140%;
+  float: left;
+  font-size: 16px;
+  margin-top: 15px;
+  margin-left: 40px;
+  width: 320px;
+  text-align: center;
+}
+.modalie.content a {
+  margin-top: 20px;
+  text-decoration: none;
+  margin-left: 30px;
+  float: left;
+  background: url(../images/gui-ie.png);
+  background-position: 0px -190px;
+  width: 340px;
+  height: 40px;
+}
+.modalie.content a:hover {
+  background-position: 0px -230px;
+}
+.modalie.content a p {
+  margin-left: 10px;
+  margin-top: 10px;
+  text-align: center;
+  color: white;
+}
 .icon {
   padding: 0px;
   position: relative;
@@ -3553,6 +3640,9 @@ label {
   /* Firefox */
   -webkit-appearance: none;
   /* Safari and Chrome */
+}
+.form-group.styled-select select::-ms-expand {
+  display: none;
 }
 .form-group.styled-select-none {
   overflow: hidden;

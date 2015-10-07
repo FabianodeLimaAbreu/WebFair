@@ -334,7 +334,7 @@ window.Content = Spine.Controller.sub({
     if(this.getPage() === "amostras"){
       var viewport=$(".overview-container tbody");
       $("body").attr("class","").addClass("list");
-      console.dir($(".overview-container tbody").eq(viewport.length-1));
+      //console.dir($(".overview-container tbody").eq(viewport.length-1));
       a.appendTo($(".overview-container tbody").eq(viewport.length-1));
       this.itens = $(".overview-container tbody").find('tr');
     }
@@ -351,12 +351,12 @@ window.Content = Spine.Controller.sub({
     /*this.table.hide();
     this.tbody.hide();*/
     //this.bread.fadeOut();
-    console.log("RESETOU");
+    //console.log("RESETOU");
     this.page = 0;
     this.clean();
   }, init:function() {
     // (this.type !== "CLIENTE" && this.type !== "VISITANTE") ? this.table.addClass('cseven') : this.table.addClass('cfive');
-    console.log("RESETOU");
+    //console.log("RESETOU");
     this.itens = $([]);
     this.page = 0;
     // this.el.disableSelection && this.el.disableSelection();
@@ -531,6 +531,7 @@ window.Box = Spine.Controller.sub({init:function() {
 
         if(a.NOTES.length ){
           var segnote=[];
+
           for(i=0;i<a.NOTES.length;i++){
             if(a.NOTES[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
               segnote.push(a.NOTES[i]);
