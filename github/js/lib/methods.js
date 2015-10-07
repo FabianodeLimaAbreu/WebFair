@@ -1,6 +1,7 @@
 var imgPath= "http://192.168.10.100/webfair/ifair_img/";
 //var imgPath= "http://bdb/ifair_img/";
 var stringServer ="http://192.168.10.100/WebService.asmx?op=";
+//var stringServer ="http://ifair.focustextil.com.br/WebService.asmx?op";
 var nodePath = "../WebService.asmx?op=", scrollTop = document.documentElement ? document.documentElement.scrollTop : document.body.scrollTop;
 window.console = window.console || {log:function() {
 }};

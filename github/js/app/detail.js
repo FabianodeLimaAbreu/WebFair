@@ -913,7 +913,6 @@ setFav:function(a){
   //Gravar dados nos campos
 
 },inputValues:function(){
-  console.dir(this.item);
   var context=this,complet=!0;
   if(this.item.FORN_ID){
     $(".fair option").each(function(a,b){
