@@ -232,7 +232,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.amosval="";
       this.initialTime='2000-01-01';
       this.endTime='2020-10-10';
-      this.notcombo=0;
       this.unable_select=!1;
       this.combofilter={
         "FLAG_FISICA":{"clicked":0,"code":0},
@@ -305,8 +304,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         getFairVal:this.proxy(this.getFairVal),
         setFairVal:this.proxy(this.setFairVal),
         getAmosVal:this.proxy(this.getAmosVal),
-        getNotCombo:this.proxy(this.getNotCombo),
-        setNotCombo:this.proxy(this.setNotCombo),
         getPage:this.proxy(this.getPage)
       });
 
@@ -483,7 +480,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           var context=this;
           this.page ="fornecedores";
           $("html").attr("class","").addClass(this.page);
-          this.notcombo=!0;
           this.writePage(this.page);
           this.submit(a,b,c,!1);
         },
@@ -989,9 +985,15 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       }
       switch (this.page){
         case "fornecedores":
+          if(!this.fairval &amp;&amp; !this.fornval){
+            this.callService("fornecedores",'&lt;FEIR_COD>'+this.fairval+'&lt;/FEIR_COD>','&lt;LINHA_I>1&lt;/LINHA_I>','&lt;LINHA_F>20&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+this.initialTime+'&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>'+this.endTime+'&lt;/CREATE_DATE_F>');
+            //this.modal.open("message","Selecione ao menos uma feira para filtrar!!!",!1,!0);
+            return !0;
+          }
           this.callService("fornecedores",'&lt;FORN_DESC>'+this.fornval+'&lt;/FORN_DESC>','&lt;FEIR_COD>'+this.fairval+'&lt;/FEIR_COD>','&lt;LINHA_I>'+(this.content.page*20+1)+'&lt;/LINHA_I>','&lt;LINHA_F>'+((this.content.page+1)*20)+'&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+this.initialTime+'&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>'+this.endTime+'&lt;/CREATE_DATE_F>');
           break;
         case "amostras":
+          console.log(this.endTime);
           if(!this.fairval &amp;&amp; !this.fornval){
             this.callService("amostras",'&lt;FEIR_COD>'+this.fairval+'&lt;/FEIR_COD>','&lt;LINHA_I>1&lt;/LINHA_I>','&lt;LINHA_F>20&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+this.initialTime+'&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>'+this.endTime+'&lt;/CREATE_DATE_F>');
             //this.modal.open("message","Selecione ao menos uma feira para filtrar!!!",!1,!0);
@@ -1171,10 +1173,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             'serviceName':'ListarFornecedores',
             'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;ListarFornecedores xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+''+e+''+f+'&lt;/ListarFornecedores>&lt;/soap:Body>&lt;/soap:Envelope>',
             callback:function(data,req){
-              if(core.notcombo){
-                core.convertData(data,req,name,!0);
-                return !0;
-              }
+              core.convertData(data,req,name,!0);
+            }
+          },
+          {
+            'name':'combosearch',
+            'serviceName':'ListarFornecedores',
+            'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;ListarFornecedores xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+''+e+''+f+'&lt;SEARCH_TYPE>1&lt;/SEARCH_TYPE>&lt;/ListarFornecedores>&lt;/soap:Body>&lt;/soap:Envelope>',
+            callback:function(data,req){
               core.convertData(data,req,name);
             }
           },
@@ -1318,7 +1324,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         $.support.cors=true;
         soapRequest.filter(function(a,b){
           if(a['name'] === name){
-            //console.log(a['code']);
+            console.log(a['code']);
             core.callback=a['callback'];
             core.ajaxrequest=!0;                                                                        
             $.ajax({
@@ -1529,7 +1535,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           }
         }
     },
-    convertData:function(data,req,what,notcombo){
+    convertData:function(data,req,what){
         var context=this;
         switch(what){
           case "amostras":
@@ -1566,29 +1572,27 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
            // context.setdata(this.fair,"local");
             break;
           case "fornecedores":
-            if(notcombo){
-              if(!this.data.length){
-                this.data=jQuery.parseJSON($(req.responseXML).text()).unique();
-                this.setDate(this.data);
-                this.setdata(this.data,"fornecedores");
-              }
-              else{
-                var temp=jQuery.parseJSON($(req.responseXML).text()).unique().sortBy('FORN_ID');
-                /*console.dir(temp);
-                console.dir(this.data);*/
-                this.setDate(temp);
-                this.data=this.data.concat(temp);
-                //console.dir(this.data);
-                this.createbox(this.data, this.content.page, !0,"list");
-              }
+            if(!this.data.length){
+              this.data=jQuery.parseJSON($(req.responseXML).text()).unique();
+              this.setDate(this.data);
+              this.setdata(this.data,"fornecedores");
             }
             else{
-              this.spotlight.forn=[];
-              this.spotlight.forn=jQuery.parseJSON($(req.responseXML).text()).sortBy('FORN_DESC').unique();
-              //this.createComponent(this.forn,this.bforn,what);
-              this.spotlight.open();
-              //this.callService(this.page,"&lt;FEIR_COD>10&lt;/FEIR_COD>","&lt;FORN_ID>4200000&lt;/FORN_ID>",1,20);
+              var temp=jQuery.parseJSON($(req.responseXML).text()).unique().sortBy('FORN_ID');
+              /*console.dir(temp);
+              console.dir(this.data);*/
+              this.setDate(temp);
+              this.data=this.data.concat(temp);
+              //console.dir(this.data);
+              this.createbox(this.data, this.content.page, !0,"list");
             }
+            break;
+          case 'combosearch':
+            this.spotlight.forn=[];
+            this.spotlight.forn=jQuery.parseJSON($(req.responseXML).text()).sortBy('FORN_DESC').unique();
+            console.dir(this.spotlight.forn);
+            //this.createComponent(this.forn,this.bforn,what);
+            this.spotlight.open();
             break;
           case 'email_fornecedor':
             this.sendEmailGo(jQuery.parseJSON($(req.responseXML).text()).unique());
@@ -2888,7 +2892,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       //this.scroller=0;
       if(this.page === "fornecedor_cadastro"){
         this.fornecedores.setfair=$(a.target).find("option:selected").val();
-        this.notcombo=!1;
         this.submit("&lt;FEIR_COD>"+this.fairval+"&lt;/FEIR_COD>",!1,!1,!0);
         return !1;
       }
@@ -2901,7 +2904,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.bforn.val("");
       $(".overview-container").remove();
       this.fairval=$(a.target).find("option:selected").val();
-      this.notcombo=!0;
       this.mode=this.page+"/"+(this.fairval.replace(" ","_") || "padrao")+"/"+"padrao"+"/"+"padrao";
       this.navigate(this.mode, !1);
       this.submit("&lt;FEIR_COD>"+this.fairval+"&lt;/FEIR_COD>");
@@ -2980,16 +2982,15 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         //this.spotlight.select(a);
       }
       else{
-        if(3 &lt; a.target.value.length){
+        if(0 &lt; a.target.value.length){
           this.spotlight.input=$(a.target);
           if(40 === a.keyCode || 38 === a.keyCode) {
             return this.spotlight.arrow(a), !1;
             //return this.arrow(a), !1;
           }
           else{
-            this.notcombo=!1;
             $(".spotlight").html("&lt;li>Carregando...&lt;/li>").show();
-            this.callService("fornecedores",'&lt;FORN_DESC>'+a.target.value+'&lt;/FORN_DESC>','&lt;FEIR_COD>'+this.fairval+'&lt;/FEIR_COD>','&lt;LINHA_I>'+'1'+'&lt;/LINHA_I>','&lt;LINHA_F>'+'60'+'&lt;/LINHA_F>','&lt;CREATE_DATE_I>1900-10-17&lt;/CREATE_DATE_I>','');
+            this.callService("combosearch",'&lt;FORN_DESC>'+a.target.value+'&lt;/FORN_DESC>','&lt;FEIR_COD>'+this.fairval+'&lt;/FEIR_COD>','&lt;LINHA_I>'+'1'+'&lt;/LINHA_I>','&lt;LINHA_F>'+'60'+'&lt;/LINHA_F>','&lt;CREATE_DATE_I>1900-10-17&lt;/CREATE_DATE_I>','');
           }
         }
         else{
@@ -3016,12 +3017,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     },
     setAmosVal:function(a){
       this.amosval=a;
-    },
-    getNotCombo:function(){
-      return this.notcombo;
-    },
-    setNotCombo:function(a){
-      this.notcombo=a;
     },
     getPage:function(){
       return this.page;
@@ -3320,7 +3315,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.nsort="";
       this.initialTime='2000-01-01';
       this.endTime='2020-10-10';
-      this.notcombo=0;
       $.removeCookie('posscroll', { path: '/' });
       this.combofilter={
         "FLAG_FISICA":{"clicked":0,"code":0},

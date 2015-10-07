@@ -135,7 +135,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.amosval="";
       this.initialTime='2000-01-01';
       this.endTime='2020-10-10';
-      this.notcombo=0;
       this.unable_select=!1;
       this.combofilter={
         "FLAG_FISICA":{"clicked":0,"code":0},
@@ -208,8 +207,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         getFairVal:this.proxy(this.getFairVal),
         setFairVal:this.proxy(this.setFairVal),
         getAmosVal:this.proxy(this.getAmosVal),
-        getNotCombo:this.proxy(this.getNotCombo),
-        setNotCombo:this.proxy(this.setNotCombo),
         getPage:this.proxy(this.getPage)
       });
 
@@ -386,7 +383,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           var context=this;
           this.page ="fornecedores";
           $("html").attr("class","").addClass(this.page);
-          this.notcombo=!0;
           this.writePage(this.page);
           this.submit(a,b,c,!1);
         },
@@ -892,9 +888,15 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       }
       switch (this.page){
         case "fornecedores":
+          if(!this.fairval && !this.fornval){
+            this.callService("fornecedores",'<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>1</LINHA_I>','<LINHA_F>20</LINHA_F>','<CREATE_DATE_I>'+this.initialTime+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTime+'</CREATE_DATE_F>');
+            //this.modal.open("message","Selecione ao menos uma feira para filtrar!!!",!1,!0);
+            return !0;
+          }
           this.callService("fornecedores",'<FORN_DESC>'+this.fornval+'</FORN_DESC>','<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>'+(this.content.page*20+1)+'</LINHA_I>','<LINHA_F>'+((this.content.page+1)*20)+'</LINHA_F>','<CREATE_DATE_I>'+this.initialTime+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTime+'</CREATE_DATE_F>');
           break;
         case "amostras":
+          console.log(this.endTime);
           if(!this.fairval && !this.fornval){
             this.callService("amostras",'<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>1</LINHA_I>','<LINHA_F>20</LINHA_F>','<CREATE_DATE_I>'+this.initialTime+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTime+'</CREATE_DATE_F>');
             //this.modal.open("message","Selecione ao menos uma feira para filtrar!!!",!1,!0);
@@ -1074,10 +1076,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             'serviceName':'ListarFornecedores',
             'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedores xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+''+e+''+f+'</ListarFornecedores></soap:Body></soap:Envelope>',
             callback:function(data,req){
-              if(core.notcombo){
-                core.convertData(data,req,name,!0);
-                return !0;
-              }
+              core.convertData(data,req,name,!0);
+            }
+          },
+          {
+            'name':'combosearch',
+            'serviceName':'ListarFornecedores',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedores xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+''+e+''+f+'<SEARCH_TYPE>1</SEARCH_TYPE></ListarFornecedores></soap:Body></soap:Envelope>',
+            callback:function(data,req){
               core.convertData(data,req,name);
             }
           },
@@ -1432,7 +1438,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           }
         }
     },
-    convertData:function(data,req,what,notcombo){
+    convertData:function(data,req,what){
         var context=this;
         switch(what){
           case "amostras":
@@ -1469,29 +1475,27 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
            // context.setdata(this.fair,"local");
             break;
           case "fornecedores":
-            if(notcombo){
-              if(!this.data.length){
-                this.data=jQuery.parseJSON($(req.responseXML).text()).unique();
-                this.setDate(this.data);
-                this.setdata(this.data,"fornecedores");
-              }
-              else{
-                var temp=jQuery.parseJSON($(req.responseXML).text()).unique().sortBy('FORN_ID');
-                /*console.dir(temp);
-                console.dir(this.data);*/
-                this.setDate(temp);
-                this.data=this.data.concat(temp);
-                //console.dir(this.data);
-                this.createbox(this.data, this.content.page, !0,"list");
-              }
+            if(!this.data.length){
+              this.data=jQuery.parseJSON($(req.responseXML).text()).unique();
+              this.setDate(this.data);
+              this.setdata(this.data,"fornecedores");
             }
             else{
-              this.spotlight.forn=[];
-              this.spotlight.forn=jQuery.parseJSON($(req.responseXML).text()).sortBy('FORN_DESC').unique();
-              //this.createComponent(this.forn,this.bforn,what);
-              this.spotlight.open();
-              //this.callService(this.page,"<FEIR_COD>10</FEIR_COD>","<FORN_ID>4200000</FORN_ID>",1,20);
+              var temp=jQuery.parseJSON($(req.responseXML).text()).unique().sortBy('FORN_ID');
+              /*console.dir(temp);
+              console.dir(this.data);*/
+              this.setDate(temp);
+              this.data=this.data.concat(temp);
+              //console.dir(this.data);
+              this.createbox(this.data, this.content.page, !0,"list");
             }
+            break;
+          case 'combosearch':
+            this.spotlight.forn=[];
+            this.spotlight.forn=jQuery.parseJSON($(req.responseXML).text()).sortBy('FORN_DESC').unique();
+            console.dir(this.spotlight.forn);
+            //this.createComponent(this.forn,this.bforn,what);
+            this.spotlight.open();
             break;
           case 'email_fornecedor':
             this.sendEmailGo(jQuery.parseJSON($(req.responseXML).text()).unique());
@@ -2791,7 +2795,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       //this.scroller=0;
       if(this.page === "fornecedor_cadastro"){
         this.fornecedores.setfair=$(a.target).find("option:selected").val();
-        this.notcombo=!1;
         this.submit("<FEIR_COD>"+this.fairval+"</FEIR_COD>",!1,!1,!0);
         return !1;
       }
@@ -2804,7 +2807,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.bforn.val("");
       $(".overview-container").remove();
       this.fairval=$(a.target).find("option:selected").val();
-      this.notcombo=!0;
       this.mode=this.page+"/"+(this.fairval.replace(" ","_") || "padrao")+"/"+"padrao"+"/"+"padrao";
       this.navigate(this.mode, !1);
       this.submit("<FEIR_COD>"+this.fairval+"</FEIR_COD>");
@@ -2883,22 +2885,21 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         //this.spotlight.select(a);
       }
       else{
-        if(3 < a.target.value.length){
+        if(0 < a.target.value.length){
           this.spotlight.input=$(a.target);
           if(40 === a.keyCode || 38 === a.keyCode) {
             return this.spotlight.arrow(a), !1;
             //return this.arrow(a), !1;
           }
           else{
-            this.notcombo=!1;
             $(".spotlight").html("<li>Carregando...</li>").show();
-            this.callService("fornecedores",'<FORN_DESC>'+a.target.value+'</FORN_DESC>','<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'60'+'</LINHA_F>','<CREATE_DATE_I>1900-10-17</CREATE_DATE_I>','');
+            this.callService("combosearch",'<FORN_DESC>'+a.target.value+'</FORN_DESC>','<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'60'+'</LINHA_F>','<CREATE_DATE_I>1900-10-17</CREATE_DATE_I>','');
           }
         }
-        /*else{
+        else{
           this.fornval=a.target.value;
           this.spotlight.close();
-        }*/
+        }
       }
       return !1;
     },
@@ -2919,12 +2920,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     },
     setAmosVal:function(a){
       this.amosval=a;
-    },
-    getNotCombo:function(){
-      return this.notcombo;
-    },
-    setNotCombo:function(a){
-      this.notcombo=a;
     },
     getPage:function(){
       return this.page;
@@ -3223,7 +3218,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.nsort="";
       this.initialTime='2000-01-01';
       this.endTime='2020-10-10';
-      this.notcombo=0;
       $.removeCookie('posscroll', { path: '/' });
       this.combofilter={
         "FLAG_FISICA":{"clicked":0,"code":0},

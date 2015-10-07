@@ -679,7 +679,7 @@ open: function(a){
     return !1;
   }
   var el=$(a.target);
-  if(el.attr("name") === "999"){
+  if(el.attr("name") === "9999"){
     if(el.hasClass('sel')){
       el.removeClass('sel');
       $(".form-control-other").attr('disabled', 'disabled');
@@ -1010,7 +1010,7 @@ setFav:function(a){
   //Gravar dados nos campos
 
 },inputValues:function(){
-  //console.dir(this.item);
+  console.dir(this.item);
   var context=this,complet=!0;
   if(this.item.FORN_ID){
     $(".fair option").each(function(a,b){
@@ -1221,7 +1221,7 @@ setFav:function(a){
         else{
           $(".form-control-other").attr('disabled', 'disabled');
           $("#profile button[name='"+context.item.PROFILES[i].PERF_COD+"']").addClass('sel');
-          if(context.item.PROFILES[i].PERF_COD === 999){
+          if(context.item.PROFILES[i].PERF_COD === 9999){
             $(".form-control-other").removeAttr('disabled').val(context.item.PROFILES[i].PERF_OTHERS);
           }
         }
@@ -1249,7 +1249,7 @@ setFav:function(a){
       $("a[href='#products'] button").removeClass('incomplet').addClass('complet');
       for(var i=0;i&lt;context.item.PRODUCTS.length;i++){
         //console.log($(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").attr("name"));
-        if($(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").attr("name") === "prod/999"){
+        if($(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").attr("name") === "prod/9999"){
           $(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").find("input").val(context.item.PRODUCTS[i].PROD_OTHERS);
         }
         $(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").trigger('click');
@@ -1258,7 +1258,7 @@ setFav:function(a){
     if(context.item.MARKETS.length){
       $("a[href='#markets'] button").removeClass('incomplet').addClass('complet');
       for(var i=0;i&lt;context.item.MARKETS.length;i++){
-        if($(".mark-add button[name='mark/"+parseInt(context.item.MARKETS[i].MERC_COD)+"']").attr("name") === "mark/999"){
+        if($(".mark-add button[name='mark/"+parseInt(context.item.MARKETS[i].MERC_COD)+"']").attr("name") === "mark/9999"){
           $(".mark-add button[name='mark/"+parseInt(context.item.MARKETS[i].MERC_COD)+"']").find("input").val(context.item.MARKETS[i].MERC_OTHERS);
         }
         $(".mark-add button[name='mark/"+parseInt(context.item.MARKETS[i].MERC_COD)+"']").trigger('click');
@@ -1505,7 +1505,7 @@ setFav:function(a){
         }
 
         $("#profile .row-down .bsquare.sel").each(function(a,b){
-          if($(b).attr("name") == "999"){
+          if($(b).attr("name") == "9999"){
             other=$(b).parent().find("input").val();
           }
           html+="&lt;Profile>&lt;FAB_COD>0&lt;/FAB_COD>&lt;PERF_COD>"+$(b).attr("name")+"&lt;/PERF_COD>&lt;TP_FAB_COD>0&lt;/TP_FAB_COD>&lt;PERF_OTHERS>"+other+"&lt;/PERF_OTHERS>&lt;/Profile>";
@@ -1633,7 +1633,7 @@ setFav:function(a){
         //console.log(this.lasttab);
         $(".prod-rem .row-item").each(function(a,b){
           var el=$(b).find(".bminus").attr("name"),others="";
-          if(el.substr(el.indexOf("/")+1, el.length) === "999"){
+          if(el.substr(el.indexOf("/")+1, el.length) === "9999"){
             others=$(b).find(".bminus").find("input").val();
           }
           else{
@@ -1695,7 +1695,7 @@ setFav:function(a){
         var html="",others="",last_request=!1;
         $(".mark-rem .row-item").each(function(a,b){
           var el=$(b).find(".bminus").attr("name");
-          if(el.substr(el.indexOf("/")+1, el.length) === "999"){
+          if(el.substr(el.indexOf("/")+1, el.length) === "9999"){
             others=$(b).find(".bminus").find("input").val();
           }
           else{

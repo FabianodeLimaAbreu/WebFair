@@ -156,7 +156,6 @@
       this.close();
     }
     else{
-      this.setNotCombo(!0);
       this.mode="fornecedores/"+((""+this.getFairVal()).replace(" ","_") || "padrao")+"/"+((""+this.getFornVal()).replace(" ","_") || "padrao")+"/"+"padrao";
       this.navigate(this.mode, !1);
       this.callService("fornecedores",fair,name,'&lt;LINHA_I>'+'1'+'&lt;/LINHA_I>','&lt;LINHA_F>'+'20'+'&lt;/LINHA_F>','&lt;CREATE_DATE_I>2000-01-01&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>2020-01-01&lt;/CREATE_DATE_F>');
@@ -166,9 +165,9 @@
   a.addClass("sel");
   this.input.val(a.text()).focus();
 }, close:function(a) {
+  console.log("CLOSING");
   this.list = "";
   this.id = -1;
-  this.setNotCombo(!0);
   this.doc.unbind("click");
   this.el.empty().fadeOut();
   return!1;
@@ -587,7 +586,6 @@ window.Box = Spine.Controller.sub({init:function() {
       case "fornecedores":
         if(a){
           var result="",i,status,nome_contato,segmento=[],middlefav="";
-          console.dir(a); 
           status= a.FORN_STATUS ? "complet":"incomplet";
           result+="&lt;td>&lt;a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.FORN_DESC+"&lt;/a>&lt;/td>"+"&lt;td>&lt;a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.FEIR_DESC+"&lt;/a>&lt;/td>"+"&lt;td>&lt;a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.CREATE_DATE+"&lt;/a>&lt;/td>";
           

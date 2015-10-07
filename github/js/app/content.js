@@ -59,7 +59,6 @@ window.Spotlight = Spine.Controller.sub({
       this.close();
     }
     else{
-      this.setNotCombo(!0);
       this.mode="fornecedores/"+((""+this.getFairVal()).replace(" ","_") || "padrao")+"/"+((""+this.getFornVal()).replace(" ","_") || "padrao")+"/"+"padrao";
       this.navigate(this.mode, !1);
       this.callService("fornecedores",fair,name,'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20'+'</LINHA_F>','<CREATE_DATE_I>2000-01-01</CREATE_DATE_I>','<CREATE_DATE_F>2020-01-01</CREATE_DATE_F>');
@@ -72,7 +71,6 @@ window.Spotlight = Spine.Controller.sub({
   console.log("CLOSING");
   this.list = "";
   this.id = -1;
-  this.setNotCombo(!0);
   this.doc.unbind("click");
   this.el.empty().fadeOut();
   return!1;
