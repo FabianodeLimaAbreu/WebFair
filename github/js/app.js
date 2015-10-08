@@ -279,7 +279,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             }
           }
 
-          //console.dir(this.cookiefair[0]);
+          console.dir(this.cookiefair[0]);
           if(parseInt(b)){
             b="<FORN_ID>"+b+"</FORN_ID>";
           }
@@ -365,8 +365,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             }
           }
           else{
-            console.log("int");
-            b="<FORN_ID>"+b+"</FORN_ID>";
+            if(b){
+              b="<FORN_ID>"+b+"</FORN_ID>";
+            }
+            else{
+              b="";
+            }
           }
 
           if(parseInt(c)){
@@ -863,6 +867,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     submitDateFilter:function(a){
       this.initialTime=$("input[name='initial_date']").val() || (new Date().getFullYear()+"-"+"01"+"-"+"01");
       this.endTime=$("input[name='end_date']").val() || ("2020-"+"01"+"-"+"01");
+      this.fairval=$(".bselect.fair").find("option:selected").val();
+      this.fornval=this.bforn.val();
+      this.amosval=$(".form-control-search").val();
       this.reset();
       
       //PRICE
@@ -891,15 +898,21 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       switch (this.page){
         case "fornecedores":
           if(!this.fairval && !this.fornval){
+            this.mode="fornecedores/"+"padrao"+"/"+"padrao"+"/"+"padrao";
+            this.navigate(this.mode, !1);
             this.callService("fornecedores",'<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>1</LINHA_I>','<LINHA_F>20</LINHA_F>','<CREATE_DATE_I>'+this.initialTime+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTime+'</CREATE_DATE_F>');
             //this.modal.open("message","Selecione ao menos uma feira para filtrar!!!",!1,!0);
             return !0;
           }
+          this.mode="fornecedores/"+(this.fairval || "padrao")+"/"+(this.fornval || "padrao")+"/"+(this.amosval || "padrao");
+          this.navigate(this.mode, !1);
           this.callService("fornecedores",'<FORN_DESC>'+this.fornval+'</FORN_DESC>','<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>'+(this.content.page*20+1)+'</LINHA_I>','<LINHA_F>'+((this.content.page+1)*20)+'</LINHA_F>','<CREATE_DATE_I>'+this.initialTime+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTime+'</CREATE_DATE_F>');
           break;
         case "amostras":
-          console.log(this.endTime);
-          if(!this.fairval && !this.fornval){
+          console.log(this.fornval);
+          if(!this.fairval && !this.fornval && !this.amosval){
+            //this.mode="amostras/"+"padrao"+"/"+"padrao"+"/"+"padrao";
+            //this.navigate(this.mode, !1);
             this.callService("amostras",'<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>1</LINHA_I>','<LINHA_F>20</LINHA_F>','<CREATE_DATE_I>'+this.initialTime+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTime+'</CREATE_DATE_F>');
             //this.modal.open("message","Selecione ao menos uma feira para filtrar!!!",!1,!0);
             return !0;
@@ -914,6 +927,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           else{
             FORN_DESC="";
           }
+          this.mode="amostras/"+(this.fairval || "padrao")+"/"+(this.fornval || "padrao")+"/"+(this.amosval || "padrao");
+          this.navigate(this.mode, !1);
           this.callService("amostras",'<AMOS_DESC>'+this.amosval+'</AMOS_DESC>','<FEIR_COD>'+this.fairval+'</FEIR_COD>',FORN_DESC,'<LINHA_I>'+(this.content.page*20+1)+'</LINHA_I>','<LINHA_F>'+((this.content.page+1)*20)+'</LINHA_F>','<CREATE_DATE_I>'+this.initialTime+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTime+'</CREATE_DATE_F>');
           break;
       }
@@ -1229,7 +1244,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         $.support.cors=true;
         soapRequest.filter(function(a,b){
           if(a['name'] === name){
-            //console.log(a['code']);
+            console.log(a['code']);
             core.callback=a['callback'];
             core.ajaxrequest=!0;                                                                        
             $.ajax({
@@ -2805,12 +2820,19 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       //this.reopenFilter();
       this.itens_by_page=this.itens_page_default;
       this.resetFilters();
-      this.bforn.val("");
       $(".overview-container").remove();
       this.fairval=$(a.target).find("option:selected").val();
-      this.mode=this.page+"/"+(this.fairval.replace(" ","_") || "padrao")+"/"+"padrao"+"/"+"padrao";
-      this.navigate(this.mode, !1);
-      this.submit("<FEIR_COD>"+this.fairval+"</FEIR_COD>");
+      this.fornval=this.bforn.val();
+      this.amosval=$(".form-control-search").val();
+
+      if (this.page === "amostras") {
+        this.mode=this.page+"/"+(this.fairval.replace(" ","_") || "padrao")+"/"+(this.fornval || "padrao")+"/"+(this.amosval || "padrao");
+        this.navigate(this.mode, !0);
+      }
+      else{
+        this.mode=this.page+"/"+(this.fairval.replace(" ","_") || "padrao")+"/"+(this.fornval || "padrao")+"/"+(this.amosval || "padrao");
+        this.navigate(this.mode, !0);
+      }      
     },
     exportExcel:function(){
       //Extracted from: http://stackoverflow.com/questions/22317951/export-html-table-data-to-excel-using-javascript-jquery-is-not-working-properl/24081343#24081343
@@ -3079,10 +3101,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
             //console.log(d+" , "+f);
             if (d >= f && b) {
-              //console.log("chegou");
               e.content.page++;
               e.setloading(!0,!1);
-              e.submit("<FEIR_COD>"+(e.fairval || "")+"</FEIR_COD>","<FORN_DESC>"+(e.fornval || "")+"</FORN_DESC>",(e.amosval || ""),!0);
+              e.submit("<FEIR_COD>"+(e.fairval || "")+"</FEIR_COD>","<FORN_DESC>"+e.fornval+"</FORN_DESC>",(e.amosval || ""),!0);
             }
             break;
           case "fornecedores":

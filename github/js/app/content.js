@@ -68,7 +68,6 @@ window.Spotlight = Spine.Controller.sub({
   a.addClass("sel");
   this.input.val(a.text()).focus();
 }, close:function(a) {
-  console.log("CLOSING");
   this.list = "";
   this.id = -1;
   this.doc.unbind("click");
