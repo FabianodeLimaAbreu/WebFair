@@ -361,8 +361,22 @@ elements:{
       return !1;
     }
     if(this.tab === this.lasttab){
-      //console.log("profile");
+      console.log("IGUAIS CLOSE");
       this.tab="profile";
+    }
+    else{
+      this.lasttab=this.tab;
+      if(this.tab !== "dados"){
+        this.tab = "dados";
+      }
+      else{
+        if(this.tab === "profile"){
+          this.tab = "compositions";
+        }
+        else{
+          this.tab = "profile";
+        }
+      }
     }
     this.saveForn(!0);
   }
@@ -1263,8 +1277,8 @@ setFav:function(a){
     month=date.getMonth()+1;
   }
   date=""+date.getFullYear()+"-"+month+"-"+day;
-  //console.log(this.tab);
-  //console.log(this.lasttab);
+  console.log(this.tab);
+  console.log(this.lasttab);
   //console.log(this.setfair);
   pattern+="<USU_COD>"+this.usr.USU_COD+"</USU_COD>"+"<CREATE_DATE>"+date+"</CREATE_DATE>"+"<FEIR_COD>"+this.setfair+"</FEIR_COD>";
  /*if(this.tab === "dados" && !this.scroller){
@@ -1289,6 +1303,9 @@ setFav:function(a){
         status=setInterval(function(){
           if(!context.ajaxrequest){
             //console.log("entrou no interval: "+complet);
+            if(!$(".cont.actived").not(".hide").length){
+              complet=!1;
+            }
             $(".cont.actived").each(function(a,b){
               html="";
               $(b).find("input").each(function(index,el){
@@ -1313,6 +1330,7 @@ setFav:function(a){
               }
               html+="<FORN_ID>"+context.item.FORN_ID+"</FORN_ID>";
               if($(b).hasClass('hide')){
+
                 html+="<CONT_INATIVO>1</CONT_INATIVO>";
               }
               else{

@@ -353,10 +353,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           this.fornval = b=res.fornval !== "padrao" ? res.fornval.replace("_"," ").replace("_"," ").replace("_"," ") : "";
           this.amosval = c=res.amosval !== "padrao" ? res.amosval.replace("_"," ").replace("_"," ").replace("_"," ") : ""; 
 
-          if(parseInt(b)){
-            b="<FORN_ID>"+b+"</FORN_ID>";
-          }
-          else{
+          if(isNaN(b)){
             if(b){
               if(b.slice(0, 3) === "alt"){
                 b=b.slice(3,(b.length));
@@ -367,6 +364,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               b="";
             }
           }
+          else{
+            console.log("int");
+            b="<FORN_ID>"+b+"</FORN_ID>";
+          }
+
           if(parseInt(c)){
             c="<AMOS_ID>"+c+"</AMOS_ID>";
           }
@@ -1227,7 +1229,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         $.support.cors=true;
         soapRequest.filter(function(a,b){
           if(a['name'] === name){
-            console.log(a['code']);
+            //console.log(a['code']);
             core.callback=a['callback'];
             core.ajaxrequest=!0;                                                                        
             $.ajax({
@@ -1339,7 +1341,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         case 'amostras':
           //this.data = a.sortBy(this.nsort);
           this.data = a;
-          console.dir(this.data);
           this.content.changeview(this.view);
           //$(".changeview button.b"+this.view);
           if(!$(".changeview button.sel").hasClass('b'+this.view)){
@@ -2864,6 +2865,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       return (sa);
     },
     getSpot:function(a){
+      var context=this;
       //13 === a.keyCode ? (this.spotlight.close(), this.searchEl.trigger("submit")) : (this.filter.close(), 1 < a.target.value.length ? this.spotlight.open(a) : this.spotlight.close());
       if(13 === a.keyCode){
         var a=$(a.target);
@@ -2881,12 +2883,21 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         
         this.resetFilters();
         this.mode=this.page+"/"+((""+this.fairval).replace(" ","_") || "padrao")+"/"+((""+this.fornval).replace(" ","_") || "padrao")+"/"+((""+this.amosval).replace(" ","_") || "padrao");
-        this.navigate(this.mode, !0);
+        
+        var status;
+        status=setInterval(function(){
+          if(!context.ajaxrequest){
+            console.log("foi");
+            context.navigate(context.mode, !0);
+            clearInterval(status);
+          }
+        },1000);
         //this.spotlight.select(a);
       }
       else{
         if(0 < a.target.value.length){
           this.spotlight.input=$(a.target);
+          console.log(a.target.value);
           if(40 === a.keyCode || 38 === a.keyCode) {
             return this.spotlight.arrow(a), !1;
             //return this.arrow(a), !1;
