@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>DocStrap Source: login.js</title>
+	<title>DocStrap Module: Fornecedores</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -96,119 +96,97 @@
 	<div class="row-fluid">
 
 		
-			<div class="span12">
-				
+		<div class="span8">
+			
 				<div id="main">
 					
 
 
-		<h1 class="page-title">Source: login.js</h1>
-    
+	<h1 class="page-title">Module: Fornecedores</h1>
 <section>
-	<article>
-		<pre
-			class="sunlight-highlight-javascript linenums">/**
-*@fileOverview Login Page
-* @module Login
-*
-*/
 
-/**
-*@classDesc This class deal with all action of users' `login`
-*@exports Login
-*@constructor
-*/
-var App={
-	elements:{
-		'el':$("body"),
-		"loginEl" : $(".login"),
-		"inputs" : $(".login input"),
-		"warn" : $(".warn")
-	},
-	/**
-	*This method is responsible for call all listeners, in our case, call submit listener
-	* @memberOf Login#
-	* @name events
-	*/
-	events:function(){
-		this.elements.loginEl.find("form").bind("submit",this.submit);
-	},
+<header>
+    <h2>
+    Fornecedores
+    </h2>
+    
+</header>
 
-	/**
-	*Initial method, responsible for call events method and verify if user is logged or not.
-	* @memberOf Login#
-	* @name init
-	*/
-	init:function(){
-		this.usr = null;
-		this.events();
-		this.usr = jQuery.parseJSON($.cookie("portal")); 
-		this.elements.inputs.attr("autocomplete", "off");
-		/*if(this.usr)
-            window.location.href = './index.html';*/
-	},
+<article>
+    <div class="container-overview">
+    
 
-	/**
-	*Submit method
-	* @param {event} a - Submit event itself
-	* @memberOf Login#
-	*/
-	submit:function(a){
-		a.preventDefault();
-		var complet,val=[],contex=App;
-		contex.elements.inputs.removeClass("error");
+    
+        
+            <div class="description"><p>Detail's page with Fornecedores's Cadastre</p></div>
+        
 
-		//Pass into all inputs
-		$.each(contex.elements.inputs, function(index, obj) {
-		  complet = !1;
-	      if(!obj.value) {
-	      	//If if empty and is required
-	        return $(this).addClass('error'), !1;
-	      }
-	      val.push(obj.value);
-	      complet = !0;
-	    });
-	    if(complet){
-	    	$(".mask").fadeIn();
-	    	var wsUrl = "../../WebService.asmx?op=Login";
-	    	var soapRequest ='&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;Login xmlns="http://tempuri.org/">&lt;USU_LOGIN>'+val[0]+'&lt;/USU_LOGIN>&lt;USU_PASS>'+val[1]+'&lt;/USU_PASS>&lt;/Login>&lt;/soap:Body>&lt;/soap:Envelope>';
-	    	$.support.cors=true;
-			$.ajax({
-				type: "POST",
-				url: wsUrl,
-				contentType: "text/xml; charset=utf-8",
-				dataType: "xml",
-				crossDomain: true,
-				data: soapRequest,
-				success: function(data, status, req){
-					if (status == "success") {
-						$(".mask").fadeOut();
-						var result=jQuery.parseJSON($(req.responseXML).text());
-						console.log(result);
-				        if(result.USU_LOGIN !== null){
-				        	return $.cookie.json = !0, $.cookie("webfair", result, {expires:7, path:"/"}), window.location.href = "./index.html", !1;
-				        }
-				        else{
-				        	contex.elements.warn.fadeIn();
-				        }
-				    }
-				},
-				error: function(data, status, req) {
-					alert(req.responseText + " " + status);
-				}
-			});
-	    }
-	    else{
-	    	contex.elements.warn.fadeIn();
-	    	return !1;
-	    }
-	}
+        
+<dl class="details">
 	
-};
-App.init();</pre>
-	</article>
-</section>
 
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="app_detail.js.html">app/detail.js</a>,
+				 <a href="app_detail.js.html#sunlight-1-line-1">line 1</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 
@@ -232,6 +210,10 @@ App.init();</pre>
 				</footer>
 			</div>
 
+			
+			<div class="span3">
+				<div id="toc"></div>
+			</div>
 			
 			<br clear="both">
 		</div>

@@ -34,16 +34,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       "#wrap .mask":"maskEl",
       "#wrap .loader":"loader",
        ".modal_mask" : "modalEl",
-      //".form-control":"searchEl",
-      //".right-list button":"viewBtn",
-      //"button.close":"closeBtn",
       ".login-name":"username",
       ".login-id":"usersegm"
-      //".table-container":"viewList",
-      /*".viewport":"viewImage",
-      ".bread-box":"breadEl",
-     
-      ".detail":"detailEl"*/
     },
 
     events: {      
@@ -99,9 +91,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       "focus .info-template textarea":"focusArea",
       "click .filterlist a":"setComboFilter",
       "click .combofilter":"makeComboFilter"
-      /*"submit .search":"submit",
-      "click button.icon.go_back_default":"goBack",
-      "click button.close":"getOut"*/
     },
     init:function(){
       this.view = "images";
@@ -147,16 +136,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
 
 
-      /*this.loja="";
-      this.area="";
-      this.father=!0;
-      this.searchname="";*/
       this.breadarr = [];
       this.usr = jQuery.parseJSON($.cookie("webfair"));
       if(!this.usr)
         window.location.href = 'login.html';
 
-      //console.dir(this.usr)
       this.cookiefair=[];
 
       this.header.addClass("goDown");
@@ -223,14 +207,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           this.view = "images";
           //console.log("AMOSTRAS NORMAL");
           $("html").attr("class","").addClass(this.page);
-          $(".zoomContainer").remove();
           this.restartValues();
           this.writePage(this.page);
         },
         "amostras/*fairval/*fornval/*amosval":function(res){
           var a,b,c;
           //console.log("this.cookiefair");
-          $(".zoomContainer").remove();
           this.filterisdone=!0;
           this.fairval = a=res.fairval !== "padrao" ? parseInt(res.fairval) : ""; 
           this.fornval = b=res.fornval !== "padrao" ? res.fornval.replace("_"," ").replace("_"," ").replace("_"," ") : "";
@@ -279,7 +261,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             }
           }
 
-          console.dir(this.cookiefair[0]);
           if(parseInt(b)){
             b="<FORN_ID>"+b+"</FORN_ID>";
           }
@@ -321,7 +302,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         },
         "fornecedores/*fairval/*fornval/*amosval":function(res){
           var a,b,c;
-          $(".zoomContainer").remove();
+          
 
           if(this.cookiefair.length){
             //console.dir(this.cookiefair);
@@ -396,15 +377,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           var context=this;
           this.page ="fornecedor_cadastro";
           $("html").attr("class","fornecedor_cadastro edit_forn");
-          $(".zoomContainer").remove();
           this.writePage(this.page,a.code);
         },
         "fornecedores/*func":function(a){
           var context=this;
-          //console.log("criar novo fornecedor");
           this.page ="fornecedor_cadastro";
           $("html").attr("class","fornecedor_cadastro add_forn");
-          $(".zoomContainer").remove();
           this.writePage(this.page,"new");
         },
         "relatorio":function(){
@@ -448,9 +426,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           this.writePage(this.page);
         },
         "detail/*fair/*code" : function(a) {
-          //alert(a.code);
-          /*this.cookiefair=jQuery.parseJSON($.cookie("posscroll"));
-          console.dir(this.cookiefair);*/
           this.page ="detail";
           this.writePage(this.page);
           this.fairval=a.fair;
@@ -459,13 +434,31 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       });
     },
 
+    /**
+    * `Logout of app - Calling Logout Method from methods.js`
+    * @memberOf App#
+    * @param {event} a. The click event.
+    */
     getOut : function(a){
       a.preventDefault();
       Logout();
     },
+
+    /**
+    * `Return 1 hash from history`
+    * @memberOf App#
+    * @param {event} a. The click event.
+    */
     goBack : function(){
       window.history.go(-1);
     },
+
+    /**
+    * `Prevent Action from click when user click on note's and email's button in sample's page.`
+    * `Prevent when user is on fornecedor_cadastro's page and click on a menu's item too, confirming if the user desire to change the page, if true, call this.redirect`
+    * @memberOf App#
+    * @param {event} a. The click event.
+    */
     preventAction:function(a){
       a.preventDefault();
       if(this.page === "fornecedor_cadastro"){
@@ -473,29 +466,47 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         this.modal.open("message","Sair sem salvar as alterações nesta aba?<br> Para salvar, basta trocar de aba", this.proxy(this.redirect),!0, !0);
       }
     },
+
+    /**
+    * `This method is called by preventAction when the user click in yes in the Modal.`
+    * `The method take the redirect_val set in preventAction method and change the hash of the page using it.`
+    * @memberOf App#
+    */
     redirect:function(a){
       window.location.hash=this.redirect_val;
     },
+
+    /**
+    * `This method is called every time that the user point the mouse to a combonote to see the note of a supplier or a sample.`
+    * `The method take the outerHeight of the table's scroller and compare to the tooltip of note's height. Then, if is needed, the method change the position of the element to top.`
+    * @memberOf App#
+    * @param {event} a. The click event.
+    */
     positionNote:function(a){
       var tablesize=$(".scroller").outerHeight();
-      //console.log(tablesize);
       if(($(a.target).position().top+$(a.target).height()+50 )> tablesize){
         var el=$(a.target).find(".notepadmess");
         el.css("top","-"+el.height()+"px").addClass('otherbefore');
       }
     },
+
+    /**
+    * `This method change the container's value of the index.html according to the hash's change and hash's value.`
+    * @memberOf App#
+    * @param {String} hash. hash's value.
+    * @param {number} val. The code of a local or supplier that has to be edited.
+    */
     writePage:function(hash,val){
       var context=this;  
       if(this.page !== "detail" && this.page !== "fornecedor_cadastro"){
         context.reset();
       }
-
+      $(".zoomContainer").remove();
       $(".nav-menu a").removeClass('sel');
       this.container.load("pages/"+hash+".html",function( response, status, xhr){
         switch(context.page){
           case "amostras":
             var status;
-            //console.log(context.fairval);
             context.viewBtn=$(".changeview button");
             context.order_box=$(".tooltip.borderby");
             context.bfair=$(".fair");
@@ -535,11 +546,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               $(".form-control-search").val(context.amosval);
             }
             $( "input[name='initial_date']" ).datepicker({
-              //defaultDate: "+1w",
               changeMonth: true,
               changeYear: true,
               numberOfMonths: 1,
-              //defaultDate:'01-01-01',
               monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
               monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
               dayNamesMin: ['Dom','Seg','Ter','Qua','Qui','Sex','Sab'],
@@ -549,11 +558,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               }
             });
             $( "input[name='end_date']" ).datepicker({
-              //defaultDate: "+1w",
               changeMonth: true,
               changeYear: true,
               numberOfMonths: 1,
-              //defaultDate:context.endTime,
               monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
               monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
               dayNamesMin: ['Dom','Seg','Ter','Qua','Qui','Sex','Sab'],
@@ -624,7 +631,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                 $( "input[name='initial_date']").datepicker( "option", "maxDate", selectedDate );
               }
             });
-            //console.dir(context.fair);
             break;
           case "local":
             var status;
@@ -692,7 +698,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             }
             //console.log("fornecedor cadastro");
 
-            //$.getScript("js/lib/external-script.js");
             if(!context.fair.length){
               status=setInterval(function(){
                 if(context.fair.length){
@@ -764,6 +769,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         }
       });
     },
+
+    /**
+    * `Populate the local's component on the page to be changed.`
+    * @memberOf App#
+    * @param {Object} item. The Local that is goint to be edited or viewed.
+    */
     popComponent:function(item){
       var status,elem=$(".form-control"),context=this;
       elem.each(function(a,b){
@@ -790,16 +801,33 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         }
       },100);
     },
+
+    /**
+    * `On click to ativate or disable a fair.`
+    * @memberOf App#
+    * @param {event} a. The click event.
+    */
     ChangeStatusFair:function(a){
       var el=$(a.target);
       $(".ai-holder button").removeClass('sel');
       el.addClass('sel');
     },
+
+    /**
+    * `Click on the button to unable a fair to be edited. When the user has permission to edit or create a fair, this button is clicked automatically`
+    * @memberOf App#
+    * @param {event} a. The click event.
+    */
     editFair:function(a){
       $(a.target).addClass("sel");
       $("html").attr("class","local_cadastro edit-fair");
       var elem=$(".form-control").removeAttr("disabled");
     },
+
+    /**
+    * `This method save a fair after changes`
+    * @memberOf App#
+    */
     saveFair:function(){
       var elem=$(".form-control"),html="";
       var day,date,month;
@@ -822,9 +850,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       if($("html").hasClass("edit-fair")){
         html+="<FEIR_COD>"+parseInt(this.fairval.FEIR_COD)+"</FEIR_COD>";
         elem.each(function(a,b){
-          //console.log($(b).attr("class"));
           if($(b).hasClass("bselect")){
-            //console.log($(b).find("option:selected").val());
             html+="<"+$(b).attr("name")+">"+$(b).find("option:selected").val().replace(' ',"")+"</"+$(b).attr("name")+">";
           }
           else{
@@ -838,25 +864,33 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       else{
         html+="<FEIR_COD></FEIR_COD>";
         elem.each(function(a,b){
-          //console.log($(b).attr("class"));
           if($(b).hasClass("bselect")){
-            //console.log($(b).find("option:selected").val());
             html+="<"+$(b).attr("name")+">"+$(b).find("option:selected").val().replace(' ',"")+"</"+$(b).attr("name")+">";
           }
           else{
             html+="<FEIR_DESC>"+$(b).val()+"</FEIR_DESC>";
           }
         });
-        //html+="<CREATE_DATE>"+new Date().toLocaleDateString().replace("/","-").replace("/","-")+"</CREATE_DATE>";
         html+="<CREATE_DATE>"+date+"</CREATE_DATE>";
         this.callService("gravarLocal",html,"I");
       }
     },
+
+    /**
+    * `This method call a service to delete a fair`
+    * @memberOf App#
+    */
     deleteFair:function(){
       var html="";
       html+="<FEIR_COD>"+parseInt(this.fairval.FEIR_COD)+"</FEIR_COD>"+"<CREATE_DATE>"+"2015-12-12"+"</CREATE_DATE>";
       this.callService("gravarLocal",html,"D");
     },
+
+    /**
+    * `This method is called when the user click on filter date's button, this method just set a class to the clicked element.`
+    * @memberOf App#
+    * @param {event} a. The click event.
+    */
     showPicker:function(a){
       if($(a.target).hasClass("sel")){
         $(a.target).removeClass("sel");
@@ -864,6 +898,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       }
       $(a.target).addClass("sel");
     },
+
+
     submitDateFilter:function(a){
       this.initialTime=$("input[name='initial_date']").val() || (new Date().getFullYear()+"-"+"01"+"-"+"01");
       this.endTime=$("input[name='end_date']").val() || ("2020-"+"01"+"-"+"01");
@@ -909,7 +945,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           this.callService("fornecedores",'<FORN_DESC>'+this.fornval+'</FORN_DESC>','<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>'+(this.content.page*20+1)+'</LINHA_I>','<LINHA_F>'+((this.content.page+1)*20)+'</LINHA_F>','<CREATE_DATE_I>'+this.initialTime+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTime+'</CREATE_DATE_F>');
           break;
         case "amostras":
-          console.log(this.fornval);
           if(!this.fairval && !this.fornval && !this.amosval){
             //this.mode="amostras/"+"padrao"+"/"+"padrao"+"/"+"padrao";
             //this.navigate(this.mode, !1);
@@ -1084,7 +1119,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFeira xmlns="http://tempuri.org/"><fair>'+a+'</fair><action>'+b+'</action></GravarFeira></soap:Body></soap:Envelope>',
             callback:function(data,req){
               this.modal.open("message","Local Salvo com Sucesso!!!",!1,!0);
-              //core.convertData(data,req,name);
               window.location.reload();
             }
           },
@@ -1244,7 +1278,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         $.support.cors=true;
         soapRequest.filter(function(a,b){
           if(a['name'] === name){
-            console.log(a['code']);
+            //console.log(a['code']);
             core.callback=a['callback'];
             core.ajaxrequest=!0;                                                                        
             $.ajax({
@@ -1400,7 +1434,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
           this.data = a.sortBy("FORN_ID");
           this.content.changeview("list");
-         console.dir(this.data);
           this.createbox(this.data, this.content.page, !0,"list");
           break;
         case 'local':
@@ -1470,7 +1503,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               this.setdata(this.data,"amostras");
             }
             else{
-              var temp=jQuery.parseJSON($(req.responseXML).text()).unique().sortBy(this.nsort);
+              if(this.nsort.length){
+                var temp=jQuery.parseJSON($(req.responseXML).text()).unique().sortBy(this.nsort);
+              }
+              else{
+                var temp=jQuery.parseJSON($(req.responseXML).text()).unique();
+              }
               this.data=this.data.filter(function(a,b){
                 if(a.SEGM_COD === context.usr.SEGM_COD || context.usr.SEGM_COD === "TD"){
                   return a;
@@ -1509,7 +1547,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           case 'combosearch':
             this.spotlight.forn=[];
             this.spotlight.forn=jQuery.parseJSON($(req.responseXML).text()).sortBy('FORN_DESC').unique();
-            console.dir(this.spotlight.forn);
             //this.createComponent(this.forn,this.bforn,what);
             this.spotlight.open();
             break;
@@ -2309,7 +2346,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     },
     sendEmailGo:function(item){
       var i,j,length,amos_code=[],amos_id=[],counter,any_principal=!0,email="",context=this;
-      console.dir(item);
       length=item[0].CONTACTS.length;
       if(!length){
         this.modal.open("message","O Fornecedor não possui contatos cadastrados",!1,!0);
@@ -2909,7 +2945,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         var status;
         status=setInterval(function(){
           if(!context.ajaxrequest){
-            console.log("foi");
             context.navigate(context.mode, !0);
             clearInterval(status);
           }
@@ -2919,7 +2954,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       else{
         if(0 < a.target.value.length){
           this.spotlight.input=$(a.target);
-          console.log(a.target.value);
           if(40 === a.keyCode || 38 === a.keyCode) {
             return this.spotlight.arrow(a), !1;
             //return this.arrow(a), !1;

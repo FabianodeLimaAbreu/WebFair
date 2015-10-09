@@ -1,4 +1,11 @@
 /**
+*@fileOverview Detail's page with Fornecedores's Cadastre
+* @module Detail
+* @module Fornecedores
+*
+*/
+
+/**
 * Details's class and actions
 * @exports Detail
 * @constructor
@@ -345,8 +352,8 @@ open: function(a){
 }});
 
 /**
-* Details's class and actions
-* @exports Detail
+* Fornecedores's class and actions
+* @exports Fornecedores
 * @constructor
 */
 window.Fornecedores = Spine.Controller.sub({
@@ -1277,8 +1284,8 @@ setFav:function(a){
     month=date.getMonth()+1;
   }
   date=""+date.getFullYear()+"-"+month+"-"+day;
-  console.log(this.tab);
-  console.log(this.lasttab);
+  //console.log(this.tab);
+  //console.log(this.lasttab);
   //console.log(this.setfair);
   pattern+="<USU_COD>"+this.usr.USU_COD+"</USU_COD>"+"<CREATE_DATE>"+date+"</CREATE_DATE>"+"<FEIR_COD>"+this.setfair+"</FEIR_COD>";
  /*if(this.tab === "dados" && !this.scroller){

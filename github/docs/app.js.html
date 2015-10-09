@@ -36,6 +36,10 @@
 						</li>
 						
 						<li>
+							<a href="module-Fornecedores.html">Fornecedores</a>
+						</li>
+						
+						<li>
 							<a href="module-Login.html">Login</a>
 						</li>
 						
@@ -66,11 +70,19 @@
 						</li>
 						
 						<li>
+							<a href="Fornecedores.html">Fornecedores</a>
+						</li>
+						
+						<li>
 							<a href="Login.html">Login</a>
 						</li>
 						
 						<li>
 							<a href="Modal.html">Modal</a>
+						</li>
+						
+						<li>
+							<a href="Spotlight.html">Spotlight</a>
 						</li>
 						
 
@@ -131,16 +143,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       "#wrap .mask":"maskEl",
       "#wrap .loader":"loader",
        ".modal_mask" : "modalEl",
-      //".form-control":"searchEl",
-      //".right-list button":"viewBtn",
-      //"button.close":"closeBtn",
       ".login-name":"username",
       ".login-id":"usersegm"
-      //".table-container":"viewList",
-      /*".viewport":"viewImage",
-      ".bread-box":"breadEl",
-     
-      ".detail":"detailEl"*/
     },
 
     events: {      
@@ -196,9 +200,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       "focus .info-template textarea":"focusArea",
       "click .filterlist a":"setComboFilter",
       "click .combofilter":"makeComboFilter"
-      /*"submit .search":"submit",
-      "click button.icon.go_back_default":"goBack",
-      "click button.close":"getOut"*/
     },
     init:function(){
       this.view = "images";
@@ -244,16 +245,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
 
 
-      /*this.loja="";
-      this.area="";
-      this.father=!0;
-      this.searchname="";*/
       this.breadarr = [];
       this.usr = jQuery.parseJSON($.cookie("webfair"));
       if(!this.usr)
         window.location.href = 'login.html';
 
-      //console.dir(this.usr)
       this.cookiefair=[];
 
       this.header.addClass("goDown");
@@ -320,14 +316,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           this.view = "images";
           //console.log("AMOSTRAS NORMAL");
           $("html").attr("class","").addClass(this.page);
-          $(".zoomContainer").remove();
           this.restartValues();
           this.writePage(this.page);
         },
         "amostras/*fairval/*fornval/*amosval":function(res){
           var a,b,c;
           //console.log("this.cookiefair");
-          $(".zoomContainer").remove();
           this.filterisdone=!0;
           this.fairval = a=res.fairval !== "padrao" ? parseInt(res.fairval) : ""; 
           this.fornval = b=res.fornval !== "padrao" ? res.fornval.replace("_"," ").replace("_"," ").replace("_"," ") : "";
@@ -376,7 +370,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             }
           }
 
-          //console.dir(this.cookiefair[0]);
           if(parseInt(b)){
             b="&lt;FORN_ID>"+b+"&lt;/FORN_ID>";
           }
@@ -418,7 +411,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         },
         "fornecedores/*fairval/*fornval/*amosval":function(res){
           var a,b,c;
-          $(".zoomContainer").remove();
+          
 
           if(this.cookiefair.length){
             //console.dir(this.cookiefair);
@@ -462,8 +455,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             }
           }
           else{
-            console.log("int");
-            b="&lt;FORN_ID>"+b+"&lt;/FORN_ID>";
+            if(b){
+              b="&lt;FORN_ID>"+b+"&lt;/FORN_ID>";
+            }
+            else{
+              b="";
+            }
           }
 
           if(parseInt(c)){
@@ -489,15 +486,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           var context=this;
           this.page ="fornecedor_cadastro";
           $("html").attr("class","fornecedor_cadastro edit_forn");
-          $(".zoomContainer").remove();
           this.writePage(this.page,a.code);
         },
         "fornecedores/*func":function(a){
           var context=this;
-          //console.log("criar novo fornecedor");
           this.page ="fornecedor_cadastro";
           $("html").attr("class","fornecedor_cadastro add_forn");
-          $(".zoomContainer").remove();
           this.writePage(this.page,"new");
         },
         "relatorio":function(){
@@ -541,9 +535,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           this.writePage(this.page);
         },
         "detail/*fair/*code" : function(a) {
-          //alert(a.code);
-          /*this.cookiefair=jQuery.parseJSON($.cookie("posscroll"));
-          console.dir(this.cookiefair);*/
           this.page ="detail";
           this.writePage(this.page);
           this.fairval=a.fair;
@@ -552,13 +543,31 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       });
     },
 
+    /**
+    * `Logout of app - Calling Logout Method from methods.js`
+    * @memberOf App#
+    * @param {event} a. The click event.
+    */
     getOut : function(a){
       a.preventDefault();
       Logout();
     },
+
+    /**
+    * `Return 1 hash from history`
+    * @memberOf App#
+    * @param {event} a. The click event.
+    */
     goBack : function(){
       window.history.go(-1);
     },
+
+    /**
+    * `Prevent Action from click when user click on note's and email's button in sample's page.`
+    * `Prevent when user is on fornecedor_cadastro's page and click on a menu's item too, confirming if the user desire to change the page, if true, call this.redirect`
+    * @memberOf App#
+    * @param {event} a. The click event.
+    */
     preventAction:function(a){
       a.preventDefault();
       if(this.page === "fornecedor_cadastro"){
@@ -566,29 +575,47 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         this.modal.open("message","Sair sem salvar as alterações nesta aba?&lt;br> Para salvar, basta trocar de aba", this.proxy(this.redirect),!0, !0);
       }
     },
+
+    /**
+    * `This method is called by preventAction when the user click in yes in the Modal.`
+    * `The method take the redirect_val set in preventAction method and change the hash of the page using it.`
+    * @memberOf App#
+    */
     redirect:function(a){
       window.location.hash=this.redirect_val;
     },
+
+    /**
+    * `This method is called every time that the user point the mouse to a combonote to see the note of a supplier or a sample.`
+    * `The method take the outerHeight of the table's scroller and compare to the tooltip of note's height. Then, if is needed, the method change the position of the element to top.`
+    * @memberOf App#
+    * @param {event} a. The click event.
+    */
     positionNote:function(a){
       var tablesize=$(".scroller").outerHeight();
-      //console.log(tablesize);
       if(($(a.target).position().top+$(a.target).height()+50 )> tablesize){
         var el=$(a.target).find(".notepadmess");
         el.css("top","-"+el.height()+"px").addClass('otherbefore');
       }
     },
+
+    /**
+    * `This method change the container's value of the index.html according to the hash's change and hash's value.`
+    * @memberOf App#
+    * @param {String} hash. hash's value.
+    * @param {number} val. The code of a local or supplier that has to be edited.
+    */
     writePage:function(hash,val){
       var context=this;  
       if(this.page !== "detail" &amp;&amp; this.page !== "fornecedor_cadastro"){
         context.reset();
       }
-
+      $(".zoomContainer").remove();
       $(".nav-menu a").removeClass('sel');
       this.container.load("pages/"+hash+".html",function( response, status, xhr){
         switch(context.page){
           case "amostras":
             var status;
-            //console.log(context.fairval);
             context.viewBtn=$(".changeview button");
             context.order_box=$(".tooltip.borderby");
             context.bfair=$(".fair");
@@ -628,11 +655,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               $(".form-control-search").val(context.amosval);
             }
             $( "input[name='initial_date']" ).datepicker({
-              //defaultDate: "+1w",
               changeMonth: true,
               changeYear: true,
               numberOfMonths: 1,
-              //defaultDate:'01-01-01',
               monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
               monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
               dayNamesMin: ['Dom','Seg','Ter','Qua','Qui','Sex','Sab'],
@@ -642,11 +667,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               }
             });
             $( "input[name='end_date']" ).datepicker({
-              //defaultDate: "+1w",
               changeMonth: true,
               changeYear: true,
               numberOfMonths: 1,
-              //defaultDate:context.endTime,
               monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
               monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
               dayNamesMin: ['Dom','Seg','Ter','Qua','Qui','Sex','Sab'],
@@ -717,7 +740,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                 $( "input[name='initial_date']").datepicker( "option", "maxDate", selectedDate );
               }
             });
-            //console.dir(context.fair);
             break;
           case "local":
             var status;
@@ -785,7 +807,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             }
             //console.log("fornecedor cadastro");
 
-            //$.getScript("js/lib/external-script.js");
             if(!context.fair.length){
               status=setInterval(function(){
                 if(context.fair.length){
@@ -857,6 +878,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         }
       });
     },
+
+    /**
+    * `Populate the local's component on the page to be changed.`
+    * @memberOf App#
+    * @param {Object} item. The Local that is goint to be edited or viewed.
+    */
     popComponent:function(item){
       var status,elem=$(".form-control"),context=this;
       elem.each(function(a,b){
@@ -883,16 +910,33 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         }
       },100);
     },
+
+    /**
+    * `On click to ativate or disable a fair.`
+    * @memberOf App#
+    * @param {event} a. The click event.
+    */
     ChangeStatusFair:function(a){
       var el=$(a.target);
       $(".ai-holder button").removeClass('sel');
       el.addClass('sel');
     },
+
+    /**
+    * `Click on the button to unable a fair to be edited. When the user has permission to edit or create a fair, this button is clicked automatically`
+    * @memberOf App#
+    * @param {event} a. The click event.
+    */
     editFair:function(a){
       $(a.target).addClass("sel");
       $("html").attr("class","local_cadastro edit-fair");
       var elem=$(".form-control").removeAttr("disabled");
     },
+
+    /**
+    * `This method save a fair after changes`
+    * @memberOf App#
+    */
     saveFair:function(){
       var elem=$(".form-control"),html="";
       var day,date,month;
@@ -915,9 +959,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       if($("html").hasClass("edit-fair")){
         html+="&lt;FEIR_COD>"+parseInt(this.fairval.FEIR_COD)+"&lt;/FEIR_COD>";
         elem.each(function(a,b){
-          //console.log($(b).attr("class"));
           if($(b).hasClass("bselect")){
-            //console.log($(b).find("option:selected").val());
             html+="&lt;"+$(b).attr("name")+">"+$(b).find("option:selected").val().replace(' ',"")+"&lt;/"+$(b).attr("name")+">";
           }
           else{
@@ -931,25 +973,33 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       else{
         html+="&lt;FEIR_COD>&lt;/FEIR_COD>";
         elem.each(function(a,b){
-          //console.log($(b).attr("class"));
           if($(b).hasClass("bselect")){
-            //console.log($(b).find("option:selected").val());
             html+="&lt;"+$(b).attr("name")+">"+$(b).find("option:selected").val().replace(' ',"")+"&lt;/"+$(b).attr("name")+">";
           }
           else{
             html+="&lt;FEIR_DESC>"+$(b).val()+"&lt;/FEIR_DESC>";
           }
         });
-        //html+="&lt;CREATE_DATE>"+new Date().toLocaleDateString().replace("/","-").replace("/","-")+"&lt;/CREATE_DATE>";
         html+="&lt;CREATE_DATE>"+date+"&lt;/CREATE_DATE>";
         this.callService("gravarLocal",html,"I");
       }
     },
+
+    /**
+    * `This method call a service to delete a fair`
+    * @memberOf App#
+    */
     deleteFair:function(){
       var html="";
       html+="&lt;FEIR_COD>"+parseInt(this.fairval.FEIR_COD)+"&lt;/FEIR_COD>"+"&lt;CREATE_DATE>"+"2015-12-12"+"&lt;/CREATE_DATE>";
       this.callService("gravarLocal",html,"D");
     },
+
+    /**
+    * `This method is called when the user click on filter date's button, this method just set a class to the clicked element.`
+    * @memberOf App#
+    * @param {event} a. The click event.
+    */
     showPicker:function(a){
       if($(a.target).hasClass("sel")){
         $(a.target).removeClass("sel");
@@ -957,9 +1007,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       }
       $(a.target).addClass("sel");
     },
+
+
     submitDateFilter:function(a){
       this.initialTime=$("input[name='initial_date']").val() || (new Date().getFullYear()+"-"+"01"+"-"+"01");
       this.endTime=$("input[name='end_date']").val() || ("2020-"+"01"+"-"+"01");
+      this.fairval=$(".bselect.fair").find("option:selected").val();
+      this.fornval=this.bforn.val();
+      this.amosval=$(".form-control-search").val();
       this.reset();
       
       //PRICE
@@ -988,15 +1043,20 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       switch (this.page){
         case "fornecedores":
           if(!this.fairval &amp;&amp; !this.fornval){
+            this.mode="fornecedores/"+"padrao"+"/"+"padrao"+"/"+"padrao";
+            this.navigate(this.mode, !1);
             this.callService("fornecedores",'&lt;FEIR_COD>'+this.fairval+'&lt;/FEIR_COD>','&lt;LINHA_I>1&lt;/LINHA_I>','&lt;LINHA_F>20&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+this.initialTime+'&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>'+this.endTime+'&lt;/CREATE_DATE_F>');
             //this.modal.open("message","Selecione ao menos uma feira para filtrar!!!",!1,!0);
             return !0;
           }
+          this.mode="fornecedores/"+(this.fairval || "padrao")+"/"+(this.fornval || "padrao")+"/"+(this.amosval || "padrao");
+          this.navigate(this.mode, !1);
           this.callService("fornecedores",'&lt;FORN_DESC>'+this.fornval+'&lt;/FORN_DESC>','&lt;FEIR_COD>'+this.fairval+'&lt;/FEIR_COD>','&lt;LINHA_I>'+(this.content.page*20+1)+'&lt;/LINHA_I>','&lt;LINHA_F>'+((this.content.page+1)*20)+'&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+this.initialTime+'&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>'+this.endTime+'&lt;/CREATE_DATE_F>');
           break;
         case "amostras":
-          console.log(this.endTime);
-          if(!this.fairval &amp;&amp; !this.fornval){
+          if(!this.fairval &amp;&amp; !this.fornval &amp;&amp; !this.amosval){
+            //this.mode="amostras/"+"padrao"+"/"+"padrao"+"/"+"padrao";
+            //this.navigate(this.mode, !1);
             this.callService("amostras",'&lt;FEIR_COD>'+this.fairval+'&lt;/FEIR_COD>','&lt;LINHA_I>1&lt;/LINHA_I>','&lt;LINHA_F>20&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+this.initialTime+'&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>'+this.endTime+'&lt;/CREATE_DATE_F>');
             //this.modal.open("message","Selecione ao menos uma feira para filtrar!!!",!1,!0);
             return !0;
@@ -1011,6 +1071,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           else{
             FORN_DESC="";
           }
+          this.mode="amostras/"+(this.fairval || "padrao")+"/"+(this.fornval || "padrao")+"/"+(this.amosval || "padrao");
+          this.navigate(this.mode, !1);
           this.callService("amostras",'&lt;AMOS_DESC>'+this.amosval+'&lt;/AMOS_DESC>','&lt;FEIR_COD>'+this.fairval+'&lt;/FEIR_COD>',FORN_DESC,'&lt;LINHA_I>'+(this.content.page*20+1)+'&lt;/LINHA_I>','&lt;LINHA_F>'+((this.content.page+1)*20)+'&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+this.initialTime+'&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>'+this.endTime+'&lt;/CREATE_DATE_F>');
           break;
       }
@@ -1166,7 +1228,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;GravarFeira xmlns="http://tempuri.org/">&lt;fair>'+a+'&lt;/fair>&lt;action>'+b+'&lt;/action>&lt;/GravarFeira>&lt;/soap:Body>&lt;/soap:Envelope>',
             callback:function(data,req){
               this.modal.open("message","Local Salvo com Sucesso!!!",!1,!0);
-              //core.convertData(data,req,name);
               window.location.reload();
             }
           },
@@ -1482,7 +1543,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
           this.data = a.sortBy("FORN_ID");
           this.content.changeview("list");
-         console.dir(this.data);
           this.createbox(this.data, this.content.page, !0,"list");
           break;
         case 'local':
@@ -1552,7 +1612,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               this.setdata(this.data,"amostras");
             }
             else{
-              var temp=jQuery.parseJSON($(req.responseXML).text()).unique().sortBy(this.nsort);
+              if(this.nsort.length){
+                var temp=jQuery.parseJSON($(req.responseXML).text()).unique().sortBy(this.nsort);
+              }
+              else{
+                var temp=jQuery.parseJSON($(req.responseXML).text()).unique();
+              }
               this.data=this.data.filter(function(a,b){
                 if(a.SEGM_COD === context.usr.SEGM_COD || context.usr.SEGM_COD === "TD"){
                   return a;
@@ -1591,7 +1656,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           case 'combosearch':
             this.spotlight.forn=[];
             this.spotlight.forn=jQuery.parseJSON($(req.responseXML).text()).sortBy('FORN_DESC').unique();
-            console.dir(this.spotlight.forn);
             //this.createComponent(this.forn,this.bforn,what);
             this.spotlight.open();
             break;
@@ -2391,7 +2455,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     },
     sendEmailGo:function(item){
       var i,j,length,amos_code=[],amos_id=[],counter,any_principal=!0,email="",context=this;
-      console.dir(item);
       length=item[0].CONTACTS.length;
       if(!length){
         this.modal.open("message","O Fornecedor não possui contatos cadastrados",!1,!0);
@@ -2902,12 +2965,19 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       //this.reopenFilter();
       this.itens_by_page=this.itens_page_default;
       this.resetFilters();
-      this.bforn.val("");
       $(".overview-container").remove();
       this.fairval=$(a.target).find("option:selected").val();
-      this.mode=this.page+"/"+(this.fairval.replace(" ","_") || "padrao")+"/"+"padrao"+"/"+"padrao";
-      this.navigate(this.mode, !1);
-      this.submit("&lt;FEIR_COD>"+this.fairval+"&lt;/FEIR_COD>");
+      this.fornval=this.bforn.val();
+      this.amosval=$(".form-control-search").val();
+
+      if (this.page === "amostras") {
+        this.mode=this.page+"/"+(this.fairval.replace(" ","_") || "padrao")+"/"+(this.fornval || "padrao")+"/"+(this.amosval || "padrao");
+        this.navigate(this.mode, !0);
+      }
+      else{
+        this.mode=this.page+"/"+(this.fairval.replace(" ","_") || "padrao")+"/"+(this.fornval || "padrao")+"/"+(this.amosval || "padrao");
+        this.navigate(this.mode, !0);
+      }      
     },
     exportExcel:function(){
       //Extracted from: http://stackoverflow.com/questions/22317951/export-html-table-data-to-excel-using-javascript-jquery-is-not-working-properl/24081343#24081343
@@ -2984,7 +3054,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         var status;
         status=setInterval(function(){
           if(!context.ajaxrequest){
-            console.log("foi");
             context.navigate(context.mode, !0);
             clearInterval(status);
           }
@@ -2994,7 +3063,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       else{
         if(0 &lt; a.target.value.length){
           this.spotlight.input=$(a.target);
-          console.log(a.target.value);
           if(40 === a.keyCode || 38 === a.keyCode) {
             return this.spotlight.arrow(a), !1;
             //return this.arrow(a), !1;
@@ -3176,10 +3244,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
             //console.log(d+" , "+f);
             if (d >= f &amp;&amp; b) {
-              //console.log("chegou");
               e.content.page++;
               e.setloading(!0,!1);
-              e.submit("&lt;FEIR_COD>"+(e.fairval || "")+"&lt;/FEIR_COD>","&lt;FORN_DESC>"+(e.fornval || "")+"&lt;/FORN_DESC>",(e.amosval || ""),!0);
+              e.submit("&lt;FEIR_COD>"+(e.fairval || "")+"&lt;/FEIR_COD>","&lt;FORN_DESC>"+e.fornval+"&lt;/FORN_DESC>",(e.amosval || ""),!0);
             }
             break;
           case "fornecedores":
@@ -3392,7 +3459,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Thu Oct 8th 2015 using the <a
+		on Fri Oct 9th 2015 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>

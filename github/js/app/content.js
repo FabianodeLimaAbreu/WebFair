@@ -1,3 +1,17 @@
+/**
+*@fileOverview Content's page with Modal, Content and Boxes classes
+* @module Spotlight
+* @module Content
+* @module Modal
+* @module Box
+*
+*/
+
+/**
+* Spotlight's class and actions
+* @exports Spotlight
+* @constructor
+*/
 window.Spotlight = Spine.Controller.sub({
   elements:{
     //dd:"buttons"
@@ -131,14 +145,6 @@ window.Spotlight = Spine.Controller.sub({
   }));
   this.el.disableSelection && this.el.disableSelection();*/
 }});
-
-/**
-*@fileOverview Content's page with Modal, Content and Boxes classes
-* @module Content
-* @module Modal
-* @module Box
-*
-*/
 
 /**
 * Modal's class and actions
