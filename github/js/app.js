@@ -108,6 +108,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.itens_by_page=20;
       this.itens_page_default=this.itens_by_page;
       this.ajaxrequest=!1;
+      this.thanks=!1;
 
       //Var to storage the basic data
       this.fair=[];
@@ -901,8 +902,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
 
     submitDateFilter:function(a){
-      this.initialTime=$("input[name='initial_date']").val() || (new Date().getFullYear()+"-"+"01"+"-"+"01");
-      this.endTime=$("input[name='end_date']").val() || ("2020-"+"01"+"-"+"01");
+      this.initialTime=$("input[name='initial_date']").val() || ("2000"+"-"+"01"+"-"+"01");
+      this.endTime=$("input[name='end_date']").val() || ("2020-"+"10"+"-"+"10");
       this.fairval=$(".bselect.fair").find("option:selected").val();
       this.fornval=this.bforn.val();
       this.amosval=$(".form-control-search").val();
@@ -1278,7 +1279,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         $.support.cors=true;
         soapRequest.filter(function(a,b){
           if(a['name'] === name){
-            //console.log(a['code']);
+            console.log(a['code']);
             core.callback=a['callback'];
             core.ajaxrequest=!0;                                                                        
             $.ajax({
@@ -1383,7 +1384,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       
 
       if (!this.data.length && b !="local") {        
-        return this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0), $('.bread-search').find(".spec").text("0 Resultados");
+        return this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0), $('.bread-search').find(".spec").text("0 Resultados"),$("input[name='initial_date']").datepicker('setDate', this.initialTime.slice(0,4)+'-'+this.initialTime.slice(5, 7)+"-"+this.initialTime.slice(8, 10)),$("input[name='end_date']").datepicker('setDate', this.endTime.slice(0,4)+'-'+this.endTime.slice(5, 7)+"-"+this.endTime.slice(8, 10));;
         //return this.modal.open(),this.breadEl.find('.bread-colec a').text("").removeClass('active'),this.setloading(!1), this.searchEl.find('input').blur();
       }  
       switch(b){
@@ -2322,30 +2323,58 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       //console.log("clicou");
       var i,context=this,error=!1;
       if(!this.select_items.length){
-        this.modal.open("message","Selecione ao menos um item",!1,!0);
-        return !1;
-      }
-
-      for(i=0;i<=this.select_items.length;i++){
-        if(this.select_items[i]){
-          if(i>0 && this.select_items[i].FORN_ID !== context.select_items[i-1].FORN_ID){
-            error=!0;
-          }
+        if($(".overview-container").length>1){
+          this.modal.open("message","Selecione ao menos um item",!1,!0);
+          return !1;
         }
         else{
-          if(error){
-            context.modal.open("message","Email pode ser enviado para apenas 1 fornecedor",!1,!0);
-            return !1;
+          var status,last;
+          this.thanks=!0;
+          last_request=!1;
+          status=setInterval(function(){
+            last_request=!0;
+            if(!context.ajaxrequest){
+              context.callService("template_email",'','<TEMP_DESC></TEMP_DESC><SEGM_COD></SEGM_COD>');
+              clearInterval(status);
+              last_request=!1;
+            }
+          },100);
+          last=setInterval(function(){
+            if(!context.ajaxrequest && !last_request){
+              context.callService("email_fornecedor","<FEIR_COD></FEIR_COD>","<FORN_ID>"+context.data[0].FORN_ID+"</FORN_ID>",'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20'+'</LINHA_F>','<CREATE_DATE_I>2000-04-10</CREATE_DATE_I>','<CREATE_DATE_F>2050-04-10</CREATE_DATE_F>');
+              clearInterval(last);
+            }
+          },100);
+        }
+      }
+      else{
+        this.thanks=!1;
+        for(i=0;i<=this.select_items.length;i++){
+          if(this.select_items[i]){
+            if(i>0 && this.select_items[i].FORN_ID !== context.select_items[i-1].FORN_ID){
+              error=!0;
+            }
           }
           else{
-            this.callService("email_fornecedor","<FEIR_COD></FEIR_COD>","<FORN_ID>"+this.select_items[0].FORN_ID+"</FORN_ID>",'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20'+'</LINHA_F>','<CREATE_DATE_I>2000-04-10</CREATE_DATE_I>','<CREATE_DATE_F>2050-04-10</CREATE_DATE_F>');
-          }
-        } 
+            if(error){
+              context.modal.open("message","Email pode ser enviado para apenas 1 fornecedor",!1,!0);
+              return !1;
+            }
+            else{
+              this.callService("email_fornecedor","<FEIR_COD></FEIR_COD>","<FORN_ID>"+this.select_items[0].FORN_ID+"</FORN_ID>",'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20'+'</LINHA_F>','<CREATE_DATE_I>2000-04-10</CREATE_DATE_I>','<CREATE_DATE_F>2050-04-10</CREATE_DATE_F>');
+            }
+          } 
+        }
+        //alert("Enviar email para: "+this.select_items.join(" , "));
       }
-      //alert("Enviar email para: "+this.select_items.join(" , "));
     },
     sendEmailGo:function(item){
-      var i,j,length,amos_code=[],amos_id=[],counter,any_principal=!0,email="",context=this;
+      var i,j,length,amos_code=[],amos_id=[],counter,any_principal=!0,email="",context=this,listemail;
+      console.dir(item);
+      if(!item.length){
+        this.modal.open("message","Fornecedor Inativo!!!",!1,!0);
+        return !1;
+      }
       length=item[0].CONTACTS.length;
       if(!length){
         this.modal.open("message","O Fornecedor não possui contatos cadastrados",!1,!0);
@@ -2383,11 +2412,24 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                   }
 
                 });*/
+                console.dir(this.email);
+                listemail=this.email.filter(function(a,b){
+                  if(context.thanks){
+                    if(a.TP_TEMP_ID === 2){
+                      return a;
+                    }
+                  }
+                  else{
+                    if(a.TP_TEMP_ID === 1){
+                      return a;
+                    }
+                  }
+                });
 
                 item[0].CONTACTS.forEach(function(element,index){
                   if(element.CONT_EMAIL.length && !email.length){
-                    email="";
-                    context.modal.open("template",[context.email,amos_code,amos_id,email,item,item[0]],!1,!1);
+                    email=element.CONT_EMAIL;
+                    context.modal.open("template",[listemail,amos_code,amos_id,email,item,item[0]],!1,!1);
                     return !1;
                   }
                   else{
@@ -2403,7 +2445,20 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                 amos_code.push(this.select_items[j].AMOS_DESC);
               }*/
               //console.log("email para: "+email);
-              context.modal.open("template",[context.email,amos_code,amos_id,email,item,item[0]],!1,!1);
+              console.dir(this.email);
+              listemail=this.email.filter(function(a,b){
+                if(context.thanks){
+                  if(a.TP_TEMP_ID === 2){
+                    return a;
+                  }
+                }
+                else{
+                  if(a.TP_TEMP_ID === 1){
+                    return a;
+                  }
+                }
+              });
+              context.modal.open("template",[listemail,amos_code,amos_id,email,item,item[0]],!1,!1);
             }
           }
         }
@@ -2861,6 +2916,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.fornval=this.bforn.val();
       this.amosval=$(".form-control-search").val();
 
+
       if (this.page === "amostras") {
         this.mode=this.page+"/"+(this.fairval.replace(" ","_") || "padrao")+"/"+(this.fornval || "padrao")+"/"+(this.amosval || "padrao");
         this.navigate(this.mode, !0);
@@ -2960,7 +3016,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           }
           else{
             $(".spotlight").html("<li>Carregando...</li>").show();
-            this.callService("combosearch",'<FORN_DESC>'+a.target.value+'</FORN_DESC>','<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'60'+'</LINHA_F>','<CREATE_DATE_I>1900-10-17</CREATE_DATE_I>','');
+            this.callService("combosearch",'<FORN_DESC>'+a.target.value+'</FORN_DESC>','<FEIR_COD></FEIR_COD>','<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'60'+'</LINHA_F>','<CREATE_DATE_I>1900-10-17</CREATE_DATE_I>','');
           }
         }
         else{
@@ -3257,6 +3313,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         }
       }
 
+      if(this.initialTime !== "2000-01-01" || this.endTime !== "2020-10-10"){
+        $(".date-filter").parent().addClass('has');
+      }
+      else{
+        $(".date-filter").parent().removeClass('has');
+      }
+
       //REOPEN      
       this.Componentfilter(data,page,d,view,haslength);
     },
@@ -3265,8 +3328,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.data = [];
       this.fdata = [];
       this.itens = $([]);
+      this.select_items = [];
       this.itens.remove();
       this.unable_select=!1;
+      this.thanks=!1;
       this.content.reset();
       //$("#table").floatThead('destroy');
     },
@@ -3282,8 +3347,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.amosval="";
       //this.nsort="AMOS_DESC";
       this.nsort="";
-      this.initialTime='2000-01-01';
-      this.endTime='2020-10-10';
+      /*this.initialTime='2000-01-01';
+      this.endTime='2020-10-10';*/
       $.removeCookie('posscroll', { path: '/' });
       this.combofilter={
         "FLAG_FISICA":{"clicked":0,"code":0},
@@ -3298,10 +3363,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     resetFilters:function(){  
       //console.log("resetou FILTROS");
       //DATE
-      $("input[name='initial_date']").val("");
+      /*$("input[name='initial_date']").val("");
       $("input[name='end_date']").val("");
       this.initialTime='2000-01-01';
-      this.endTime='2020-10-10';
+      this.endTime='2020-10-10';*/
 
       //PRICE
       $("input[name='initial_price']").val("");
