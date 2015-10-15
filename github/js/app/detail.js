@@ -368,7 +368,6 @@ elements:{
       return !1;
     }
     if(this.tab === this.lasttab){
-      console.log("IGUAIS CLOSE");
       this.tab="profile";
     }
     else{

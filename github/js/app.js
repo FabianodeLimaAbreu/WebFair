@@ -213,7 +213,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         },
         "amostras/*fairval/*fornval/*amosval":function(res){
           var a,b,c;
-          //console.log("this.cookiefair");
+          //console.dir(this.cookiefair);
           this.filterisdone=!0;
           this.fairval = a=res.fairval !== "padrao" ? parseInt(res.fairval) : ""; 
           this.fornval = b=res.fornval !== "padrao" ? res.fornval.replace("_"," ").replace("_"," ").replace("_"," ") : "";
@@ -241,6 +241,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             if(jQuery.parseJSON($.cookie("posscroll"))){
               this.cookiefair.push(jQuery.parseJSON($.cookie("posscroll")));
               if(a == this.cookiefair[0].fairval && b === this.cookiefair[0].fornval  && c === this.cookiefair[0].amosval ){
+                //console.dir(this.cookiefair[0]);
                 //console.log("bateu parametros do cookie");
                 this.initialTime=this.cookiefair[0].dates[0];
                 this.endTime=this.cookiefair[0].dates[1];
@@ -937,19 +938,19 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           if(!this.fairval && !this.fornval){
             this.mode="fornecedores/"+"padrao"+"/"+"padrao"+"/"+"padrao";
             this.navigate(this.mode, !1);
-            this.callService("fornecedores",'<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>1</LINHA_I>','<LINHA_F>20</LINHA_F>','<CREATE_DATE_I>'+this.initialTime+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTime+'</CREATE_DATE_F>');
+            this.callService("fornecedores",'<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>1</LINHA_I>','<LINHA_F>3000</LINHA_F>','<CREATE_DATE_I>'+this.initialTime+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTime+'</CREATE_DATE_F>');
             //this.modal.open("message","Selecione ao menos uma feira para filtrar!!!",!1,!0);
             return !0;
           }
           this.mode="fornecedores/"+(this.fairval || "padrao")+"/"+(this.fornval || "padrao")+"/"+(this.amosval || "padrao");
           this.navigate(this.mode, !1);
-          this.callService("fornecedores",'<FORN_DESC>'+this.fornval+'</FORN_DESC>','<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>'+(this.content.page*20+1)+'</LINHA_I>','<LINHA_F>'+((this.content.page+1)*20)+'</LINHA_F>','<CREATE_DATE_I>'+this.initialTime+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTime+'</CREATE_DATE_F>');
+          this.callService("fornecedores",'<FORN_DESC>'+this.fornval+'</FORN_DESC>','<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>'+(this.content.page*20+1)+'</LINHA_I>','<LINHA_F>3000</LINHA_F>','<CREATE_DATE_I>'+this.initialTime+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTime+'</CREATE_DATE_F>');
           break;
         case "amostras":
           if(!this.fairval && !this.fornval && !this.amosval){
             //this.mode="amostras/"+"padrao"+"/"+"padrao"+"/"+"padrao";
             //this.navigate(this.mode, !1);
-            this.callService("amostras",'<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>1</LINHA_I>','<LINHA_F>20</LINHA_F>','<CREATE_DATE_I>'+this.initialTime+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTime+'</CREATE_DATE_F>');
+            this.callService("amostras",'<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>1</LINHA_I>','<LINHA_F>3000</LINHA_F>','<CREATE_DATE_I>'+this.initialTime+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTime+'</CREATE_DATE_F>');
             //this.modal.open("message","Selecione ao menos uma feira para filtrar!!!",!1,!0);
             return !0;
           }
@@ -965,7 +966,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           }
           this.mode="amostras/"+(this.fairval || "padrao")+"/"+(this.fornval || "padrao")+"/"+(this.amosval || "padrao");
           this.navigate(this.mode, !1);
-          this.callService("amostras",'<AMOS_DESC>'+this.amosval+'</AMOS_DESC>','<FEIR_COD>'+this.fairval+'</FEIR_COD>',FORN_DESC,'<LINHA_I>'+(this.content.page*20+1)+'</LINHA_I>','<LINHA_F>'+((this.content.page+1)*20)+'</LINHA_F>','<CREATE_DATE_I>'+this.initialTime+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTime+'</CREATE_DATE_F>');
+          this.callService("amostras",'<AMOS_DESC>'+this.amosval+'</AMOS_DESC>','<FEIR_COD>'+this.fairval+'</FEIR_COD>',FORN_DESC,'<LINHA_I>'+(this.content.page*20+1)+'</LINHA_I>','<LINHA_F>3000</LINHA_F>','<CREATE_DATE_I>'+this.initialTime+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTime+'</CREATE_DATE_F>');
           break;
       }
       $(".date-filter").removeClass("sel");
@@ -1279,7 +1280,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         $.support.cors=true;
         soapRequest.filter(function(a,b){
           if(a['name'] === name){
-            console.log(a['code']);
+            //console.log(a['code']);
             core.callback=a['callback'];
             core.ajaxrequest=!0;                                                                        
             $.ajax({
@@ -1310,10 +1311,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             core.reset();
           }
           if(core.page ===  "amostras"){
-            core.callService(core.page,a,b,c,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>'+((core.content.page+1)*core.itens_by_page)+'</LINHA_F>','<CREATE_DATE_I>'+core.initialTime+'</CREATE_DATE_I>',"<CREATE_DATE_F>"+core.endTime+"</CREATE_DATE_F>");
+            //core.callService(core.page,a,b,c,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>'+((core.content.page+1)*core.itens_by_page)+'</LINHA_F>','<CREATE_DATE_I>'+core.initialTime+'</CREATE_DATE_I>',"<CREATE_DATE_F>"+core.endTime+"</CREATE_DATE_F>");
+            core.callService(core.page,a,b,c,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>3000</LINHA_F>','<CREATE_DATE_I>'+core.initialTime+'</CREATE_DATE_I>',"<CREATE_DATE_F>"+core.endTime+"</CREATE_DATE_F>");
           }
           else{
-            core.callService(core.page,a,b,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>'+((core.content.page+1)*core.itens_by_page)+'</LINHA_F>','<CREATE_DATE_I>'+core.initialTime+'</CREATE_DATE_I>',"<CREATE_DATE_F>"+core.endTime+"</CREATE_DATE_F>");
+            //core.callService(core.page,a,b,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>'+((core.content.page+1)*core.itens_by_page)+'</LINHA_F>','<CREATE_DATE_I>'+core.initialTime+'</CREATE_DATE_I>',"<CREATE_DATE_F>"+core.endTime+"</CREATE_DATE_F>");
+            core.callService(core.page,a,b,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>3000</LINHA_F>','<CREATE_DATE_I>'+core.initialTime+'</CREATE_DATE_I>',"<CREATE_DATE_F>"+core.endTime+"</CREATE_DATE_F>");
           }
         }
       },100);
@@ -1750,7 +1753,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
  
                     var view_container=$(".overview-container");
                     view_container=$(view_container).eq(view_container.length-1);
-                    view_container.find(".bread-search .specall").text(h.COUNT_AMOS);
+                    view_container.find(".bread-search .spec").text(view_container.find(".viewport .thumbnail").length+1);
+                    view_container.find(".bread-search .specall").text(a.length);
                     view_container.find(".bread-search .specforn").text("/ "+h.FORN_DESC);
                     //$('.bread-search').find(".spec").text(k+1+" de "+h.COUNT_AMOS+" Resultados / "+countf+" Fornecedores");
                 } else {
@@ -1768,7 +1772,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                         }
                         var view_container=$(".overview-container");
                         view_container=$(view_container).eq(view_container.length-1);
-                        view_container.find(".bread-search .specall").text(h.COUNT_AMOS);
+                        view_container.find(".bread-search .spec").text(view_container.find("tbody tr").length+1);
+                        view_container.find(".bread-search .specall").text(a.length);
                         view_container.find(".bread-search .specforn").text("/ "+h.FORN_DESC);
                       }
 
@@ -1786,6 +1791,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                         e.active.create(g.render());
                         return $("tbody .bstar").unbind("click").bind("click",function(a){context.starForn(a)}),l--,k++;
                     } else {
+                        if(e.cookiefair.length){
+                          $(".container-fullsize.scroller").scrollTop(e.cookiefair[0].posscroll);
+                        }
                         clearInterval(f), e.setloading(!1);
                     }
                 }
@@ -1822,6 +1830,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                     }
                     
                     if(e.cookiefair.length){
+                      console.dir(e.cookiefair);
                       $(".container-fullsize.scroller").scrollTop(e.cookiefair[0].posscroll);
                     }
                 }
@@ -1894,7 +1903,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
  
                     var view_container=$(".overview-container");
                     view_container=$(view_container).eq(view_container.length-1);
-                    view_container.find(".bread-search .specall").text(h.COUNT_AMOS);
+                    view_container.find(".bread-search .spec").text(view_container.find(".viewport .thumbnail").length+1);
+                    view_container.find(".bread-search .specall").text(a.length);
                     view_container.find(".bread-search .specforn").text("/ "+h.FORN_DESC);
                 } else {
                     var count="COUNT_FORN";
@@ -1923,7 +1933,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                           }
                           var view_container=$(".overview-container");
                           view_container=$(view_container).eq(view_container.length-1);
-                          view_container.find(".bread-search .specall").text(h.COUNT_AMOS);
+                          view_container.find(".bread-search .spec").text(view_container.find("tbody tr").length+1);
+                          view_container.find(".bread-search .specall").text(a.length);
                           view_container.find(".bread-search .specforn").text("/ "+h.FORN_DESC);
                         }
 
@@ -1939,15 +1950,15 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                         });
                         //return 
                         e.active.create(g.render());
-                        (e.page !== "amostras" && e.page !== "template_email") && (e.page === "local" ? $('.bread-search').find(".spec").text(k+1) : $('.bread-search').find(".spec").text(k+1),$('.bread-search').find(".specall").text(h[count])),$("tbody .bstar").unbind("click").bind("click",function(a){context.starForn(a)});
-                        
-
-                        
+                        (e.page !== "amostras" && e.page !== "template_email") && (e.page === "local" ? $('.bread-search').find(".spec").text(k+1) : $('.bread-search').find(".spec").text(k+1),$('.bread-search').find(".specall").text(a.length)),$("tbody .bstar").unbind("click").bind("click",function(a){context.starForn(a)});
                         return l--,k++;
                         //, $('.bread-box').find(".bread-load").text(k+1), l--, k++, !1*/
                     } else {
                       if(c === "list"){
                         $("button.main_opt_button.bselect.bsel").trigger('click');
+                      }
+                      if(e.cookiefair.length){
+                        $(".container-fullsize.scroller").scrollTop(e.cookiefair[0].posscroll);
                       }
                       clearInterval(f), e.setloading(!1);
                     }
@@ -2015,7 +2026,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       var obj=$(a.target);
     },
     sortItems : function(a){
-      var type,i,length,temp=[];
+      var type,i,length,temp=[],aux=[];
       if($(a.target).hasClass("sel") || this.loading){
         return !1;
       }
@@ -2041,14 +2052,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         this.nsort="AMOS_PRECO";
         if(this.fdata.length){
           length= this.fdata.length-1;
-          temp = this.fdata.sortBy(type).unique();
+          aux = this.fdata.sortBy(type).unique();
         }
         else{
           length= this.data.length-1;
-          temp = this.data.sortBy(type).unique();
+          aux = this.data.sortBy(type).unique();
         }
         for(i=length;i>=0;i--){
-          temp.push(this.data[i]);
+          temp.push(aux[i]);
         }
         this.createbox(temp.unique(), this.content.page,!1,!1,length+1);
         //this.createbox(temp.unique(), this.content.page,!1,!1,length);
@@ -2312,7 +2323,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       //$.cookie("posscroll", scroll, {expires:7, path:"/"});
       this.data=aux;
       this.setloading(!1);
-      //console.dir(this.fdata);
+      console.dir(this.fdata);
       this.createbox(this.fdata, page,d,view,haslength);
     },
 
@@ -2370,7 +2381,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     },
     sendEmailGo:function(item){
       var i,j,length,amos_code=[],amos_id=[],counter,any_principal=!0,email="",context=this,listemail;
-      console.dir(item);
       if(!item.length){
         this.modal.open("message","Fornecedor Inativo!!!",!1,!0);
         return !1;
@@ -2412,7 +2422,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                   }
 
                 });*/
-                console.dir(this.email);
                 listemail=this.email.filter(function(a,b){
                   if(context.thanks){
                     if(a.TP_TEMP_ID === 2){
@@ -2445,7 +2454,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                 amos_code.push(this.select_items[j].AMOS_DESC);
               }*/
               //console.log("email para: "+email);
-              console.dir(this.email);
               listemail=this.email.filter(function(a,b){
                 if(context.thanks){
                   if(a.TP_TEMP_ID === 2){
@@ -3193,7 +3201,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             if (d >= f && b) {
               e.content.page++;
               e.setloading(!0,!1);
-              e.submit("<FEIR_COD>"+(e.fairval || "")+"</FEIR_COD>","<FORN_DESC>"+e.fornval+"</FORN_DESC>",(e.amosval || ""),!0);
+              e.reopenFilter(e.data, e.content.page, !0);
+              //e.submit("<FEIR_COD>"+(e.fairval || "")+"</FEIR_COD>","<FORN_DESC>"+e.fornval+"</FORN_DESC>",(e.amosval || ""),!0);
             }
             break;
           case "fornecedores":
@@ -3232,7 +3241,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               //console.log("chegou");
               e.content.page++;
               e.setloading(!0,!1);
-              e.submit("<FEIR_COD>"+(e.fairval || "")+"</FEIR_COD>","<FORN_DESC>"+(e.fornval || "")+"</FORN_DESC>",(e.amosval || ""),!0);
+              //e.submit("<FEIR_COD>"+(e.fairval || "")+"</FEIR_COD>","<FORN_DESC>"+(e.fornval || "")+"</FORN_DESC>",(e.amosval || ""),!0);
+              e.createbox(e.data, e.content.page, !0,"list");
             }
             break;
           case "fornecedor_cadastro":
