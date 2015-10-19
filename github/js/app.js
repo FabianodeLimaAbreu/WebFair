@@ -192,7 +192,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         getFairVal:this.proxy(this.getFairVal),
         setFairVal:this.proxy(this.setFairVal),
         getAmosVal:this.proxy(this.getAmosVal),
-        getPage:this.proxy(this.getPage)
+        getPage:this.proxy(this.getPage),
+        getInitialTime:this.proxy(this.getInitialTime),
+        getEndTime:this.proxy(this.getEndTime)
       });
 
       if(!this.fair.length){
@@ -209,11 +211,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           //console.log("AMOSTRAS NORMAL");
           $("html").attr("class","").addClass(this.page);
           this.restartValues();
+          this.initialTime='2000-01-01';
+          this.endTime='2020-10-10';
           this.writePage(this.page);
         },
         "amostras/*fairval/*fornval/*amosval":function(res){
           var a,b,c;
-          //console.dir(this.cookiefair);
+          console.dir(this.cookiefair);
           this.filterisdone=!0;
           this.fairval = a=res.fairval !== "padrao" ? parseInt(res.fairval) : ""; 
           this.fornval = b=res.fornval !== "padrao" ? res.fornval.replace("_"," ").replace("_"," ").replace("_"," ") : "";
@@ -221,7 +225,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
           if(this.cookiefair.length){
             if(a == this.cookiefair[0].fairval && b === this.cookiefair[0].fornval  && c === this.cookiefair[0].amosval ){
-              //console.log("bateu parametros do cookie");
+              console.log("bateu parametros do cookie");
               this.initialTime=this.cookiefair[0].dates[0];
               this.endTime=this.cookiefair[0].dates[1];
               this.prices=this.cookiefair[0].prices;
@@ -230,19 +234,19 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               this.nsort=this.cookiefair[0].nsort;
             }
             else{
-              //console.log("WINDOW 0");
+              console.log("WINDOW 0");
               this.cookiefair=[];
               $.removeCookie('posscroll', { path: '/' });
               $(".container-fullsize.scroller").scrollTop(0);
             }
           }
           else{
-            //console.log("nao achou");
+            console.log("nao achou");
             if(jQuery.parseJSON($.cookie("posscroll"))){
               this.cookiefair.push(jQuery.parseJSON($.cookie("posscroll")));
               if(a == this.cookiefair[0].fairval && b === this.cookiefair[0].fornval  && c === this.cookiefair[0].amosval ){
                 //console.dir(this.cookiefair[0]);
-                //console.log("bateu parametros do cookie");
+                console.log("bateu parametros do cookie");
                 this.initialTime=this.cookiefair[0].dates[0];
                 this.endTime=this.cookiefair[0].dates[1];
                 this.prices=this.cookiefair[0].prices;
@@ -251,14 +255,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                 this.nsort=this.cookiefair[0].nsort;
               }
               else{
-                //console.log("WINDOW 0");
+                console.log("WINDOW 0");
                 this.cookiefair=[];
                 $.removeCookie('posscroll', { path: '/' });
                 $(".container-fullsize.scroller").scrollTop(0);
               }
             }
             else{
-              //console.log("WINDOW 0");
+              console.log("WINDOW 0");
               $(".container-fullsize.scroller").scrollTop(0);
             }
           }
@@ -300,6 +304,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           var context=this;
           this.page ="fornecedores";
           this.restartValues();
+          this.initialTime='2000-01-01';
+          this.endTime='2020-10-10';
           $("html").attr("class","").addClass(this.page);
           this.writePage(this.page);
         },
@@ -1292,7 +1298,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         $.support.cors=true;
         soapRequest.filter(function(a,b){
           if(a['name'] === name){
-            //console.log(a['code']);
+            console.log(a['code']);
             core.callback=a['callback'];
             core.ajaxrequest=!0;                                                                        
             $.ajax({
@@ -1328,7 +1334,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           }
           else{
             //core.callService(core.page,a,b,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>'+((core.content.page+1)*core.itens_by_page)+'</LINHA_F>','<CREATE_DATE_I>'+core.initialTime+'</CREATE_DATE_I>',"<CREATE_DATE_F>"+core.endTime+"</CREATE_DATE_F>");
-            core.callService(core.page,a,b,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>20</LINHA_F>','<CREATE_DATE_I>'+core.initialTime+'</CREATE_DATE_I>',"<CREATE_DATE_F>"+core.endTime+"</CREATE_DATE_F>");
+            core.callService(core.page,a,b,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>20000</LINHA_F>','<CREATE_DATE_I>'+core.initialTime+'</CREATE_DATE_I>',"<CREATE_DATE_F>"+core.endTime+"</CREATE_DATE_F>");
           }
         }
       },100);
@@ -2881,6 +2887,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     },
     getPage:function(){
       return this.page;
+    },
+    getInitialTime:function(){
+      return this.initialTime;
+    },
+    getEndTime:function(){
+      return this.endTime;
     },
     changeCity:function(val){
       var country,city,context=this,arr=[];
