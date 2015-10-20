@@ -3081,7 +3081,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         this.navigate(this.mode, !0);
       }      
     },
-    exportExcel:function(){
+    exportExcel1:function(){
       //Extracted from: http://stackoverflow.com/questions/22317951/export-html-table-data-to-excel-using-javascript-jquery-is-not-working-properl/24081343#24081343
       var tab_text="&lt;table border='2px'>&lt;tr bgcolor='#71abcc'>";
       var textRange; var j=0;
@@ -3118,6 +3118,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       tab_text= tab_text.replace(/&lt;img[^>]*>/gi,""); // remove if u want images in your table
       tab_text= tab_text.replace(/&lt;input[^>]*>|&lt;\/input>/gi, ""); // reomves input params
 
+      console.log(tab_text);
+
       var ua = window.navigator.userAgent;
       var msie = ua.indexOf("MSIE "); 
       if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
@@ -3131,6 +3133,139 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         else                 //other browser not tested on IE 11
           sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
       
+      return (sa);
+    },
+    exportExcel:function(){
+      console.dir(this.fdata);
+      var j,i;
+      var homologado,fisica,fav,email,status;
+      var indice_amos=[
+        {"code":"FORN_DESC","name":"Fornecedor","pattern":false,"pvalue":""},
+        {"code":"AMOS_DESC","name":"Codigo","pattern":false,"pvalue":""},
+        {"code":"CREATE_DATE","name":"Data","pattern":false,"pvalue":""},
+        {"code":"FLAG_FISICA","name":"Fisica","pattern":true,"pvalue":""},
+        {"code":"AMOS_PRECO","name":"Preco Inicial","pattern":false,"pvalue":""},
+        {"code":"AMOS_GRAMATURA_M","name":"M/kg","pattern":false,"pvalue":""},
+        {"code":"FLAG_PRIORIDADE","name":"Favorita","pattern":true,"pvalue":""},
+        {"code":"AMOS_HOMOLOGAR","name":"Homologada","pattern":true,"pvalue":""},
+        {"code":"NOTES","name":"Anotacoes","pattern":false,"pvalue":""},
+        {"code":"AMOS_ENV_EMAIL","name":"Email","pattern":true,"pvalue":""},
+        {"code":"TECI_DESC","name":"Tecimento","pattern":false,"pvalue":""},
+        {"code":"BASE_DESC","name":"Base","pattern":false,"pvalue":""},
+        {"code":"GRUP_DESC","name":"Grupo","pattern":false,"pvalue":""},
+        {"code":"SUBG_DESC","name":"Sub-Grupo","pattern":false,"pvalue":""},
+        {"code":"COMPOSITIONS","name":"Composicao","pattern":false,"pvalue":""},
+        {"code":"AMOS_STATUS","name":"Status","pattern":true,"pvalue":""}
+      ]
+
+      //Abaixo a tabela completa
+      //tab_text='&lt;table border="2px">&lt;tr bgcolor="#71abcc">&lt;th>&lt;/th>&lt;th>Fornecedor&lt;/th>&lt;th>Codigo&lt;/th>&lt;th>Data&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfisica nothas unable">Fisica&lt;/button>&lt;/th>&lt;th>Preco Inicial&lt;/th>&lt;th>M/kg&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfav nothas unable">Favorita&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bhomologado nothas unable">Homologada&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bnote">Anotacoes&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bemail">Email&lt;/button>&lt;/th>&lt;th>Tecimento&lt;/th>&lt;th>Base&lt;/th>&lt;th>Grupo&lt;/th>&lt;th>Sub-Grupo&lt;/th>&lt;th>Composicao&lt;/th>&lt;th class="tlast">Status&lt;/th>&lt;/tr>&lt;td>&lt;button type="button" name="102002054" class="icon bselection">&lt;/button>&lt;/td>&lt;td>&lt;a href="#detail/4/102002054">KUNSHAN KANGDABTEXTILE CO.,LTD&lt;/a>&lt;/td>&lt;td>&lt;a href="#detail/102002054">TASILON&lt;/a>&lt;/td>&lt;td>&lt;a href="#detail/102002054">03/03/2014&lt;/a>&lt;/td>&lt;td>&lt;button type="button" class="caption-icons-icon justit setitem bfisica nothas" name="102002054" title="Fisica">Nao&lt;/button>&lt;/td>&lt;td>0&lt;/td>&lt;td>0&lt;/td>&lt;td>&lt;button type="button" class="caption-icons-icon justit setitem bfav nothas" name="102002054" title="Favoritar">Nao&lt;/button>&lt;/td>&lt;td>&lt;button type="button" class="caption-icons-icon justit setitem bhomologado nothas" name="102002054" title="Homologar">Nao&lt;/button>&lt;/td>&lt;td>&lt;/td>&lt;td>&lt;button type="button" class="caption-icons-icon justit bemail disabled" name="102002054">Nao&lt;/button>&lt;/td>&lt;td>&lt;a href="#detail/102002054">&lt;/a>&lt;/td>&lt;td>&lt;a href="#detail/102002054">&lt;/a>&lt;/td>&lt;td>&lt;a href="#detail/102002054">&lt;/a>&lt;/td>&lt;td>&lt;a href="#detail/102002054">&lt;/a>&lt;/td>&lt;td>&lt;/td>&lt;td>&lt;button type="button" class="caption-icons-icon justit bstatus incomplet" title="Incomplet">incomplet&lt;/button>&lt;/td>&lt;/tr>&lt;td>&lt;button type="button" name="102004998" class="icon bselection">&lt;/button>&lt;/td>&lt;td>&lt;a href="#detail/1/102004998">NEW HEAVEN ENTERPRISE CO LTD&lt;/a>&lt;/td>&lt;td>&lt;a href="#detail/102004998">TAS 060043&lt;/a>&lt;/td>&lt;td>&lt;a href="#detail/102004998">14/04/2015&lt;/a>&lt;/td>&lt;td>&lt;button type="button" class="caption-icons-icon justit setitem bfisica has" name="102004998" title="Fisica">Sim&lt;/button>&lt;/td>&lt;td>0&lt;/td>&lt;td>0&lt;/td>&lt;td>&lt;button type="button" class="caption-icons-icon justit setitem bfav nothas" name="102004998" title="Favoritar">Nao&lt;/button>&lt;/td>&lt;td>&lt;button type="button" class="caption-icons-icon justit setitem bhomologado nothas" name="102004998" title="Homologar">Nao&lt;/button>&lt;/td>&lt;td>&lt;/td>&lt;td>&lt;button type="button" class="caption-icons-icon justit bemail disabled" name="102004998">Nao&lt;/button>&lt;/td>&lt;td>&lt;a href="#detail/102004998">&lt;/a>&lt;/td>&lt;td>&lt;a href="#detail/102004998">&lt;/a>&lt;/td>&lt;td>&lt;a href="#detail/102004998">&lt;/a>&lt;/td>&lt;td>&lt;a href="#detail/102004998">&lt;/a>&lt;/td>&lt;td>&lt;/td>&lt;td>&lt;button type="button" class="caption-icons-icon justit bstatus incomplet" title="Incomplet">incomplet&lt;/button>&lt;/td>&lt;/tr>&lt;td>&lt;button type="button" name="102005010" class="icon bselection">&lt;/button>&lt;/td>&lt;td>&lt;a href="#detail/1/102005010">NEW HEAVEN ENTERPRISE CO LTD&lt;/a>&lt;/td>&lt;td>&lt;a href="#detail/102005010">TAS 130300-A&lt;/a>&lt;/td>&lt;td>&lt;a href="#detail/102005010">14/04/2015&lt;/a>&lt;/td>&lt;td>&lt;button type="button" class="caption-icons-icon justit setitem bfisica nothas" name="102005010" title="Fisica">Nao&lt;/button>&lt;/td>&lt;td>0&lt;/td>&lt;td>0&lt;/td>&lt;td>&lt;button type="button" class="caption-icons-icon justit setitem bfav nothas" name="102005010" title="Favoritar">Nao&lt;/button>&lt;/td>&lt;td>&lt;button type="button" class="caption-icons-icon justit setitem bhomologado nothas" name="102005010" title="Homologar">Nao&lt;/button>&lt;/td>&lt;td>&lt;/td>&lt;td>&lt;button type="button" class="caption-icons-icon justit bemail disabled" name="102005010">Nao&lt;/button>&lt;/td>&lt;td>&lt;a href="#detail/102005010">&lt;/a>&lt;/td>&lt;td>&lt;a href="#detail/102005010">&lt;/a>&lt;/td>&lt;td>&lt;a href="#detail/102005010">&lt;/a>&lt;/td>&lt;td>&lt;a href="#detail/102005010">&lt;/a>&lt;/td>&lt;td>&lt;/td>&lt;td>&lt;button type="button" class="caption-icons-icon justit bstatus incomplet" title="Incomplet">incomplet&lt;/button>&lt;/td>&lt;/tr>';
+
+      //Abaixo a tabela sem o titulo
+      //tab_text='&lt;table border="2px">&lt;/tr>&lt;td>&lt;button type="button" name="102002054" class="icon bselection">&lt;/button>&lt;/td>&lt;td>&lt;a href="#detail/4/102002054">KUNSHAN KANGDABTEXTILE CO.,LTD&lt;/a>&lt;/td>&lt;td>&lt;a href="#detail/102002054">TASILON&lt;/a>&lt;/td>&lt;td>&lt;a href="#detail/102002054">03/03/2014&lt;/a>&lt;/td>&lt;td>&lt;button type="button" class="caption-icons-icon justit setitem bfisica nothas" name="102002054" title="Fisica">Nao&lt;/button>&lt;/td>&lt;td>0&lt;/td>&lt;td>0&lt;/td>&lt;td>&lt;button type="button" class="caption-icons-icon justit setitem bfav nothas" name="102002054" title="Favoritar">Nao&lt;/button>&lt;/td>&lt;td>&lt;button type="button" class="caption-icons-icon justit setitem bhomologado nothas" name="102002054" title="Homologar">Nao&lt;/button>&lt;/td>&lt;td>&lt;/td>&lt;td>&lt;button type="button" class="caption-icons-icon justit bemail disabled" name="102002054">Nao&lt;/button>&lt;/td>&lt;td>&lt;a href="#detail/102002054">&lt;/a>&lt;/td>&lt;td>&lt;a href="#detail/102002054">&lt;/a>&lt;/td>&lt;td>&lt;a href="#detail/102002054">&lt;/a>&lt;/td>&lt;td>&lt;a href="#detail/102002054">&lt;/a>&lt;/td>&lt;td>&lt;/td>&lt;td>&lt;button type="button" class="caption-icons-icon justit bstatus incomplet" title="Incomplet">incomplet&lt;/button>&lt;/td>&lt;/tr>&lt;td>&lt;button type="button" name="102004998" class="icon bselection">&lt;/button>&lt;/td>&lt;td>&lt;a href="#detail/1/102004998">NEW HEAVEN ENTERPRISE CO LTD&lt;/a>&lt;/td>&lt;td>&lt;a href="#detail/102004998">TAS 060043&lt;/a>&lt;/td>&lt;td>&lt;a href="#detail/102004998">14/04/2015&lt;/a>&lt;/td>&lt;td>&lt;button type="button" class="caption-icons-icon justit setitem bfisica has" name="102004998" title="Fisica">Sim&lt;/button>&lt;/td>&lt;td>0&lt;/td>&lt;td>0&lt;/td>&lt;td>&lt;button type="button" class="caption-icons-icon justit setitem bfav nothas" name="102004998" title="Favoritar">Nao&lt;/button>&lt;/td>&lt;td>&lt;button type="button" class="caption-icons-icon justit setitem bhomologado nothas" name="102004998" title="Homologar">Nao&lt;/button>&lt;/td>&lt;td>&lt;/td>&lt;td>&lt;button type="button" class="caption-icons-icon justit bemail disabled" name="102004998">Nao&lt;/button>&lt;/td>&lt;td>&lt;a href="#detail/102004998">&lt;/a>&lt;/td>&lt;td>&lt;a href="#detail/102004998">&lt;/a>&lt;/td>&lt;td>&lt;a href="#detail/102004998">&lt;/a>&lt;/td>&lt;td>&lt;a href="#detail/102004998">&lt;/a>&lt;/td>&lt;td>&lt;/td>&lt;td>&lt;button type="button" class="caption-icons-icon justit bstatus incomplet" title="Incomplet">incomplet&lt;/button>&lt;/td>&lt;/tr>&lt;td>&lt;button type="button" name="102005010" class="icon bselection">&lt;/button>&lt;/td>&lt;td>&lt;a href="#detail/1/102005010">NEW HEAVEN ENTERPRISE CO LTD&lt;/a>&lt;/td>&lt;td>&lt;a href="#detail/102005010">TAS 130300-A&lt;/a>&lt;/td>&lt;td>&lt;a href="#detail/102005010">14/04/2015&lt;/a>&lt;/td>&lt;td>&lt;button type="button" class="caption-icons-icon justit setitem bfisica nothas" name="102005010" title="Fisica">Nao&lt;/button>&lt;/td>&lt;td>0&lt;/td>&lt;td>0&lt;/td>&lt;td>&lt;button type="button" class="caption-icons-icon justit setitem bfav nothas" name="102005010" title="Favoritar">Nao&lt;/button>&lt;/td>&lt;td>&lt;button type="button" class="caption-icons-icon justit setitem bhomologado nothas" name="102005010" title="Homologar">Nao&lt;/button>&lt;/td>&lt;td>&lt;/td>&lt;td>&lt;button type="button" class="caption-icons-icon justit bemail disabled" name="102005010">Nao&lt;/button>&lt;/td>&lt;td>&lt;a href="#detail/102005010">&lt;/a>&lt;/td>&lt;td>&lt;a href="#detail/102005010">&lt;/a>&lt;/td>&lt;td>&lt;a href="#detail/102005010">&lt;/a>&lt;/td>&lt;td>&lt;a href="#detail/102005010">&lt;/a>&lt;/td>&lt;td>&lt;/td>&lt;td>&lt;button type="button" class="caption-icons-icon justit bstatus incomplet" title="Incomplet">incomplet&lt;/button>&lt;/td>&lt;/tr>';
+
+      //Abaixo a tabela apenas com uma linha
+      //tab_text='&lt;table border="2px">&lt;tr>&lt;td>&lt;button type="button" name="102002054" class="icon bselection">&lt;/button>&lt;/td>&lt;td>&lt;a href="#detail/4/102002054">KUNSHAN KANGDABTEXTILE CO.,LTD&lt;/a>&lt;/td>&lt;td>&lt;a href="#detail/102002054">TASILON&lt;/a>&lt;/td>&lt;td>&lt;a href="#detail/102002054">03/03/2014&lt;/a>&lt;/td>&lt;td>&lt;button type="button" class="caption-icons-icon justit setitem bfisica nothas" name="102002054" title="Fisica">Nao&lt;/button>&lt;/td>&lt;td>0&lt;/td>&lt;td>0&lt;/td>&lt;td>&lt;button type="button" class="caption-icons-icon justit setitem bfav nothas" name="102002054" title="Favoritar">Nao&lt;/button>&lt;/td>&lt;td>&lt;button type="button" class="caption-icons-icon justit setitem bhomologado nothas" name="102002054" title="Homologar">Nao&lt;/button>&lt;/td>&lt;td>&lt;/td>&lt;td>&lt;button type="button" class="caption-icons-icon justit bemail disabled" name="102002054">Nao&lt;/button>&lt;/td>&lt;td>&lt;a href="#detail/102002054">&lt;/a>&lt;/td>&lt;td>&lt;a href="#detail/102002054">&lt;/a>&lt;/td>&lt;td>&lt;a href="#detail/102002054">&lt;/a>&lt;/td>&lt;td>&lt;a href="#detail/102002054">&lt;/a>&lt;/td>&lt;td>&lt;/td>&lt;td>&lt;button type="button" class="caption-icons-icon justit bstatus incomplet" title="Incomplet">incomplet&lt;/button>&lt;/td>&lt;/tr>';
+      
+      tab_text='&lt;table border="2px">&lt;tr bgcolor="#71abcc">';
+
+      for(i=0;i&lt;indice_amos.length;i++){
+        tab_text+='&lt;th>'+indice_amos[i].name+'&lt;/th>';
+      }
+      tab_text+="&lt;/tr>";
+
+      for(i = 0 ; i &lt; this.fdata.length ; i++) 
+      {     
+        tab_text+="&lt;tr>";
+        homologado= this.fdata[i].AMOS_HOMOLOGAR ? "Sim":"Nao";  
+        fisica= this.fdata[i].FLAG_FISICA ? "Sim":"Nao";
+        fav= this.fdata[i].FLAG_PRIORIDADE ? "Sim":"Nao";
+        status= this.fdata[i].AMOS_STATUS ? "Completo":"Incompleto";
+        email= this.fdata[i].AMOS_ENV_EMAIL? "Enviado":"Nao enviado";
+        for(j=0;j&lt;indice_amos.length;j++){
+          if(indice_amos[j].pattern){
+            switch(indice_amos[j].code){
+              case "AMOS_HOMOLOGAR":
+                indice_amos[j].pvalue=homologado;
+                break;
+              case "FLAG_FISICA":
+                indice_amos[j].pvalue=fisica;
+                break;
+              case "FLAG_PRIORIDADE":
+                indice_amos[j].pvalue=fav;
+                break;
+              case "AMOS_STATUS":
+                indice_amos[j].pvalue=status;
+                break;
+              case "AMOS_ENV_EMAIL":
+                indice_amos[j].pvalue=email;
+                break;
+              default:
+                indice_amos[j].pvalue="";
+                break;
+            }
+          }
+          else{
+            indice_amos[j].pvalue="";
+          }
+
+          if(indice_amos[j].code === "NOTES"){
+            var segnote=[];
+            for(var k=0;k&lt;this.fdata[i].NOTES.length;k++){
+              if(this.fdata[i].NOTES[k].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
+                segnote.push(this.fdata[i].NOTES[k]);
+              }
+            }
+            if(segnote.length){
+              tab_text+="&lt;td>";
+              for(var k=0;k&lt;segnote.length;k++){
+                tab_text+="&lt;p>&lt;b>"+segnote[k].CREATE_DATE+" | "+this.fdata[i].FORN_ID+" - "+ this.fdata[i].FORN_DESC.removeAccents()+" | "+segnote[k].OBJ_ID+" - "+this.fdata[i].AMOS_DESC+"&lt;/b>&lt;/p>&lt;p>"+segnote[k].USU_NOME+" - "+segnote[k].SEGM_DESC+"&lt;/p>&lt;p>"+segnote[k].NOTA_DESC.removeAccents()+"&lt;/p>&lt;hr/>";
+              }
+              tab_text+="&lt;/td>";
+            }
+            else{
+              tab_text+="&lt;td>&lt;/td>";
+            }
+          }
+          else if(indice_amos[j].code === "COMPOSITIONS"){
+            var arr=[];
+            tab_text+="&lt;td>";
+            for(var k=0;k&lt;this.fdata[i].COMPOSITIONS.length;k++){
+              arr.push(this.fdata[i].COMPOSITIONS[k].COMP_DESC.capitalize());
+            }
+            tab_text+=arr.join(" , ")+"&lt;/td>";
+          }
+          else{
+            tab_text+="&lt;td>";
+            if(indice_amos[j].pattern){
+              tab_text+=indice_amos[j].pvalue;
+            }
+            else{
+              if(this.fdata[i][indice_amos[j].code]){
+                tab_text+=this.fdata[i][indice_amos[j].code]+"".removeAccents();
+              }
+              else{
+                tab_text+="";
+              }
+            }
+            tab_text+="&lt;/td>";
+          }
+        }
+        tab_text+="&lt;/tr>";
+      }
+      var ua = window.navigator.userAgent;
+      var msie = ua.indexOf("MSIE "); 
+      if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+      {
+          txtArea1.document.open("txt/html","replace");
+          txtArea1.document.write(tab_text);
+          txtArea1.document.close();
+          txtArea1.focus(); 
+          sa=txtArea1.document.execCommand("SaveAs",true,"WebFair Report.xls");
+      }  
+      else                 //other browser not tested on IE 11
+        sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+
       return (sa);
     },
     getSpot:function(a){
@@ -3572,7 +3707,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Mon Oct 19th 2015 using the <a
+		on Tue Oct 20th 2015 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>

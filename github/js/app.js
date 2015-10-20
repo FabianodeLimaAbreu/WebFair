@@ -1344,8 +1344,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             core.callService(core.page,a,b,c,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>20000</LINHA_F>','<CREATE_DATE_I>'+core.initialTime+'</CREATE_DATE_I>',"<CREATE_DATE_F>"+core.endTime+"</CREATE_DATE_F>");
           }
           else{
-            core.callService(core.page,a,b,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>'+((core.content.page+1)*core.itens_by_page)+'</LINHA_F>','<CREATE_DATE_I>'+core.initialTime+'</CREATE_DATE_I>',"<CREATE_DATE_F>"+core.endTime+"</CREATE_DATE_F>");
-            //core.callService(core.page,a,b,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>20000</LINHA_F>','<CREATE_DATE_I>'+core.initialTime+'</CREATE_DATE_I>',"<CREATE_DATE_F>"+core.endTime+"</CREATE_DATE_F>");
+            //core.callService(core.page,a,b,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>'+((core.content.page+1)*core.itens_by_page)+'</LINHA_F>','<CREATE_DATE_I>'+core.initialTime+'</CREATE_DATE_I>',"<CREATE_DATE_F>"+core.endTime+"</CREATE_DATE_F>");
+            core.callService(core.page,a,b,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>20000</LINHA_F>','<CREATE_DATE_I>'+core.initialTime+'</CREATE_DATE_I>',"<CREATE_DATE_F>"+core.endTime+"</CREATE_DATE_F>");
           }
         }
       },100);
@@ -2973,55 +2973,246 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       }      
     },
     exportExcel:function(){
-      //Extracted from: http://stackoverflow.com/questions/22317951/export-html-table-data-to-excel-using-javascript-jquery-is-not-working-properl/24081343#24081343
-      var tab_text="<table border='2px'><tr bgcolor='#71abcc'>";
-      var textRange; var j=0;
+      var j,i,fdata=[];
+      var homologado,fisica,fav,email,status,length;
+      var indice_forn=[
+        {"code":"FORN_DESC","name":"Fornecedor"},
+        {"code":"FEIR_DESC","name":"Local da Coleta"},
+        {"code":"CREATE_DATE","name":"Data"},
+        {"code":"CONTACTS","name":"Contatos"},
+        {"code":"SEGM_DESC","name":"Segmento"},
+        {"code":"NOTES","name":"Anotacoes"},
+        {"code":"FAVORITES","name":"Favoritos"},
+        {"code":"FORN_STATUS","name":"Status"}
+      ]
+      var indice_amos=[
+        {"code":"FORN_DESC","name":"Fornecedor","pattern":false,"pvalue":""},
+        {"code":"AMOS_DESC","name":"Codigo","pattern":false,"pvalue":""},
+        {"code":"CREATE_DATE","name":"Data","pattern":false,"pvalue":""},
+        {"code":"FLAG_FISICA","name":"Fisica","pattern":true,"pvalue":""},
+        {"code":"AMOS_PRECO","name":"Preco Inicial","pattern":true,"pvalue":"0"},
+        {"code":"AMOS_GRAMATURA_M","name":"M/kg","pattern":true,"pvalue":"0"},
+        {"code":"FLAG_PRIORIDADE","name":"Favorita","pattern":true,"pvalue":""},
+        {"code":"AMOS_HOMOLOGAR","name":"Homologada","pattern":true,"pvalue":""},
+        {"code":"NOTES","name":"Anotacoes","pattern":false,"pvalue":""},
+        {"code":"AMOS_ENV_EMAIL","name":"Email","pattern":true,"pvalue":""},
+        {"code":"TECI_DESC","name":"Tecimento","pattern":false,"pvalue":""},
+        {"code":"BASE_DESC","name":"Base","pattern":false,"pvalue":""},
+        {"code":"GRUP_DESC","name":"Grupo","pattern":false,"pvalue":""},
+        {"code":"SUBG_DESC","name":"Sub-Grupo","pattern":false,"pvalue":""},
+        {"code":"COMPOSITIONS","name":"Composicao","pattern":false,"pvalue":""},
+        {"code":"AMOS_STATUS","name":"Status","pattern":true,"pvalue":""}
+      ]
 
-      if(this.page === "fornecedores"){
-        tab = document.getElementById('table'); // id of table
-        for(j = 0 ; j < tab.rows.length ; j++) 
-        {     
-            tab_text=tab_text+tab.rows[j].innerHTML+"</tr>";            
-            //tab_text=tab_text+"</tr>";
+      tab_text='<table border="2px"><tr bgcolor="#71abcc">';
+      if(this.fdata.length){
+        fdata=this.fdata;
+      }
+      else{
+        fdata=this.data;
+      }
+
+      if(this.page === "amostras"){
+        for(i=0;i<indice_amos.length;i++){
+          tab_text+='<th>'+indice_amos[i].name+'</th>';
         }
       }
       else{
-        tab = document.getElementsByClassName('table-large');  
-        for(i=0;i<tab.length;i++){
-          for(j = 0 ; j < tab[i].rows.length ; j++) 
-          {     
-            if(i>0 && j === 0){
+        for(i=0;i<indice_forn.length;i++){
+          tab_text+='<th>'+indice_forn[i].name+'</th>';
+        }
+      }
+      
+      tab_text+="</tr>";
 
+      for(i = 0 ; i < fdata.length ; i++) 
+      {     
+        tab_text+="<tr>";
+        if(this.page === "amostras"){
+          homologado=fdata[i].AMOS_HOMOLOGAR ? "Sim":"Nao";  
+          fisica=fdata[i].FLAG_FISICA ? "Sim":"Nao";
+          fav=fdata[i].FLAG_PRIORIDADE ? "Sim":"Nao";
+          status=fdata[i].AMOS_STATUS ? "Completo":"Incompleto";
+          email=fdata[i].AMOS_ENV_EMAIL? "Enviado":"Nao enviado";
+          length=indice_amos.length;
+          for(j=0;j<indice_amos.length;j++){
+            if(indice_amos[j].pattern){
+              switch(indice_amos[j].code){
+                case "AMOS_HOMOLOGAR":
+                  indice_amos[j].pvalue=homologado;
+                  break;
+                case "FLAG_FISICA":
+                  indice_amos[j].pvalue=fisica;
+                  break;
+                case "FLAG_PRIORIDADE":
+                  indice_amos[j].pvalue=fav;
+                  break;
+                case "AMOS_STATUS":
+                  indice_amos[j].pvalue=status;
+                  break;
+                case "AMOS_ENV_EMAIL":
+                  indice_amos[j].pvalue=email;
+                  break;
+                case "AMOS_PRECO":
+                  indice_amos[j].pvalue=this.fdata[i].AMOS_PRECO;
+                  break;
+                case "AMOS_GRAMATURA_M":
+                  indice_amos[j].pvalue=this.fdata[i].AMOS_GRAMATURA_M;
+                  break;
+                default:
+                  indice_amos[j].pvalue="";
+                  break;
+              }
             }
             else{
-              tab_text=tab_text+tab[i].rows[j].innerHTML+"</tr>";
+              indice_amos[j].pvalue="";
             }
-              
-              //tab_text=tab_text+"</tr>";
+          }
+        }
+        else{
+          fav= fdata[i].FAVORITES.length ? true:false;
+          length=indice_forn.length;
+        }
+        for(j=0;j<length;j++){
+          if(this.page !== "amostras"){
+            switch (indice_forn[j].code){
+              case "NOTES":
+                var segnote=[];
+                for(var k=0;k<fdata[i].NOTES.length;k++){
+                  if(fdata[i].NOTES[k].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
+                    segnote.push(fdata[i].NOTES[k]);
+                  }
+                }
+                if(segnote.length){
+                  this.setDate(segnote);
+                  tab_text+="<td>";
+                  for(var k=0;k<segnote.length;k++){
+                    tab_text+="<p><b>"+segnote[k].CREATE_DATE+" | "+segnote[k].OBJ_ID+"</b></p><p>"+segnote[k].USU_NOME+" - "+segnote[k].SEGM_DESC+"</p><p>"+segnote[k].NOTA_DESC.removeAccents()+"</p><hr/>";
+                  }
+                  tab_text+="</td>";
+                }
+                else{
+                  tab_text+="<td></td>";
+                }
+                break;
+              case "CONTACTS":
+                if(fdata[i].CONTACTS.length){
+                  console.log(fdata[i].FORN_DESC);
+                  tab_text+="<td>";
+                  for(var k=0;k<fdata[i].CONTACTS.length;k++){
+                    tab_text+="<p>"+(fdata[i].CONTACTS[k].CONT_NOME || "SEM NOME")+"</p>";
+                  }
+                  tab_text+="</td>";
+                }
+                else{
+                  tab_text+="<td></td>";
+                }
+                break;
+              case "SEGM_DESC":
+                if(fdata[i].CONTACTS.length){
+                  tab_text+="<td>";
+                  for(var k=0;k<fdata[i].CONTACTS.length;k++){
+                    tab_text+="<p>"+fdata[i].CONTACTS[k].SEGM_DESC+"</p>";
+                  }
+                  tab_text+="</td>";
+                }
+                else{
+                  tab_text+="<td></td>";
+                }
+                break;
+              case "FAVORITES":
+                if(fav){
+                  tab_text+="<td>";
+                  for(var k=0;k<fdata[i].FAVORITES.length;k++){
+                    tab_text+="<p>"+fdata[i].FAVORITES[k].SEGM_DESC+"</p>";
+                  }
+                  tab_text+="</td>";
+                }
+                else{
+                  tab_text+="<td>Nao</td>";
+                }
+                break;
+              default:
+                tab_text+="<td>";
+                if(indice_forn[j].code === "FORN_STATUS"){
+                  tab_text+=fdata[i][indice_forn[j].code] ? "Completo" : "Incompleto";
+                }
+                else{
+                  if(fdata[i][indice_forn[j].code]){
+                    tab_text+=fdata[i][indice_forn[j].code].toString().removeAccents();              
+                  }
+                  else{
+                    tab_text+="";
+                  }
+                }
+                tab_text+="</td>";
+                break;
+            }
+          }
+          else{
+            switch (indice_amos[j].code){
+              case "NOTES":
+                var segnote=[];
+                for(var k=0;k<fdata[i].NOTES.length;k++){
+                  if(fdata[i].NOTES[k].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
+                    segnote.push(fdata[i].NOTES[k]);
+                  }
+                }
+                if(segnote.length){
+                  this.setDate(segnote);
+                  tab_text+="<td>";
+                  for(var k=0;k<segnote.length;k++){
+                    tab_text+="<p><b>"+segnote[k].CREATE_DATE+" | "+segnote[k].OBJ_ID+"</b></p><p>"+segnote[k].USU_NOME+" - "+segnote[k].SEGM_DESC+"</p><p>"+segnote[k].NOTA_DESC.removeAccents()+"</p><hr/>";
+                  }
+                  tab_text+="</td>";
+                }
+                else{
+                  tab_text+="<td></td>";
+                }
+                break;
+              case "COMPOSITIONS":
+                var arr=[];
+                tab_text+="<td>";
+                for(var k=0;k<fdata[i].COMPOSITIONS.length;k++){
+                  arr.push(this.fdata[i].COMPOSITIONS[k].COMP_DESC.capitalize());
+                }
+                tab_text+=arr.join(" , ")+"</td>";
+                break;
+              default:
+                tab_text+="<td>";
+                if(indice_amos[j].pattern){
+                  tab_text+=indice_amos[j].pvalue;
+                }
+                else{
+                  if(fdata[i][indice_amos[j].code]){
+                    tab_text+=fdata[i][indice_amos[j].code].toString().removeAccents();
+                  }
+                  else{
+                    tab_text+="";
+                  }
+                }
+                tab_text+="</td>";
+                break;
+            }
           }
           
         }
-      } 
-      
-      
-      tab_text=tab_text+"</table>";
-      tab_text= tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
-      tab_text= tab_text.replace(/<img[^>]*>/gi,""); // remove if u want images in your table
-      tab_text= tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
+        tab_text+="</tr>";
+      }
 
       var ua = window.navigator.userAgent;
       var msie = ua.indexOf("MSIE "); 
       if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
-        {
-            txtArea1.document.open("txt/html","replace");
-            txtArea1.document.write(tab_text);
-            txtArea1.document.close();
-            txtArea1.focus(); 
-            sa=txtArea1.document.execCommand("SaveAs",true,"WebFair Report.xls");
-        }  
-        else                 //other browser not tested on IE 11
-          sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
-      
+      {
+          txtArea1.document.open("txt/html","replace");
+          txtArea1.document.write(tab_text);
+          txtArea1.document.close();
+          txtArea1.focus(); 
+          sa=txtArea1.document.execCommand("SaveAs",true,"WebFair Report.xls");
+      }  
+      else                 //other browser not tested on IE 11
+        sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+
       return (sa);
     },
     getSpot:function(a){
