@@ -940,6 +940,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
 
     submitDateFilter:function(a){
+      this.setloading(!0,!1);
       this.initialTime=$("input[name='initial_date']").val() || ("2000"+"-"+"01"+"-"+"01");
       this.endTime=$("input[name='end_date']").val() || ("2020-"+"10"+"-"+"10");
       this.fairval=$(".bselect.fair").find("option:selected").val();
@@ -1309,7 +1310,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         $.support.cors=true;
         soapRequest.filter(function(a,b){
           if(a['name'] === name){
-            //console.log(a['code']);
+            console.log(a['code']);
             core.callback=a['callback'];
             core.ajaxrequest=!0;                                                                        
             $.ajax({
@@ -1397,6 +1398,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           search="<AMOS_ID>"+$(a.target).val()+"</AMOS_ID>";
         }
         this.amosval=$(a.target).val();
+        this.setloading(!0,!1);
         this.mode="amostras/"+((""+this.fairval).replace(" ","_") || "padrao")+"/"+(this.fornval.replace(" ","_") || "padrao")+"/"+($(a.target).val().replace(" ","_") || "padrao");
         this.navigate(this.mode, !1);
         this.submit(fair_id,forn_desc,search);
