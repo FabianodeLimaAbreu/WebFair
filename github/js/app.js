@@ -1730,7 +1730,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
                     v = h.AMOS_ID || null; 
                     //Usando por enquanto o caminho para a imagem large, pois as amostras antigas eram salvas em tamanho muito pequeno
-                    p = new Image, q = imgPath+h.IMG_PATH_SAMPLE.replace("thumb","large"), $(p).load(function() {
+                    p = new Image, q = imgPath+h.IMG_PATH_SAMPLE, $(p).load(function() {
                         if (!l > 0)
                           return !1;
 
@@ -1878,7 +1878,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
                     v = h.AMOS_ID || null; 
                     //Usando por enquanto o caminho para a imagem large, pois as amostras antigas eram salvas em tamanho muito pequeno
-                    p = new Image, q =imgPath+h.IMG_PATH_SAMPLE.replace("thumb","large"), $(p).load(function() {
+                    p = new Image, q =imgPath+h.IMG_PATH_SAMPLE, $(p).load(function() {
                         if (!l > 0)
                             return !1;
 
@@ -2313,8 +2313,26 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           if(Boolean(a["AMOS_STATUS"]) === context.fstatus || context.fstatus === null){
             for(var prop in context.combofilter) {
               if(context.combofilter.is_set){
-                if(context.combofilter[prop].clicked === 1 && context.combofilter[prop].code === a[prop]){
-                  return a;
+                if(context.combofilter[prop].clicked === 1){
+                  if(prop === "NOTES"){
+                    //Caso seja anotações
+                    if(context.combofilter[prop].code){
+                      if(a['NOTES'].length){
+                        return a;
+                      }
+                    }
+                    else{
+                      if(!a['NOTES'].length){
+                        return a;
+                      }
+                    }
+                  }
+                  else{
+                    //Caso seja boolean normal como favoritos por exemplo
+                    if(context.combofilter[prop].code === a[prop]){
+                      return a;
+                    }
+                  }
                 }
               }
               else{
@@ -3207,16 +3225,22 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       var msie = ua.indexOf("MSIE "); 
       if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
       {
-          txtArea1.document.open("txt/html","replace");
-          txtArea1.document.write(tab_text);
-          txtArea1.document.close();
-          txtArea1.focus(); 
-          sa=txtArea1.document.execCommand("SaveAs",true,"WebFair Report.xls");
+        document.open("txt/html","replace");
+        document.write(tab_text);
+        document.close();
+        
+        var sa = document.execCommand("SaveAs",true,"WebFair Report.xls");
+        return (sa);
+        /*this.mode=this.page+"/"+(this.fairval || "padrao")+"/"+(this.fornval.replace(" ","_") || "padrao")+"/"+(this.amosval.replace(" ","") || "padrao");
+        window.open(link+"#"+this.mode);*/
       }  
-      else                 //other browser not tested on IE 11
+      else{
         sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+        return (sa);
+      }                 //other browser not tested on IE 11
 
-      return (sa);
+
+      
     },
     getSpot:function(a){
       var context=this;
