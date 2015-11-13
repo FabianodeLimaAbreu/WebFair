@@ -120,6 +120,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.prices=[];
       this.select_items=[];
       this.fstatus=null;
+      this.cadstatus=undefined;
       this.fairval="";
       this.fornval="";
       this.amosval="";
@@ -1327,7 +1328,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           }
         });
     },
-    submit:function(a,b,c,d){
+    submit:function(a,b,c,d,fstatus){
       var status,core=this;
       var b=b || "";
       var c=c || "";
@@ -1345,8 +1346,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             core.callService(core.page,a,b,c,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>20000</LINHA_F>','<CREATE_DATE_I>'+core.initialTime+'</CREATE_DATE_I>',"<CREATE_DATE_F>"+core.endTime+"</CREATE_DATE_F>");
           }
           else{
-            //core.callService(core.page,a,b,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>'+((core.content.page+1)*core.itens_by_page)+'</LINHA_F>','<CREATE_DATE_I>'+core.initialTime+'</CREATE_DATE_I>',"<CREATE_DATE_F>"+core.endTime+"</CREATE_DATE_F>");
-            core.callService(core.page,a,b,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>20000</LINHA_F>','<CREATE_DATE_I>'+core.initialTime+'</CREATE_DATE_I>',"<CREATE_DATE_F>"+core.endTime+"</CREATE_DATE_F>");
+            if(typeof fstatus !== "undefined"){
+              fstatus="<FORN_STATUS>"+fstatus+"</FORN_STATUS>";
+            }
+            else{
+              fstatus="";
+            }
+            core.callService(core.page,a,b,fstatus,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>'+((core.content.page+1)*core.itens_by_page)+'</LINHA_F>','<CREATE_DATE_I>'+core.initialTime+'</CREATE_DATE_I>',"<CREATE_DATE_F>"+core.endTime+"</CREATE_DATE_F>");
+            //core.callService(core.page,a,b,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>20000</LINHA_F>','<CREATE_DATE_I>'+core.initialTime+'</CREATE_DATE_I>',"<CREATE_DATE_F>"+core.endTime+"</CREATE_DATE_F>");
           }
         }
       },100);
@@ -1981,7 +1988,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                         });
                         //return 
                         e.active.create(g.render());
-                        (e.page !== "amostras" && e.page !== "template_email") && (e.page === "local" ? $('.bread-search').find(".spec").text(k+1) : $('.bread-search').find(".spec").text(k+1),$('.bread-search').find(".specall").text(a.length)),$("tbody .bstar").unbind("click").bind("click",function(a){context.starForn(a)});
+                        (e.page !== "amostras" && e.page !== "template_email") && (e.page === "local" ? $('.bread-search').find(".spec").text(k+1) : $('.bread-search').find(".spec").text(k+1),(e.page === "fornecedores" ? $('.bread-search').find(".specall").text(h.COUNT_FORN) : $('.bread-search').find(".specall").text(a.length))),$("tbody .bstar").unbind("click").bind("click",function(a){context.starForn(a)});
                         return l--,k++;
                         //, $('.bread-box').find(".bread-load").text(k+1), l--, k++, !1*/
                     } else {
@@ -2151,6 +2158,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       }
       this.callService("cities",'<PAIS_COD>'+$(a.target).find("option:selected").val()+'</PAIS_COD>','<PAIS_DESC></PAIS_DESC>','<REGI_COD></REGI_COD>','<REGI_DESC></REGI_DESC>');
     },
+    /*THis method was deprecated in 10/11/2015 09:56 by Fabiano de Lima
+    Because Supplier's status filter are being using like a Search Param and no more a filter of a complet list.
+
     filterForn:function(ev){
       var aux;
       aux=this.data;
@@ -2164,6 +2174,31 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       //console.dir(this.fdata);
       //this.content.page = 0;
       this.createbox(this.fdata, this.content.page, !0,"list");
+      //console.dir(typeof Boolean($(a.target).find("option:selected").val()));
+    },*/
+
+    filterForn:function(ev){
+      var status;
+      this.reset();
+      
+      if($(ev.target).find("option:selected").val().length){
+        this.cadstatus=$(ev.target).find("option:selected").val().bool();
+      }
+      else{
+        this.cadstatus=undefined;
+      }
+      this.submit("<FEIR_COD>"+(this.fairval || "")+"</FEIR_COD>","<FORN_DESC>"+(this.fornval || "")+"</FORN_DESC>",(this.amosval || ""),!0,this.cadstatus);
+      //e.setloading(!0,!1);
+      //e.submit("<FEIR_COD>"+(e.fairval || "")+"</FEIR_COD>","<FORN_DESC>"+(e.fornval || "")+"</FORN_DESC>",(e.amosval || ""),!0);
+      /*this.fdata = aux.filter(function(a,b){
+        if(Boolean(a[$(ev.target).find("option:selected").attr("name")]) === $(ev.target).find("option:selected").val().bool()){
+          return a;
+        }
+      });
+      this.data=aux;
+      //console.dir(this.fdata);
+      //this.content.page = 0;
+      this.createbox(this.fdata, this.content.page, !0,"list");*/
       //console.dir(typeof Boolean($(a.target).find("option:selected").val()));
     },
     starForn:function(ev){
@@ -3497,8 +3532,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               //console.log("chegou");
               e.content.page++;
               e.setloading(!0,!1);
-              //e.submit("<FEIR_COD>"+(e.fairval || "")+"</FEIR_COD>","<FORN_DESC>"+(e.fornval || "")+"</FORN_DESC>",(e.amosval || ""),!0);
-              e.createbox(e.data, e.content.page, !0,"list");
+              e.submit("<FEIR_COD>"+(e.fairval || "")+"</FEIR_COD>","<FORN_DESC>"+(e.fornval || "")+"</FORN_DESC>",(e.amosval || ""),!0,e.cadstatus);
+              //e.createbox(e.data, e.content.page, !0,"list");
             }
             break;
           case "fornecedor_cadastro":
