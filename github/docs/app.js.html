@@ -127,7 +127,7 @@ require.config({
     sp: "spine"
   }
 });
-require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], function() {
+require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","app/filter"], function() {
   /**
   * Main application class, responsible for all main funcionalities and call anothers classes constructors
   * @exports App
@@ -173,7 +173,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       "click .edit-fair":"editFair",
       "click .fair-save":"saveFair",
       "click .delete-fair":"deleteFair",
-      "click .date-filter":"showPicker",
+      "click .not-autoshow":"showPicker",
       "click .save-date-filter":"submitDateFilter",
       "click .setitem":"SetItemAmos",
       "click .bselection-edit":"selectItem",
@@ -229,6 +229,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       this.prices=[];
       this.select_items=[];
       this.fstatus=null;
+      this.cadstatus=undefined;
       this.fairval="";
       this.fornval="";
       this.amosval="";
@@ -243,7 +244,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         "NOTES":{"clicked":0,"code":0},
         "is_set":0
       };
-
 
 
       this.breadarr = [];
@@ -304,6 +304,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         getPage:this.proxy(this.getPage),
         getInitialTime:this.proxy(this.getInitialTime),
         getEndTime:this.proxy(this.getEndTime)
+      });
+      this.filter = new Filter({
+        getloading: this.proxy(this.getloading),
+        setdata: this.proxy(this.setdata),
+        setloading:this.proxy(this.setloading)
       });
 
       if(!this.fair.length){
@@ -1035,7 +1040,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     },
 
     /**
-    * `This method is called when the user click on filter date's button, this method just set a class to the clicked element.`
+    * `This method is called when the user click on filter not-autoshow's button, this method just set a class to the clicked element.`
     * @memberOf App#
     * @param {event} a. The click event.
     */
@@ -1045,10 +1050,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         return !1;
       }
       $(a.target).addClass("sel");
+      if($(a.target).hasClass('refine-filter')){
+        this.filter.checklist(this.data);
+      }
     },
 
 
     submitDateFilter:function(a){
+      this.setloading(!0,!1);
       this.initialTime=$("input[name='initial_date']").val() || ("2000"+"-"+"01"+"-"+"01");
       this.endTime=$("input[name='end_date']").val() || ("2020-"+"10"+"-"+"10");
       this.fairval=$(".bselect.fair").find("option:selected").val();
@@ -1418,7 +1427,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         $.support.cors=true;
         soapRequest.filter(function(a,b){
           if(a['name'] === name){
-            //console.log(a['code']);
+            console.log(a['code']);
             core.callback=a['callback'];
             core.ajaxrequest=!0;                                                                        
             $.ajax({
@@ -1435,7 +1444,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           }
         });
     },
-    submit:function(a,b,c,d){
+    submit:function(a,b,c,d,fstatus){
       var status,core=this;
       var b=b || "";
       var c=c || "";
@@ -1453,8 +1462,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
             core.callService(core.page,a,b,c,'&lt;LINHA_I>'+(core.content.page*core.itens_by_page+1)+'&lt;/LINHA_I>','&lt;LINHA_F>20000&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+core.initialTime+'&lt;/CREATE_DATE_I>',"&lt;CREATE_DATE_F>"+core.endTime+"&lt;/CREATE_DATE_F>");
           }
           else{
-            //core.callService(core.page,a,b,'&lt;LINHA_I>'+(core.content.page*core.itens_by_page+1)+'&lt;/LINHA_I>','&lt;LINHA_F>'+((core.content.page+1)*core.itens_by_page)+'&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+core.initialTime+'&lt;/CREATE_DATE_I>',"&lt;CREATE_DATE_F>"+core.endTime+"&lt;/CREATE_DATE_F>");
-            core.callService(core.page,a,b,'&lt;LINHA_I>'+(core.content.page*core.itens_by_page+1)+'&lt;/LINHA_I>','&lt;LINHA_F>20000&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+core.initialTime+'&lt;/CREATE_DATE_I>',"&lt;CREATE_DATE_F>"+core.endTime+"&lt;/CREATE_DATE_F>");
+            if(typeof fstatus !== "undefined"){
+              fstatus="&lt;FORN_STATUS>"+fstatus+"&lt;/FORN_STATUS>";
+            }
+            else{
+              fstatus="";
+            }
+            core.callService(core.page,a,b,fstatus,'&lt;LINHA_I>'+(core.content.page*core.itens_by_page+1)+'&lt;/LINHA_I>','&lt;LINHA_F>'+((core.content.page+1)*core.itens_by_page)+'&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+core.initialTime+'&lt;/CREATE_DATE_I>',"&lt;CREATE_DATE_F>"+core.endTime+"&lt;/CREATE_DATE_F>");
+            //core.callService(core.page,a,b,'&lt;LINHA_I>'+(core.content.page*core.itens_by_page+1)+'&lt;/LINHA_I>','&lt;LINHA_F>20000&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+core.initialTime+'&lt;/CREATE_DATE_I>',"&lt;CREATE_DATE_F>"+core.endTime+"&lt;/CREATE_DATE_F>");
           }
         }
       },100);
@@ -1506,6 +1521,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           search="&lt;AMOS_ID>"+$(a.target).val()+"&lt;/AMOS_ID>";
         }
         this.amosval=$(a.target).val();
+        this.setloading(!0,!1);
         this.mode="amostras/"+((""+this.fairval).replace(" ","_") || "padrao")+"/"+(this.fornval.replace(" ","_") || "padrao")+"/"+($(a.target).val().replace(" ","_") || "padrao");
         this.navigate(this.mode, !1);
         this.submit(fair_id,forn_desc,search);
@@ -1531,8 +1547,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       switch(b){
         case 'amostras':
           //this.data = a.sortBy(this.nsort);
+          console.dir(a);
           this.data = a;
           this.content.changeview(this.view);
+          //this.filter.checklist(a);
           //$(".changeview button.b"+this.view);
           if(!$(".changeview button.sel").hasClass('b'+this.view)){
             $(".changeview button").removeClass('sel');
@@ -1837,7 +1855,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
                     v = h.AMOS_ID || null; 
                     //Usando por enquanto o caminho para a imagem large, pois as amostras antigas eram salvas em tamanho muito pequeno
-                    p = new Image, q = imgPath+h.IMG_PATH_SAMPLE.replace("thumb","large"), $(p).load(function() {
+                    p = new Image, q = imgPath+h.IMG_PATH_SAMPLE, $(p).load(function() {
                         if (!l > 0)
                           return !1;
 
@@ -1985,7 +2003,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 
                     v = h.AMOS_ID || null; 
                     //Usando por enquanto o caminho para a imagem large, pois as amostras antigas eram salvas em tamanho muito pequeno
-                    p = new Image, q =imgPath+h.IMG_PATH_SAMPLE.replace("thumb","large"), $(p).load(function() {
+                    p = new Image, q =imgPath+h.IMG_PATH_SAMPLE, $(p).load(function() {
                         if (!l > 0)
                             return !1;
 
@@ -2088,7 +2106,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
                         });
                         //return 
                         e.active.create(g.render());
-                        (e.page !== "amostras" &amp;&amp; e.page !== "template_email") &amp;&amp; (e.page === "local" ? $('.bread-search').find(".spec").text(k+1) : $('.bread-search').find(".spec").text(k+1),$('.bread-search').find(".specall").text(a.length)),$("tbody .bstar").unbind("click").bind("click",function(a){context.starForn(a)});
+                        (e.page !== "amostras" &amp;&amp; e.page !== "template_email") &amp;&amp; (e.page === "local" ? $('.bread-search').find(".spec").text(k+1) : $('.bread-search').find(".spec").text(k+1),(e.page === "fornecedores" ? $('.bread-search').find(".specall").text(h.COUNT_FORN) : $('.bread-search').find(".specall").text(a.length))),$("tbody .bstar").unbind("click").bind("click",function(a){context.starForn(a)});
                         return l--,k++;
                         //, $('.bread-box').find(".bread-load").text(k+1), l--, k++, !1*/
                     } else {
@@ -2258,6 +2276,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       }
       this.callService("cities",'&lt;PAIS_COD>'+$(a.target).find("option:selected").val()+'&lt;/PAIS_COD>','&lt;PAIS_DESC>&lt;/PAIS_DESC>','&lt;REGI_COD>&lt;/REGI_COD>','&lt;REGI_DESC>&lt;/REGI_DESC>');
     },
+    /*THis method was deprecated in 10/11/2015 09:56 by Fabiano de Lima
+    Because Supplier's status filter are being using like a Search Param and no more a filter of a complet list.
+
     filterForn:function(ev){
       var aux;
       aux=this.data;
@@ -2271,6 +2292,31 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       //console.dir(this.fdata);
       //this.content.page = 0;
       this.createbox(this.fdata, this.content.page, !0,"list");
+      //console.dir(typeof Boolean($(a.target).find("option:selected").val()));
+    },*/
+
+    filterForn:function(ev){
+      var status;
+      this.reset();
+      
+      if($(ev.target).find("option:selected").val().length){
+        this.cadstatus=$(ev.target).find("option:selected").val().bool();
+      }
+      else{
+        this.cadstatus=undefined;
+      }
+      this.submit("&lt;FEIR_COD>"+(this.fairval || "")+"&lt;/FEIR_COD>","&lt;FORN_DESC>"+(this.fornval || "")+"&lt;/FORN_DESC>",(this.amosval || ""),!0,this.cadstatus);
+      //e.setloading(!0,!1);
+      //e.submit("&lt;FEIR_COD>"+(e.fairval || "")+"&lt;/FEIR_COD>","&lt;FORN_DESC>"+(e.fornval || "")+"&lt;/FORN_DESC>",(e.amosval || ""),!0);
+      /*this.fdata = aux.filter(function(a,b){
+        if(Boolean(a[$(ev.target).find("option:selected").attr("name")]) === $(ev.target).find("option:selected").val().bool()){
+          return a;
+        }
+      });
+      this.data=aux;
+      //console.dir(this.fdata);
+      //this.content.page = 0;
+      this.createbox(this.fdata, this.content.page, !0,"list");*/
       //console.dir(typeof Boolean($(a.target).find("option:selected").val()));
     },
     starForn:function(ev){
@@ -2420,8 +2466,26 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
           if(Boolean(a["AMOS_STATUS"]) === context.fstatus || context.fstatus === null){
             for(var prop in context.combofilter) {
               if(context.combofilter.is_set){
-                if(context.combofilter[prop].clicked === 1 &amp;&amp; context.combofilter[prop].code === a[prop]){
-                  return a;
+                if(context.combofilter[prop].clicked === 1){
+                  if(prop === "NOTES"){
+                    //Caso seja anotações
+                    if(context.combofilter[prop].code){
+                      if(a['NOTES'].length){
+                        return a;
+                      }
+                    }
+                    else{
+                      if(!a['NOTES'].length){
+                        return a;
+                      }
+                    }
+                  }
+                  else{
+                    //Caso seja boolean normal como favoritos por exemplo
+                    if(context.combofilter[prop].code === a[prop]){
+                      return a;
+                    }
+                  }
                 }
               }
               else{
@@ -3314,16 +3378,22 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       var msie = ua.indexOf("MSIE "); 
       if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
       {
-          txtArea1.document.open("txt/html","replace");
-          txtArea1.document.write(tab_text);
-          txtArea1.document.close();
-          txtArea1.focus(); 
-          sa=txtArea1.document.execCommand("SaveAs",true,"WebFair Report.xls");
+        document.open("txt/html","replace");
+        document.write(tab_text);
+        document.close();
+        
+        var sa = document.execCommand("SaveAs",true,"WebFair Report.xls");
+        return (sa);
+        /*this.mode=this.page+"/"+(this.fairval || "padrao")+"/"+(this.fornval.replace(" ","_") || "padrao")+"/"+(this.amosval.replace(" ","") || "padrao");
+        window.open(link+"#"+this.mode);*/
       }  
-      else                 //other browser not tested on IE 11
+      else{
         sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+        return (sa);
+      }                 //other browser not tested on IE 11
 
-      return (sa);
+
+      
     },
     getSpot:function(a){
       var context=this;
@@ -3580,8 +3650,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
               //console.log("chegou");
               e.content.page++;
               e.setloading(!0,!1);
-              //e.submit("&lt;FEIR_COD>"+(e.fairval || "")+"&lt;/FEIR_COD>","&lt;FORN_DESC>"+(e.fornval || "")+"&lt;/FORN_DESC>",(e.amosval || ""),!0);
-              e.createbox(e.data, e.content.page, !0,"list");
+              e.submit("&lt;FEIR_COD>"+(e.fairval || "")+"&lt;/FEIR_COD>","&lt;FORN_DESC>"+(e.fornval || "")+"&lt;/FORN_DESC>",(e.amosval || ""),!0,e.cadstatus);
+              //e.createbox(e.data, e.content.page, !0,"list");
             }
             break;
           case "fornecedor_cadastro":
@@ -3764,7 +3834,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Wed Oct 21st 2015 using the <a
+		on Thu Dec 17th 2015 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>

@@ -799,6 +799,11 @@ header{
 				background: @dark-text;
 				color: #fff;
 			}
+			&.off{
+				background: none;
+				color:#c5c5c7;
+				cursor: default;
+			}
 		}
 		span{
 			float: right;
@@ -829,20 +834,21 @@ header{
 		border-radius: 0 0 10px 10px;
 		border: solid 1px #bcc0ce;	
 		width:720px;
-		height:45px;
+		height:auto;
 		&.tooltip-content{
 			&:before{
 			background-image: none;
 			}
 		}
 		li{
-			
 			width:50%;
-			height:20px;
+			height:45px;
 			a{
+				padding: 0;
+				line-height: 45px;
 				margin-top: -7px;
 				width:100%;
-				height:43px;
+				height:45px;
 				&:hover{
 					color: @dark-text;
 					background-color: #d9e7f2;
@@ -876,10 +882,10 @@ header{
 	button:hover+.tooltip-content {
 		display: block;
 	}
-	button.date-filter:hover+.tooltip-content{
+	button.not-autoshow:hover+.tooltip-content{
 		display: none;
 	}
-	button.date-filter.sel+.tooltip-content{
+	button.not-autoshow.sel+.tooltip-content{
 		display: block;
 	}
 }

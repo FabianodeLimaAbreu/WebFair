@@ -18,7 +18,7 @@ require.config({
     sp: "spine"
   }
 });
-require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], function() {
+require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","app/filter"], function() {
   /**
   * Main application class, responsible for all main funcionalities and call anothers classes constructors
   * @exports App
@@ -64,7 +64,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       "click .edit-fair":"editFair",
       "click .fair-save":"saveFair",
       "click .delete-fair":"deleteFair",
-      "click .date-filter":"showPicker",
+      "click .not-autoshow":"showPicker",
       "click .save-date-filter":"submitDateFilter",
       "click .setitem":"SetItemAmos",
       "click .bselection-edit":"selectItem",
@@ -137,7 +137,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       };
 
 
-
       this.breadarr = [];
       this.usr = jQuery.parseJSON($.cookie("webfair"));
       if(!this.usr)
@@ -196,6 +195,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         getPage:this.proxy(this.getPage),
         getInitialTime:this.proxy(this.getInitialTime),
         getEndTime:this.proxy(this.getEndTime)
+      });
+      this.filter = new Filter({
+        getloading: this.proxy(this.getloading),
+        setdata: this.proxy(this.setdata),
+        setloading:this.proxy(this.setloading)
       });
 
       if(!this.fair.length){
@@ -927,7 +931,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
     },
 
     /**
-    * `This method is called when the user click on filter date's button, this method just set a class to the clicked element.`
+    * `This method is called when the user click on filter not-autoshow's button, this method just set a class to the clicked element.`
     * @memberOf App#
     * @param {event} a. The click event.
     */
@@ -937,6 +941,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
         return !1;
       }
       $(a.target).addClass("sel");
+      if($(a.target).hasClass('refine-filter')){
+        this.filter.checklist(this.data);
+      }
     },
 
 
@@ -1431,8 +1438,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail"], 
       switch(b){
         case 'amostras':
           //this.data = a.sortBy(this.nsort);
+          console.dir(a);
           this.data = a;
           this.content.changeview(this.view);
+          //this.filter.checklist(a);
           //$(".changeview button.b"+this.view);
           if(!$(".changeview button.sel").hasClass('b'+this.view)){
             $(".changeview button").removeClass('sel');
