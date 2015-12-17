@@ -198,7 +198,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       });
       this.filter = new Filter({
         getloading: this.proxy(this.getloading),
-        setdata: this.proxy(this.setdata),
+        content:this.content,
+        Componentfilter:this.proxy(this.Componentfilter),
         setloading:this.proxy(this.setloading)
       });
 
@@ -1438,7 +1439,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       switch(b){
         case 'amostras':
           //this.data = a.sortBy(this.nsort);
-          console.dir(a);
           this.data = a;
           this.content.changeview(this.view);
           //this.filter.checklist(a);
@@ -2348,7 +2348,15 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
     Componentfilter:function(data,page,d,view,haslength){
       //Componente para todos os filtros, vou passar em todo o data e filtrar todos os filtros sempre que o filtro for mudado.
       var aux,context=this,status,i;
-      aux=this.data;
+      if(this.filter.list.length){
+        if(!data.length){
+          return this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0), $('.bread-search').find(".spec").text("0 Resultados");
+        }
+        aux=context.filter.confirm(this.data,!0);
+      }
+      else{
+        aux=this.data;
+      }
       this.prices=[];
       this.prices.push($("input[name='initial_price']").val() || 0);
       this.prices.push($("input[name='end_price']").val() || 100000);
@@ -2418,7 +2426,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.cookiefair.push(scroll);
       //console.dir(scroll);
       //$.cookie("posscroll", scroll, {expires:7, path:"/"});
-      this.data=aux;
+      if(!this.filter.list.length){
+        this.data=aux;
+      }      
       this.setloading(!1);
       this.createbox(this.fdata, page,d,view,haslength);
     },
