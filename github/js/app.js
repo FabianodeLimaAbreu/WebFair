@@ -118,6 +118,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.email=[];
       this.segm=[];
       this.prices=[];
+      this.refine=[];
       this.select_items=[];
       this.fstatus=null;
       this.cadstatus=undefined;
@@ -223,7 +224,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         },
         "amostras/*fairval/*fornval/*amosval":function(res){
           var a,b,c;
-          //console.dir(this.cookiefair);
+          console.dir(this.cookiefair);
           this.filterisdone=!0;
           this.fairval = a=res.fairval !== "padrao" ? parseInt(res.fairval) : ""; 
           this.fornval = b=res.fornval !== "padrao" ? res.fornval.replace("_"," ").replace("_"," ").replace("_"," ") : "";
@@ -235,6 +236,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               this.initialTime=this.cookiefair[0].dates[0];
               this.endTime=this.cookiefair[0].dates[1];
               this.prices=this.cookiefair[0].prices;
+              this.refine=this.cookiefair[0].refine;
               this.combofilter=this.cookiefair[0].combofilter;
               this.fstatus=this.cookiefair[0].fstatus;
               this.nsort=this.cookiefair[0].nsort;
@@ -256,6 +258,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 this.initialTime=this.cookiefair[0].dates[0];
                 this.endTime=this.cookiefair[0].dates[1];
                 this.prices=this.cookiefair[0].prices;
+                this.refine=this.cookiefair[0].refine;
                 this.combofilter=this.cookiefair[0].combofilter;
                 this.fstatus=this.cookiefair[0].fstatus;
                 this.nsort=this.cookiefair[0].nsort;
@@ -327,6 +330,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             this.initialTime=this.cookiefair[0].dates[0];
             this.endTime=this.cookiefair[0].dates[1];
             this.prices=this.cookiefair[0].prices;
+            this.refine=this.cookiefair[0].refine;
             this.fstatus=this.cookiefair[0].fstatus;
             this.nsort=this.cookiefair[0].nsort;
             this.combofilter=this.cookiefair[0].combofilter;
@@ -336,6 +340,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               this.initialTime=this.cookiefair[0].dates[0];
               this.endTime=this.cookiefair[0].dates[1];
               this.prices=this.cookiefair[0].prices;
+              this.refine=this.cookiefair[0].refine;
               this.combofilter=this.cookiefair[0].combofilter;
               this.fstatus=this.cookiefair[0].fstatus;
               this.nsort=this.cookiefair[0].nsort;
@@ -357,6 +362,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 this.initialTime=this.cookiefair[0].dates[0];
                 this.endTime=this.cookiefair[0].dates[1];
                 this.prices=this.cookiefair[0].prices;
+                this.refine=this.cookiefair[0].refine;
                 this.combofilter=this.cookiefair[0].combofilter;
                 this.fstatus=this.cookiefair[0].fstatus;
                 this.nsort=this.cookiefair[0].nsort;
@@ -1440,6 +1446,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         case 'amostras':
           //this.data = a.sortBy(this.nsort);
           this.data = a;
+          console.dir(this.data);
           this.content.changeview(this.view);
           //this.filter.checklist(a);
           //$(".changeview button.b"+this.view);
@@ -1454,6 +1461,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               "amosval":""+this.amosval,
               "dates":[this.initialTime,this.endTime],
               "prices":this.prices,
+              "refine":this.filter.list,
               "combofilter":this.combofilter,
               "fstatus":this.fstatus,
               "nsort":this.nsort,
@@ -2409,6 +2417,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         "amosval":""+this.amosval,
         "dates":[this.initialTime,this.endTime],
         "prices":this.prices,
+        "refine":this.filter.list,
         "combofilter":this.combofilter,
         "fstatus":this.fstatus,
         "nsort":this.nsort,
@@ -2782,7 +2791,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 
     },
     setCompositions:function(a){
-      //console.log("SET COMPOSITIONS");
+      console.log("SET COMPOSITIONS");
       var length,context=this,l=0,obj,status;
       if($(a.target).prop("tagName") ===  "SPAN"){
         a.preventDefault();
@@ -2799,6 +2808,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       }
       this.setloading(!0,!1);
       if(obj.attr("name") === "COMP"){
+        //debugger;
         status=setInterval(function(){
           if(l<length){
             var html="";
@@ -2807,9 +2817,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 elem.COMPOSITIONS.push({"COMP_COD":obj.attr("href").replace("#",""),"COMP_DESC":obj.attr("title")})
               }
             });
+
             $("#"+context.select_items[l].AMOS_ID+" .caption-downside ul").append("<li><a href='#"+obj.attr('href').replace("#","")+"' name='"+context.select_items[l].AMOS_ID+"'>"+obj.attr('title').toUpperCase()+"</a></li>");
             $("#"+context.select_items[l].AMOS_ID+" .caption-downside a").each(function(index, el) {
-              if($(el).attr("href").replace("#","") !== "M" && $(el).attr("href").replace("#","") !== "P"){
+              if($(el).attr("href").replace("#","") !== "M" && $(el).attr("href").replace("#","") !== "P" && $(el).attr("href").replace("#","") !== "null"){
                 html+="<Composition><COMP_COD>"+$(el).attr("href").replace("#","")+"</COMP_COD><COMP_OTHERS></COMP_OTHERS><TP_COMP_ID>1</TP_COMP_ID></Composition>";
               }
             });
@@ -2876,7 +2887,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       //this.callService("gravarAmostraComposicao","102004997","<Composition><COMP_COD>CL_1</COMP_COD><COMP_OTHERS></COMP_OTHERS><TP_COMP_ID>1</TP_COMP_ID></Composition>");
     },
     compChange:function(ev){
-      //console.log("COMP CHANGE");
+      console.log("COMP CHANGE");
       ev.preventDefault();
       var aux,html="",context=this;
       if(typeof ev === "object"){
@@ -2891,7 +2902,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         el.parent().remove();
         var items=aux.find("a");
         $("#"+code+" .caption-downside a").each(function(index, el) {
-          if($(el).attr("href").replace("#","") !== "M" && $(el).attr("href").replace("#","") !== "P"){
+          if($(el).attr("href").replace("#","") !== "M" && $(el).attr("href").replace("#","") !== "P" && $(el).attr("href").replace("#","") !== "null"){
             html+="<Composition><COMP_COD>"+$(el).attr("href").replace("#","")+"</COMP_COD><COMP_OTHERS></COMP_OTHERS><TP_COMP_ID>1</TP_COMP_ID></Composition>";
           }
         });
@@ -3492,6 +3503,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 "amosval":""+e.amosval,
                 "dates":[e.initialTime,e.endTime],
                 "prices":e.prices,
+                "refine":e.filter.list,
                 "combofilter":e.combofilter,
                 "fstatus":e.fstatus,
                 "nsort":e.nsort,
@@ -3534,6 +3546,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 "amosval":""+e.amosval,
                 "dates":[e.initialTime,e.endTime],
                 "prices":e.prices,
+                "refine":e.filter.list,
                 "combofilter":e.combofilter,
                 "fstatus":e.fstatus,
                 "nsort":e.nsort,
@@ -3631,6 +3644,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             $(".filterlist a[name='"+prop+"'][href='"+this.combofilter[prop].code+"']").addClass('sel');
           }
         }
+      }
+
+      console.dir(this.refine);
+      if(this.refine.length){
+        //Fazer o trigger no filtro
+        $(".refine-container").addClass('has');
+        this.filter.list=this.refine;
+        this.filter.data=this.data;
       }
 
       if(this.initialTime !== "2000-01-01" || this.endTime !== "2020-10-10"){

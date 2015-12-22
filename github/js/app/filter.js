@@ -101,7 +101,10 @@ elements:{
     b = b || this.data;
       if("COMPOSITIONS" !== a.bt) {
         return b.filter(function(b) {
-          return b[a.bt] && -1 !== b[a.bt].toLowerCase().indexOf(a.ft);
+          //console.log(b[a.bt].toLowerCase()+" , "+a.ft);
+          return b[a.bt] && b[a.bt].toLowerCase() === a.ft;
+          //return b[a.bt] && -1 !== a.ft.indexOf(b[a.bt].toLowerCase());
+          //return b[a.bt] && -1 !== b[a.bt].toLowerCase().indexOf(a.ft);
         });
       }
       if(!a.pc) {
@@ -155,6 +158,7 @@ elements:{
         if(cookie){
           return g.unique();
         }
+
         //console.log(g.length);
         $(".overview-container").remove();
         this.content.reset();
@@ -168,7 +172,8 @@ elements:{
     }
     else{ 
       if(cookie){
-        return this.data;
+        return console.log("COOKIE");
+        //return this.data;
       }
       $(".overview-container").remove();
       this.content.reset();

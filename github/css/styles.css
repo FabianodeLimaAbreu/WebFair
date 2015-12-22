@@ -801,6 +801,11 @@ header .logo-print {
 }
 .tooltip-content.search-refine {
   border-radius: 10px 10px 0 0;
+  /*span{
+			float: right;
+			margin-top:-10px;
+			display: none;
+		}*/
 }
 .tooltip-content.search-refine a {
   border-radius: 10px;
@@ -821,11 +826,6 @@ header .logo-print {
   color: #c5c5c7;
   cursor: default;
 }
-.tooltip-content.search-refine span {
-  float: right;
-  margin-top: -10px;
-  display: none;
-}
 .tooltip-content.search-refine li {
   text-align: center;
   padding: 0;
@@ -836,6 +836,15 @@ header .logo-print {
 }
 .tooltip-content.search-refine li.last-div {
   border-right: solid 1px #e6ebf0;
+}
+.tooltip-content.search-refine li .topcount {
+  position: absolute;
+  right: 3px;
+  background: #7abecc;
+  padding: 2px;
+  color: #fff;
+  border-radius: 6px;
+  top: 0;
 }
 .tooltip-content.search-refine button {
   margin: -5px 0 0 5px;

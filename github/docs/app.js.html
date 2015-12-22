@@ -307,7 +307,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       });
       this.filter = new Filter({
         getloading: this.proxy(this.getloading),
-        setdata: this.proxy(this.setdata),
+        content:this.content,
+        Componentfilter:this.proxy(this.Componentfilter),
         setloading:this.proxy(this.setloading)
       });
 
@@ -1547,8 +1548,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       switch(b){
         case 'amostras':
           //this.data = a.sortBy(this.nsort);
-          console.dir(a);
           this.data = a;
+          console.dir(this.data);
           this.content.changeview(this.view);
           //this.filter.checklist(a);
           //$(".changeview button.b"+this.view);
@@ -2457,7 +2458,15 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
     Componentfilter:function(data,page,d,view,haslength){
       //Componente para todos os filtros, vou passar em todo o data e filtrar todos os filtros sempre que o filtro for mudado.
       var aux,context=this,status,i;
-      aux=this.data;
+      if(this.filter.list.length){
+        if(!data.length){
+          return this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0), $('.bread-search').find(".spec").text("0 Resultados");
+        }
+        aux=context.filter.confirm(this.data,!0);
+      }
+      else{
+        aux=this.data;
+      }
       this.prices=[];
       this.prices.push($("input[name='initial_price']").val() || 0);
       this.prices.push($("input[name='end_price']").val() || 100000);
@@ -2527,7 +2536,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.cookiefair.push(scroll);
       //console.dir(scroll);
       //$.cookie("posscroll", scroll, {expires:7, path:"/"});
-      this.data=aux;
+      if(!this.filter.list.length){
+        this.data=aux;
+      }      
       this.setloading(!1);
       this.createbox(this.fdata, page,d,view,haslength);
     },
@@ -2881,7 +2892,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 
     },
     setCompositions:function(a){
-      //console.log("SET COMPOSITIONS");
+      console.log("SET COMPOSITIONS");
       var length,context=this,l=0,obj,status;
       if($(a.target).prop("tagName") ===  "SPAN"){
         a.preventDefault();
@@ -2898,6 +2909,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       }
       this.setloading(!0,!1);
       if(obj.attr("name") === "COMP"){
+        //debugger;
         status=setInterval(function(){
           if(l&lt;length){
             var html="";
@@ -2906,9 +2918,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 elem.COMPOSITIONS.push({"COMP_COD":obj.attr("href").replace("#",""),"COMP_DESC":obj.attr("title")})
               }
             });
+
             $("#"+context.select_items[l].AMOS_ID+" .caption-downside ul").append("&lt;li>&lt;a href='#"+obj.attr('href').replace("#","")+"' name='"+context.select_items[l].AMOS_ID+"'>"+obj.attr('title').toUpperCase()+"&lt;/a>&lt;/li>");
             $("#"+context.select_items[l].AMOS_ID+" .caption-downside a").each(function(index, el) {
-              if($(el).attr("href").replace("#","") !== "M" &amp;&amp; $(el).attr("href").replace("#","") !== "P"){
+              if($(el).attr("href").replace("#","") !== "M" &amp;&amp; $(el).attr("href").replace("#","") !== "P" &amp;&amp; $(el).attr("href").replace("#","") !== "null"){
                 html+="&lt;Composition>&lt;COMP_COD>"+$(el).attr("href").replace("#","")+"&lt;/COMP_COD>&lt;COMP_OTHERS>&lt;/COMP_OTHERS>&lt;TP_COMP_ID>1&lt;/TP_COMP_ID>&lt;/Composition>";
               }
             });
@@ -2975,7 +2988,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       //this.callService("gravarAmostraComposicao","102004997","&lt;Composition>&lt;COMP_COD>CL_1&lt;/COMP_COD>&lt;COMP_OTHERS>&lt;/COMP_OTHERS>&lt;TP_COMP_ID>1&lt;/TP_COMP_ID>&lt;/Composition>");
     },
     compChange:function(ev){
-      //console.log("COMP CHANGE");
+      console.log("COMP CHANGE");
       ev.preventDefault();
       var aux,html="",context=this;
       if(typeof ev === "object"){
@@ -2990,7 +3003,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         el.parent().remove();
         var items=aux.find("a");
         $("#"+code+" .caption-downside a").each(function(index, el) {
-          if($(el).attr("href").replace("#","") !== "M" &amp;&amp; $(el).attr("href").replace("#","") !== "P"){
+          if($(el).attr("href").replace("#","") !== "M" &amp;&amp; $(el).attr("href").replace("#","") !== "P" &amp;&amp; $(el).attr("href").replace("#","") !== "null"){
             html+="&lt;Composition>&lt;COMP_COD>"+$(el).attr("href").replace("#","")+"&lt;/COMP_COD>&lt;COMP_OTHERS>&lt;/COMP_OTHERS>&lt;TP_COMP_ID>1&lt;/TP_COMP_ID>&lt;/Composition>";
           }
         });
@@ -3834,7 +3847,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Thu Dec 17th 2015 using the <a
+		on Mon Dec 21st 2015 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>
