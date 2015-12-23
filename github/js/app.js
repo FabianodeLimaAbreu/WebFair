@@ -253,7 +253,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             if(jQuery.parseJSON($.cookie("posscroll"))){
               this.cookiefair.push(jQuery.parseJSON($.cookie("posscroll")));
               if(a == this.cookiefair[0].fairval && b === this.cookiefair[0].fornval  && c === this.cookiefair[0].amosval ){
-                //console.dir(this.cookiefair[0]);
+                console.dir(this.cookiefair[0]);
                 //console.log("bateu parametros do cookie");
                 this.initialTime=this.cookiefair[0].dates[0];
                 this.endTime=this.cookiefair[0].dates[1];
@@ -1438,15 +1438,15 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 
       
 
-      if (!this.data.length && b !="local") {        
-        return this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0), $('.bread-search').find(".spec").text("0 Resultados"),$("input[name='initial_date']").datepicker('setDate', this.initialTime.slice(0,4)+'-'+this.initialTime.slice(5, 7)+"-"+this.initialTime.slice(8, 10)),$("input[name='end_date']").datepicker('setDate', this.endTime.slice(0,4)+'-'+this.endTime.slice(5, 7)+"-"+this.endTime.slice(8, 10)),this.setloading(!1);;
+      if (!this.data.length && b !="local") {    
+        return this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0), $(".overview-container").remove(),$('<div class="brea"></div>d-search').find(".spec").text("0 Resultados"),$("input[name='initial_date']").datepicker('setDate', this.initialTime.slice(0,4)+'-'+this.initialTime.slice(5, 7)+"-"+this.initialTime.slice(8, 10)),$("input[name='end_date']").datepicker('setDate', this.endTime.slice(0,4)+'-'+this.endTime.slice(5, 7)+"-"+this.endTime.slice(8, 10)),this.setloading(!1);;
         //return this.modal.open(),this.breadEl.find('.bread-colec a').text("").removeClass('active'),this.setloading(!1), this.searchEl.find('input').blur();
       }  
       switch(b){
         case 'amostras':
           //this.data = a.sortBy(this.nsort);
           this.data = a;
-          console.dir(this.data);
+          //console.dir(this.data);
           this.content.changeview(this.view);
           //this.filter.checklist(a);
           //$(".changeview button.b"+this.view);
@@ -1502,18 +1502,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           //console.log("ALGO ERRADO");
       }
       ("images" !== this.view) ? this.scroll($("table tbody")) : this.scroll();
-      /*if(b){
-        
-      }
-      else{
-        
-      }*/
-      
-      /*this.content.page = 0;
-      
-      b ? (this.data = this.data || this.data) : this.data = this.data;*/
-      
-      //this.content.create(this.data[0]);
             
     },
     callRequest:function(data, status, req){
@@ -2316,7 +2304,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       else{
         $(".status.tooltip-selectable").removeClass('has');
       }
-      this.Componentfilter(this.fdata, 0, !0);
+      this.Componentfilter(this.data, 0, !0);
     },AmosByPrice:function(){
       $(".container-fullsize.scroller").scrollTop(0);
       this.itens = $([]);
@@ -2350,19 +2338,126 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       else{
          $(".tooltip-filter").removeClass('has');
       }
-      this.Componentfilter(this.fdata, 0, !0);
+      this.Componentfilter(this.data, 0, !0);
     },
+
+    /*
+    Componentfilter:function(data,page,d,view,haslength){
+      //Componente para todos os filtros, vou passar em todo o data e filtrar todos os filtros sempre que o filtro for mudado.
+      var aux,context=this,status,i;
+      if(this.filter.list.length){
+        $(".refine-container").addClass('has');
+        debugger;
+        if(!data.length){
+          debugger;
+          console.dir(this.fdata);
+          console.dir(this.data);
+          return this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0), $('.bread-search').find(".spec").text("0 Resultados");
+        }
+        debugger;
+        console.dir(this.fdata);
+          console.dir(this.data);
+        aux=context.filter.confirm(this.data,!0);
+      }
+      else{
+        debugger;
+        console.dir(this.fdata);
+        console.dir(this.data);
+        $(".refine-container").removeClass('has');
+        aux=this.data;
+      }
+      this.prices=[];
+      this.prices.push($("input[name='initial_price']").val() || 0);
+      this.prices.push($("input[name='end_price']").val() || 100000);
+      this.fdata = aux.filter(function(a,b){
+        if(parseInt(a["AMOS_PRECO"]) >= parseInt(context.prices[0]) && parseInt(a["AMOS_PRECO"]) <= parseInt(context.prices[1])){
+          if(Boolean(a["AMOS_STATUS"]) === context.fstatus || context.fstatus === null){
+            for(var prop in context.combofilter) {
+              if(context.combofilter.is_set){
+                if(context.combofilter[prop].clicked === 1){
+                  if(prop === "NOTES"){
+                    //Caso seja anotações
+                    if(context.combofilter[prop].code){
+                      if(a['NOTES'].length){
+                        return a;
+                      }
+                    }
+                    else{
+                      if(!a['NOTES'].length){
+                        return a;
+                      }
+                    }
+                  }
+                  else{
+                    //Caso seja boolean normal como favoritos por exemplo
+                    if(context.combofilter[prop].code === a[prop]){
+                      return a;
+                    }
+                  }
+                }
+              }
+              else{
+                return a;
+              }
+            }
+          }
+        }
+        
+      });
+      if(!this.fdata.length){
+        debugger;
+        this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0);
+        this.setloading(!1);
+        $('.bread-search').find(".spec").text("0 Amostras");
+        this.data=aux;
+        return !1;
+      }
+
+      var scroll={
+        "fornval":''+this.fornval,
+        "fairval":''+this.fairval,
+        "amosval":""+this.amosval,
+        "dates":[this.initialTime,this.endTime],
+        "prices":this.prices,
+        "refine":this.filter.list,
+        "combofilter":this.combofilter,
+        "fstatus":this.fstatus,
+        "nsort":this.nsort,
+        "view":""+this.view,
+        "posscroll":this.cookiefair[0].posscroll,
+        "total": 20
+      };
+
+      if(this.prices[0] != this.cookiefair[0].prices[0] || this.prices[1] != this.cookiefair[0].prices[1] || context.fstatus !== this.cookiefair[0].fstatus || this.cookiefair[0].combofilter.is_set !== context.combofilter.is_set){
+        scroll.posscroll=0;
+      }
+      
+      $.cookie.json = !0;
+      this.cookiefair=[];
+      this.cookiefair.push(scroll);
+      //console.dir(scroll);
+      //$.cookie("posscroll", scroll, {expires:7, path:"/"});
+      if(!this.filter.list.length){
+        debugger;
+        this.data=aux;
+      }      
+      this.setloading(!1);
+      this.createbox(this.fdata, page,d,view,haslength);
+    },*/
 
     Componentfilter:function(data,page,d,view,haslength){
       //Componente para todos os filtros, vou passar em todo o data e filtrar todos os filtros sempre que o filtro for mudado.
       var aux,context=this,status,i;
       if(this.filter.list.length){
+        $(".refine-container").addClass('has');
         if(!data.length){
           return this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0), $('.bread-search').find(".spec").text("0 Resultados");
         }
+        this.fdata=this.data;
         aux=context.filter.confirm(this.data,!0);
       }
       else{
+        $(".refine-container").removeClass('has');
         aux=this.data;
       }
       this.prices=[];
@@ -2406,8 +2501,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       if(!this.fdata.length){
         this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0);
         this.setloading(!1);
+        this.data=this.data;
+        //debugger;
         $('.bread-search').find(".spec").text("0 Amostras");
-        this.data=aux;
         return !1;
       }
 
@@ -2433,11 +2529,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       $.cookie.json = !0;
       this.cookiefair=[];
       this.cookiefair.push(scroll);
-      //console.dir(scroll);
-      //$.cookie("posscroll", scroll, {expires:7, path:"/"});
       if(!this.filter.list.length){
+        //debugger;
         this.data=aux;
-      }      
+      }  
       this.setloading(!1);
       this.createbox(this.fdata, page,d,view,haslength);
     },
@@ -3519,7 +3614,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             }
 
 
-            //console.log(d+" , "+f);
+            console.log(d+" , "+f);
             if (d >= f && b) {
               e.content.page++;
               e.setloading(!0,!1);
@@ -3646,10 +3741,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         }
       }
 
-      console.dir(this.refine);
       if(this.refine.length){
         //Fazer o trigger no filtro
-        $(".refine-container").addClass('has');
         this.filter.list=this.refine;
         this.filter.data=this.data;
       }
@@ -3671,6 +3764,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.itens = $([]);
       this.select_items = [];
       this.itens.remove();
+      this.filter.reset();
       this.unable_select=!1;
       this.thanks=!1;
       this.content.reset();
@@ -3682,6 +3776,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.unable_select=!1;
       this.cookiefair=[];
       this.prices=[];
+      this.refine=[];
       this.fstatus=null;
       this.fairval="";
       this.fornval="";
@@ -3731,6 +3826,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       };
       $(".filterlist a").removeClass('sel');
       $(".tooltip-filter").removeClass('has');
+
+      $(".refine a").removeClass('sel').addClass('unsel');
+      $(".not-autoshow").removeClass('sel');
+      $(".sub-refine").addClass('hide').hide().find("ul").empty();
     }
   });
   new App;

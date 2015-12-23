@@ -60,7 +60,8 @@ elements:{
             return c.bt === b && (c.ft === a || c.ft.toUpperCase() === a.toUpperCase());
         }) : !1;
         c = parseInt(c) || c.length ? "sel" : " ";
-        e.push('<li><a href="#" data="' + a + '" class="'+c+'">' + a.capitalize() + "</a></li>");
+        f = (-1 !== a.indexOf('oz')) ? a : a.capitalize();
+        e.push('<li><a href="#" data="' + a + '" class="'+c+'">' + f + "</a></li>");
     });
     $(".sub-refine ul").html(e.join(""));
 },getfilter:function(a){
@@ -86,7 +87,6 @@ elements:{
 },checklist:function(a){
     this.callerEvents();
     this.data = a;
-    console.dir(a);
     var b, c;
     a = $(".refine .unsel");
     b = this;
@@ -130,11 +130,14 @@ elements:{
         //console.dir(d);
         return d;
       }
-  },confirm:function(a,cookie){
+  },confirm:function(arr,cookie){
     var b, c, d, e = this, f, g;
     this.list = this.list.sortBy("id");
     //$(".filter_list li span").text(0).addClass('hide');
+    console.dir($(".refine li span"));
+    $(".refine li span").text(0).addClass('hide');
     c = this.list.map(function(a, b) {
+      $(".refine a[href='#"+a.bt+"']").parent().find("span").removeClass('hide').html(parseInt($(".refine a[href='#"+a.bt+"']").parent().find("span").html())+1);
       //$(".filter_list a[href='#"+a.bt+"']").parent().find("span").removeClass('hide').html(parseInt($(".filter_list a[href='#"+a.bt+"']").parent().find("span").html())+1);
         return a.id;
     });
@@ -150,8 +153,8 @@ elements:{
           //console.log(a.bt +" "+ a.ft +" "+ d.length);
         }), g = d;
         if(!g.length){
+          //debugger;
           return $(".overview-container").remove(),this.close(),this.content.reset(),this.Componentfilter(g.unique(), 0, !0),!1;
-          //return this.resetOptFilter(),this.setdata(g.unique()), this.close(), !1; 
         }
       }
       if(g){
@@ -172,9 +175,10 @@ elements:{
     }
     else{ 
       if(cookie){
-        return console.log("COOKIE");
-        //return this.data;
+        //return console.log("COOKIE");
+        return this.data;
       }
+      //debugger;
       $(".overview-container").remove();
       this.content.reset();
       this.Componentfilter(this.data, 0, !0);
@@ -184,7 +188,11 @@ elements:{
 },close:function(){
   $(".refine a").removeClass('sel').addClass('unsel');
   $(".not-autoshow").removeClass('sel');
-  $(".sub-refine").addClass('hide').hide().find("ul").empty();;
+  $(".sub-refine").addClass('hide').hide().find("ul").empty();
+},
+reset:function(){
+  this.list = [];
+  this.data = null;
 },
 init:function() {
   this.list = [];
