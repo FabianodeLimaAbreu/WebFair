@@ -36,6 +36,10 @@
 						</li>
 						
 						<li>
+							<a href="module-Filter.html">Filter</a>
+						</li>
+						
+						<li>
 							<a href="module-Fornecedores.html">Fornecedores</a>
 						</li>
 						
@@ -67,6 +71,10 @@
 						
 						<li>
 							<a href="Detail.html">Detail</a>
+						</li>
+						
+						<li>
+							<a href="Filter.html">Filter</a>
 						</li>
 						
 						<li>
@@ -227,6 +235,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.email=[];
       this.segm=[];
       this.prices=[];
+      this.refine=[];
       this.select_items=[];
       this.fstatus=null;
       this.cadstatus=undefined;
@@ -332,7 +341,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         },
         "amostras/*fairval/*fornval/*amosval":function(res){
           var a,b,c;
-          //console.dir(this.cookiefair);
+          console.dir(this.cookiefair);
           this.filterisdone=!0;
           this.fairval = a=res.fairval !== "padrao" ? parseInt(res.fairval) : ""; 
           this.fornval = b=res.fornval !== "padrao" ? res.fornval.replace("_"," ").replace("_"," ").replace("_"," ") : "";
@@ -344,6 +353,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               this.initialTime=this.cookiefair[0].dates[0];
               this.endTime=this.cookiefair[0].dates[1];
               this.prices=this.cookiefair[0].prices;
+              this.refine=this.cookiefair[0].refine;
               this.combofilter=this.cookiefair[0].combofilter;
               this.fstatus=this.cookiefair[0].fstatus;
               this.nsort=this.cookiefair[0].nsort;
@@ -360,11 +370,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             if(jQuery.parseJSON($.cookie("posscroll"))){
               this.cookiefair.push(jQuery.parseJSON($.cookie("posscroll")));
               if(a == this.cookiefair[0].fairval &amp;&amp; b === this.cookiefair[0].fornval  &amp;&amp; c === this.cookiefair[0].amosval ){
-                //console.dir(this.cookiefair[0]);
+                console.dir(this.cookiefair[0]);
                 //console.log("bateu parametros do cookie");
                 this.initialTime=this.cookiefair[0].dates[0];
                 this.endTime=this.cookiefair[0].dates[1];
                 this.prices=this.cookiefair[0].prices;
+                this.refine=this.cookiefair[0].refine;
                 this.combofilter=this.cookiefair[0].combofilter;
                 this.fstatus=this.cookiefair[0].fstatus;
                 this.nsort=this.cookiefair[0].nsort;
@@ -436,6 +447,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             this.initialTime=this.cookiefair[0].dates[0];
             this.endTime=this.cookiefair[0].dates[1];
             this.prices=this.cookiefair[0].prices;
+            this.refine=this.cookiefair[0].refine;
             this.fstatus=this.cookiefair[0].fstatus;
             this.nsort=this.cookiefair[0].nsort;
             this.combofilter=this.cookiefair[0].combofilter;
@@ -445,6 +457,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               this.initialTime=this.cookiefair[0].dates[0];
               this.endTime=this.cookiefair[0].dates[1];
               this.prices=this.cookiefair[0].prices;
+              this.refine=this.cookiefair[0].refine;
               this.combofilter=this.cookiefair[0].combofilter;
               this.fstatus=this.cookiefair[0].fstatus;
               this.nsort=this.cookiefair[0].nsort;
@@ -466,6 +479,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 this.initialTime=this.cookiefair[0].dates[0];
                 this.endTime=this.cookiefair[0].dates[1];
                 this.prices=this.cookiefair[0].prices;
+                this.refine=this.cookiefair[0].refine;
                 this.combofilter=this.cookiefair[0].combofilter;
                 this.fstatus=this.cookiefair[0].fstatus;
                 this.nsort=this.cookiefair[0].nsort;
@@ -1541,15 +1555,15 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 
       
 
-      if (!this.data.length &amp;&amp; b !="local") {        
-        return this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0), $('.bread-search').find(".spec").text("0 Resultados"),$("input[name='initial_date']").datepicker('setDate', this.initialTime.slice(0,4)+'-'+this.initialTime.slice(5, 7)+"-"+this.initialTime.slice(8, 10)),$("input[name='end_date']").datepicker('setDate', this.endTime.slice(0,4)+'-'+this.endTime.slice(5, 7)+"-"+this.endTime.slice(8, 10)),this.setloading(!1);;
+      if (!this.data.length &amp;&amp; b !="local") {    
+        return this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0), $(".overview-container").remove(),$('&lt;div class="brea">&lt;/div>d-search').find(".spec").text("0 Resultados"),$("input[name='initial_date']").datepicker('setDate', this.initialTime.slice(0,4)+'-'+this.initialTime.slice(5, 7)+"-"+this.initialTime.slice(8, 10)),$("input[name='end_date']").datepicker('setDate', this.endTime.slice(0,4)+'-'+this.endTime.slice(5, 7)+"-"+this.endTime.slice(8, 10)),this.setloading(!1);;
         //return this.modal.open(),this.breadEl.find('.bread-colec a').text("").removeClass('active'),this.setloading(!1), this.searchEl.find('input').blur();
       }  
       switch(b){
         case 'amostras':
           //this.data = a.sortBy(this.nsort);
           this.data = a;
-          console.dir(this.data);
+          //console.dir(this.data);
           this.content.changeview(this.view);
           //this.filter.checklist(a);
           //$(".changeview button.b"+this.view);
@@ -1564,6 +1578,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               "amosval":""+this.amosval,
               "dates":[this.initialTime,this.endTime],
               "prices":this.prices,
+              "refine":this.filter.list,
               "combofilter":this.combofilter,
               "fstatus":this.fstatus,
               "nsort":this.nsort,
@@ -1604,18 +1619,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           //console.log("ALGO ERRADO");
       }
       ("images" !== this.view) ? this.scroll($("table tbody")) : this.scroll();
-      /*if(b){
-        
-      }
-      else{
-        
-      }*/
-      
-      /*this.content.page = 0;
-      
-      b ? (this.data = this.data || this.data) : this.data = this.data;*/
-      
-      //this.content.create(this.data[0]);
             
     },
     callRequest:function(data, status, req){
@@ -2418,7 +2421,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       else{
         $(".status.tooltip-selectable").removeClass('has');
       }
-      this.Componentfilter(this.fdata, 0, !0);
+      this.Componentfilter(this.data, 0, !0);
     },AmosByPrice:function(){
       $(".container-fullsize.scroller").scrollTop(0);
       this.itens = $([]);
@@ -2452,19 +2455,22 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       else{
          $(".tooltip-filter").removeClass('has');
       }
-      this.Componentfilter(this.fdata, 0, !0);
+      this.Componentfilter(this.data, 0, !0);
     },
 
     Componentfilter:function(data,page,d,view,haslength){
       //Componente para todos os filtros, vou passar em todo o data e filtrar todos os filtros sempre que o filtro for mudado.
       var aux,context=this,status,i;
       if(this.filter.list.length){
+        $(".refine-container").addClass('has');
         if(!data.length){
           return this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0), $('.bread-search').find(".spec").text("0 Resultados");
         }
+        this.fdata=this.data;
         aux=context.filter.confirm(this.data,!0);
       }
       else{
+        $(".refine-container").removeClass('has');
         aux=this.data;
       }
       this.prices=[];
@@ -2508,8 +2514,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       if(!this.fdata.length){
         this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0);
         this.setloading(!1);
+        this.data=this.data;
+        //debugger;
         $('.bread-search').find(".spec").text("0 Amostras");
-        this.data=aux;
         return !1;
       }
 
@@ -2519,6 +2526,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         "amosval":""+this.amosval,
         "dates":[this.initialTime,this.endTime],
         "prices":this.prices,
+        "refine":this.filter.list,
         "combofilter":this.combofilter,
         "fstatus":this.fstatus,
         "nsort":this.nsort,
@@ -2534,11 +2542,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       $.cookie.json = !0;
       this.cookiefair=[];
       this.cookiefair.push(scroll);
-      //console.dir(scroll);
-      //$.cookie("posscroll", scroll, {expires:7, path:"/"});
       if(!this.filter.list.length){
+        //debugger;
         this.data=aux;
-      }      
+      }  
       this.setloading(!1);
       this.createbox(this.fdata, page,d,view,haslength);
     },
@@ -3604,6 +3611,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 "amosval":""+e.amosval,
                 "dates":[e.initialTime,e.endTime],
                 "prices":e.prices,
+                "refine":e.filter.list,
                 "combofilter":e.combofilter,
                 "fstatus":e.fstatus,
                 "nsort":e.nsort,
@@ -3619,7 +3627,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             }
 
 
-            //console.log(d+" , "+f);
+            console.log(d+" , "+f);
             if (d >= f &amp;&amp; b) {
               e.content.page++;
               e.setloading(!0,!1);
@@ -3646,6 +3654,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 "amosval":""+e.amosval,
                 "dates":[e.initialTime,e.endTime],
                 "prices":e.prices,
+                "refine":e.filter.list,
                 "combofilter":e.combofilter,
                 "fstatus":e.fstatus,
                 "nsort":e.nsort,
@@ -3745,6 +3754,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         }
       }
 
+      if(this.refine.length){
+        //Fazer o trigger no filtro
+        this.filter.list=this.refine;
+        this.filter.data=this.data;
+      }
+
       if(this.initialTime !== "2000-01-01" || this.endTime !== "2020-10-10"){
         $(".date-filter").parent().addClass('has');
       }
@@ -3762,6 +3777,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.itens = $([]);
       this.select_items = [];
       this.itens.remove();
+      this.filter.reset();
       this.unable_select=!1;
       this.thanks=!1;
       this.content.reset();
@@ -3773,6 +3789,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.unable_select=!1;
       this.cookiefair=[];
       this.prices=[];
+      this.refine=[];
       this.fstatus=null;
       this.fairval="";
       this.fornval="";
@@ -3822,6 +3839,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       };
       $(".filterlist a").removeClass('sel');
       $(".tooltip-filter").removeClass('has');
+
+      $(".refine a").removeClass('sel').addClass('unsel');
+      $(".not-autoshow").removeClass('sel');
+      $(".sub-refine").addClass('hide').hide().find("ul").empty();
     }
   });
   new App;
@@ -3847,7 +3868,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Mon Dec 21st 2015 using the <a
+		on Mon Dec 28th 2015 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>

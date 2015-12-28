@@ -1,26 +1,36 @@
 /**
-*@fileOverview Detail's page with Fornecedores's Cadastre
-* @module Detail
-* @module Fornecedores
+*@fileOverview Filter's component
+* @module Filter
 *
 */
 
 /**
-* Details's class and actions
-* @exports Detail
+* Filter's class and actions
+* @exports Filter
 * @constructor
 */
 window.Filter = Spine.Controller.sub({
 elements:{
-	//".refine":"listEl"
 }, events:{
-    //"click .search-refine a":"select"
-},callerEvents:function(){
+},
+  /**
+  *Caller bind events' methods
+  * @memberOf Filter#
+  * @name callerEvents
+  */
+  callerEvents:function(){
     var context=this;
     $(".refine a").unbind("click").bind("click",function(a){context.select(a);});
     $(".sub-refine a").unbind("click").bind("click",function(a){context.add(a);});
     $(".filter-confirm").unbind("click").bind("click",function(a){context.confirm(a);});
-},add:function(a){
+},
+  /**
+  * When add an subfilter's list opt, this method is called.
+  * @param {event} a - click event itself
+  * @memberOf Filter#
+  * @name add
+  */
+  add:function(a){
     if("object" === typeof a) {
       a.preventDefault(), a = $(a.target);
     }else {
@@ -33,7 +43,14 @@ elements:{
     a.hasClass("sel") ? (b = this.list.filter(function(a) {
       return a.id === d && a.ft === c.toLowerCase();
     }), this.list = this.list.diff(b), a.removeClass("sel")) : (this.list.push({id:d, bt:b, ft:c.toLowerCase()}), a.addClass("sel"));
-},select:function(a){
+},
+  /**
+  * When select (unable and disable) a filter's opt to show subfilter's list.
+  * @param {event} a - click event itself
+  * @memberOf Filter#
+  * @name select
+  */
+  select:function(a){
     var context=this;
     if("object" === typeof a) {
       a.preventDefault(), a = $(a.target);
@@ -43,7 +60,6 @@ elements:{
     $(".sub-refine").addClass('hide').hide().find("ul").empty();;
     if(!a.hasClass("unsel") || a.hasClass("off")) {
       a.removeClass('sel').addClass('unsel');
-      //this.close();
       return!1;
     }
     $(".refine").find("a").removeClass('sel').addClass('unsel');
@@ -52,7 +68,15 @@ elements:{
     (a = this.getfilter(b)) && this.setfilters(a.sort(), b);
     $(".sub-refine").removeClass('hide').show();
     $(".sub-refine a").unbind("click").bind("click",function(a){context.add(a);});
-},setfilters:function(a,b){
+},
+  /**
+  * Create all subfilter's options items in html.
+  * @param {Array} a - All opt to be write by html
+  * @param {String} b - Subfilter's name
+  * @memberOf Filter#
+  * @name setfilters
+  */
+  setfilters:function(a,b){
     var c, d, e = [], f;
     d = this;
     a.forEach(function(a) {
@@ -64,8 +88,16 @@ elements:{
         e.push('<li><a href="#" data="' + a + '" class="'+c+'">' + f + "</a></li>");
     });
     $(".sub-refine ul").html(e.join(""));
-},getfilter:function(a){
-	var b, c,d=[];
+},
+  /**
+  * This method both verify if filter's opt is off or not and when click in some filter's opt verify all subfilter's list.
+  * @param {event} a - click event itself
+  * @return Array
+  * @memberOf Filter#
+  * @name getfilter
+  */
+  getfilter:function(a){
+    var b, c,d=[];
     if("COMPOSITIONS" !== a) {
     	for(var d = [], e = 0;e < this.data.length;e++) {
     		if(this.data[e][a] !== ""){
@@ -84,7 +116,14 @@ elements:{
     	}
     }
     return d.unique();
-},checklist:function(a){
+},
+  /**
+  * This method is called when filter is opened, with it, call getfilter and add class off or not according to result of getfilter's return
+  * @param {event} a - click event itself
+  * @memberOf Filter#
+  * @name getfilter
+  */
+  checklist:function(a){
     this.callerEvents();
     this.data = a;
     var b, c;
@@ -96,15 +135,21 @@ elements:{
       c = b.getfilter(c);
       c.length || $(this).addClass("off");
     });
-},reload:function(a,b){
+},
+  /**
+  * When confirm's method is called,it method call this method to run all select filter's opt and concat to return.
+  * @param {Object} a - Each select filter's opt and subfilter.
+  * @param {Array} b - Array OBjects list
+  * @memberOf Filter#
+  * @name reload
+  */
+  reload:function(a,b){
+    debugger;
     var i,b,d=[];
     b = b || this.data;
       if("COMPOSITIONS" !== a.bt) {
         return b.filter(function(b) {
-          //console.log(b[a.bt].toLowerCase()+" , "+a.ft);
           return b[a.bt] && b[a.bt].toLowerCase() === a.ft;
-          //return b[a.bt] && -1 !== a.ft.indexOf(b[a.bt].toLowerCase());
-          //return b[a.bt] && -1 !== b[a.bt].toLowerCase().indexOf(a.ft);
         });
       }
       if(!a.pc) {
@@ -127,18 +172,23 @@ elements:{
             d = c;
           }
         }
-        //console.dir(d);
         return d;
       }
-  },confirm:function(arr,cookie){
+  },
+   /**
+  * This method is called when click ate confirm's button, and it's responsible to increment counter of select's item.
+  * @param {Array} a - Each item's list
+  * @param {Boolean} b - If is being with cookie or not
+  * @memberOf Filter#
+  * @name confirm
+  */
+  confirm:function(arr,cookie){
+    debugger;
     var b, c, d, e = this, f, g;
     this.list = this.list.sortBy("id");
-    //$(".filter_list li span").text(0).addClass('hide');
-    console.dir($(".refine li span"));
     $(".refine li span").text(0).addClass('hide');
     c = this.list.map(function(a, b) {
       $(".refine a[href='#"+a.bt+"']").parent().find("span").removeClass('hide').html(parseInt($(".refine a[href='#"+a.bt+"']").parent().find("span").html())+1);
-      //$(".filter_list a[href='#"+a.bt+"']").parent().find("span").removeClass('hide').html(parseInt($(".filter_list a[href='#"+a.bt+"']").parent().find("span").html())+1);
         return a.id;
     });
     c = c.unique();
@@ -150,10 +200,8 @@ elements:{
         a.length && (f = []) && a.forEach(function(a) {
 
           f = d = f.concat(e.reload(a, g));
-          //console.log(a.bt +" "+ a.ft +" "+ d.length);
         }), g = d;
         if(!g.length){
-          //debugger;
           return $(".overview-container").remove(),this.close(),this.content.reset(),this.Componentfilter(g.unique(), 0, !0),!1;
         }
       }
@@ -162,38 +210,46 @@ elements:{
           return g.unique();
         }
 
-        //console.log(g.length);
         $(".overview-container").remove();
         this.content.reset();
         this.Componentfilter(g.unique(), 0, !0);
         this.close();
-        //console.dir(g.unique());
-        /*this.resetOptFilter();
-        this.setdata(g.unique());
-        this.close();*/
       }
     }
     else{ 
       if(cookie){
-        //return console.log("COOKIE");
         return this.data;
       }
-      //debugger;
       $(".overview-container").remove();
       this.content.reset();
       this.Componentfilter(this.data, 0, !0);
       this.close();
-      //this.bclear.eq(0).trigger('click');
     }
-},close:function(){
+},
+ /**
+  * Close filter
+  * @memberOf Filter#
+  * @name close
+  */
+close:function(){
   $(".refine a").removeClass('sel').addClass('unsel');
   $(".not-autoshow").removeClass('sel');
   $(".sub-refine").addClass('hide').hide().find("ul").empty();
 },
+  /**
+  * Reset filter
+  * @memberOf Filter#
+  * @name reset
+  */
 reset:function(){
   this.list = [];
   this.data = null;
 },
+/**
+* Init filter
+* @memberOf Filter#
+* @name init
+*/
 init:function() {
   this.list = [];
 	this.data = null;
