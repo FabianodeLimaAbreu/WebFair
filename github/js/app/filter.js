@@ -144,7 +144,6 @@ elements:{
   * @name reload
   */
   reload:function(a,b){
-    debugger;
     var i,b,d=[];
     b = b || this.data;
       if("COMPOSITIONS" !== a.bt) {
@@ -183,7 +182,6 @@ elements:{
   * @name confirm
   */
   confirm:function(arr,cookie){
-    debugger;
     var b, c, d, e = this, f, g;
     this.list = this.list.sortBy("id");
     $(".refine li span").text(0).addClass('hide');

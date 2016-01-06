@@ -884,17 +884,17 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       var day,date,month;
       date=new Date();
       if(parseInt(date.getDate())<10){
-        day="0"+date.getDate();
+        day="0"+parseInt(date.getDate());
       }
       else{
         day=date.getDate();
       }
 
       if((parseInt(date.getMonth())+1)<10){
-        month="0"+date.getMonth()+1;
+        month="0"+parseInt(date.getMonth()+1);
       }
       else{
-        month=date.getMonth()+1;
+        month=parseInt(date.getMonth()+1);
       }
 
       date=""+date.getFullYear()+"-"+month+"-"+day;
@@ -1446,7 +1446,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         case 'amostras':
           //this.data = a.sortBy(this.nsort);
           this.data = a;
-          //console.dir(this.data);
+          console.dir(this.data);
           this.content.changeview(this.view);
           //this.filter.checklist(a);
           //$(".changeview button.b"+this.view);
@@ -1487,6 +1487,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           this.filterTemplate();
           break;
         case 'fornecedores':
+          console.dir(a);
           $("input[name='initial_date']").datepicker('setDate', this.initialTime.slice(0,4)+'-'+this.initialTime.slice(5, 7)+"-"+this.initialTime.slice(8, 10));
           $("input[name='end_date']").datepicker('setDate', this.endTime.slice(0,4)+'-'+this.endTime.slice(5, 7)+"-"+this.endTime.slice(8, 10));
 
@@ -2341,6 +2342,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.Componentfilter(this.data, 0, !0);
     },
 
+
     Componentfilter:function(data,page,d,view,haslength){
       //Componente para todos os filtros, vou passar em todo o data e filtrar todos os filtros sempre que o filtro for mudado.
       var aux,context=this,status,i;
@@ -2437,6 +2439,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.navigate("detail/"+$(a.target).attr("name"), !0);
     },
     sendEmail:function(){
+      //debugger;
       //console.log("clicou");
       var i,context=this,error=!1;
       if(!this.select_items.length){
@@ -2486,7 +2489,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       }
     },
     sendEmailGo:function(item){
-      var i,j,length,amos_code=[],amos_id=[],counter,any_principal=!0,email="",context=this,listemail;
+      //debugger;
+      var i,j,length,amos_sel=[],counter,any_principal=!0,email="",context=this,listtemplates;
       if(!item.length){
         this.modal.open("message","Fornecedor Inativo!!!",!1,!0);
         return !1;
@@ -2508,17 +2512,17 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           }
           else{
             for(j=0;j<this.select_items.length;j++){
-              amos_code.push(this.select_items[j].AMOS_DESC);
-              amos_id.push(this.select_items[j].AMOS_ID);
+              amos_sel.push(this.select_items[j]);
             }
             if(any_principal){
+
                 /*No dia 07/10/2015 o Issac solicitou que caso o contato principal não tenha email, verificar se os outros contatos possuem email
                 Caso possuam, abrir o outlook com o campo de receiver vazio.*/
 
                 /*item[0].CONTACTS.forEach(function(element,index){
                   if(element.CONT_EMAIL.length && !email.length){
                     email=element.CONT_EMAIL;
-                    context.modal.open("template",[context.email,amos_code,amos_id,element.CONT_EMAIL,item,item[0]],!1,!1);
+                    context.modal.open("template",[context.email,amos_sel,element.CONT_EMAIL,item,item[0]],!1,!1);
                     return !1;
                   }
                   else{
@@ -2528,8 +2532,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                   }
 
                 });*/
-                listemail=this.email.filter(function(a,b){
-                  if(context.thanks){
+
+                listtemplates=this.email.filter(function(a,b){
+                  return a;
+
+                  /*Seguindo demanda da segunda etapa do projeto webfair (93 Manter Todas os templates de email juntos (Cotação e Agradecimento))
+                  06/01/2015
+                  /*if(context.thanks){
                     if(a.TP_TEMP_ID === 2){
                       return a;
                     }
@@ -2538,13 +2547,19 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                     if(a.TP_TEMP_ID === 1){
                       return a;
                     }
-                  }
+                  }*/
+
                 });
 
                 item[0].CONTACTS.forEach(function(element,index){
                   if(element.CONT_EMAIL.length && !email.length){
                     email=element.CONT_EMAIL;
-                    context.modal.open("template",[listemail,amos_code,amos_id,email,item,item[0]],!1,!1);
+                    $.cookie.json = !0;
+                    var temp={
+                      "opt":[amos_sel,email,item[0]]
+                    }
+                     $.cookie("sendemail", temp, {expires:7, path:"/"});
+                    context.modal.open("template",[listtemplates,amos_sel,email,item[0]],!1,!1);
                     return !1;
                   }
                   else{
@@ -2557,10 +2572,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             }
             else{
               /*for(j=0;j<this.select_items.length;j++){
-                amos_code.push(this.select_items[j].AMOS_DESC);
+                amos_sel.push(this.select_items[j].AMOS_DESC);
               }*/
               //console.log("email para: "+email);
-              listemail=this.email.filter(function(a,b){
+              listtemplates=this.email.filter(function(a,b){
                 if(context.thanks){
                   if(a.TP_TEMP_ID === 2){
                     return a;
@@ -2572,7 +2587,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                   }
                 }
               });
-              context.modal.open("template",[listemail,amos_code,amos_id,email,item,item[0]],!1,!1);
+              $.cookie.json = !0;
+              var temp={
+                "opt":[amos_sel,email,item[0]]
+              }
+              $.cookie("sendemail", temp, {expires:7, path:"/"});
+
+              context.modal.open("template",[listtemplates,amos_sel,email,item[0]],!1,!1);
             }
           }
         }
@@ -2839,17 +2860,17 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                   var day,date,month;
                   date=new Date();
                   if(parseInt(date.getDate())<10){
-                    day="0"+date.getDate();
+                    day="0"+parseInt(date.getDate());
                   }
                   else{
                     day=date.getDate();
                   }
 
                   if((parseInt(date.getMonth())+1)<10){
-                    month="0"+date.getMonth()+1;
+                    month="0"+parseInt(date.getMonth()+1);
                   }
                   else{
-                    month=date.getMonth()+1;
+                    month=parseInt(date.getMonth()+1);
                   }
 
                   date=""+date.getFullYear()+"-"+month+"-"+day;
@@ -2907,17 +2928,17 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             var day,date,month;
             date=new Date();
             if(parseInt(date.getDate())<10){
-              day="0"+date.getDate();
+              day="0"+parseInt(date.getDate());
             }
             else{
               day=date.getDate();
             }
 
             if((parseInt(date.getMonth())+1)<10){
-              month="0"+date.getMonth()+1;
+              month="0"+parseInt(date.getMonth()+1);
             }
             else{
-              month=date.getMonth()+1;
+              month=parseInt(date.getMonth()+1);
             }
             date=""+date.getFullYear()+"-"+month+"-"+day;
             
@@ -2944,17 +2965,17 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 var day,date,month;
                 date=new Date();
                 if(parseInt(date.getDate())<10){
-                  day="0"+date.getDate();
+                  day="0"+parseInt(date.getDate());
                 }
                 else{
                   day=date.getDate();
                 }
 
                 if((parseInt(date.getMonth())+1)<10){
-                  month="0"+date.getMonth()+1;
+                  month="0"+parseInt(date.getMonth()+1);
                 }
                 else{
-                  month=date.getMonth()+1;
+                  month=parseInt(date.getMonth()+1);
                 }
 
                 date=""+date.getFullYear()+"-"+month+"-"+day;

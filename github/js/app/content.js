@@ -198,7 +198,12 @@ window.Modal = Spine.Controller.sub({
     $(a.target).attr("name") === "yes" ? this.callback() : this.callback=null,this.close();;   
   },
   goEmail:function(a){
-    var listemail=[],amos_code=[],amos_id=[],address,counter,supplier;
+    a.preventDefault();
+    window.open("envioemail.html?template="+$(a.target).attr("name"));
+    this.close();
+
+
+    /*var listemail=[],amos_code=[],amos_id=[],address,counter,supplier;
     a.preventDefault();
     listemail=this.email[0][parseInt($(a.target).attr("name"))];
     amos_code=this.email[1];
@@ -211,7 +216,7 @@ window.Modal = Spine.Controller.sub({
     var texto=encodeURIComponent(listemail.TEMP_BODY.replace("##SAMPLES"," "+amos_code.join(" ; ")+" ").replace("##SUPPLIER",supplier.FORN_DESC).replace("##CONTACT",supplier.FORN_DESC).slice(0,(1290 - counter)));
     this.setEmailSent(amos_id);
     this.close();   
-    window.open("mailto:"+address+"?subject="+encodeURIComponent(listemail.TEMP_SUBJECT)+"&body="+texto);
+    window.open("mailto:"+address+"?subject="+encodeURIComponent(listemail.TEMP_SUBJECT)+"&body="+texto);*/
   },
   open:function(who,msg,call,isbad,isquest) {
     var a;
@@ -245,11 +250,9 @@ window.Modal = Spine.Controller.sub({
     this.email=msg;
     this.main.find("tbody").empty();
     for(i=0;i<msg[0].length;i++){
-      html+="<tr><td><a href='#"+i+"' class='link' name='"+i+"'>"+msg[0][i].TEMP_DESC+"</a></td><td><a href='#"+i+"' class='link' name='"+i+"'>"+msg[0][i].TP_TEMP_DESC+"</a></td></tr>";
+      html+="<tr><td><a href='#"+msg[0][i].TEMP_ID+"' class='link' name='"+msg[0][i].TEMP_ID+"'>"+msg[0][i].TEMP_DESC+"</a></td><td><a href='#"+msg[0][i].TEMP_ID+"' class='link' name='"+msg[0][i].TEMP_ID+"'>"+msg[0][i].TP_TEMP_DESC+"</a></td></tr>";
     }
     this.main.find("tbody").append(html);
-    /*counter=msg[1].join(" ; ").length;
-    console.log(msg[1].join(" ; "));*/
   },
   populateForn:function(who,msg){
     $("."+who).find("input").each(function(a,b){
@@ -271,17 +274,17 @@ window.Modal = Spine.Controller.sub({
           var day,date,month;
           date=new Date();
           if(parseInt(date.getDate())<10){
-            day="0"+date.getDate();
+            day="0"+parseInt(date.getDate());
           }
           else{
             day=date.getDate();
           }
 
           if((parseInt(date.getMonth())+1)<10){
-            month="0"+date.getMonth()+1;
+            month="0"+parseInt(date.getMonth()+1);
           }
           else{
-            month=date.getMonth()+1;
+            month=parseInt(date.getMonth()+1);
           }
           date=""+date.getFullYear()+"-"+month+"-"+day;
           this.callService("gravarNotes","<OBJ_ID>"+this.objid+"</OBJ_ID><TP_NOTA_ID>"+TEMP_ID+"</TP_NOTA_ID><USU_COD>"+this.usr.USU_COD+"</USU_COD>","<NOTA_DESC>"+$(".notebook textarea").val()+"</NOTA_DESC><CREATE_DATE>"+date+"</CREATE_DATE>");

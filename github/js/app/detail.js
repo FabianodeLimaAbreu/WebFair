@@ -211,17 +211,17 @@ open: function(a){
   var day,date,month;
   date=new Date();
   if(parseInt(date.getDate())<10){
-    day="0"+date.getDate();
+    day="0"+parseInt(date.getDate());
   }
   else{
     day=date.getDate();
   }
 
   if((parseInt(date.getMonth())+1)<10){
-    month="0"+date.getMonth()+1;
+    month="0"+parseInt(date.getMonth()+1);
   }
   else{
-    month=date.getMonth()+1;
+    month=parseInt(date.getMonth()+1);
   }
 
   date=day+"/"+month+"/"+date.getFullYear();
@@ -309,17 +309,17 @@ open: function(a){
     var day,date,month;
     date=new Date();
     if(parseInt(date.getDate())<10){
-      day="0"+date.getDate();
+      day="0"+parseInt(date.getDate());
     }
     else{
       day=date.getDate();
     }
 
     if((parseInt(date.getMonth())+1)<10){
-      month="0"+date.getMonth()+1;
+      month="0"+parseInt(date.getMonth()+1);
     }
     else{
-      month=date.getMonth()+1;
+      month=parseInt(date.getMonth()+1);
     }
     date=""+date.getFullYear()+"-"+month+"-"+day;
     this.callService("gravarNotes","<OBJ_ID>"+this.item.AMOS_ID+"</OBJ_ID><TP_NOTA_ID>1</TP_NOTA_ID><USU_COD>"+this.usr.USU_COD+"</USU_COD>","<NOTA_DESC>"+$(".samplenote").val()+"</NOTA_DESC><SEGM_COD>"+this.usr.SEGM_COD+"</SEGM_COD><CREATE_DATE>"+date+"</CREATE_DATE>");
@@ -749,17 +749,17 @@ setFav:function(a){
     var day,date,month;
     date=new Date();
     if(parseInt(date.getDate())<10){
-      day="0"+date.getDate();
+      day="0"+parseInt(date.getDate());
     }
     else{
       day=date.getDate();
     }
 
     if((parseInt(date.getMonth())+1)<10){
-      month="0"+date.getMonth()+1;
+      month="0"+parseInt(date.getMonth()+1);
     }
     else{
-      month=date.getMonth()+1;
+      month=parseInt(date.getMonth()+1);
     }
 
     date=""+date.getFullYear()+"-"+month+"-"+day;
@@ -793,17 +793,17 @@ setFav:function(a){
   var day,date,month,status;
   date=new Date();
   if(parseInt(date.getDate())<10){
-    day="0"+date.getDate();
+    day="0"+parseInt(date.getDate());
   }
   else{
     day=date.getDate();
   }
 
   if((parseInt(date.getMonth())+1)<10){
-    month="0"+date.getMonth()+1;
+    month="0"+parseInt(date.getMonth()+1);
   }
   else{
-    month=date.getMonth()+1;
+    month=parseInt(date.getMonth()+1);
   }
   date=""+date.getFullYear()+"-"+month+"-"+day;
 
@@ -833,17 +833,17 @@ setFav:function(a){
   var day,date,month;
   date=new Date();
   if(parseInt(date.getDate())<10){
-    day="0"+date.getDate();
+    day="0"+parseInt(date.getDate());
   }
   else{
     day=date.getDate();
   }
 
   if((parseInt(date.getMonth())+1)<10){
-    month="0"+date.getMonth()+1;
+    month="0"+parseInt(date.getMonth()+1);
   }
   else{
-    month=date.getMonth()+1;
+    month=parseInt(date.getMonth()+1);
   }
   date=day+"/"+month+"/"+date.getFullYear();
   result+="<li><article><div class='notepad-note blockquote'><p><b>"+date+" | "+(this.item.FORN_DESC || $("input[name='FORN_DESC']").val()) +" | "+this.noteid+"</b></p><p>"+this.usr.USU_NOME+" - "+this.usr.SEGM_DESC+"</p><p>"+$(".addnote").val()+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+this.noteid+"' name='"+this.usr.USU_COD+"'></button></div></article></li>";
@@ -1270,17 +1270,17 @@ setFav:function(a){
   var day,date,month;
   date=new Date();
   if(parseInt(date.getDate())<10){
-    day="0"+date.getDate();
+    day="0"+parseInt(date.getDate());
   }
   else{
     day=date.getDate();
   }
 
   if((parseInt(date.getMonth())+1)<10){
-    month="0"+date.getMonth()+1;
+    month="0"+parseInt(date.getMonth()+1);
   }
   else{
-    month=date.getMonth()+1;
+    month=parseInt(date.getMonth()+1);
   }
   date=""+date.getFullYear()+"-"+month+"-"+day;
   //console.log(this.tab);
