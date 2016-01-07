@@ -199,24 +199,14 @@ window.Modal = Spine.Controller.sub({
   },
   goEmail:function(a){
     a.preventDefault();
+    var amos_id=[];
+    
+    for(var i=0;i<this.email[1].length;i++){
+      amos_id.push(this.email[1][i].AMOS_ID);
+    }
+    this.setEmailSent(amos_id);
     window.open("envioemail.html?template="+$(a.target).attr("name"));
     this.close();
-
-
-    /*var listemail=[],amos_code=[],amos_id=[],address,counter,supplier;
-    a.preventDefault();
-    listemail=this.email[0][parseInt($(a.target).attr("name"))];
-    amos_code=this.email[1];
-    amos_id=this.email[2];
-    address=this.email[3];
-    supplier=this.email[4][0];
-
-    counter=amos_code.join(" ; ").length;
-
-    var texto=encodeURIComponent(listemail.TEMP_BODY.replace("##SAMPLES"," "+amos_code.join(" ; ")+" ").replace("##SUPPLIER",supplier.FORN_DESC).replace("##CONTACT",supplier.FORN_DESC).slice(0,(1290 - counter)));
-    this.setEmailSent(amos_id);
-    this.close();   
-    window.open("mailto:"+address+"?subject="+encodeURIComponent(listemail.TEMP_SUBJECT)+"&body="+texto);*/
   },
   open:function(who,msg,call,isbad,isquest) {
     var a;
@@ -263,36 +253,6 @@ window.Modal = Spine.Controller.sub({
   save:function(a){
     var TEMP_ID,date;
     switch($(a.target).attr("name")){
-      case "isnote":
-        if($(".notebook textarea").val().length){
-          if(this.getPage() === "detail"){
-            TEMP_ID=1;
-          }
-          else{
-            TEMP_ID=2;
-          }
-          var day,date,month;
-          date=new Date();
-          if(parseInt(date.getDate())<10){
-            day="0"+parseInt(date.getDate());
-          }
-          else{
-            day=date.getDate();
-          }
-
-          if((parseInt(date.getMonth())+1)<10){
-            month="0"+parseInt(date.getMonth()+1);
-          }
-          else{
-            month=parseInt(date.getMonth()+1);
-          }
-          date=""+date.getFullYear()+"-"+month+"-"+day;
-          this.callService("gravarNotes","<OBJ_ID>"+this.objid+"</OBJ_ID><TP_NOTA_ID>"+TEMP_ID+"</TP_NOTA_ID><USU_COD>"+this.usr.USU_COD+"</USU_COD>","<NOTA_DESC>"+$(".notebook textarea").val()+"</NOTA_DESC><CREATE_DATE>"+date+"</CREATE_DATE>");
-        }
-        else{
-          this.modal.open("message","Digite o texto da anotação!!!",!1,!0);
-        }
-        break;
       case 'istemp':
         this.callService("gravarTemplate","<TEMP_ID>"+(this.objid[0].TEMP_ID || 0)+"</TEMP_ID>"+"<TEMP_DESC>"+$(".dialog input[name='TEMP_DESC']").val()+"</TEMP_DESC><TEMP_SUBJECT>"+$(".dialog input[name='TEMP_SUBJECT']").val()+"</TEMP_SUBJECT><TEMP_BODY>"+$(".dialog textarea").val()+"</TEMP_BODY><SEGM_COD>"+this.objid[0].SEGM_COD+"</SEGM_COD>","<TP_TEMP_ID>"+(this.objid[0].TP_TEMP_ID || 2)+"</TP_TEMP_ID>","<action>U</action>");
         break;
@@ -670,7 +630,7 @@ window.Box = Spine.Controller.sub({init:function() {
       case 'template_email':
         var result="";
         //result='<td style="max-width:200px;">'+a.TEMP_ID+"<br/></td>"+"<td>"+a.SEGM_DESC+"<br/><div class='template"+a.TEMP_ID+" show-hide hide'>Assunto</br>"+"Texto"+"</div></td>"+"<td>"+a.TEMP_DESC+"</br><div class='template"+a.TEMP_ID+" show-hide hide'>"+a.TEMP_SUBJECT+"</br>"+a.TEMP_BODY+"</div></td>"+"<td>"+a.TP_TEMP_DESC+"</br><div class='template"+a.TEMP_ID+" show-hide hide'>ITENS PERSONALIZADOS"+"<div class='close-size'>"+/*<button type='button' class='icon floatLeft s-four edit-temp' alt='list' name='"+a.TEMP_ID+"'>Editar</button><button type='button' class='icon floatLeft s-four delete-temp' alt='list' name='"+a.TP_TEMP_ID+"' title='"+a.TEMP_ID+"''>Deletar</button>*/'</div></div></td><td><button type="button" class="caption-icons-icon bstar  bnote" name="'+a.TEMP_ID+'"></button></td>';
-        result='<td style="max-width:200px;">'+a.TEMP_ID+'<br/><div class="info-template hide item'+a.TEMP_ID+'"><div class="text-template"><p><b>ASSUNTO</b></p><br><form><textarea disabled="disabled" name="TEMP_SUBJECT">'+a.TEMP_SUBJECT+'</textarea><br><p><b>TEXTO</b></p><br><textarea disabled="disabled" name="TEMP_BODY" class="edit-text">'+a.TEMP_BODY+'</textarea></form></div><ul class="custombuttons hide"><li><p><b>ITENS PERSONALIZADOS</b></p></li><li><button type="button" class="icon floatLeft s-four  hash" alt="SUPPLIER" name="'+a.TEMP_ID+'">Fornecedor</button></li><li><button type="button" class="icon floatLeft s-four  hash" alt="SAMPLES" name="'+a.TEMP_ID+'">Amostras</button></li></ul><ul class="ulbottom"><li><button type="button" class="icon floatLeft s-four edit-temp" alt="list" name="'+a.TEMP_ID+'">Editar</button></li><li><button type="button" class="icon floatLeft s-four delete-temp" alt="list" title="'+a.TEMP_ID+'" name="'+a.TP_TEMP_ID+'">Excluir</button></li><li><button type="button" class="icon floatLeft s-four save-temp hide" alt="list" name="'+a.TEMP_ID+'">Salvar</button></li></ul><button type="button" class="icon s-four close-temp" alt="list" name="'+a.TEMP_ID+'">Fechar</button></div></td></td><td>'+a.SEGM_DESC+'</td><td>'+a.TEMP_DESC+'</td><td>'+a.TP_TEMP_DESC+'</td><td><button type="button" class="open-info" name="'+a.TEMP_ID+'"><span></span></button></td>';
+        result='<td style="max-width:200px;">'+a.TEMP_ID+'<br/><div class="info-template hide item'+a.TEMP_ID+'"><div class="text-template"><p><b>ASSUNTO</b></p><br><form><textarea disabled="disabled" name="TEMP_SUBJECT">'+a.TEMP_SUBJECT+'</textarea><br><p><b>TEXTO</b></p><br><textarea disabled="disabled" name="TEMP_BODY" class="edit-text">'+a.TEMP_BODY+'</textarea></form></div><ul class="custombuttons hide"><li><p><b>ITENS PERSONALIZADOS</b></p></li><li><button type="button" class="icon floatLeft s-four  hash" alt="SUPPLIER" name="'+a.TEMP_ID+'">Fornecedor</button></li><li><button type="button" class="icon floatLeft s-four  hash" alt="SAMPLES" name="'+a.TEMP_ID+'">Amostras</button></li><li><button type="button" class="icon floatLeft s-four  hash" alt="CONTACT" name="'+a.TEMP_ID+'">Contato</button></li></ul><ul class="ulbottom"><li><button type="button" class="icon floatLeft s-four edit-temp" alt="list" name="'+a.TEMP_ID+'">Editar</button></li><li><button type="button" class="icon floatLeft s-four delete-temp" alt="list" title="'+a.TEMP_ID+'" name="'+a.TP_TEMP_ID+'">Excluir</button></li><li><button type="button" class="icon floatLeft s-four save-temp hide" alt="list" name="'+a.TEMP_ID+'">Salvar</button></li></ul><button type="button" class="icon s-four close-temp" alt="list" name="'+a.TEMP_ID+'">Fechar</button></div></td></td><td>'+a.SEGM_DESC+'</td><td>'+a.TEMP_DESC+'</td><td>'+a.TP_TEMP_DESC+'</td><td><button type="button" class="open-info" name="'+a.TEMP_ID+'"><span></span></button></td>';
         return result;
         break;
       default:

@@ -37,13 +37,16 @@ var App={
 	init:function(){
 		this.usr = null;
 		this.usr = jQuery.parseJSON($.cookie("webfair")); 
-		this.temp=null;
-		this.temp=$.cookie("sendemail"); 
+		this.tempcookie=null;
+        this.tempforn=null;
+        this.tempforn=$.cookie("tempforn");
+		this.tempcookie=$.cookie("sendemail"); 
 		if(!this.usr)
             window.location.href = 'login.html';
 
-        if(this.temp){
-        	this.temp=jQuery.parseJSON(this.temp);
+        if(this.tempcookie && this.tempforn){
+        	this.tempcookie=jQuery.parseJSON(this.tempcookie);
+            this.tempforn=jQuery.parseJSON(this.tempforn);
         }
         else{
         	alert("um erro ocorreu");
@@ -72,7 +75,7 @@ var App={
 	callRequest:function(data, status, req){
 		var a=jQuery.parseJSON($(req.responseXML).text())[0];
 		var result="";
-        result='<tr class="tropened"><td style="max-width:200px;">'+a.TEMP_ID+'<br/><div class="info-template item'+a.TEMP_ID+'"><div class="text-template"><p><b>ASSUNTO</b></p><br><form><textarea name="TEMP_SUBJECT">'+this.replaceTags(a.TEMP_SUBJECT)+'</textarea><br><p><b>TEXTO</b></p><br><textarea name="TEMP_BODY" class="edit-text">'+this.replaceTags(a.TEMP_BODY)+'</textarea></form></div><ul class="custombuttons"><li><p><b>ITENS PERSONALIZADOS</b></p></li><li><button type="button" class="icon floatLeft s-four  hash" alt="SUPPLIER" name="'+a.TEMP_ID+'">Fornecedor</button></li><li><button type="button" class="icon floatLeft s-four  hash" alt="SAMPLES" name="'+a.TEMP_ID+'">Amostras</button></li></ul><ul class="ulbottom"><li><button type="button" class="icon floatLeft s-four save-temp send-temp" alt="list" name="'+a.TEMP_ID+'">Enviar</button></li></ul></div></td></td><td>'+a.SEGM_DESC+'</td><td>'+a.TEMP_DESC+'</td><td>'+a.TP_TEMP_DESC+'</td></tr>';
+        result='<tr class="tropened"><td style="max-width:200px;">'+a.TEMP_ID+'<br/><div class="info-template item'+a.TEMP_ID+'"><div class="text-template"><p><b>ASSUNTO</b></p><br><form><textarea name="TEMP_SUBJECT">'+this.replaceTags(a.TEMP_SUBJECT)+'</textarea><br><p><b>TEXTO</b></p><br><textarea name="TEMP_BODY" class="edit-text">'+this.replaceTags(a.TEMP_BODY)+'</textarea></form></div><ul class="custombuttons"><li><p><b>ITENS PERSONALIZADOS</b></p></li><li><button type="button" class="icon floatLeft s-four  hash" alt="SUPPLIER" name="'+a.TEMP_ID+'">Fornecedor</button></li><li><button type="button" class="icon floatLeft s-four  hash" alt="SAMPLES" name="'+a.TEMP_ID+'">Amostras</button></li><li><button type="button" class="icon floatLeft s-four  hash" alt="CONTACT" name="'+a.TEMP_ID+'">Contato</button></li></ul><ul class="ulbottom"><li><button type="button" class="icon floatLeft s-four save-temp send-temp" alt="list" name="'+a.TEMP_ID+'">Enviar</button></li></ul></div></td></td><td>'+a.SEGM_DESC+'</td><td>'+a.TEMP_DESC+'</td><td>'+a.TP_TEMP_DESC+'</td></tr>';
         $("tbody").html(result);
         this.events();
         this.replaceTags();
@@ -83,17 +86,17 @@ var App={
     },
 
     replaceTags:function(val){
-    	console.dir(this.temp);
     	if(!val){
     		return "";
     	}
-    	var amos_code=[];
+    	var amos_code=[],principal;
 
     	//Pegando todos os códigos
-    	for(var i=0;i<this.temp.opt[0].length;i++){
-    		amos_code.push(this.temp.opt[0][i].AMOS_DESC);
+    	for(var i=0;i<this.tempcookie.opt[0].length;i++){
+    		amos_code.push(this.tempcookie.opt[0][i].AMOS_DESC);
     	}
-    	val = val.replace("##SAMPLES"," "+amos_code.join(" ; ")+"").replace("##SUPPLIER",this.temp.opt[2].FORN_DESC);
+
+    	val = val.replace("##SAMPLES"," "+amos_code.join(" ; ")+"").replace("##SUPPLIER",this.tempforn.opt[0].FORN_DESC).replace("##CONTACT",this.tempcookie.opt[1].CONT_NOME);
     	return val;
     },
 

@@ -1099,7 +1099,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       }
       // PAI      
       (this.area=="X") ? (bread_text=loja+' - '+val) : bread_text=(loja+' - '+area+' - '+val);
-      this.breadEl.find('.bread-colec a').text(bread_text).addClass('active')   
+      this.breadEl.find('.bread-colec a').text(bread_text).addClass('active');   
     },
     changeview : function(a) {
       if ("object" === typeof a) {
@@ -1112,6 +1112,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       }*/ 
       $(".thumbnail .icon").attr("class","icon");
       $("html").attr("class","amostras");
+      this.select_items.length=0;
       a.hasClass("sel") || (this.viewBtn.removeClass("sel"), a.addClass("sel"), this.view = a.attr('alt'), this.setdata(this.data, "amostras"));
     },
     setMenu:function(loja){
@@ -1446,7 +1447,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         case 'amostras':
           //this.data = a.sortBy(this.nsort);
           this.data = a;
-          console.dir(this.data);
           this.content.changeview(this.view);
           //this.filter.checklist(a);
           //$(".changeview button.b"+this.view);
@@ -2443,7 +2443,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       //console.log("clicou");
       var i,context=this,error=!1;
       if(!this.select_items.length){
-        if($(".overview-container").length>1){
+        if($(".overview-container").length<1){
           this.modal.open("message","Selecione ao menos um item",!1,!0);
           return !1;
         }
@@ -2505,7 +2505,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           if(item[0].CONTACTS[i]){
             if(item[0].CONTACTS[i].CONT_PRINCIPAL){
               if(item[0].CONTACTS[i].CONT_EMAIL.length){
-                email=item[0].CONTACTS[i].CONT_EMAIL;
+                contemail=item[0].CONTACTS[i];
                 any_principal=!1;
               }   
             }
@@ -2515,55 +2515,26 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               amos_sel.push(this.select_items[j]);
             }
             if(any_principal){
-
-                /*No dia 07/10/2015 o Issac solicitou que caso o contato principal não tenha email, verificar se os outros contatos possuem email
-                Caso possuam, abrir o outlook com o campo de receiver vazio.*/
-
-                /*item[0].CONTACTS.forEach(function(element,index){
-                  if(element.CONT_EMAIL.length && !email.length){
-                    email=element.CONT_EMAIL;
-                    context.modal.open("template",[context.email,amos_sel,element.CONT_EMAIL,item,item[0]],!1,!1);
-                    return !1;
-                  }
-                  else{
-                    if(!email.length){
-                      context.modal.open("message","Os Contatos deste fornecedor não possuem email cadastrado",!1,!0);
-                    }
-                  }
-
-                });*/
+                if(!amos_sel.length){
+                  this.modal.open("message","Selecione ao menos um item",!1,!0);
+                  return !1;
+                }
 
                 listtemplates=this.email.filter(function(a,b){
                   return a;
-
                   /*Seguindo demanda da segunda etapa do projeto webfair (93 Manter Todas os templates de email juntos (Cotação e Agradecimento))
-                  06/01/2015
-                  /*if(context.thanks){
-                    if(a.TP_TEMP_ID === 2){
-                      return a;
-                    }
-                  }
-                  else{
-                    if(a.TP_TEMP_ID === 1){
-                      return a;
-                    }
-                  }*/
-
+                  06/01/2015*/
                 });
 
                 item[0].CONTACTS.forEach(function(element,index){
-                  if(element.CONT_EMAIL.length && !email.length){
-                    email=element.CONT_EMAIL;
-                    $.cookie.json = !0;
-                    var temp={
-                      "opt":[amos_sel,email,item[0]]
-                    }
-                     $.cookie("sendemail", temp, {expires:7, path:"/"});
-                    context.modal.open("template",[listtemplates,amos_sel,email,item[0]],!1,!1);
+                  if(element.CONT_EMAIL.length && !contemail.length){
+                    contemail=element.CONT_EMAIL;
+                    context.modal.open("message","Abrir combo para usuário setar um contato como principal",!1,!0);
+                    //context.modal.open("message","O fornecedor não possui um contato principal!",!1,!0);
                     return !1;
                   }
                   else{
-                    if(!email.length){
+                    if(!contemail.length){
                       context.modal.open("message","Os Contatos deste fornecedor não possuem email cadastrado",!1,!0);
                     }
                   }
@@ -2576,24 +2547,19 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               }*/
               //console.log("email para: "+email);
               listtemplates=this.email.filter(function(a,b){
-                if(context.thanks){
-                  if(a.TP_TEMP_ID === 2){
-                    return a;
-                  }
-                }
-                else{
-                  if(a.TP_TEMP_ID === 1){
-                    return a;
-                  }
-                }
+                return a;
               });
+
               $.cookie.json = !0;
               var temp={
-                "opt":[amos_sel,email,item[0]]
+                "opt":[amos_sel,contemail]
+              }
+              var tempforn={
+                "opt":[item[0]]
               }
               $.cookie("sendemail", temp, {expires:7, path:"/"});
-
-              context.modal.open("template",[listtemplates,amos_sel,email,item[0]],!1,!1);
+              $.cookie("tempforn", tempforn, {expires:7, path:"/"});
+              context.modal.open("template",[listtemplates,amos_sel,contemail,item[0]],!1,!1);
             }
           }
         }
