@@ -154,7 +154,7 @@
 			right: 5px;
 		}
 	}
-	&.edit, &.edit-temp, &.save-temp{
+	&.edit, &.edit-temp, &.save-temp, &.send-temp{
 		line-height: 24px;
 		text-align: right;
 		padding-right: 30px;
@@ -169,7 +169,7 @@
 			left: -4px;
 		}
 	}
-	&.edit-temp, &.save-temp{
+	&.edit-temp, &.save-temp,&.send-temp{
 		margin-bottom: 10px;
 		width:110px;
 		&:before{
@@ -179,6 +179,13 @@
 	&.save-temp{
 		&:before{
 			.actions_save;
+		}
+	}
+	&.send-temp{
+		&:before{
+			margin: 0 0 0 0;
+			top: 7px;
+			.actions-sender_btn;
 		}
 	}
 	&.edit-big{
@@ -369,7 +376,7 @@
 	}
 	&.bemail{
 		&:after{
-			.item-email;
+			.item-email_black;
 		}
 		&.disabled{
 			cursor: default;
@@ -424,9 +431,9 @@
 			.actions-trash_blue;
 		}
 	}
-	&.bsend_receive{
+	&.sender_legend{
 		&:after{
-			.menu-send_receive_mini;
+			.actions-sender_legend;
 		}
 	}
 	&.bfisica{

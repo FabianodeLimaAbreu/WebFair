@@ -440,23 +440,23 @@ header .logo-print {
 .menu .menu-item a.bmenu-legend:after {
   width: 30px;
   height: 30px;
-  background-position: -10px -330px;
+  background-position: -10px -370px;
   left: 10px;
 }
 .menu .menu-item a.bmenu-settings:after {
   width: 30px;
   height: 30px;
-  background-position: -10px -170px;
+  background-position: -10px -90px;
 }
 .menu .menu-item a.bmenu-send_receive:after {
   width: 40px;
   height: 30px;
-  background-position: -10px -130px;
+  background-position: -10px -10px;
 }
 .menu .menu-item a.bmenu-logoff:after {
   width: 25px;
   height: 30px;
-  background-position: -10px -370px;
+  background-position: -10px -330px;
   right: 2px;
   left: 0;
 }
@@ -484,7 +484,7 @@ header .logo-print {
 .tooltip-item.bselect span.icon.bselection:hover:after {
   width: 15px;
   height: 15px;
-  background-position: -35px -1711px;
+  background-position: -10px -1761px;
   width: 25px;
 }
 .tooltip-item.bannex-leg:after {
@@ -496,13 +496,13 @@ header .logo-print {
   background: url("../images/sprite.png") top left no-repeat;
   width: 10px;
   height: 25px;
-  background-position: -35px -480px;
+  background-position: -10px -445px;
 }
 .tooltip-item.bannex-leg.add:after {
   left: 20px;
   width: 15px;
   height: 25px;
-  background-position: -10px -480px;
+  background-position: -30px -445px;
 }
 .tooltip-item.bcircle {
   cursor: pointer;
@@ -516,7 +516,7 @@ header .logo-print {
   background: url("../images/sprite.png") top left no-repeat;
   width: 20px;
   height: 20px;
-  background-position: -10px -909px;
+  background-position: -10px -939px;
 }
 .tooltip-item.bcircle.bcicle-other {
   display: inline;
@@ -526,7 +526,7 @@ header .logo-print {
 .tooltip-item.bcircle:hover:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -939px;
+  background-position: -10px -969px;
 }
 .tooltip-item.bsquare {
   cursor: pointer;
@@ -540,7 +540,7 @@ header .logo-print {
   background: url("../images/sprite.png") top left no-repeat;
   width: 20px;
   height: 20px;
-  background-position: -10px -879px;
+  background-position: -10px -909px;
 }
 .tooltip-item.bsquare.bcicle-other {
   display: inline;
@@ -550,7 +550,7 @@ header .logo-print {
 .tooltip-item.bsquare:hover:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -759px;
+  background-position: -10px -789px;
 }
 .tooltip-item.btrash-big:after {
   left: 10px;
@@ -613,7 +613,7 @@ header .logo-print {
   background: url("../images/sprite.png") top left no-repeat;
   width: 30px;
   height: 30px;
-  background-position: -10px -10px;
+  background-position: -10px -50px;
 }
 .tooltip-content {
   float: left;
@@ -736,7 +736,7 @@ header .logo-print {
 .tooltip-content.filter li a:before {
   margin-top: -5px;
   background: url("../images/sprite.png") top left no-repeat;
-  background-position: -10px -879px;
+  background-position: -10px -909px;
   content: "";
   width: 20px;
   height: 20px;
@@ -747,7 +747,7 @@ header .logo-print {
   background: url("../images/sprite.png") top left no-repeat;
   width: 20px;
   height: 20px;
-  background-position: -10px -759px;
+  background-position: -10px -789px;
 }
 .tooltip-content.filter .filterlist {
   border-right: solid 1px #e6ebf0;
@@ -1477,7 +1477,7 @@ form.search {
 .container-fullsize .right-list .bedit:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -669px;
+  background-position: -10px -699px;
 }
 .container-fullsize .main_opt {
   position: relative;
@@ -1539,7 +1539,7 @@ form.search {
 .container-fullsize .main_opt .main_opt_item .main_opt_button.bemail:after {
   width: 20px;
   height: 15px;
-  background-position: -10px -1636px;
+  background-position: -10px -1736px;
 }
 .container-fullsize .main_opt .main_opt_item .main_opt_button.bemail.disabled {
   cursor: default;
@@ -1672,7 +1672,7 @@ form.search {
   display: inline-block;
   width: 10px;
   height: 10px;
-  background-position: -40px -609px;
+  background-position: -40px -639px;
   position: relative;
   float: right;
   right: 5px;
@@ -1681,7 +1681,7 @@ form.search {
 .aside-edit .category li .category_button.actived:after {
   width: 10px;
   height: 10px;
-  background-position: -40px -579px;
+  background-position: -40px -609px;
 }
 .aside-edit .category .sub_category {
   padding: 0;
@@ -1950,7 +1950,7 @@ form.search {
   background: url("../images/sprite.png") top left no-repeat;
   width: 20px;
   height: 20px;
-  background-position: -10px -729px;
+  background-position: -10px -759px;
   display: inline-block;
   position: relative;
   margin-right: 5px;
@@ -1965,7 +1965,7 @@ form.search {
 .detail .detail-sample-container .sample-buttons li button.btag:after {
   width: 20px;
   height: 17px;
-  background-position: -10px -1506px;
+  background-position: -10px -1533px;
   top: 5px;
   left: 10px;
   float: left;
@@ -2574,7 +2574,7 @@ div.modalie {
   margin: 3px 0 0 8px;
   width: 15px;
   height: 15px;
-  background-position: -10px -1686px;
+  background-position: -35px -1711px;
 }
 .icon.newuser {
   margin-bottom: 10px;
@@ -2588,7 +2588,7 @@ div.modalie {
   background: url("../images/sprite.png") top left no-repeat;
   width: 16px;
   height: 17px;
-  background-position: -10px -1533px;
+  background-position: -10px -1506px;
   top: 6px;
   left: 5px;
 }
@@ -2598,7 +2598,7 @@ div.modalie {
 .icon.close-temp:before {
   width: 15px;
   height: 15px;
-  background-position: -10px -1736px;
+  background-position: -35px -1586px;
 }
 .icon.gotop:after {
   content: "";
@@ -2611,7 +2611,7 @@ div.modalie {
   background: url("../images/sprite.png") top left no-repeat;
   width: 15px;
   height: 15px;
-  background-position: -10px -1736px;
+  background-position: -35px -1586px;
   margin: 1px -8px 0 10px;
 }
 .icon.finishit {
@@ -2629,7 +2629,7 @@ div.modalie {
   background: url("../images/sprite.png") top left no-repeat;
   width: 14px;
   height: 12px;
-  background-position: -36px -1533px;
+  background-position: -36px -1506px;
   margin: 3px -8px 0 10px;
 }
 .icon.delete,
@@ -2644,7 +2644,7 @@ div.modalie {
   background: url("../images/sprite.png") top left no-repeat;
   width: 20px;
   height: 20px;
-  background-position: -10px -579px;
+  background-position: -10px -609px;
   display: inline-block;
   position: relative;
   margin-right: 5px;
@@ -2659,7 +2659,7 @@ div.modalie {
   background: url("../images/sprite.png") top left no-repeat;
   width: 20px;
   height: 20px;
-  background-position: -10px -579px;
+  background-position: -10px -609px;
   margin: 0 7px 0 0;
 }
 .icon.bgoselect,
@@ -2674,7 +2674,7 @@ div.modalie {
   background: url("../images/sprite.png") top left no-repeat;
   width: 15px;
   height: 15px;
-  background-position: -10px -1686px;
+  background-position: -35px -1711px;
   display: inline-block;
   position: relative;
   margin-right: 5px;
@@ -2696,7 +2696,7 @@ div.modalie {
   background: url("../images/sprite.png") top left no-repeat;
   width: 15px;
   height: 15px;
-  background-position: -35px -1686px;
+  background-position: -10px -1586px;
   display: inline-block;
   position: absolute;
   margin-right: 5px;
@@ -2705,19 +2705,21 @@ div.modalie {
 }
 .icon.edit,
 .icon.edit-temp,
-.icon.save-temp {
+.icon.save-temp,
+.icon.send-temp {
   line-height: 24px;
   text-align: right;
   padding-right: 30px;
 }
 .icon.edit:before,
 .icon.edit-temp:before,
-.icon.save-temp:before {
+.icon.save-temp:before,
+.icon.send-temp:before {
   content: "";
   background: url("../images/sprite.png") top left no-repeat;
   width: 20px;
   height: 20px;
-  background-position: -10px -669px;
+  background-position: -10px -699px;
   display: inline-block;
   position: relative;
   margin-right: 5px;
@@ -2725,18 +2727,27 @@ div.modalie {
   left: -4px;
 }
 .icon.edit-temp,
-.icon.save-temp {
+.icon.save-temp,
+.icon.send-temp {
   margin-bottom: 10px;
   width: 110px;
 }
 .icon.edit-temp:before,
-.icon.save-temp:before {
+.icon.save-temp:before,
+.icon.send-temp:before {
   margin: 0 11px 0 0;
 }
 .icon.save-temp:before {
   width: 17px;
   height: 17px;
   background-position: -10px -1479px;
+}
+.icon.send-temp:before {
+  margin: 0 0 0 0;
+  top: 7px;
+  width: 26px;
+  height: 20px;
+  background-position: -10px -819px;
 }
 .icon.edit-big {
   background: none;
@@ -2767,7 +2778,7 @@ div.modalie {
   background: url("../images/sprite.png") top left no-repeat;
   width: 30px;
   height: 30px;
-  background-position: -10px -90px;
+  background-position: -10px -170px;
   display: block;
   position: relative;
   content: "";
@@ -2775,7 +2786,7 @@ div.modalie {
 .icon.fav-big.sel:after {
   width: 30px;
   height: 30px;
-  background-position: -10px -50px;
+  background-position: -10px -130px;
 }
 .icon.trash-big:after {
   background: url("../images/sprite.png") top left no-repeat;
@@ -2811,7 +2822,7 @@ div.modalie {
   background: url("../images/sprite.png") top left no-repeat;
   width: 10px;
   height: 25px;
-  background-position: -35px -480px;
+  background-position: -10px -445px;
   display: block;
   position: relative;
   content: "";
@@ -2859,7 +2870,7 @@ div.modalie {
 .icon.bselection:after {
   width: 15px;
   height: 15px;
-  background-position: -35px -1711px;
+  background-position: -10px -1761px;
   display: block;
   left: 0;
   top: 0;
@@ -2869,26 +2880,26 @@ div.modalie {
 .icon.bselection:hover:after {
   width: 15px;
   height: 15px;
-  background-position: -35px -1586px;
+  background-position: -10px -1661px;
   width: 25px;
 }
 .icon.bselection.sel:after {
   width: 15px;
   height: 15px;
-  background-position: -35px -1586px;
+  background-position: -10px -1661px;
   width: 25px;
 }
 .icon.bselection.sel:hover:after {
   width: 15px;
   height: 15px;
-  background-position: -35px -1711px;
+  background-position: -10px -1761px;
   width: 20px;
   margin-left: 5px;
 }
 .icon.bselection-edit:after {
   width: 15px;
   height: 15px;
-  background-position: -10px -1661px;
+  background-position: -35px -1661px;
   display: block;
   left: 0;
   top: 0;
@@ -2896,17 +2907,17 @@ div.modalie {
 .icon.bselection-edit:hover:after {
   width: 15px;
   height: 15px;
-  background-position: -35px -1661px;
+  background-position: -10px -1686px;
 }
 .icon.bselection-edit.sel:after {
   width: 15px;
   height: 15px;
-  background-position: -35px -1661px;
+  background-position: -10px -1686px;
 }
 .icon.bselection-edit.sel:hover:after {
   width: 15px;
   height: 15px;
-  background-position: -10px -1661px;
+  background-position: -35px -1661px;
 }
 .caption-icons-icon.justit {
   position: relative;
@@ -2934,17 +2945,17 @@ div.modalie {
 .caption-icons-icon.bstatus.complet:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -969px;
+  background-position: -10px -999px;
 }
 .caption-icons-icon.bstatus.incomplet:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1059px;
+  background-position: -10px -729px;
 }
 .caption-icons-icon.bemail:after {
   width: 20px;
   height: 15px;
-  background-position: -10px -1636px;
+  background-position: -10px -1736px;
 }
 .caption-icons-icon.bemail.disabled {
   cursor: default;
@@ -2985,7 +2996,7 @@ div.modalie {
 .caption-icons-icon.bnote:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -999px;
+  background-position: -10px -1029px;
 }
 .caption-icons-icon.btrash:after {
   width: 20px;
@@ -3000,8 +3011,8 @@ div.modalie {
   height: 30px;
   background-position: -10px -250px;
 }
-.caption-icons-icon.bsend_receive:after {
-  width: 25px;
+.caption-icons-icon.sender_legend:after {
+  width: 26px;
   height: 20px;
   background-position: -10px -849px;
 }
@@ -3064,7 +3075,7 @@ div.modalie {
 .caption-icons-icon.bedit_mini:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -699px;
+  background-position: -10px -879px;
 }
 .caption-icons-icon.bstar.has:after {
   width: 20px;
@@ -3079,18 +3090,18 @@ div.modalie {
 .caption-icons-icon.bstar.middle:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -609px;
+  background-position: -10px -669px;
 }
 .caption-icons-icon.bannex_file.has:after {
   width: 15px;
   height: 25px;
-  background-position: -10px -480px;
+  background-position: -30px -445px;
   margin-left: 7px;
 }
 .caption-icons-icon.bannex.has:after {
   width: 10px;
   height: 25px;
-  background-position: -35px -480px;
+  background-position: -10px -445px;
   margin-left: 9px;
 }
 .detail-status .caption-icons-icon.bstatus {
@@ -3142,26 +3153,26 @@ div.modalie {
 .thumbnail .icon.bselection-edit:after {
   width: 15px;
   height: 15px;
-  background-position: -10px -1661px;
+  background-position: -35px -1661px;
   width: 25px;
   margin-left: 5px;
 }
 .thumbnail .icon.bselection-edit:hover:after {
   width: 15px;
   height: 15px;
-  background-position: -35px -1661px;
+  background-position: -10px -1686px;
   width: 25px;
 }
 .thumbnail .icon.bselection-edit.sel:after {
   width: 15px;
   height: 15px;
-  background-position: -35px -1661px;
+  background-position: -10px -1686px;
   width: 25px;
 }
 .thumbnail .icon.bselection-edit.sel:hover:after {
   width: 15px;
   height: 15px;
-  background-position: -10px -1661px;
+  background-position: -35px -1661px;
   width: 25px;
 }
 .thumbnail .caption-icons-icon {
@@ -3280,27 +3291,27 @@ th {
 .sprite {
   background: url("../images/sprite.png") top left no-repeat;
 }
-.insiders-less {
-  width: 30px;
+.menu-send_receive {
+  width: 40px;
   height: 30px;
   background-position: -10px -10px;
 }
-.actions-fav-big_selected {
+.insiders-less {
   width: 30px;
   height: 30px;
   background-position: -10px -50px;
 }
-.actions-fav-big {
+.menu-settings {
   width: 30px;
   height: 30px;
   background-position: -10px -90px;
 }
-.menu-send_receive {
-  width: 40px;
+.actions-fav-big_selected {
+  width: 30px;
   height: 30px;
   background-position: -10px -130px;
 }
-.menu-settings {
+.actions-fav-big {
   width: 30px;
   height: 30px;
   background-position: -10px -170px;
@@ -3320,13 +3331,13 @@ th {
   height: 30px;
   background-position: -10px -290px;
 }
-.menu-legend {
-  width: 30px;
+.menu-logoff {
+  width: 25px;
   height: 30px;
   background-position: -10px -330px;
 }
-.menu-logoff {
-  width: 25px;
+.menu-legend {
+  width: 30px;
   height: 30px;
   background-position: -10px -370px;
 }
@@ -3335,20 +3346,20 @@ th {
   height: 25px;
   background-position: -10px -410px;
 }
+.status-annex {
+  width: 10px;
+  height: 25px;
+  background-position: -10px -445px;
+}
 .actions-export_hover {
   width: 25px;
   height: 25px;
-  background-position: -10px -445px;
+  background-position: -10px -480px;
 }
 .actions_annex {
   width: 15px;
   height: 25px;
-  background-position: -10px -480px;
-}
-.status-annex {
-  width: 10px;
-  height: 25px;
-  background-position: -35px -480px;
+  background-position: -30px -445px;
 }
 .badx {
   width: 21px;
@@ -3360,12 +3371,12 @@ th {
   height: 22px;
   background-position: -10px -547px;
 }
-.actions-trash {
-  width: 20px;
+.menu-send_receive_mini {
+  width: 25px;
   height: 20px;
   background-position: -10px -579px;
 }
-.item-middle_fav {
+.actions-trash {
   width: 20px;
   height: 20px;
   background-position: -10px -609px;
@@ -3375,72 +3386,72 @@ th {
   height: 20px;
   background-position: -10px -639px;
 }
-.actions-edit {
+.item-middle_fav {
   width: 20px;
   height: 20px;
   background-position: -10px -669px;
 }
-.actions-edit-mini {
+.actions-edit {
   width: 20px;
   height: 20px;
   background-position: -10px -699px;
 }
-.actions_sample {
+.status-warning {
   width: 20px;
   height: 20px;
   background-position: -10px -729px;
 }
-.other_square_notdot_selected {
+.actions_sample {
   width: 20px;
   height: 20px;
   background-position: -10px -759px;
 }
-.actions-sender_btn {
-  width: 26px;
+.other_square_notdot_selected {
+  width: 20px;
   height: 20px;
   background-position: -10px -789px;
 }
-.actions-sender_legend {
+.actions-sender_btn {
   width: 26px;
   height: 20px;
   background-position: -10px -819px;
 }
-.menu-send_receive_mini {
-  width: 25px;
+.actions-sender_legend {
+  width: 26px;
   height: 20px;
   background-position: -10px -849px;
 }
-.other_square_notdot {
+.actions-edit-mini {
   width: 20px;
   height: 20px;
   background-position: -10px -879px;
 }
-.other_notdot {
+.other_square_notdot {
   width: 20px;
   height: 20px;
   background-position: -10px -909px;
 }
-.other_dot {
+.other_notdot {
   width: 20px;
   height: 20px;
   background-position: -10px -939px;
 }
-.status_check {
+.other_dot {
   width: 20px;
   height: 20px;
   background-position: -10px -969px;
 }
-.insiders-notepad_black {
+.status_check {
   width: 20px;
   height: 20px;
   background-position: -10px -999px;
 }
-.insiders-notepad {
+.insiders-notepad_black {
   width: 20px;
   height: 20px;
   background-position: -10px -1029px;
 }
-.status-warning {
+.insiders-notepad {
   width: 20px;
   height: 20px;
   background-position: -10px -1059px;
@@ -3515,30 +3526,35 @@ th {
   height: 17px;
   background-position: -10px -1479px;
 }
-.actions_tag {
-  width: 20px;
-  height: 17px;
-  background-position: -10px -1506px;
-}
 .hashtag {
   width: 16px;
   height: 17px;
-  background-position: -10px -1533px;
+  background-position: -10px -1506px;
 }
-.open-down {
-  width: 15px;
-  height: 16px;
-  background-position: -10px -1560px;
+.actions_tag {
+  width: 20px;
+  height: 17px;
+  background-position: -10px -1533px;
 }
 .white_x {
   width: 15px;
   height: 16px;
+  background-position: -10px -1560px;
+}
+.open-down {
+  width: 15px;
+  height: 16px;
   background-position: -35px -1560px;
 }
-.opt_ordering {
+.actions-arrow_right_right {
   width: 15px;
   height: 15px;
   background-position: -10px -1586px;
+}
+.other-go_top {
+  width: 15px;
+  height: 15px;
+  background-position: -35px -1586px;
 }
 .item-email_disabled {
   width: 20px;
@@ -3553,24 +3569,19 @@ th {
 .item_selected {
   width: 15px;
   height: 15px;
-  background-position: -35px -1586px;
+  background-position: -10px -1661px;
 }
 .insiders-edit_blue {
   width: 15px;
   height: 15px;
-  background-position: -10px -1661px;
+  background-position: -35px -1661px;
 }
 .insiders-edit_gray {
   width: 15px;
   height: 15px;
-  background-position: -35px -1661px;
-}
-.actions-arrow_left_left {
-  width: 15px;
-  height: 15px;
   background-position: -10px -1686px;
 }
-.actions-arrow_right_right {
+.opt_ordering {
   width: 15px;
   height: 15px;
   background-position: -35px -1686px;
@@ -3580,35 +3591,40 @@ th {
   height: 15px;
   background-position: -10px -1711px;
 }
-.item_select {
+.item-email_black {
+  width: 20px;
+  height: 15px;
+  background-position: -10px -1736px;
+}
+.actions-arrow_left_left {
   width: 15px;
   height: 15px;
   background-position: -35px -1711px;
 }
-.other-go_top {
+.item_select {
   width: 15px;
   height: 15px;
-  background-position: -10px -1736px;
-}
-.check {
-  width: 14px;
-  height: 12px;
-  background-position: -36px -1533px;
+  background-position: -10px -1761px;
 }
 .opt_search {
   width: 12px;
   height: 12px;
   background-position: -37px -1479px;
 }
+.check {
+  width: 14px;
+  height: 12px;
+  background-position: -36px -1506px;
+}
 .other-arrow_down {
   width: 10px;
   height: 10px;
-  background-position: -40px -579px;
+  background-position: -40px -609px;
 }
 .other-arrow_right {
   width: 10px;
   height: 10px;
-  background-position: -40px -609px;
+  background-position: -40px -639px;
 }
 /***************
 *********************HOME e busca
@@ -3779,7 +3795,7 @@ label {
   background: url("../images/sprite.png") top left no-repeat;
   width: 15px;
   height: 15px;
-  background-position: -10px -1586px;
+  background-position: -35px -1686px;
   position: relative;
   float: left;
   content: "";
@@ -3794,7 +3810,7 @@ label {
   background: url("../images/sprite.png") top left no-repeat;
   width: 25px;
   height: 25px;
-  background-position: -10px -445px;
+  background-position: -10px -480px;
   position: relative;
   float: left;
   content: "";
@@ -4235,7 +4251,7 @@ form textarea {
   background: url("../images/sprite.png") top left no-repeat;
   width: 15px;
   height: 16px;
-  background-position: -10px -1560px;
+  background-position: -35px -1560px;
   margin: 2px 0 0 1px ;
 }
 .open-info:hover {
@@ -4478,7 +4494,7 @@ form textarea {
   background: url("../images/sprite.png") top left no-repeat;
   width: 15px;
   height: 16px;
-  background-position: -35px -1560px;
+  background-position: -10px -1560px;
 }
 .cnt-nav label.cnt-close1 {
   top: 25px;
@@ -4494,7 +4510,7 @@ form textarea {
   background: url("../images/sprite.png") top left no-repeat;
   width: 15px;
   height: 15px;
-  background-position: -35px -1686px;
+  background-position: -10px -1586px;
 }
 .cnt-nav label.cnt-prev span {
   margin: 8px 0 0 6px;
@@ -4504,7 +4520,7 @@ form textarea {
   background: url("../images/sprite.png") top left no-repeat;
   width: 15px;
   height: 15px;
-  background-position: -10px -1686px;
+  background-position: -35px -1711px;
 }
 input:checked + .cnt-slide-container .cnt-slide {
   opacity: 1;
