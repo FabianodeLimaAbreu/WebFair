@@ -1447,6 +1447,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         case 'amostras':
           //this.data = a.sortBy(this.nsort);
           this.data = a;
+          console.dir(this.data);
           this.content.changeview(this.view);
           //this.filter.checklist(a);
           //$(".changeview button.b"+this.view);
@@ -2490,7 +2491,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
     },
     sendEmailGo:function(item){
       //debugger;
-      var i,j,length,amos_sel=[],counter,any_principal=!0,email="",context=this,listtemplates;
+      var i,j,length,amos_sel=[],counter,any_principal=!0,contemail="",context=this,listtemplates;
       if(!item.length){
         this.modal.open("message","Fornecedor Inativo!!!",!1,!0);
         return !1;
@@ -2529,7 +2530,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 item[0].CONTACTS.forEach(function(element,index){
                   if(element.CONT_EMAIL.length && !contemail.length){
                     contemail=element.CONT_EMAIL;
-                    context.modal.open("message","Abrir combo para usuário setar um contato como principal",!1,!0);
+                    //context.modal.open("message","Abrir combo para usuário setar um contato como principal",!1,!0);
+                    context.modal.open("contacts",item[0],!1,!1);
                     //context.modal.open("message","O fornecedor não possui um contato principal!",!1,!0);
                     return !1;
                   }
@@ -2552,7 +2554,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 
               $.cookie.json = !0;
               var temp={
-                "opt":[amos_sel,contemail]
+                "opt":[amos_sel,contemail,this.usr]
               }
               var tempforn={
                 "opt":[item[0]]

@@ -336,12 +336,28 @@ window.Modal = Spine.Controller.sub({
     isquest &amp;&amp; this.buttons_container.removeClass('hide');
     this.main.removeClass('foremail');
     if(typeof msg === "object"){
-      if(who === "template"){
-        this.main.addClass('foremail');
-        this.populateTemp(msg);
-      }
-      else{
-        this.populateForn(who,msg);
+      switch(who){
+        case 'template':
+          var html="";
+          this.main.addClass('foremail');
+          this.email=msg;
+          this.main.find("tbody").empty();
+          for(i=0;i&lt;msg[0].length;i++){
+            html+="&lt;tr>&lt;td>&lt;a href='#"+msg[0][i].TEMP_ID+"' class='link' name='"+msg[0][i].TEMP_ID+"'>"+msg[0][i].TEMP_DESC+"&lt;/a>&lt;/td>&lt;td>&lt;a href='#"+msg[0][i].TEMP_ID+"' class='link' name='"+msg[0][i].TEMP_ID+"'>"+msg[0][i].TP_TEMP_DESC+"&lt;/a>&lt;/td>&lt;/tr>";
+          }
+          this.main.find("tbody").append(html);
+          break;
+        case 'contacts':
+          var html="";
+          this.main.addClass('foremail');
+          this.email=msg;
+          this.main.find("tbody").empty();
+          console.dir(msg);
+          for(i=0;i&lt;msg.CONTACTS.length;i++){
+            html+="&lt;tr>&lt;td>&lt;a href='#"+msg.CONTACTS[i].CONT_ID+"' class='link' name='"+msg.CONTACTS[i].CONT_ID+"'>"+msg.CONTACTS[i].CONT_NOME+"&lt;/a>&lt;/td>&lt;td>&lt;a href='#"+msg.CONTACTS[i].CONT_ID+"' class='link' name='"+msg.CONTACTS[i].CONT_ID+"'>"+msg.CONTACTS[i].CONT_EMAIL+"&lt;/a>&lt;/td>&lt;/tr>";
+          }
+          this.main.find("tbody").append(html);
+          break;
       }
     }
     else{
@@ -351,15 +367,6 @@ window.Modal = Spine.Controller.sub({
     if(call &amp;&amp; "function" === typeof call)
       //If d is a function
       this.callback = call;
-  },
-  populateTemp:function(msg){
-    var i,html="";
-    this.email=msg;
-    this.main.find("tbody").empty();
-    for(i=0;i&lt;msg[0].length;i++){
-      html+="&lt;tr>&lt;td>&lt;a href='#"+msg[0][i].TEMP_ID+"' class='link' name='"+msg[0][i].TEMP_ID+"'>"+msg[0][i].TEMP_DESC+"&lt;/a>&lt;/td>&lt;td>&lt;a href='#"+msg[0][i].TEMP_ID+"' class='link' name='"+msg[0][i].TEMP_ID+"'>"+msg[0][i].TP_TEMP_DESC+"&lt;/a>&lt;/td>&lt;/tr>";
-    }
-    this.main.find("tbody").append(html);
   },
   populateForn:function(who,msg){
     $("."+who).find("input").each(function(a,b){

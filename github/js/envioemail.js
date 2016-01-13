@@ -14,7 +14,8 @@ var App={
 	elements:{
 		'el':$("body"),
 		"loginName" : $(".login-name"),
-		"loginId" : $(".login-id")
+		"loginId" : $(".login-id"),
+        "loginName":$(".login-name")
 	},
 
 	/**
@@ -27,6 +28,7 @@ var App={
 		$(".send-temp").bind("click",this.submit);
 		$(".hash").bind("click",function(a){core.addHash(a)});
 		$(".info-template textarea").bind("focus",this.focusArea);
+        $(".send-temp").bind("click",function(a){core.submitTemp(a)});
 	},
 
 	/**
@@ -47,6 +49,8 @@ var App={
         if(this.tempcookie && this.tempforn){
         	this.tempcookie=jQuery.parseJSON(this.tempcookie);
             this.tempforn=jQuery.parseJSON(this.tempforn);
+            this.elements.loginName.text(this.tempcookie.opt[2].USU_NOME);
+            this.elements.loginId.text(this.tempcookie.opt[2].SEGM_DESC);
         }
         else{
         	alert("um erro ocorreu");
@@ -82,7 +86,8 @@ var App={
 	},
 
 	processError:function(data, status, req){
-      alert("template não encontrado");
+        var modal=new Modal(!0,"Um erro ocorreu!!!");
+        modal.open();
     },
 
     replaceTags:function(val){
@@ -103,7 +108,7 @@ var App={
     addHash:function(a){	
       var el=$(a.target),area,core=this;
       area=$(".info-template textarea.focused");
-      var caretPos = area[0].selectionStart;
+      var caretPos = area[0].selectionStart;    
       var textAreaTxt = area.val();
       var txtToAdd = this.replaceTags("##"+el.attr("alt"));
       area.val(textAreaTxt.substring(0, caretPos) + txtToAdd + textAreaTxt.substring(caretPos) );
@@ -119,9 +124,57 @@ var App={
 	* @param {event} a - Submit event itself
 	* @memberOf Login#
 	*/
-	submit:function(a){
-		debugger;
-	}
-	
+	submitTemp:function(a){
+        var EMAIL_TO,EMAIL_FROM,EMAIL_SUBJECT,EMAIL_BODY;
+        EMAIL_TO=this.tempcookie.opt[1].CONT_EMAIL;
+        EMAIL_FROM=this.tempcookie.opt[2].USU_EMAIL;
+        EMAIL_SUBJECT=$("textarea[name='TEMP_SUBJECT']").val();
+        EMAIL_BODY=$("textarea[name='TEMP_BODY']").val();
+
+        console.log(EMAIL_FROM+"  =  "+EMAIL_TO);
+        EMAIL_TO="fabianoabreu@focustextil.com.br";
+        EMAIL_FROM="fabianoabreu@focustextil.com.br";
+
+		var core=this;
+        $.support.cors=true;
+        core.ajaxrequest=!0;                                                                        
+        $.ajax({
+            type: "POST",
+            url: nodePath+"EnviarEmail",
+            contentType: "text/xml; charset=utf-8",
+            dataType: "xml",
+            crossDomain: true,
+            context: core,
+            data: '<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><EnviarEmail xmlns="http://tempuri.org/"><email><EMAIL_FROM>'+EMAIL_FROM+'</EMAIL_FROM><EMAIL_TO>'+EMAIL_TO+'</EMAIL_TO><EMAIL_SUBJECT>'+EMAIL_SUBJECT+'</EMAIL_SUBJECT><EMAIL_BODY>'+EMAIL_BODY.replace(/(\r\n|\n|\r)/gm, "\r\n")+'</EMAIL_BODY><USU_COD>1</USU_COD></email></EnviarEmail></soap:Body></soap:Envelope>',
+            success: core.emailSent,
+            error: core.processError
+        });
+	},
+    emailSent:function(data, status, req){
+        var modal=new Modal(!1,"Email enviado com sucesso!!!");
+        modal.open();
+    }
 };
+
+function Modal(isbad,msg){
+    var core=this;
+    this.container=$(".modal_mask");
+    this.el=$(".modal");
+    this.modal_text=$(".modal-text");
+    this.btnclose=$(".alertclose");
+    this.btnclose.bind("click",function(){core.close()});
+
+    this.open=function(){
+        if(isbad){  
+            this.el.addClass('bad');
+        }
+        this.modal_text.text(msg);
+        this.container.fadeIn();
+    };
+    this.close=function(){
+        this.el.removeClass('bad');
+        this.container.fadeOut();
+        window.close();
+    }
+}
 App.init();

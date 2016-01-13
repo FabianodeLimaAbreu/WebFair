@@ -162,7 +162,8 @@ window.Modal = Spine.Controller.sub({
     "click .alertclose":"close",
     "click .dialog-save":"save",
     "click .link":"goEmail",
-    "click .question button":"actions"
+    "click .question button":"actions",
+    "click .setFav":"setFav"
   },
 
   /**
@@ -208,6 +209,10 @@ window.Modal = Spine.Controller.sub({
     window.open("envioemail.html?template="+$(a.target).attr("name"));
     this.close();
   },
+  setFav:function(a){
+    a.preventDefault();
+    alert("CLICOU");
+  },
   open:function(who,msg,call,isbad,isquest) {
     var a;
     msg= msg || "";
@@ -219,12 +224,29 @@ window.Modal = Spine.Controller.sub({
     isquest && this.buttons_container.removeClass('hide');
     this.main.removeClass('foremail');
     if(typeof msg === "object"){
-      if(who === "template"){
-        this.main.addClass('foremail');
-        this.populateTemp(msg);
-      }
-      else{
-        this.populateForn(who,msg);
+      switch(who){
+        case 'template':
+          var html="";
+          this.main.addClass('foremail');
+          this.email=msg;
+          this.main.find("tbody").empty();
+          for(i=0;i<msg[0].length;i++){
+            html+="<tr><td><a href='#"+msg[0][i].TEMP_ID+"' class='link' name='"+msg[0][i].TEMP_ID+"'>"+msg[0][i].TEMP_DESC+"</a></td><td><a href='#"+msg[0][i].TEMP_ID+"' class='link' name='"+msg[0][i].TEMP_ID+"'>"+msg[0][i].TP_TEMP_DESC+"</a></td></tr>";
+          }
+          this.main.find("tbody").append(html);
+          break;
+        case 'contacts':
+          var html="";
+          this.main.find("tbody").empty();
+          this.main.addClass('foremail');
+          this.email=msg;
+          for(i=0;i<msg.CONTACTS.length;i++){
+            if(msg.CONTACTS[i].CONT_EMAIL.length){
+              html+="<tr><td><a href='#"+msg.CONTACTS[i].CONT_ID+"' class='setFav' name='"+msg.CONTACTS[i].CONT_ID+"'>"+msg.CONTACTS[i].CONT_NOME+"</a></td><td><a href='#"+msg.CONTACTS[i].CONT_ID+"' class='setFav' name='"+msg.CONTACTS[i].CONT_ID+"'>"+msg.CONTACTS[i].CONT_EMAIL+"</a></td></tr>";
+            }
+          }
+          this.main.find("tbody").append(html);
+          break;
       }
     }
     else{
@@ -234,15 +256,6 @@ window.Modal = Spine.Controller.sub({
     if(call && "function" === typeof call)
       //If d is a function
       this.callback = call;
-  },
-  populateTemp:function(msg){
-    var i,html="";
-    this.email=msg;
-    this.main.find("tbody").empty();
-    for(i=0;i<msg[0].length;i++){
-      html+="<tr><td><a href='#"+msg[0][i].TEMP_ID+"' class='link' name='"+msg[0][i].TEMP_ID+"'>"+msg[0][i].TEMP_DESC+"</a></td><td><a href='#"+msg[0][i].TEMP_ID+"' class='link' name='"+msg[0][i].TEMP_ID+"'>"+msg[0][i].TP_TEMP_DESC+"</a></td></tr>";
-    }
-    this.main.find("tbody").append(html);
   },
   populateForn:function(who,msg){
     $("."+who).find("input").each(function(a,b){

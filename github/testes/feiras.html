@@ -17,15 +17,15 @@
 
                   $.support.cors=true;
                   $.ajax({
-                           type: "POST",
-                           url: wsUrl,
-                           contentType: "text/xml; charset=utf-8",
-                           dataType: "xml",
-                           crossDomain: true,
-                           data: soapRequest,
-                        success: processSuccess,
-                         error: processError
-                         });
+                      $interpolate(text, mustHaveExpressionq)ype: "POST",
+                      url: wsUrl,
+                      contentType: "text/xml; charset=utf-8",
+                      dataType: "xml",
+                      crossDomain: true,
+                      data: soapRequest,
+                      success: processSuccess,
+                      error: processError
+                      });
                   });
             });
             

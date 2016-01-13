@@ -248,6 +248,7 @@ reset:function(){
 * @memberOf Filter#
 * @name init
 */
+
 init:function() {
   this.list = [];
 	this.data = null;
