@@ -2530,9 +2530,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 item[0].CONTACTS.forEach(function(element,index){
                   if(element.CONT_EMAIL.length && !contemail.length){
                     contemail=element.CONT_EMAIL;
-                    //context.modal.open("message","Abrir combo para usuário setar um contato como principal",!1,!0);
-                    context.modal.open("contacts",item[0],!1,!1);
-                    //context.modal.open("message","O fornecedor não possui um contato principal!",!1,!0);
+                    context.modal.open("message","O contato principal deste fornecedor não possui email cadastrado!!!",!1,!0);
+                    //context.modal.open("contacts",item[0],!1,!1);
                     return !1;
                   }
                   else{

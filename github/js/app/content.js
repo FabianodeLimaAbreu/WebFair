@@ -232,7 +232,7 @@ window.Modal = Spine.Controller.sub({
           this.main.find("tbody").empty();
           for(i=0;i<msg[0].length;i++){
             html+="<tr><td><a href='#"+msg[0][i].TEMP_ID+"' class='link' name='"+msg[0][i].TEMP_ID+"'>"+msg[0][i].TEMP_DESC+"</a></td><td><a href='#"+msg[0][i].TEMP_ID+"' class='link' name='"+msg[0][i].TEMP_ID+"'>"+msg[0][i].TP_TEMP_DESC+"</a></td></tr>";
-          }
+          }     
           this.main.find("tbody").append(html);
           break;
         case 'contacts':
@@ -643,7 +643,14 @@ window.Box = Spine.Controller.sub({init:function() {
       case 'template_email':
         var result="";
         //result='<td style="max-width:200px;">'+a.TEMP_ID+"<br/></td>"+"<td>"+a.SEGM_DESC+"<br/><div class='template"+a.TEMP_ID+" show-hide hide'>Assunto</br>"+"Texto"+"</div></td>"+"<td>"+a.TEMP_DESC+"</br><div class='template"+a.TEMP_ID+" show-hide hide'>"+a.TEMP_SUBJECT+"</br>"+a.TEMP_BODY+"</div></td>"+"<td>"+a.TP_TEMP_DESC+"</br><div class='template"+a.TEMP_ID+" show-hide hide'>ITENS PERSONALIZADOS"+"<div class='close-size'>"+/*<button type='button' class='icon floatLeft s-four edit-temp' alt='list' name='"+a.TEMP_ID+"'>Editar</button><button type='button' class='icon floatLeft s-four delete-temp' alt='list' name='"+a.TP_TEMP_ID+"' title='"+a.TEMP_ID+"''>Deletar</button>*/'</div></div></td><td><button type="button" class="caption-icons-icon bstar  bnote" name="'+a.TEMP_ID+'"></button></td>';
-        result='<td style="max-width:200px;">'+a.TEMP_ID+'<br/><div class="info-template hide item'+a.TEMP_ID+'"><div class="text-template"><p><b>ASSUNTO</b></p><br><form><textarea disabled="disabled" name="TEMP_SUBJECT">'+a.TEMP_SUBJECT+'</textarea><br><p><b>TEXTO</b></p><br><textarea disabled="disabled" name="TEMP_BODY" class="edit-text">'+a.TEMP_BODY+'</textarea></form></div><ul class="custombuttons hide"><li><p><b>ITENS PERSONALIZADOS</b></p></li><li><button type="button" class="icon floatLeft s-four  hash" alt="SUPPLIER" name="'+a.TEMP_ID+'">Fornecedor</button></li><li><button type="button" class="icon floatLeft s-four  hash" alt="SAMPLES" name="'+a.TEMP_ID+'">Amostras</button></li><li><button type="button" class="icon floatLeft s-four  hash" alt="CONTACT" name="'+a.TEMP_ID+'">Contato</button></li></ul><ul class="ulbottom"><li><button type="button" class="icon floatLeft s-four edit-temp" alt="list" name="'+a.TEMP_ID+'">Editar</button></li><li><button type="button" class="icon floatLeft s-four delete-temp" alt="list" title="'+a.TEMP_ID+'" name="'+a.TP_TEMP_ID+'">Excluir</button></li><li><button type="button" class="icon floatLeft s-four save-temp hide" alt="list" name="'+a.TEMP_ID+'">Salvar</button></li></ul><button type="button" class="icon s-four close-temp" alt="list" name="'+a.TEMP_ID+'">Fechar</button></div></td></td><td>'+a.SEGM_DESC+'</td><td>'+a.TEMP_DESC+'</td><td>'+a.TP_TEMP_DESC+'</td><td><button type="button" class="open-info" name="'+a.TEMP_ID+'"><span></span></button></td>';
+        result='<td style="max-width:200px;">'+a.TEMP_ID+'<br/><div class="info-template hide item'+a.TEMP_ID+'"><div class="text-template"><p><b>ASSUNTO</b></p><br><form><textarea disabled="disabled" name="TEMP_SUBJECT">'+a.TEMP_SUBJECT+'</textarea><br><p><b>TEXTO</b></p><br><textarea disabled="disabled" name="TEMP_BODY" class="edit-text">'+a.TEMP_BODY+'</textarea></form></div><ul class="custombuttons hide"><li><p><b>ITENS PERSONALIZADOS</b></p></li><li><button type="button" class="icon floatLeft s-four  hash" alt="SUPPLIER" name="'+a.TEMP_ID+'">Fornecedor</button></li><li><button type="button" class="icon floatLeft s-four  hash" alt="SAMPLES" name="'+a.TEMP_ID+'">Amostras</button></li><li><button type="button" class="icon floatLeft s-four  hash" alt="CONTACT" name="'+a.TEMP_ID+'">Contato</button></li></ul>';
+        if(this.usr.SEGM_COD === "TD"){
+          result+='<ul class="ulbottom hide">';
+        }
+        else{
+          result+='<ul class="ulbottom">';
+        }
+        result+='<li><button type="button" class="icon floatLeft s-four edit-temp" alt="list" name="'+a.TEMP_ID+'">Editar</button></li><li><button type="button" class="icon floatLeft s-four delete-temp" alt="list" title="'+a.TEMP_ID+'" name="'+a.TP_TEMP_ID+'">Excluir</button></li><li><button type="button" class="icon floatLeft s-four save-temp hide" alt="list" name="'+a.TEMP_ID+'">Salvar</button></li></ul><button type="button" class="icon s-four close-temp" alt="list" name="'+a.TEMP_ID+'">Fechar</button></div></td></td><td>'+a.SEGM_DESC+'</td><td>'+a.TEMP_DESC+'</td><td>'+a.TP_TEMP_DESC+'</td><td><button type="button" class="open-info" name="'+a.TEMP_ID+'"><span></span></button></td>';
         return result;
         break;
       default:
