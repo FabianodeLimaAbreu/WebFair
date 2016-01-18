@@ -248,6 +248,10 @@
 		margin: 0 auto;
 		width: 30px;
 		float: none;
+		&.bselection-big{
+			width: 40px;
+			height: 40px;
+		}
 		&:after{
 			.sprite;
 			.status-annex;
@@ -287,7 +291,7 @@
 	}
 	&.bselection{
 		&:after{
-			.item_select;
+			.item_select_small;
 			display: block;
 			left: 0;
   			top: 0;
@@ -296,18 +300,18 @@
 		}
 		&:hover{
 			&:after{
-				.item_selected;
+				.item_selected_small;
 				width:25px;
 			}
 		}
 		&.sel{
 			&:after{
-				.item_selected;
+				.item_selected_small;
 				width:25px;
 			}
 			&:hover{
 				&:after{
-					.item_select;
+					.item_select_small;
 					width: 20px;
   					margin-left: 5px;
 				}
@@ -422,7 +426,7 @@
 	}
 	&.btrash{
 		&:after{
-			.item-trash_black;
+			.item-cleafilter;
 		}
 	}
 	&.btrash-big{
@@ -563,16 +567,21 @@
 			right: 0;
 		}
 		&.bselection-edit,&.bselection{
+			border: 1px solid #ebebeb;
 			background: #fff;
 			border:none;
 			&:after{
 				display: block;
-				left: 2px;
+				left: 5px;
+				width: 30px;
+				height: 30px;
 			}
 			&:hover{
+				border: 1px solid #292929;
 				background: @inative-itens;
 			}
 			&.sel{
+				border: 1px solid #292929;
 				background: @inative-itens;
 				&:hover{
 					background: #fff;
@@ -581,26 +590,46 @@
 		}
 		&.bselection-edit{
 			&:after{
-				.insiders-edit_blue;
-			    width: 25px;
+				.insiders-edit_gray_big;
 			    margin-left: 5px;
 			}
 			&:hover{
 				&:after{
-					.insiders-edit_gray;
-					width: 25px;
+					.insiders-edit_gray_big;
 				}
 			}
 			&.sel{
 				&:after{
-					.insiders-edit_gray;
-					width: 25px;
+					.insiders-edit_gray_big;
 				}
 				&:hover{
 					&:after{
-						.insiders-edit_blue;
-						width: 25px;
+						.insiders-edit_blue_big;
 					}
+				}
+			}
+		}
+		&.bselection{
+			
+			&:after{
+				.item_select_big;
+			}
+			&:hover{
+				&:after{
+					.item_selected_big;
+				}
+				background: @inative-itens;
+			}
+			&.sel{
+				background: @inative-itens;
+				&:after{
+					.item_selected_big;
+				}
+				&:hover{
+					&:after{
+						.item_selected_big;
+					}
+					background: #fff;
 				}
 			}
 		}

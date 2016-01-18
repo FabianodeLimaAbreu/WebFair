@@ -463,7 +463,7 @@ header{
     		&.icon.bselection:hover{
     			background-color: #fff;
 				&:after{
-					.item_select;
+					.item_select_small;
 					width:25px;
 				}
     		}
@@ -1578,7 +1578,7 @@ form.search{
 				}
 				&.btrash{
 					&:after{
-						.item-trash_black
+						.item-cleafilter;
 					}
 				}
 			}
@@ -1845,6 +1845,12 @@ form.search{
 		min-height: 200px;
 		padding: 1px;
 		cursor: pointer;
+	}
+	.icon{
+		height: 50px;
+		&.bselection-edit, &.icon.bselection{
+			width: 50px;
+		}
 	}
 }
 .caption{

@@ -2543,7 +2543,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 });
             }
             else{
-              /*for(j=0;j<this.select_items.length;j++){
+              /*for(j=0;j<this.select_items.length;j++){  
                 amos_sel.push(this.select_items[j].AMOS_DESC);
               }*/
               //console.log("email para: "+email);
@@ -2569,6 +2569,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
     CleanFilter:function(){
       var scroll;
       this.resetFilters();
+      $.removeCookie('posscroll', { path: '/' });
       this.mode="amostras/"+(this.fairval || "padrao")+"/"+(this.fornval.replace(" ","_") || "padrao")+"/"+(this.amosval.replace(" ","_") || "padrao");
       /*scroll=this.cookiefair[0];
       this.restartValues();
@@ -2594,6 +2595,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         $(".info-template.item"+id).find("textarea").attr('disabled','disabled');
         $(".info-template textarea").removeClass('focused');
         $(".info-template.item"+id).find(".custombuttons").addClass('hide');
+
       }
       else{
         $(".info-template.item"+id).find("textarea").removeAttr('disabled');
@@ -2601,7 +2603,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         $(".info-template.item"+id).find(".custombuttons").removeClass('hide');
       }
     },
-    toggleTemplate:function(a){
+    toggleTemplate:function(a){   
       var el;
       if($(a.target).prop("tagName") ===  "SPAN"){
         el=$(a.target).parent();

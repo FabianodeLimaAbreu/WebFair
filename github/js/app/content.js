@@ -381,6 +381,7 @@ window.Box = Spine.Controller.sub({init:function() {
       }
     }
   }, images:function(a) {
+
     var homologado,note,fisica,fav,email,annex,status,result="",samesegm=!1;
     this.el.addClass('col col-small col-large');
     $(".bselect").removeClass("sel");
@@ -404,7 +405,7 @@ window.Box = Spine.Controller.sub({init:function() {
       else{
         $(".bselect[name='bselection']").addClass('sel');
       }
-      result+="<button type='button' name='"+a.AMOS_ID+"' class='icon bselection'></button>"; //bselection
+      result+="<button type='button' name='"+a.AMOS_ID+"' class='icon bselection bselection-big'></button>"; //bselection
     }
     //result+="<a href='#detail/"+parseInt(a.FEIR_COD)+"/"+a.AMOS_DESC+"'><div class='thumbnail' id="+a.AMOS_ID+"><button type='button' name='"+a.AMOS_ID+"' class='icon'></button>"; //bselection
 

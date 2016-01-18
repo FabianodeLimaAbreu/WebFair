@@ -279,7 +279,8 @@ window.Modal = Spine.Controller.sub({
     "click .alertclose":"close",
     "click .dialog-save":"save",
     "click .link":"goEmail",
-    "click .question button":"actions"
+    "click .question button":"actions",
+    "click .setFav":"setFav"
   },
 
   /**
@@ -325,6 +326,10 @@ window.Modal = Spine.Controller.sub({
     window.open("envioemail.html?template="+$(a.target).attr("name"));
     this.close();
   },
+  setFav:function(a){
+    a.preventDefault();
+    alert("CLICOU");
+  },
   open:function(who,msg,call,isbad,isquest) {
     var a;
     msg= msg || "";
@@ -344,17 +349,18 @@ window.Modal = Spine.Controller.sub({
           this.main.find("tbody").empty();
           for(i=0;i&lt;msg[0].length;i++){
             html+="&lt;tr>&lt;td>&lt;a href='#"+msg[0][i].TEMP_ID+"' class='link' name='"+msg[0][i].TEMP_ID+"'>"+msg[0][i].TEMP_DESC+"&lt;/a>&lt;/td>&lt;td>&lt;a href='#"+msg[0][i].TEMP_ID+"' class='link' name='"+msg[0][i].TEMP_ID+"'>"+msg[0][i].TP_TEMP_DESC+"&lt;/a>&lt;/td>&lt;/tr>";
-          }
+          }     
           this.main.find("tbody").append(html);
           break;
         case 'contacts':
           var html="";
+          this.main.find("tbody").empty();
           this.main.addClass('foremail');
           this.email=msg;
-          this.main.find("tbody").empty();
-          console.dir(msg);
           for(i=0;i&lt;msg.CONTACTS.length;i++){
-            html+="&lt;tr>&lt;td>&lt;a href='#"+msg.CONTACTS[i].CONT_ID+"' class='link' name='"+msg.CONTACTS[i].CONT_ID+"'>"+msg.CONTACTS[i].CONT_NOME+"&lt;/a>&lt;/td>&lt;td>&lt;a href='#"+msg.CONTACTS[i].CONT_ID+"' class='link' name='"+msg.CONTACTS[i].CONT_ID+"'>"+msg.CONTACTS[i].CONT_EMAIL+"&lt;/a>&lt;/td>&lt;/tr>";
+            if(msg.CONTACTS[i].CONT_EMAIL.length){
+              html+="&lt;tr>&lt;td>&lt;a href='#"+msg.CONTACTS[i].CONT_ID+"' class='setFav' name='"+msg.CONTACTS[i].CONT_ID+"'>"+msg.CONTACTS[i].CONT_NOME+"&lt;/a>&lt;/td>&lt;td>&lt;a href='#"+msg.CONTACTS[i].CONT_ID+"' class='setFav' name='"+msg.CONTACTS[i].CONT_ID+"'>"+msg.CONTACTS[i].CONT_EMAIL+"&lt;/a>&lt;/td>&lt;/tr>";
+            }
           }
           this.main.find("tbody").append(html);
           break;
@@ -492,6 +498,7 @@ window.Box = Spine.Controller.sub({init:function() {
       }
     }
   }, images:function(a) {
+
     var homologado,note,fisica,fav,email,annex,status,result="",samesegm=!1;
     this.el.addClass('col col-small col-large');
     $(".bselect").removeClass("sel");
@@ -515,7 +522,7 @@ window.Box = Spine.Controller.sub({init:function() {
       else{
         $(".bselect[name='bselection']").addClass('sel');
       }
-      result+="&lt;button type='button' name='"+a.AMOS_ID+"' class='icon bselection'>&lt;/button>"; //bselection
+      result+="&lt;button type='button' name='"+a.AMOS_ID+"' class='icon bselection bselection-big'>&lt;/button>"; //bselection
     }
     //result+="&lt;a href='#detail/"+parseInt(a.FEIR_COD)+"/"+a.AMOS_DESC+"'>&lt;div class='thumbnail' id="+a.AMOS_ID+">&lt;button type='button' name='"+a.AMOS_ID+"' class='icon'>&lt;/button>"; //bselection
 
@@ -754,7 +761,14 @@ window.Box = Spine.Controller.sub({init:function() {
       case 'template_email':
         var result="";
         //result='&lt;td style="max-width:200px;">'+a.TEMP_ID+"&lt;br/>&lt;/td>"+"&lt;td>"+a.SEGM_DESC+"&lt;br/>&lt;div class='template"+a.TEMP_ID+" show-hide hide'>Assunto&lt;/br>"+"Texto"+"&lt;/div>&lt;/td>"+"&lt;td>"+a.TEMP_DESC+"&lt;/br>&lt;div class='template"+a.TEMP_ID+" show-hide hide'>"+a.TEMP_SUBJECT+"&lt;/br>"+a.TEMP_BODY+"&lt;/div>&lt;/td>"+"&lt;td>"+a.TP_TEMP_DESC+"&lt;/br>&lt;div class='template"+a.TEMP_ID+" show-hide hide'>ITENS PERSONALIZADOS"+"&lt;div class='close-size'>"+/*&lt;button type='button' class='icon floatLeft s-four edit-temp' alt='list' name='"+a.TEMP_ID+"'>Editar&lt;/button>&lt;button type='button' class='icon floatLeft s-four delete-temp' alt='list' name='"+a.TP_TEMP_ID+"' title='"+a.TEMP_ID+"''>Deletar&lt;/button>*/'&lt;/div>&lt;/div>&lt;/td>&lt;td>&lt;button type="button" class="caption-icons-icon bstar  bnote" name="'+a.TEMP_ID+'">&lt;/button>&lt;/td>';
-        result='&lt;td style="max-width:200px;">'+a.TEMP_ID+'&lt;br/>&lt;div class="info-template hide item'+a.TEMP_ID+'">&lt;div class="text-template">&lt;p>&lt;b>ASSUNTO&lt;/b>&lt;/p>&lt;br>&lt;form>&lt;textarea disabled="disabled" name="TEMP_SUBJECT">'+a.TEMP_SUBJECT+'&lt;/textarea>&lt;br>&lt;p>&lt;b>TEXTO&lt;/b>&lt;/p>&lt;br>&lt;textarea disabled="disabled" name="TEMP_BODY" class="edit-text">'+a.TEMP_BODY+'&lt;/textarea>&lt;/form>&lt;/div>&lt;ul class="custombuttons hide">&lt;li>&lt;p>&lt;b>ITENS PERSONALIZADOS&lt;/b>&lt;/p>&lt;/li>&lt;li>&lt;button type="button" class="icon floatLeft s-four  hash" alt="SUPPLIER" name="'+a.TEMP_ID+'">Fornecedor&lt;/button>&lt;/li>&lt;li>&lt;button type="button" class="icon floatLeft s-four  hash" alt="SAMPLES" name="'+a.TEMP_ID+'">Amostras&lt;/button>&lt;/li>&lt;li>&lt;button type="button" class="icon floatLeft s-four  hash" alt="CONTACT" name="'+a.TEMP_ID+'">Contato&lt;/button>&lt;/li>&lt;/ul>&lt;ul class="ulbottom">&lt;li>&lt;button type="button" class="icon floatLeft s-four edit-temp" alt="list" name="'+a.TEMP_ID+'">Editar&lt;/button>&lt;/li>&lt;li>&lt;button type="button" class="icon floatLeft s-four delete-temp" alt="list" title="'+a.TEMP_ID+'" name="'+a.TP_TEMP_ID+'">Excluir&lt;/button>&lt;/li>&lt;li>&lt;button type="button" class="icon floatLeft s-four save-temp hide" alt="list" name="'+a.TEMP_ID+'">Salvar&lt;/button>&lt;/li>&lt;/ul>&lt;button type="button" class="icon s-four close-temp" alt="list" name="'+a.TEMP_ID+'">Fechar&lt;/button>&lt;/div>&lt;/td>&lt;/td>&lt;td>'+a.SEGM_DESC+'&lt;/td>&lt;td>'+a.TEMP_DESC+'&lt;/td>&lt;td>'+a.TP_TEMP_DESC+'&lt;/td>&lt;td>&lt;button type="button" class="open-info" name="'+a.TEMP_ID+'">&lt;span>&lt;/span>&lt;/button>&lt;/td>';
+        result='&lt;td style="max-width:200px;">'+a.TEMP_ID+'&lt;br/>&lt;div class="info-template hide item'+a.TEMP_ID+'">&lt;div class="text-template">&lt;p>&lt;b>ASSUNTO&lt;/b>&lt;/p>&lt;br>&lt;form>&lt;textarea disabled="disabled" name="TEMP_SUBJECT">'+a.TEMP_SUBJECT+'&lt;/textarea>&lt;br>&lt;p>&lt;b>TEXTO&lt;/b>&lt;/p>&lt;br>&lt;textarea disabled="disabled" name="TEMP_BODY" class="edit-text">'+a.TEMP_BODY+'&lt;/textarea>&lt;/form>&lt;/div>&lt;ul class="custombuttons hide">&lt;li>&lt;p>&lt;b>ITENS PERSONALIZADOS&lt;/b>&lt;/p>&lt;/li>&lt;li>&lt;button type="button" class="icon floatLeft s-four  hash" alt="SUPPLIER" name="'+a.TEMP_ID+'">Fornecedor&lt;/button>&lt;/li>&lt;li>&lt;button type="button" class="icon floatLeft s-four  hash" alt="SAMPLES" name="'+a.TEMP_ID+'">Amostras&lt;/button>&lt;/li>&lt;li>&lt;button type="button" class="icon floatLeft s-four  hash" alt="CONTACT" name="'+a.TEMP_ID+'">Contato&lt;/button>&lt;/li>&lt;/ul>';
+        if(this.usr.SEGM_COD === "TD"){
+          result+='&lt;ul class="ulbottom hide">';
+        }
+        else{
+          result+='&lt;ul class="ulbottom">';
+        }
+        result+='&lt;li>&lt;button type="button" class="icon floatLeft s-four edit-temp" alt="list" name="'+a.TEMP_ID+'">Editar&lt;/button>&lt;/li>&lt;li>&lt;button type="button" class="icon floatLeft s-four delete-temp" alt="list" title="'+a.TEMP_ID+'" name="'+a.TP_TEMP_ID+'">Excluir&lt;/button>&lt;/li>&lt;li>&lt;button type="button" class="icon floatLeft s-four save-temp hide" alt="list" name="'+a.TEMP_ID+'">Salvar&lt;/button>&lt;/li>&lt;/ul>&lt;button type="button" class="icon s-four close-temp" alt="list" name="'+a.TEMP_ID+'">Fechar&lt;/button>&lt;/div>&lt;/td>&lt;/td>&lt;td>'+a.SEGM_DESC+'&lt;/td>&lt;td>'+a.TEMP_DESC+'&lt;/td>&lt;td>'+a.TP_TEMP_DESC+'&lt;/td>&lt;td>&lt;button type="button" class="open-info" name="'+a.TEMP_ID+'">&lt;span>&lt;/span>&lt;/button>&lt;/td>';
         return result;
         break;
       default:
@@ -782,7 +796,7 @@ window.Box = Spine.Controller.sub({init:function() {
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Fri Jan 8th 2016 using the <a
+		on Thu Jan 14th 2016 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>
