@@ -219,8 +219,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           $("html").attr("class","").addClass(this.page);
           //this.restartValues();
           this.PassCookie();
-          this.initialTime='2000-01-01';
-          this.endTime='2020-10-10';
           this.writePage(this.page);
         },
         "amostras/*fairval/*fornval/*amosval":function(res){
@@ -312,8 +310,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           var context=this;
           this.page ="fornecedores";
           //this.restartValues();
-          this.initialTime='2000-01-01';
-          this.endTime='2020-10-10';
           this.PassCookie();
           $("html").attr("class","").addClass(this.page);
           this.writePage(this.page);
@@ -469,8 +465,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         "template_email/*func":function(a){
           var context=this
           $("html").attr("class","template_email add_temp");
-          this.writePage(this.page);;
           this.page ="template_cadastro";
+          this.writePage(this.page);
         },
         "gestao":function(){
           var context=this;
@@ -1504,6 +1500,27 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 
           this.data = a.sortBy("FORN_ID");
           this.content.changeview("list");
+
+          if(!this.cookiefair.length){
+            var scroll={
+              "fornval":''+this.fornval,
+              "fairval":''+this.fairval,
+              "amosval":""+this.amosval,
+              "dates":[this.initialTime,this.endTime],
+              "prices":this.prices,
+              "refine":this.filter.list,
+              "combofilter":this.combofilter,
+              "fstatus":this.fstatus,
+              "nsort":this.nsort,
+              "view":""+this.view,
+              "posscroll":(this.posscroll || 0),
+              "total":(this.total || 20)
+            };
+            $.cookie.json = !0;
+            this.cookiefair=[];
+            this.cookiefair.push(scroll);
+            $.cookie("posscroll", scroll, {expires:7, path:"/"});
+          }
           this.createbox(this.data, this.content.page, !0,"list");
           break;
         case 'local':
@@ -1535,7 +1552,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             else{
               this.fornecedores.noteid=jQuery.parseJSON($(req.responseXML).text()).OBJ_ID;
             }
-            
           }
           if(this.page === "detail" && jQuery.parseJSON($(req.responseXML).text()).OBJ_ID){
             this.detail.noteid=jQuery.parseJSON($(req.responseXML).text()).OBJ_ID;

@@ -1,4 +1,4 @@
-var imgPath= "http://192.168.10.100/webfair/ifair_img/";
+var imgPath= "http://192.168.10.100/webfair/ifairimg/";
 //var imgPath= "http://bdb/ifair_img/";
 
 var stringServer ="http://192.168.10.100/WebService.asmx?op=";
