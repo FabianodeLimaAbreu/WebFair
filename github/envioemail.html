@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <title>WebFair - Envio de Email</title>
+    <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <meta name="description" content="">
+      <meta name="author" content="Focus">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,300" rel="stylesheet" type="text/css">
+      <!-- build:css css/styles.min.css-->
+      <link href="css/reset.css" rel="stylesheet">
+      <link href="css/styles.css" rel="stylesheet">
+      <!-- endbuild-->
+      <link rel="shortcut icon" href="http://www.focustextil.com.br/images/webfair.ico">
+      <link rel="icon" type="image/icon" href="http://www.focustextil.com.br/images/webfair.ico">
+      <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+      <!--[if gte IE 9]>
+        <html id="ie9">
+      <![endif]-->
+      <!--[if lt IE 9]>
+        <html id="ie8">
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+      <![endif]-->
+      <!--[if lt IE 9]><html id="ie8"><![endif]-->
+    </head>
+  <body>
+    <div id="wrap">
+      <header style="top:0">
+        <div class="header-collum header-top">
+          <a href="index.html" class="logo"><img src="images/logo_small.png" alt=""></a>
+          <h2><span class="login-name-bar"></span><span class="login-name floatRight">Nome do Usuário</span><br><span class="login-id floatRight"></span></h2>
+        </div>
+      </header>
+      <div class="container">
+        <div class="content">
+          <div class="container-fullsize scroller">
+            <div class="floatThead wrapper" style="display:block">
+              <div class="overview holder"style="display:block">
+                <table id="table" class="table-striped sample">
+                  <thead>
+                      <tr>
+                          <th>Código</th><th>Segmento</th><th>Descrição</th><th>Tipo</th>
+                      </tr>
+                  </thead>
+                  <tbody>                     
+                    <tr class="tropened">
+                      <td style="max-width:200px;">0000000<br/><div class="info-template">
+                        <div class="text-template">
+                          <p><b>ASSUNTO</b></p><br>
+                          <form>
+                            <textarea name="subject">Thank you for your attentio</textarea><br>
+                            <p><b>TEXTO</b></p><br>
+                            <textarea name="text" class="edit-text">Dear ##SUPPLIER, We work in the Knitting Product Development Department at Focus Textil . This is a wholesaler and distributor company, which creates and commercializes fashion fabrics to many segments acting in the Brazilian market since 1940, with a portfolio of 15.000 clients. Thank you for your attention during this last event and despite not having made any sample selection, we would like to give continuity to this contact.When you have any new samples, please send them to the address below: Excim/SP – FOCUS TEXTIL Street Guaicurus, 375 – 4 andar – SALA 41 Zip Code: 05033-000 – Agua Branca - Sao Paulo - SPATT: Jd UPS. Do not use TNT, China courier and EMS as couriers. Please inform courier AWB number as soon as you send it. Feel free to contact me anytime if you have any queries regarding this request. Kindly remember to reply this e-mail to all people in copy. Best regards.</textarea> 
+                          </form> 
+                        </div>
+                        <ul>
+                          <li><p><b>ITENS PERSONALIZADOS</b></p></li>
+                          <li><button type="button" class="icon floatLeft s-four  hash" alt="list">Fornecedor</button></li>
+                          <li><button type="button" class="icon floatLeft s-four  hash" alt="list">Amostras</button></li>
+                          <li><button type="button" class="icon floatLeft s-four  hash " alt="list">Contatos</button></li>
+                        </ul>
+                        <ul class="ulbottom">
+                          <li><button type="button" class="icon floatLeft s-four save-temp send-temp" alt="list">Enviar</button></li>
+                        </ul>
+                      </div></td>
+                      <td>Malharia</td>
+                      <td>FORNECEDOR NOVO - Cotação e Hangers</td>
+                      <td>1 - Cotação de Amostras</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal_mask">
+        <div class="modal"><!--bad-->
+          <button class="alertclose" type=""></button>
+          <div class="modal-cotent message">
+            <span></span>
+            <p class="modal-text"></p>
+          </div>
+        </div>
+      </div>
+    <script src="js/lib/jquery-1.10.1.min.js"></script>
+    <script type="text/javascript" src="js/lib/methods.js"></script>
+    <script type="text/javascript" src="js/envioemail.js"></script>
+  </body>
+</html>

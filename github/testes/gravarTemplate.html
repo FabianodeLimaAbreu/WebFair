@@ -1,0 +1,62 @@
+<html>
+    <head>
+        <title>Calling Web Service from jQuery</title>
+        <script type="text/javascript" src="../js/lib/jquery-1.10.1.min.js"></script>
+        <script type="text/javascript" src="jquery.soap.js"></script>
+        <script type="text/javascript">
+            function strToJson(str) {
+                eval("var x = " + str + ";");
+                return JSON.stringify(x);
+            }
+            $(document).ready(function () {
+              $("#btnCallWebService").click(function (event) {
+                  var wsUrl = "../../WebService.asmx?op=GravarEmailTemplate";
+                  
+                  //CRIANDO TEMPLATE
+                  var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarEmailTemplate xmlns="http://tempuri.org/"><template><TEMP_ID>0</TEMP_ID><TEMP_DESC>TESTE INSERIR</TEMP_DESC><TEMP_SUBJECT>Assunto</TEMP_SUBJECT><TEMP_BODY>Corpo</TEMP_BODY><SEGM_COD>MC</SEGM_COD><TP_TEMP_ID>1</TP_TEMP_ID></template><action>I</action></GravarEmailTemplate></soap:Body></soap:Envelope>';
+
+
+
+                  //Atualizar
+                 // var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarEmailTemplate xmlns="http://tempuri.org/"><template><TEMP_ID>19</TEMP_ID><TEMP_DESC>Fabiano</TEMP_DESC><TEMP_SUBJECT>Assunto</TEMP_SUBJECT><TEMP_BODY>Corpo</TEMP_BODY><SEGM_COD>ES</SEGM_COD><TP_TEMP_ID>1</TP_TEMP_ID></template><action>U</action></GravarEmailTemplate></soap:Body></soap:Envelope>';
+
+                  //<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarEmailTemplate xmlns="http://tempuri.org/"><template><TEMP_ID>69</TEMP_ID><TP_TEMP_ID>2</TP_TEMP_ID><TEMP_SUBJECT>Assunto</TEMP_SUBJECT><TEMP_BODY>Corpos<TEMP_BODY><SEGM_COD>MC</SEGM_COD><TEMP_DESC>TESTE INSERIR</TEMP_DESC></template><action>U</action></GravarEmailTemplate></soap:Body></soap:Envelope>
+
+                  //DELETAR
+                  //var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarEmailTemplate xmlns="http://tempuri.org/"><template><TEMP_ID>20</TEMP_ID><TP_TEMP_ID>1</TP_TEMP_ID></template><action>D</action></GravarEmailTemplate></soap:Body></soap:Envelope>';
+
+                  $.support.cors=true;
+                  $.ajax({
+                           type: "POST",
+                           url: wsUrl,
+                           contentType: "text/xml; charset=utf-8",
+                           dataType: "xml",
+                           crossDomain: true,
+                           data: soapRequest,
+                        success: processSuccess,
+                         error: processError
+                         });
+                  });
+            });
+            
+            function processSuccess(data, status, req) {
+                if (status == "success") {
+                    $("#response").text($(req.responseXML).text());
+                    console.dir(jQuery.parseJSON($(req.responseXML).text()));
+
+                }
+            }
+            
+            function processError(data, status, req) {
+                alert(req.responseText + " " + status);
+            }            
+            </script>
+    </head>
+    <body>
+        <h3>
+            Calling Web Services with jQuery/AJAX
+        </h3>
+        <input id="btnCallWebService" value="Call web service" type="button" />
+        <div id="response"></div>
+    </body>
+</html>
