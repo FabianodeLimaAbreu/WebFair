@@ -19,7 +19,7 @@ elements:{
   //window.history.go(-1);
   //$(window).scrollTop(this.scrollp);
 
-  cookie=$.cookie("posscroll");
+  cookie=$.cookie("posscroll"+"amostras");
   this.on = !1;
   this.mode="amostras/"+(cookie.fairval || "padrao")+"/"+(cookie.fornval || "padrao")+"/"+(cookie.amosval || "padrao");
   this.navigate(this.mode, !0);

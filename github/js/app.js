@@ -143,7 +143,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       if(!this.usr)
         window.location.href = 'login.html';
 
-      this.cookiefair=[];
+      this.cookiefornecedores=[];
+      this.cookieamostras=[]
 
       this.header.addClass("goDown");
       
@@ -182,7 +183,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         deleteNote:this.proxy(this.deleteNote),
         usr:this.usr,
         modal:this.modal,
-        cookiefair:this.cookiefair
+        cookieamostras:this.cookieamostras
       });
 
       this.spotlight = new Spotlight({
@@ -223,53 +224,54 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         },
         "amostras/*fairval/*fornval/*amosval":function(res){
           var a,b,c;
+          this.page ="amostras";
           this.filterisdone=!0;
           this.fairval = a=res.fairval !== "padrao" ? parseInt(res.fairval) : ""; 
           this.fornval = b=res.fornval !== "padrao" ? res.fornval.replace("_"," ").replace("_"," ").replace("_"," ") : "";
           this.amosval = c=res.amosval !== "padrao" ? res.amosval.replace("_"," ").replace("_"," ").replace("_"," ") : ""; 
-          if(this.cookiefair.length){
-            if(a == this.cookiefair[0].fairval && b === this.cookiefair[0].fornval  && c === this.cookiefair[0].amosval ){
+          if(this.cookieamostras.length){
+            if(a == this.cookieamostras[0].fairval && b === this.cookieamostras[0].fornval  && c === this.cookieamostras[0].amosval ){
               //console.log("bateu parametros do cookie");
-              this.initialTime=this.cookiefair[0].dates[0];
-              this.endTime=this.cookiefair[0].dates[1];
-              this.prices=this.cookiefair[0].prices;
-              this.refine=this.cookiefair[0].refine;
-              this.combofilter=this.cookiefair[0].combofilter;
-              this.fstatus=this.cookiefair[0].fstatus;
-              this.nsort=this.cookiefair[0].nsort;
-                              console.dir(this.cookiefair[0]);
+              this.initialTime=this.cookieamostras[0].dates[0];
+              this.endTime=this.cookieamostras[0].dates[1];
+              this.prices=this.cookieamostras[0].prices;
+              this.refine=this.cookieamostras[0].refine;
+              this.combofilter=this.cookieamostras[0].combofilter;
+              this.fstatus=this.cookieamostras[0].fstatus;
+              this.nsort=this.cookieamostras[0].nsort;
+                              console.dir(this.cookieamostras[0]);
 
             }
             else{
               //console.log("WINDOW 0");
-              this.cookiefair=[];
-              $.removeCookie('posscroll', { path: '/' });
+              this.cookieamostras=[];
+              $.removeCookie('posscroll'+this.page, { path: '/' });
               debugger;
               $(".container-fullsize.scroller").scrollTop(0);
             }
           }
           else{
             //console.log("nao achou");
-            if(jQuery.parseJSON($.cookie("posscroll"))){
-              this.cookiefair.push(jQuery.parseJSON($.cookie("posscroll")));
-              if(a == this.cookiefair[0].fairval && b === this.cookiefair[0].fornval  && c === this.cookiefair[0].amosval ){
-                console.dir(this.cookiefair[0]);
+            if(jQuery.parseJSON($.cookie('posscroll'+this.page))){
+              this.cookieamostras.push(jQuery.parseJSON($.cookie('posscroll'+this.page)));
+              if(a == this.cookieamostras[0].fairval && b === this.cookieamostras[0].fornval  && c === this.cookieamostras[0].amosval ){
+                console.dir(this.cookieamostras[0]);
                 //console.log("bateu parametros do cookie");
-                this.initialTime=this.cookiefair[0].dates[0];
-                this.endTime=this.cookiefair[0].dates[1];
-                this.prices=this.cookiefair[0].prices;
-                this.refine=this.cookiefair[0].refine;
-                this.combofilter=this.cookiefair[0].combofilter;
-                this.fstatus=this.cookiefair[0].fstatus;
-                this.nsort=this.cookiefair[0].nsort;
-                                console.dir(this.cookiefair[0]);
+                this.initialTime=this.cookieamostras[0].dates[0];
+                this.endTime=this.cookieamostras[0].dates[1];
+                this.prices=this.cookieamostras[0].prices;
+                this.refine=this.cookieamostras[0].refine;
+                this.combofilter=this.cookieamostras[0].combofilter;
+                this.fstatus=this.cookieamostras[0].fstatus;
+                this.nsort=this.cookieamostras[0].nsort;
+                                console.dir(this.cookieamostras[0]);
 
               }
               else{
                 //console.log("WINDOW 0");
                 debugger;
-                this.cookiefair=[];
-                $.removeCookie('posscroll', { path: '/' });
+                this.cookieamostras=[];
+                $.removeCookie('posscroll'+this.page, { path: '/' });
                 $(".container-fullsize.scroller").scrollTop(0);
               }
             }
@@ -306,8 +308,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             }
           }
           a="<FEIR_COD>"+a+"</FEIR_COD>";
-          var context=this;
-          this.page ="amostras";
           $("html").attr("class","").addClass(this.page);
           this.writePage(this.page);
           this.setloading(!0,!1);
@@ -328,60 +328,61 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           this.amosval = c=res.amosval !== "padrao" ? res.amosval.replace("_"," ").replace("_"," ").replace("_"," ") : ""; 
 
 
-          if(this.cookiefair.length){
-            //console.dir(this.cookiefair);
-          //console.dir(this.cookiefair);
-            this.initialTime=this.cookiefair[0].dates[0];
-            this.endTime=this.cookiefair[0].dates[1];
-            this.prices=this.cookiefair[0].prices;
-            this.refine=this.cookiefair[0].refine;
-            this.fstatus=this.cookiefair[0].fstatus;
-            this.nsort=this.cookiefair[0].nsort;
-            this.combofilter=this.cookiefair[0].combofilter;
-                            console.dir(this.cookiefair[0]);
+          if(this.cookiefornecedores.length){
+            //console.dir(this.cookiefornecedores);
+          //console.dir(this.cookiefornecedores);
+            this.initialTime=this.cookiefornecedores[0].dates[0];
+            this.endTime=this.cookiefornecedores[0].dates[1];
+            this.prices=this.cookiefornecedores[0].prices;
+            this.refine=this.cookiefornecedores[0].refine;
+            this.fstatus=this.cookiefornecedores[0].fstatus;
+            this.nsort=this.cookiefornecedores[0].nsort;
+            this.combofilter=this.cookiefornecedores[0].combofilter;
+                            console.dir(this.cookiefornecedores[0]);
 
 
-            if(a == this.cookiefair[0].fairval && b === this.cookiefair[0].fornval  && c === this.cookiefair[0].amosval ){
+            if(a == this.cookiefornecedores[0].fairval && b === this.cookiefornecedores[0].fornval  && c === this.cookiefornecedores[0].amosval ){
               //console.log("bateu parametros do cookie");
-              this.initialTime=this.cookiefair[0].dates[0];
-              this.endTime=this.cookiefair[0].dates[1];
-              this.prices=this.cookiefair[0].prices;
-              this.refine=this.cookiefair[0].refine;
-              this.combofilter=this.cookiefair[0].combofilter;
-              this.fstatus=this.cookiefair[0].fstatus;
-              this.nsort=this.cookiefair[0].nsort;
-              console.dir(this.cookiefair[0]);
+              this.initialTime=this.cookiefornecedores[0].dates[0];
+              this.endTime=this.cookiefornecedores[0].dates[1];
+              this.prices=this.cookiefornecedores[0].prices;
+              this.refine=this.cookiefornecedores[0].refine;
+              this.combofilter=this.cookiefornecedores[0].combofilter;
+              this.fstatus=this.cookiefornecedores[0].fstatus;
+              this.nsort=this.cookiefornecedores[0].nsort;
+              console.dir(this.cookiefornecedores[0]);
 
             }
             else{
               console.log("WINDOW 0");
-              this.cookiefair=[];
-              $.removeCookie('posscroll', { path: '/' });
+              this.cookiefornecedores=[];
+              $.removeCookie('posscroll'+"fornecedores", { path: '/' });
               debugger;
               $(".container-fullsize.scroller").scrollTop(0);
             }
           }
           else{
             //console.log("nao achou");
-            if(jQuery.parseJSON($.cookie("posscroll"))){
+            if(jQuery.parseJSON($.cookie("posscroll"+"fornecedores"))){
 
-              this.cookiefair.push(jQuery.parseJSON($.cookie("posscroll")));
-              if(a == this.cookiefair[0].fairval && b === this.cookiefair[0].fornval  && c === this.cookiefair[0].amosval ){
-                //console.dir(this.cookiefair[0]);
+              this.cookiefornecedores.push(jQuery.parseJSON($.cookie("posscroll"+"fornecedores")));
+              if(a == this.cookiefornecedores[0].fairval && b === this.cookiefornecedores[0].fornval  && c === this.cookiefornecedores[0].amosval ){
+                //console.dir(this.cookiefornecedores[0]);
                 //console.log("bateu parametros do cookie");
-                this.initialTime=this.cookiefair[0].dates[0];
-                this.endTime=this.cookiefair[0].dates[1];
-                this.prices=this.cookiefair[0].prices;
-                this.refine=this.cookiefair[0].refine;
-                this.combofilter=this.cookiefair[0].combofilter;
-                this.fstatus=this.cookiefair[0].fstatus;
-                this.nsort=this.cookiefair[0].nsort;  
-                console.dir(this.cookiefair[0]);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+                this.initialTime=this.cookiefornecedores[0].dates[0];
+                this.endTime=this.cookiefornecedores[0].dates[1];
+                this.prices=this.cookiefornecedores[0].prices;
+                this.refine=this.cookiefornecedores[0].refine;
+                this.combofilter=this.cookiefornecedores[0].combofilter;
+                this.fstatus=this.cookiefornecedores[0].fstatus;
+                this.nsort=this.cookiefornecedores[0].nsort;  
+                console.dir(this.cookiefornecedores[0]);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
               }
               else{
                 console.log("WINDOW 0");
-                this.cookiefair=[];
-                $.removeCookie('posscroll', { path: '/' });
+                this.cookiefornecedores=[];
+                $.removeCookie('posscroll'+"fornecedores", { path: '/' });
+
                 debugger;
                 $(".container-fullsize.scroller").scrollTop(0);
               }
@@ -500,10 +501,20 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       });
     },
     PassCookie:function(){
+      //Pesquisar amostras de acordo com ultima pesquisa de fornecedores e vice versa
       var url="";
-      if(this.cookiefair.length){
-        url=this.page+"/"+(this.cookiefair[0].fairval || "padrao")+"/"+(this.cookiefair[0].fornval || "padrao")+"/"+(this.cookiefair[0].amosval || "padrao");
-        this.navigate(url, !0);
+      if(this.page === "amostras"){
+        if(this.cookiefornecedores.length){
+          url=this.page+"/"+(this.cookiefornecedores[0].fairval || "padrao")+"/"+(this.cookiefornecedores[0].fornval || "padrao")+"/"+(this.cookiefornecedores[0].amosval || "padrao");
+          this.navigate(url, !0);
+        }
+      }
+      else{
+        if(this.cookieamostras.length){
+          url=this.page+"/"+(this.cookieamostras[0].fairval || "padrao")+"/"+(this.cookieamostras[0].fornval || "padrao")+"/"+(this.cookieamostras[0].amosval || "padrao");
+          this.navigate(url, !0);
+        }
+        
       }
     },
 
@@ -651,7 +662,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             context.spotlight.el=$(".spotlight");
             $(".nav-menu a[href='#fornecedores']").addClass('sel');
             if(!context.fair.length){
-              tESTE
               status=setInterval(function(){
                 if(context.fair.length){
                   context.ajaxrequest=!1;
@@ -989,11 +999,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       
       this.resetFilters();
 
-      if(this.cookiefair.length){
-        this.cookiefair[0].posscroll=0;
-      }
       switch (this.page){
         case "fornecedores":
+          if(this.cookiefornecedores.length){
+            debugger;
+            this.cookiefornecedores[0].posscroll=0;
+          }
           if(!this.fairval && !this.fornval){
             this.mode="fornecedores/"+"padrao"+"/"+"padrao"+"/"+"padrao";
             this.navigate(this.mode, !1);
@@ -1006,6 +1017,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           this.callService("fornecedores",'<FORN_DESC>'+this.fornval+'</FORN_DESC>','<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>'+(this.content.page*20+1)+'</LINHA_I>','<LINHA_F>20000</LINHA_F>','<CREATE_DATE_I>'+this.initialTime+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTime+'</CREATE_DATE_F>');
           break;
         case "amostras":
+          if(this.cookieamostras.length){
+            debugger;
+            this.cookieamostras[0].posscroll=0;
+          }
           if(!this.fairval && !this.fornval && !this.amosval){
             //this.mode="amostras/"+"padrao"+"/"+"padrao"+"/"+"padrao";
             //this.navigate(this.mode, !1);
@@ -1137,8 +1152,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       $(".thumbnail .icon").attr("class","icon");
       $("html").attr("class","amostras");
       this.select_items.length=0;
-      if(this.cookiefair[0]){
-        this.cookiefair[0].posscroll=0;
+      if(this.cookieamostras[0]){
+        debugger;
+        this.cookieamostras[0].posscroll=0;
       }
       a.hasClass("sel") || (this.viewBtn.removeClass("sel"), a.addClass("sel"), this.view = a.attr('alt'), this.setdata(this.data, "amostras"));
     },
@@ -1482,7 +1498,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             $(".changeview button").removeClass('sel');
             $(".changeview button.b"+this.view).addClass('sel');
           }
-          if(!this.cookiefair.length){
+          if(!this.cookieamostras.length){
             var scroll={
               "fornval":''+this.fornval,
               "fairval":''+this.fairval,
@@ -1498,9 +1514,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               "total":(this.total || 20)
             };
             $.cookie.json = !0;
-            this.cookiefair=[];
-            this.cookiefair.push(scroll);
-            $.cookie("posscroll", scroll, {expires:7, path:"/"});
+            this.cookieamostras=[];
+            this.cookieamostras.push(scroll);
+            $.cookie("posscroll"+this.page, scroll, {expires:7, path:"/"});
           }
           
 
@@ -1522,7 +1538,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           this.data = a.sortBy("FORN_ID");
           this.content.changeview("list");
 
-          if(!this.cookiefair.length){
+          if(!this.cookiefornecedores.length){
             var scroll={
               "fornval":''+this.fornval,
               "fairval":''+this.fairval,
@@ -1538,9 +1554,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               "total":(this.total || 20)
             };
             $.cookie.json = !0;
-            this.cookiefair=[];
-            this.cookiefair.push(scroll);
-            $.cookie("posscroll", scroll, {expires:7, path:"/"});
+            this.cookiefornecedores=[];
+            this.cookiefornecedores.push(scroll);
+            $.cookie("posscroll"+this.page, scroll, {expires:7, path:"/"});
           }
           this.createbox(this.data, this.content.page, !0,"list");
           break;
@@ -1773,12 +1789,20 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                         //console.dir(view_container.find("tbody tr"));
                         view_container.find(".bread-search .spec").text(view_container.find("tbody tr").length);
                       }
+                      if(e.cookieamostras.length){
+                        debugger;
+                        //console.log("scroll: "+e.cookiefair[0].posscroll);
+                        $(".container-fullsize.scroller").scrollTop(e.cookieamostras[0].posscroll);
+                      }
                     }
-                    if(e.cookiefair.length){
-                      debugger;
-                      //console.log("scroll: "+e.cookiefair[0].posscroll);
-                      $(".container-fullsize.scroller").scrollTop(e.cookiefair[0].posscroll);
+                    else{
+                      if(e.cookiefornecedores.length){
+                        debugger;
+                        //console.log("scroll: "+e.cookiefair[0].posscroll);
+                        $(".container-fullsize.scroller").scrollTop(e.cookiefornecedores[0].posscroll);
+                      }
                     }
+                    
                 }
 
                 if ("images" === c && l > 0) {
@@ -1885,10 +1909,19 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                         e.active.create(g.render());
                         return $("tbody .bstar").unbind("click").bind("click",function(a){context.starForn(a)}),l--,k++;
                     } else {
-                        if(e.cookiefair.length){
-                          debugger;
-                          $(".container-fullsize.scroller").scrollTop(e.cookiefair[0].posscroll);
+                        if(e.page === "amostras"){
+                          if(e.cookieamostras.length){
+                            debugger;
+                            $(".container-fullsize.scroller").scrollTop(e.cookieamostras[0].posscroll);
+                          }
                         }
+                        else{
+                          if(e.cookiefornecedores.length){
+                            debugger;
+                            $(".container-fullsize.scroller").scrollTop(e.cookiefornecedores[0].posscroll);
+                          }
+                        }
+                        
                         clearInterval(f), e.setloading(!1);
                     }
                 }
@@ -1919,14 +1952,20 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                         view_container=$(view_container).eq(view_container.length-1);
                         view_container.find(".bread-search .spec").text(view_container.find("tbody tr").length);
                       }
+                      if(e.cookieamostras.length){
+                        debugger;
+                        $(".container-fullsize.scroller").scrollTop(e.cookieamostras[0].posscroll);
+                      }
                     }
                     else if(e.page === "local"){
                       view_container.find(".bread-search .spec").text(k+1);
                     }
-                    
-                    if(e.cookiefair.length){
-                      debugger;
-                      $(".container-fullsize.scroller").scrollTop(e.cookiefair[0].posscroll);
+                    else if(e.page === "fornecedores"){
+                      if(e.cookiefornecedores.length){
+                        debugger;
+                        console.log(e.cookiefornecedores[0].posscroll);
+                        $(".container-fullsize.scroller").scrollTop(e.cookiefornecedores[0].posscroll);
+                      }
                     }
                 }
 
@@ -2052,11 +2091,21 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                       if(c === "list"){
                         $("button.main_opt_button.bselect.bsel").trigger('click');
                       }
-                      if(e.cookiefair.length){
-                        debugger;
-                        $(".container-fullsize.scroller").scrollTop(e.cookiefair[0].posscroll);
-                        debugger;
-                        console.dir($(".container-fullsize.scroller"));
+                      if(e.page === "amostras"){
+                        if(e.cookieamostras.length){
+                          debugger;
+                          $(".container-fullsize.scroller").scrollTop(e.cookieamostras[0].posscroll);
+                          debugger;
+                          console.dir($(".container-fullsize.scroller"));
+                        }
+                      }
+                      else if( e.page === "forncedores"){
+                        if(e.cookiefornecedores.length){
+                          debugger;
+                          $(".container-fullsize.scroller").scrollTop(e.cookiefornecedores[0].posscroll);
+                          debugger;
+                          console.dir($(".container-fullsize.scroller"));
+                        }
                       }
                       clearInterval(f), e.setloading(!1);
                     }
@@ -2500,6 +2549,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         return !1;
       }
 
+      var pos=0;
+      if(this.page === "amostras"){
+        pos = this.cookieamostras[0].posscroll
+      }
+      else{
+        pos = this.cookiefornecedores[0].posscroll
+      }
       var scroll={
         "fornval":''+this.fornval,
         "fairval":''+this.fairval,
@@ -2511,17 +2567,25 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         "fstatus":this.fstatus,
         "nsort":this.nsort,
         "view":""+this.view,
-        "posscroll":this.cookiefair[0].posscroll,
+        "posscroll":pos,
         "total": 20
       };
 
-      if(this.prices[0] != this.cookiefair[0].prices[0] || this.prices[1] != this.cookiefair[0].prices[1] || context.fstatus !== this.cookiefair[0].fstatus || this.cookiefair[0].combofilter.is_set !== context.combofilter.is_set && this.page == "amostras"){
-        scroll.posscroll=0;
+      if(this.prices[0] != this.cookieamostras[0].prices[0] || this.prices[1] != this.cookieamostras[0].prices[1] || context.fstatus !== this.cookieamostras[0].fstatus || this.cookieamostras[0].combofilter.is_set !== context.combofilter.is_set && this.page == "amostras"){
+        this.cookieamostras[0].posscroll=0;
       }
       
-      $.cookie.json = !0;
-      this.cookiefair=[];
-      this.cookiefair.push(scroll);
+      if(this.page === "amostras"){
+        $.cookie.json = !0;
+        this.cookieamostras=[];
+        this.cookieamostras.push(scroll);
+      }
+      else{
+        $.cookie.json = !0;
+        this.cookiefornecedores=[];
+        this.cookiefornecedores.push(scroll);
+      }
+     
       if(!this.filter.list.length){
         //debugger;
         this.data=aux;
@@ -2663,7 +2727,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
     CleanFilter:function(){
       var scroll;
       this.resetFilters();
-      $.removeCookie('posscroll', { path: '/' });
+      $.removeCookie('posscroll'+this.page, { path: '/' });
       this.mode="amostras/"+(this.fairval || "padrao")+"/"+(this.fornval.replace(" ","_") || "padrao")+"/"+(this.amosval.replace(" ","_") || "padrao");
       /*scroll=this.cookiefair[0];
       this.restartValues();
@@ -2850,7 +2914,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         this.setloading(!1);
         return !1;
       }
-      this.createbox(this.fdata, this.content.page, !0,"list");
+      this.createbox(this.fdata, this.content.page, !0,"list"); 
     },
     showSubCategories:function(a){
       a.preventDefault();
@@ -3114,7 +3178,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         return !1;
       }
       this.restartValues();
-      $.removeCookie('posscroll', { path: '/' });
+      $.removeCookie('posscrollamostras', { path: '/' });
+      $.removeCookie('posscrollfornecedores', { path: '/' });
       $(".container-fullsize.scroller").scrollTop(0);
       //this.reopenFilter();
       this.itens_by_page=this.itens_page_default;
@@ -3588,10 +3653,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 "total":b
               };
               $.cookie.json = !0;
-              e.cookiefair=[];
-              e.cookiefair.push(scroll);
+              e.cookieamostras=[];
+              e.cookieamostras.push(scroll);
               //console.dir(e.cookiefair);
-              $.cookie("posscroll", scroll, {expires:7, path:"/"});
+              $.cookie("posscroll"+"amostras", scroll, {expires:7, path:"/"});
             }
 
 
@@ -3631,9 +3696,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 "total":b
               };
               $.cookie.json = !0;
-              e.cookiefair=[];
-              e.cookiefair.push(scroll);
-              $.cookie("posscroll", scroll, {expires:7, path:"/"});
+              e.cookiefornecedores=[];
+              e.cookiefornecedores.push(scroll);
+              $.cookie("posscroll"+"fornecedores", scroll, {expires:7, path:"/"});
             }
             
             if (d >= f && b) {
@@ -3755,7 +3820,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       //Var to storage the basic data
       //console.log("restartValues");
       this.unable_select=!1;
-      this.cookiefair=[];
+      if(this.page === "amostras"){
+        this.cookieamostras=[];
+      }
+      else{
+        this.cookiefornecedores=[];
+      }
       this.prices=[];
       this.refine=[];
       this.fstatus=null;
@@ -3766,7 +3836,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.nsort="";
       /*this.initialTime='2000-01-01';
       this.endTime='2020-10-10';*/
-      $.removeCookie('posscroll', { path: '/' });
+      $.removeCookie('posscroll'+this.page, { path: '/' });
       this.combofilter={
         "FLAG_FISICA":{"clicked":0,"code":0},
         "FLAG_PRIORIDADE":{"clicked":0,"code":0},
