@@ -999,7 +999,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.reset();
       
       this.resetFilters();
-
       switch (this.page){
         case "fornecedores":
           this.initialTimeForn=$("input[name='initial_date']").val() || ("2000"+"-"+"01"+"-"+"01");
@@ -1019,7 +1018,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           var scroll={
             "fornval":''+this.fornval,
             "fairval":''+this.fairval,
-            "amosval":""+this.amosval,
+            "amosval":''+this.amosval,
             "dates":[this.initialTimeForn,this.endTimeForn],
             "prices":this.prices,
             "refine":this.filter.list,
@@ -1067,7 +1066,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           var scroll={
             "fornval":''+this.fornval,
             "fairval":''+this.fairval,
-            "amosval":""+this.amosval,
+            "amosval":''+this.amosval,
             "dates":[this.initialTimeAmos,this.endTimeAmos],
             "prices":this.prices,
             "refine":this.filter.list,
@@ -1587,7 +1586,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             var scroll={
               "fornval":''+this.fornval,
               "fairval":''+this.fairval,
-              "amosval":""+this.amosval,
+              "amosval":''+this.amosval,
               "dates":[this.initialTimeForn,this.endTimeForn],
               "prices":this.prices,
               "refine":this.filter.list,
@@ -2478,6 +2477,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       $(ev.target).toggleClass("sel");
       debugger;
       $(".container-fullsize.scroller").scrollTop(0);
+      this.cookieamostras[0].posscroll=0;
       this.itens = $([]);
       this.itens.remove();
       this.unable_select=!1;
@@ -2495,6 +2495,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
     },AmosByPrice:function(){
       debugger;
       $(".container-fullsize.scroller").scrollTop(0);
+      this.cookieamostras[0].posscroll=0;
       this.itens = $([]);
       this.itens.remove();
       this.unable_select=!1;
@@ -2505,8 +2506,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.Componentfilter(this.data, 0, !0);
     },
     makeComboFilter:function(){
-      debugger;
       $(".container-fullsize.scroller").scrollTop(0);
+      this.cookieamostras[0].posscroll=0;
       var is_set=!1;
       this.itens = $([]);
       this.itens.remove();
@@ -2536,6 +2537,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       var aux,context=this,status,i;
       if(this.filter.list.length){
         $(".refine-container").addClass('has');
+        //$(".container-fullsize.scroller").scrollTop(0);
+        //this.cookieamostras[0].posscroll=0;
         if(!data.length){
           return this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0), $('.bread-search').find(".spec").text("0 Resultados");
         }
@@ -3183,12 +3186,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       }
       
     },
-    getEndTime:function(){
+    getEndTime:function(a){
       if(a){
-        return this.initialTimeAmos;
+        return this.endTimeAmos;
       }
       else{
-        return this.initialTimeForn;
+        return this.endTimeForn;
       }
     },
     changeCity:function(val){
@@ -3703,7 +3706,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               var scroll={
                 "fornval":''+e.fornval,
                 "fairval":''+e.fairval,
-                "amosval":""+e.amosval,
+                "amosval":''+e.amosval,
                 "dates":[e.initialTimeAmos,e.endTimeAmos],
                 "prices":e.prices,
                 "refine":e.filter.list,
@@ -3746,7 +3749,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               var scroll={
                 "fornval":''+e.fornval,
                 "fairval":''+e.fairval,
-                "amosval":""+e.amosval,
+                "amosval":''+e.amosval,
                 "dates":[e.initialTimeForn,e.endTimeForn],
                 "prices":e.prices,
                 "refine":e.filter.list,
@@ -3946,8 +3949,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       $(".tooltip-filter").removeClass('has');
 
       $(".refine a").removeClass('sel').addClass('unsel');
+      $(".topcount").text("").addClass('hide');
       $(".not-autoshow").removeClass('sel');
       $(".sub-refine").addClass('hide').hide().find("ul").empty();
+
+      //Filter list
+      //this.filterlist.length=0;
+
     }
   });
   new App;
