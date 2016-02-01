@@ -125,8 +125,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.fairval="";
       this.fornval="";
       this.amosval="";
-      this.initialTime='2000-01-01';
-      this.endTime='2020-10-10';
+      this.initialTimeAmos='2000-01-01';
+      this.endTimeAmos='2020-10-10';
+      this.initialTimeForn='2000-01-01';
+      this.endTimeForn='2020-10-10';
+
       this.unable_select=!1;
       this.combofilter={
         "FLAG_FISICA":{"clicked":0,"code":0},
@@ -232,8 +235,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           if(this.cookieamostras.length){
             if(a == this.cookieamostras[0].fairval && b === this.cookieamostras[0].fornval  && c === this.cookieamostras[0].amosval ){
               //console.log("bateu parametros do cookie");
-              this.initialTime=this.cookieamostras[0].dates[0];
-              this.endTime=this.cookieamostras[0].dates[1];
+              this.initialTimeAmos=this.cookieamostras[0].dates[0];
+              this.endTimeAmos=this.cookieamostras[0].dates[1];
               this.prices=this.cookieamostras[0].prices;
               this.refine=this.cookieamostras[0].refine;
               this.combofilter=this.cookieamostras[0].combofilter;
@@ -257,8 +260,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               if(a == this.cookieamostras[0].fairval && b === this.cookieamostras[0].fornval  && c === this.cookieamostras[0].amosval ){
                 console.dir(this.cookieamostras[0]);
                 //console.log("bateu parametros do cookie");
-                this.initialTime=this.cookieamostras[0].dates[0];
-                this.endTime=this.cookieamostras[0].dates[1];
+                this.initialTimeAmos=this.cookieamostras[0].dates[0];
+                this.endTimeAmos=this.cookieamostras[0].dates[1];
                 this.prices=this.cookieamostras[0].prices;
                 this.refine=this.cookieamostras[0].refine;
                 this.combofilter=this.cookieamostras[0].combofilter;
@@ -331,8 +334,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           if(this.cookiefornecedores.length){
             //console.dir(this.cookiefornecedores);
           //console.dir(this.cookiefornecedores);
-            this.initialTime=this.cookiefornecedores[0].dates[0];
-            this.endTime=this.cookiefornecedores[0].dates[1];
+            this.initialTimeForn=this.cookiefornecedores[0].dates[0];
+            this.endTimeForn=this.cookiefornecedores[0].dates[1];
             this.prices=this.cookiefornecedores[0].prices;
             this.refine=this.cookiefornecedores[0].refine;
             this.fstatus=this.cookiefornecedores[0].fstatus;
@@ -343,8 +346,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 
             if(a == this.cookiefornecedores[0].fairval && b === this.cookiefornecedores[0].fornval  && c === this.cookiefornecedores[0].amosval ){
               //console.log("bateu parametros do cookie");
-              this.initialTime=this.cookiefornecedores[0].dates[0];
-              this.endTime=this.cookiefornecedores[0].dates[1];
+              this.initialTimeForn=this.cookiefornecedores[0].dates[0];
+              this.endTimeForn=this.cookiefornecedores[0].dates[1];
               this.prices=this.cookiefornecedores[0].prices;
               this.refine=this.cookiefornecedores[0].refine;
               this.combofilter=this.cookiefornecedores[0].combofilter;
@@ -369,8 +372,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               if(a == this.cookiefornecedores[0].fairval && b === this.cookiefornecedores[0].fornval  && c === this.cookiefornecedores[0].amosval ){
                 //console.dir(this.cookiefornecedores[0]);
                 //console.log("bateu parametros do cookie");
-                this.initialTime=this.cookiefornecedores[0].dates[0];
-                this.endTime=this.cookiefornecedores[0].dates[1];
+                this.initialTimeForn=this.cookiefornecedores[0].dates[0];
+                this.endTimeForn=this.cookiefornecedores[0].dates[1];
                 this.prices=this.cookiefornecedores[0].prices;
                 this.refine=this.cookiefornecedores[0].refine;
                 this.combofilter=this.cookiefornecedores[0].combofilter;
@@ -990,8 +993,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 
     submitDateFilter:function(a){
       this.setloading(!0,!1);
-      this.initialTime=$("input[name='initial_date']").val() || ("2000"+"-"+"01"+"-"+"01");
-      this.endTime=$("input[name='end_date']").val() || ("2020-"+"10"+"-"+"10");
       this.fairval=$(".bselect.fair").find("option:selected").val();
       this.fornval=this.bforn.val();
       this.amosval=$(".form-control-search").val();
@@ -1001,6 +1002,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 
       switch (this.page){
         case "fornecedores":
+          this.initialTimeForn=$("input[name='initial_date']").val() || ("2000"+"-"+"01"+"-"+"01");
+          this.endTimeForn=$("input[name='end_date']").val() || ("2020-"+"10"+"-"+"10");
           if(this.cookiefornecedores.length){
             debugger;
             this.cookiefornecedores[0].posscroll=0;
@@ -1008,15 +1011,37 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           if(!this.fairval && !this.fornval){
             this.mode="fornecedores/"+"padrao"+"/"+"padrao"+"/"+"padrao";
             this.navigate(this.mode, !1);
-            this.callService("fornecedores",'<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>1</LINHA_I>','<LINHA_F>20000</LINHA_F>','<CREATE_DATE_I>'+this.initialTime+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTime+'</CREATE_DATE_F>');
+            this.callService("fornecedores",'<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>1</LINHA_I>','<LINHA_F>20000</LINHA_F>','<CREATE_DATE_I>'+this.initialTimeForn+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTimeForn+'</CREATE_DATE_F>');
             //this.modal.open("message","Selecione ao menos uma feira para filtrar!!!",!1,!0);
             return !0;
           }
+
+          var scroll={
+            "fornval":''+this.fornval,
+            "fairval":''+this.fairval,
+            "amosval":""+this.amosval,
+            "dates":[this.initialTimeForn,this.endTimeForn],
+            "prices":this.prices,
+            "refine":this.filter.list,
+            "combofilter":this.combofilter,
+            "fstatus":this.fstatus,
+            "nsort":this.nsort,
+            "view":""+this.view,
+            "posscroll":(this.posscroll || 0),
+            "total":(this.total || 20)
+          };
+          $.cookie.json = !0;
+          this.cookiefornecedores=[];
+          this.cookiefornecedores.push(scroll);
+          $.cookie("posscroll"+this.page, scroll, {expires:7, path:"/"});
+
           this.mode="fornecedores/"+(this.fairval || "padrao")+"/"+(this.fornval || "padrao")+"/"+(this.amosval || "padrao");
           this.navigate(this.mode, !1);
-          this.callService("fornecedores",'<FORN_DESC>'+this.fornval+'</FORN_DESC>','<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>'+(this.content.page*20+1)+'</LINHA_I>','<LINHA_F>20000</LINHA_F>','<CREATE_DATE_I>'+this.initialTime+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTime+'</CREATE_DATE_F>');
+          this.callService("fornecedores",'<FORN_DESC>'+this.fornval+'</FORN_DESC>','<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>'+(this.content.page*20+1)+'</LINHA_I>','<LINHA_F>20000</LINHA_F>','<CREATE_DATE_I>'+this.initialTimeForn+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTimeForn+'</CREATE_DATE_F>');
           break;
         case "amostras":
+          this.initialTimeAmos=$("input[name='initial_date']").val() || ("2000"+"-"+"01"+"-"+"01");
+          this.endTimeAmos=$("input[name='end_date']").val() || ("2020-"+"10"+"-"+"10");
           if(this.cookieamostras.length){
             debugger;
             this.cookieamostras[0].posscroll=0;
@@ -1024,7 +1049,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           if(!this.fairval && !this.fornval && !this.amosval){
             //this.mode="amostras/"+"padrao"+"/"+"padrao"+"/"+"padrao";
             //this.navigate(this.mode, !1);
-            this.callService("amostras",'<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>1</LINHA_I>','<LINHA_F>20000</LINHA_F>','<CREATE_DATE_I>'+this.initialTime+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTime+'</CREATE_DATE_F>');
+            this.callService("amostras",'<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>1</LINHA_I>','<LINHA_F>20000</LINHA_F>','<CREATE_DATE_I>'+this.initialTimeAmos+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTimeAmos+'</CREATE_DATE_F>');
             //this.modal.open("message","Selecione ao menos uma feira para filtrar!!!",!1,!0);
             return !0;
           }
@@ -1038,9 +1063,29 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           else{
             FORN_DESC="";
           }
+
+          var scroll={
+            "fornval":''+this.fornval,
+            "fairval":''+this.fairval,
+            "amosval":""+this.amosval,
+            "dates":[this.initialTimeAmos,this.endTimeAmos],
+            "prices":this.prices,
+            "refine":this.filter.list,
+            "combofilter":this.combofilter,
+            "fstatus":this.fstatus,
+            "nsort":this.nsort,
+            "view":""+this.view,
+            "posscroll":(this.posscroll || 0),
+            "total":(this.total || 20)
+          };
+          $.cookie.json = !0;
+          this.cookieamostras=[];
+          this.cookieamostras.push(scroll);
+          $.cookie("posscroll"+this.page, scroll, {expires:7, path:"/"});
+
           this.mode="amostras/"+(this.fairval || "padrao")+"/"+(this.fornval || "padrao")+"/"+(this.amosval || "padrao");
           this.navigate(this.mode, !1);
-          this.callService("amostras",'<AMOS_DESC>'+this.amosval+'</AMOS_DESC>','<FEIR_COD>'+this.fairval+'</FEIR_COD>',FORN_DESC,'<LINHA_I>'+(this.content.page*20+1)+'</LINHA_I>','<LINHA_F>20000</LINHA_F>','<CREATE_DATE_I>'+this.initialTime+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTime+'</CREATE_DATE_F>');
+          this.callService("amostras",'<AMOS_DESC>'+this.amosval+'</AMOS_DESC>','<FEIR_COD>'+this.fairval+'</FEIR_COD>',FORN_DESC,'<LINHA_I>'+(this.content.page*20+1)+'</LINHA_I>','<LINHA_F>20000</LINHA_F>','<CREATE_DATE_I>'+this.initialTimeAmos+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTimeAmos+'</CREATE_DATE_F>');
           break;
       }
       $(".date-filter").removeClass("sel");
@@ -1369,7 +1414,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         $.support.cors=true;
         soapRequest.filter(function(a,b){
           if(a['name'] === name){
-            //console.log(a['code']);
+            console.log(a['code']);
             core.callback=a['callback'];
             core.ajaxrequest=!0;                                                                        
             $.ajax({
@@ -1401,7 +1446,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           }
           if(core.page ===  "amostras"){
             //core.callService(core.page,a,b,c,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>'+((core.content.page+1)*core.itens_by_page)+'</LINHA_F>','<CREATE_DATE_I>'+core.initialTime+'</CREATE_DATE_I>',"<CREATE_DATE_F>"+core.endTime+"</CREATE_DATE_F>");
-            core.callService(core.page,a,b,c,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>20000</LINHA_F>','<CREATE_DATE_I>'+core.initialTime+'</CREATE_DATE_I>',"<CREATE_DATE_F>"+core.endTime+"</CREATE_DATE_F>");
+            core.callService(core.page,a,b,c,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>20000</LINHA_F>','<CREATE_DATE_I>'+core.initialTimeAmos+'</CREATE_DATE_I>',"<CREATE_DATE_F>"+core.endTimeAmos+"</CREATE_DATE_F>");
           }
           else{
             if(typeof fstatus !== "undefined"){
@@ -1410,7 +1455,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             else{
               fstatus="";
             }
-            core.callService(core.page,a,b,fstatus,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>'+((core.content.page+1)*core.itens_by_page)+'</LINHA_F>','<CREATE_DATE_I>'+core.initialTime+'</CREATE_DATE_I>',"<CREATE_DATE_F>"+core.endTime+"</CREATE_DATE_F>");
+            core.callService(core.page,a,b,fstatus,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>'+((core.content.page+1)*core.itens_by_page)+'</LINHA_F>','<CREATE_DATE_I>'+core.initialTimeForn+'</CREATE_DATE_I>',"<CREATE_DATE_F>"+core.endTimeForn+"</CREATE_DATE_F>");
             //core.callService(core.page,a,b,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>20000</LINHA_F>','<CREATE_DATE_I>'+core.initialTime+'</CREATE_DATE_I>',"<CREATE_DATE_F>"+core.endTime+"</CREATE_DATE_F>");
           }
         }
@@ -1483,7 +1528,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       
 
       if (!this.data.length && b !="local") {    
-        return this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0), $(".overview-container").remove(),$('<div class="brea"></div>d-search').find(".spec").text("0 Resultados"),$("input[name='initial_date']").datepicker('setDate', this.initialTime.slice(0,4)+'-'+this.initialTime.slice(5, 7)+"-"+this.initialTime.slice(8, 10)),$("input[name='end_date']").datepicker('setDate', this.endTime.slice(0,4)+'-'+this.endTime.slice(5, 7)+"-"+this.endTime.slice(8, 10)),this.setloading(!1);;
+        return this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0), $(".overview-container").remove(),$('<div class="brea"></div>d-search').find(".spec").text("0 Resultados"),this.page === "amostras" ? $("input[name='initial_date']").datepicker('setDate', this.initialTimeAmos.slice(0,4)+'-'+this.initialTimeAmos.slice(5, 7)+"-"+this.initialTimeAmos.slice(8, 10)) && $("input[name='end_date']").datepicker('setDate', this.endTimeAmos.slice(0,4)+'-'+this.endTimeAmos.slice(5, 7)+"-"+this.endTimeAmos.slice(8, 10)) :($("input[name='initial_date']").datepicker('setDate', this.initialTimeAmos.slice(0,4)+'-'+this.initialTimeAmos.slice(5, 7)+"-"+this.initialTimeAmos.slice(8, 10)) && $("input[name='end_date']").datepicker('setDate', this.endTimeAmos.slice(0,4)+'-'+this.endTimeAmos.slice(5, 7)+"-"+this.endTimeAmos.slice(8, 10))), this.setloading(!1);
         //return this.modal.open(),this.breadEl.find('.bread-colec a').text("").removeClass('active'),this.setloading(!1), this.searchEl.find('input').blur();
       }  
       switch(b){
@@ -1503,7 +1548,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               "fornval":''+this.fornval,
               "fairval":''+this.fairval,
               "amosval":""+this.amosval,
-              "dates":[this.initialTime,this.endTime],
+              "dates":[this.initialTimeAmos,this.endTimeAmos],
               "prices":this.prices,
               "refine":this.filter.list,
               "combofilter":this.combofilter,
@@ -1532,8 +1577,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           break;
         case 'fornecedores':
           console.dir(a);
-          $("input[name='initial_date']").datepicker('setDate', this.initialTime.slice(0,4)+'-'+this.initialTime.slice(5, 7)+"-"+this.initialTime.slice(8, 10));
-          $("input[name='end_date']").datepicker('setDate', this.endTime.slice(0,4)+'-'+this.endTime.slice(5, 7)+"-"+this.endTime.slice(8, 10));
+          $("input[name='initial_date']").datepicker('setDate', this.initialTimeForn.slice(0,4)+'-'+this.initialTimeForn.slice(5, 7)+"-"+this.initialTimeForn.slice(8, 10));
+          $("input[name='end_date']").datepicker('setDate', this.endTimeForn.slice(0,4)+'-'+this.endTimeForn.slice(5, 7)+"-"+this.endTimeForn.slice(8, 10));
 
           this.data = a.sortBy("FORN_ID");
           this.content.changeview("list");
@@ -1543,7 +1588,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               "fornval":''+this.fornval,
               "fairval":''+this.fairval,
               "amosval":""+this.amosval,
-              "dates":[this.initialTime,this.endTime],
+              "dates":[this.initialTimeForn,this.endTimeForn],
               "prices":this.prices,
               "refine":this.filter.list,
               "combofilter":this.combofilter,
@@ -1556,7 +1601,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             $.cookie.json = !0;
             this.cookiefornecedores=[];
             this.cookiefornecedores.push(scroll);
-            $.cookie("posscroll"+this.page, scroll, {expires:7, path:"/"});
           }
           this.createbox(this.data, this.content.page, !0,"list");
           break;
@@ -1567,7 +1611,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         default:
           //console.log("ALGO ERRADO");
       }
-      ("images" !== this.view) ? this.scroll($("table tbody")) : this.scroll();
+      ("images" !== this.view) ? this.scroll($(".container-fullsize.scroller")) : this.scroll();
             
     },
     callRequest:function(data, status, req){
@@ -2099,7 +2143,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                           console.dir($(".container-fullsize.scroller"));
                         }
                       }
-                      else if( e.page === "forncedores"){
+                      else if( e.page === "fornecedores"){
                         if(e.cookiefornecedores.length){
                           debugger;
                           $(".container-fullsize.scroller").scrollTop(e.cookiefornecedores[0].posscroll);
@@ -2550,26 +2594,29 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       }
 
       var pos=0;
-      if(this.page === "amostras"){
-        pos = this.cookieamostras[0].posscroll
-      }
-      else{
-        pos = this.cookiefornecedores[0].posscroll
-      }
       var scroll={
         "fornval":''+this.fornval,
         "fairval":''+this.fairval,
         "amosval":""+this.amosval,
-        "dates":[this.initialTime,this.endTime],
         "prices":this.prices,
         "refine":this.filter.list,
         "combofilter":this.combofilter,
         "fstatus":this.fstatus,
         "nsort":this.nsort,
         "view":""+this.view,
-        "posscroll":pos,
         "total": 20
       };
+
+      if(this.page === "amostras"){
+        pos = this.cookieamostras[0].posscroll;
+        scroll.dates=[this.initialTimeAmos,this.endTimeAmos];
+        scroll.posscroll=pos;
+      }
+      else{
+        pos = this.cookiefornecedores[0].posscroll;
+        scroll.dates=[this.initialTimeForn,this.initialTimeForn];
+        scroll.posscroll=pos;
+      }
 
       if(this.prices[0] != this.cookieamostras[0].prices[0] || this.prices[1] != this.cookieamostras[0].prices[1] || context.fstatus !== this.cookieamostras[0].fstatus || this.cookieamostras[0].combofilter.is_set !== context.combofilter.is_set && this.page == "amostras"){
         this.cookieamostras[0].posscroll=0;
@@ -2590,6 +2637,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         //debugger;
         this.data=aux;
       }  
+      console.dir(scroll)
       this.setloading(!1);
       this.createbox(this.fdata, page,d,view,haslength);
     },
@@ -3126,11 +3174,22 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
     getPage:function(){
       return this.page;
     },
-    getInitialTime:function(){
-      return this.initialTime;
+    getInitialTime:function(a){
+      if(a){
+        return this.initialTimeAmos;
+      }
+      else{
+        return this.initialTimeForn;
+      }
+      
     },
     getEndTime:function(){
-      return this.endTime;
+      if(a){
+        return this.initialTimeAmos;
+      }
+      else{
+        return this.initialTimeForn;
+      }
     },
     changeCity:function(val){
       var country,city,context=this,arr=[];
@@ -3607,12 +3666,15 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
     scroll:function(z) {
       var b, c, f, clone,e = this;
       z = z || $(".container-fullsize.scroller");
-      $.hasData(z[0]) && z.unbind("scroll");
+      console.log("DEU SCROLL");
+      //$.hasData(z[0]) && z.unbind("scroll");
       //console.dir(e.content.itens);
+      console.dir(z);
       if (!e.content.itens) {
         return !1;
       }
       z.scroll(function() {
+        console.log(e.page);
         if (e.loading || e.page === "detail") {
           return!1;
         }
@@ -3642,7 +3704,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 "fornval":''+e.fornval,
                 "fairval":''+e.fairval,
                 "amosval":""+e.amosval,
-                "dates":[e.initialTime,e.endTime],
+                "dates":[e.initialTimeAmos,e.endTimeAmos],
                 "prices":e.prices,
                 "refine":e.filter.list,
                 "combofilter":e.combofilter,
@@ -3669,12 +3731,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             }
             break;
           case "fornecedores":
-            var $table = $('#table');
+            /*var $table = $('#table');
             $table.floatThead({
                 scrollContainer: function($table){
                 return $table.closest('.scroller');
               }
-            });
+            });*/
 
             d = z.scrollTop();
             b = e.content.itens.length;
@@ -3685,7 +3747,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 "fornval":''+e.fornval,
                 "fairval":''+e.fairval,
                 "amosval":""+e.amosval,
-                "dates":[e.initialTime,e.endTime],
+                "dates":[e.initialTimeForn,e.endTimeForn],
                 "prices":e.prices,
                 "refine":e.filter.list,
                 "combofilter":e.combofilter,
@@ -3713,13 +3775,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             //console.log("SCROLL CADASTRO");
             break;
           case "local":
-            var $table = $('#table');
+            /*var $table = $('#table');
             $table.floatThead({
                 scrollContainer: function($table){
                 return $table.closest('.scroller');
               }
             });
-            $(".floatThead-container").css({'left':"50%","margin-left":"-458px"});
+            $(".floatThead-container").css({'left':"50%","margin-left":"-458px"});*/
             //$(".floatThead-table").css({'left':"50%","margin-left":"502px"});
             d = z.scrollTop();
             b = e.content.itens.length;
@@ -3739,13 +3801,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             }
             break;
           case "template_email":
-            var $table = $('#table');
+            /*var $table = $('#table');
             $table.floatThead({
                 scrollContainer: function($table){
                 return $table.closest('.scroller');
               }
             });
-            $(".floatThead-container").css({'left':"50%","margin-left":"-458px"});
+            $(".floatThead-container").css({'left':"50%","margin-left":"-458px"});*/
             d = z.scrollTop();
             b = e.content.itens.length;
             f= $("#table").height()-$(".scroller").outerHeight();
@@ -3763,9 +3825,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
     reopenFilter:function(data,page,d,view,haslength){
       //this.setloading(!0,!1);
       this.filterisdone=!1;
-      $("input[name='initial_date']").datepicker('setDate', this.initialTime.slice(0,4)+'-'+this.initialTime.slice(5, 7)+"-"+this.initialTime.slice(8, 10));
-      $("input[name='end_date']").datepicker('setDate', this.endTime.slice(0,4)+'-'+this.endTime.slice(5, 7)+"-"+this.endTime.slice(8, 10));
-      
+      if(this.page === "amostras"){
+        $("input[name='initial_date']").datepicker('setDate', this.initialTimeAmos.slice(0,4)+'-'+this.initialTimeAmos.slice(5, 7)+"-"+this.initialTimeAmos.slice(8, 10));
+        $("input[name='end_date']").datepicker('setDate', this.endTimeAmos.slice(0,4)+'-'+this.endTimeAmos.slice(5, 7)+"-"+this.endTimeAmos.slice(8, 10));
+      }
+      else{
+        $("input[name='initial_date']").datepicker('setDate', this.initialTimeForn.slice(0,4)+'-'+this.initialTimeForn.slice(5, 7)+"-"+this.initialTimeForn.slice(8, 10));
+        $("input[name='end_date']").datepicker('setDate', this.endTimeForn.slice(0,4)+'-'+this.endTimeForn.slice(5, 7)+"-"+this.endTimeForn.slice(8, 10));
+      }
       if(this.prices.length){
         //Fazer o trigger no filtro
         $(".main_opt_item.tooltip.tooltip-selectable").eq(0).addClass('has');
@@ -3793,7 +3860,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         this.filter.data=this.data;
       }
 
-      if(this.initialTime !== "2000-01-01" || this.endTime !== "2020-10-10"){
+      if(this.page === "amostras" && (this.initialTime !== "2000-01-01" || this.endTime !== "2020-10-10")){
         $(".date-filter").parent().addClass('has');
       }
       else{
