@@ -2215,50 +2215,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       a.preventDefault();
       var obj=$(a.target);
     },
-    sortItemsbyCookie:function(type,name){
-      /*if(!name){
-        return this.createbox(this.fdata, this.content.page);
-      }
-      var i,length,temp=[];
-      this.order_box.find(".b_order").removeClass("sel");
-      this.order_box.find(".b_order").each(function(index, el) {
-        if($(el).attr("name") === type){
-          $(el).addClass('sel');
-        }
-      });
-      this.order_box.find(".orderby").addClass("sel").text(name);
-
-      if(type !== "bigPE"){
-        this.nsort=type;
-        length= this.fdata.length;
-        if(type !== "PE"){
-          for(i=0;i<length;i++){
-            //.replace("  "," ");
-            this.fdata[i][type]=this.fdata[i][type]; //Validating when article has doble space insert in SAP
-          }
-        }
-        this.fdata = this.fdata.sortBy(type).unique();
-        this.createbox(this.fdata, this.content.page);
-      }
-      else{
-        this.nsort="bigPE";
-        temp = this.fdata.sortBy("PE").unique();
-        length=this.fdata.length-1;
-        for(i=length;i>=0;i--){
-          temp.push(this.fdata[i]);
-        }
-
-        this.fdata=[];
-        this.fdata=temp.unique();
-        this.createbox(this.fdata, this.content.page);
-      }*/
-    },
-    sortItems : function(a){
+    sortItems : function(a,b){
+      debugger; 
       var type,i,length,temp=[],aux=[];
       if($(a.target).hasClass("sel") || this.loading){
         return !1;
       }
-      type=$(a.target).attr("name");
+      type=$(a.target).attr("name") || this.nsort;
       $("html").attr("class","amostras");
       this.content.clean();
       $(".overview-container").remove();
@@ -2274,6 +2237,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           length= this.data.length;
           temp = this.data.sortBy(type).unique();
         }
+        if(b){
+          $(".tooltip.borderby .bcircle").each(function(index, el) {
+            if($(el).attr("name") === type){
+              $(el).addClass('sel');
+            }
+          });
+          return temp;
+        }
         this.createbox(temp, this.content.page,!1,!1,(this.content.page + 1)*20);
       }
       else{
@@ -2288,6 +2259,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         }
         for(i=length;i>=0;i--){
           temp.push(aux[i]);
+        }
+        if(b){
+          $(".tooltip.borderby .bcircle").each(function(index, el) {
+            if($(el).attr("name") === type){
+              $(el).addClass('sel');
+            }
+          });
+          return temp.unique();
         }
         this.createbox(temp.unique(), this.content.page,!1,!1,(this.content.page + 1)*20);
         //this.createbox(temp.unique(), this.content.page,!1,!1,length);
@@ -2640,8 +2619,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         //debugger;
         this.data=aux;
       }  
-      console.dir(scroll)
       this.setloading(!1);
+      if(this.nsort !== ""){
+        debugger;
+        this.fdata=this.sortItems(this.fdata,!0);
+      }
       this.createbox(this.fdata, page,d,view,haslength);
     },
 
