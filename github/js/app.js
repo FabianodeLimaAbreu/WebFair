@@ -249,7 +249,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               //console.log("WINDOW 0");
               this.cookieamostras=[];
               $.removeCookie('posscroll'+this.page, { path: '/' });
-              debugger;
+              //debugger;
               $(".container-fullsize.scroller").scrollTop(0);
             }
           }
@@ -272,7 +272,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               }
               else{
                 //console.log("WINDOW 0");
-                debugger;
+                //debugger;
                 this.cookieamostras=[];
                 $.removeCookie('posscroll'+this.page, { path: '/' });
                 $(".container-fullsize.scroller").scrollTop(0);
@@ -280,7 +280,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             }
             else{
               //console.log("WINDOW 0");
-              debugger;
+              //debugger;
               $(".container-fullsize.scroller").scrollTop(0);
             }
           }
@@ -360,7 +360,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               console.log("WINDOW 0");
               this.cookiefornecedores=[];
               $.removeCookie('posscroll'+"fornecedores", { path: '/' });
-              debugger;
+              //debugger;
               $(".container-fullsize.scroller").scrollTop(0);
             }
           }
@@ -386,13 +386,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 this.cookiefornecedores=[];
                 $.removeCookie('posscroll'+"fornecedores", { path: '/' });
 
-                debugger;
+                //debugger;
                 $(".container-fullsize.scroller").scrollTop(0);
               }
             }
             else{
               console.log("WINDOW 0");
-              debugger;
+              //debugger;
               $(".container-fullsize.scroller").scrollTop(0);
             }
           }
@@ -1004,7 +1004,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           this.initialTimeForn=$("input[name='initial_date']").val() || ("2000"+"-"+"01"+"-"+"01");
           this.endTimeForn=$("input[name='end_date']").val() || ("2020-"+"10"+"-"+"10");
           if(this.cookiefornecedores.length){
-            debugger;
+            //debugger;
             this.cookiefornecedores[0].posscroll=0;
           }
           if(!this.fairval && !this.fornval){
@@ -1042,7 +1042,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           this.initialTimeAmos=$("input[name='initial_date']").val() || ("2000"+"-"+"01"+"-"+"01");
           this.endTimeAmos=$("input[name='end_date']").val() || ("2020-"+"10"+"-"+"10");
           if(this.cookieamostras.length){
-            debugger;
+            //debugger;
             this.cookieamostras[0].posscroll=0;
           }
           if(!this.fairval && !this.fornval && !this.amosval){
@@ -1197,7 +1197,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       $("html").attr("class","amostras");
       this.select_items.length=0;
       if(this.cookieamostras[0]){
-        debugger;
+        //debugger;
         this.cookieamostras[0].posscroll=0;
       }
       a.hasClass("sel") || (this.viewBtn.removeClass("sel"), a.addClass("sel"), this.view = a.attr('alt'), this.setdata(this.data, "amostras"));
@@ -1833,14 +1833,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                         view_container.find(".bread-search .spec").text(view_container.find("tbody tr").length);
                       }
                       if(e.cookieamostras.length){
-                        debugger;
+                        //debugger;
                         //console.log("scroll: "+e.cookiefair[0].posscroll);
                         $(".container-fullsize.scroller").scrollTop(e.cookieamostras[0].posscroll);
                       }
                     }
                     else{
                       if(e.cookiefornecedores.length){
-                        debugger;
+                        //debugger;
                         //console.log("scroll: "+e.cookiefair[0].posscroll);
                         $(".container-fullsize.scroller").scrollTop(e.cookiefornecedores[0].posscroll);
                       }
@@ -1954,13 +1954,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                     } else {
                         if(e.page === "amostras"){
                           if(e.cookieamostras.length){
-                            debugger;
+                            //debugger;
                             $(".container-fullsize.scroller").scrollTop(e.cookieamostras[0].posscroll);
                           }
                         }
                         else{
                           if(e.cookiefornecedores.length){
-                            debugger;
+                            //debugger;
                             $(".container-fullsize.scroller").scrollTop(e.cookiefornecedores[0].posscroll);
                           }
                         }
@@ -1996,7 +1996,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                         view_container.find(".bread-search .spec").text(view_container.find("tbody tr").length);
                       }
                       if(e.cookieamostras.length){
-                        debugger;
+                        //debugger;
                         $(".container-fullsize.scroller").scrollTop(e.cookieamostras[0].posscroll);
                       }
                     }
@@ -2005,7 +2005,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                     }
                     else if(e.page === "fornecedores"){
                       if(e.cookiefornecedores.length){
-                        debugger;
+                        //debugger;
                         console.log(e.cookiefornecedores[0].posscroll);
                         $(".container-fullsize.scroller").scrollTop(e.cookiefornecedores[0].posscroll);
                       }
@@ -2136,17 +2136,17 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                       }
                       if(e.page === "amostras"){
                         if(e.cookieamostras.length){
-                          debugger;
+                          //debugger;
                           $(".container-fullsize.scroller").scrollTop(e.cookieamostras[0].posscroll);
-                          debugger;
+                          //debugger;
                           console.dir($(".container-fullsize.scroller"));
                         }
                       }
                       else if( e.page === "fornecedores"){
                         if(e.cookiefornecedores.length){
-                          debugger;
+                          //debugger;
                           $(".container-fullsize.scroller").scrollTop(e.cookiefornecedores[0].posscroll);
-                          debugger;
+                          //debugger;
                           console.dir($(".container-fullsize.scroller"));
                         }
                       }
@@ -2216,7 +2216,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       var obj=$(a.target);
     },
     sortItems : function(a,b){
-      debugger; 
+      //debugger; 
       var type,i,length,temp=[],aux=[];
       if($(a.target).hasClass("sel") || this.loading){
         return !1;
@@ -2454,7 +2454,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         this.fstatus=$(ev.target).attr("name").bool();
       }
       $(ev.target).toggleClass("sel");
-      debugger;
+      //debugger;
       $(".container-fullsize.scroller").scrollTop(0);
       this.cookieamostras[0].posscroll=0;
       this.itens = $([]);
@@ -2472,7 +2472,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       }
       this.Componentfilter(this.data, 0, !0);
     },AmosByPrice:function(){
-      debugger;
+      //debugger;
       $(".container-fullsize.scroller").scrollTop(0);
       this.cookieamostras[0].posscroll=0;
       this.itens = $([]);
@@ -2621,7 +2621,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       }  
       this.setloading(!1);
       if(this.nsort !== ""){
-        debugger;
+        //debugger;
         this.fdata=this.sortItems(this.fdata,!0);
       }
       this.createbox(this.fdata, page,d,view,haslength);
@@ -3215,7 +3215,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       /*this.initialTime='2000-01-01';
       this.endTime='2020-10-10';*/
       //this.scroller=0;
-      debugger;
+      //debugger;
       if(this.page === "fornecedor_cadastro"){
         this.fornecedores.setfair=$(a.target).find("option:selected").val();
         this.submit("<FEIR_COD>"+this.fairval+"</FEIR_COD>",!1,!1,!0);

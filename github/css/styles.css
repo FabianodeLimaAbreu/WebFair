@@ -54,7 +54,9 @@ body {
   overflow-y: hidden;
 }
 html.detail,
-body.detail {
+body.detail,
+html.envioemail,
+body.envioemail {
   overflow-y: auto;
 }
 body {
@@ -1433,6 +1435,10 @@ form.search {
   padding-bottom: 115px;
   height: 300px;
   overflow-y: auto;
+}
+.container-fullsize.scroller.sendtemp {
+  height: auto;
+  overflow-x: hidden;
 }
 .container-fullsize .right-list {
   position: relative;

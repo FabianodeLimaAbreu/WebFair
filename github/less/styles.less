@@ -39,9 +39,11 @@ html, body{
 	height:100%;
 	overflow-x:hidden;
 	overflow-y:hidden;
-	&.detail{
+	&.detail,&.envioemail{
 		overflow-y: auto;
 	}
+
+
 }
 body{    
 	font-family:'Open Sans', sans-serif;
@@ -1462,6 +1464,10 @@ form.search{
 		padding-bottom: 115px;
 		height: 300px;
 		overflow-y:auto;
+		&.sendtemp{
+			height: auto;
+			overflow-x: hidden;
+		}
 	}
 	.right-list{
 		position: relative;
