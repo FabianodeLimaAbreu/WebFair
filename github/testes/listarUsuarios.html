@@ -10,17 +10,10 @@
             }
             $(document).ready(function () {
               $("#btnCallWebService").click(function (event) {
-                  var wsUrl = "../../WebService.asmx?op=EnviarEmail";
+                  var wsUrl = "../../WebService.asmx?op=ListarUsuarios";
                   
                   //se nao for usado tirar FORN_ID, DATA_I para inicial DATA_F para final, ambos podem ser removidos
-
-                  //\r\n\r\n - quebra de linha
-                  var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><EnviarEmail xmlns="http://tempuri.org/"><email><EMAIL_FROM>fabianoabreu@focustextil.com.br</EMAIL_FROM><EMAIL_TO>fabianoabreu@focustextil.com.br</EMAIL_TO><EMAIL_CC></EMAIL_CC><EMAIL_SUBJECT>Printed Samples</EMAIL_SUBJECT><EMAIL_BODY>Dear ##SUPPLIER,\r\nHope you are doing fine!\r\n\r\nYou have received a visit  from Menswear team from Focus Textile Brazil. We’d like to thank you for all attention dispensed with them.\r\n\r\nAbout the samples selected, could you kindly send us a hanger of each item and complete the information below:##SAMPLES\r\n\r\nNumber Reference: \r\nComposition: \r\nPrice (dollar/m FOB Shanghai): \r\nWeight (gsm and g/m):\r\nWidth (in meter - total and cuttable)\r\nDensity: \r\nYarn Count: \r\nSpecial Finishing: \r\nFocus Address:\r\n\r\nExcim/SP - FOCUS TEXTIL\r\nStreet Guaicurus, 375 – 4 andar – SALA 41\r\nZip Code: 05033-000 – Agua Branca - Sao Paulo - SP\r\nPhone / Fax: 5511-3879-6679\r\nATT: Jonatan Furmanovich - ID TAX 02.384.871/0002-62\r\n\r\nInform in the package "To Cristina Tiaki and Andressa Martins from Men"s department".\r\n\r\nPlease, inform the AWB number when send the hangers.\r\n\r\nIf you have any doubt, please contact me.\r\n\r\nThanks and best regards.\r\nKindly remember to reply the e-mails to all people in copy.</EMAIL_BODY><USU_COD>1</USU_COD></email></EnviarEmail></soap:Body></soap:Envelope>';
-
-
-                  //<email><EMAIL_FROM>cleberteixeira@focustextil.com.br</EMAIL_FROM><EMAIL_TO>fabianoabreu@focustextil.com.br</EMAIL_TO><EMAIL_SUBJECT>Printed Samples</EMAIL_SUBJECT><EMAIL_BODY>Teste de opcao.</EMAIL_BODY><USU_COD>1</USU_COD></email>
-
-                  //<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedores xmlns="http://tempuri.org/"><FORN_DESC>A JIN</FORN_DESC><FEIR_COD></FEIR_COD><LINHA_I>1</LINHA_I><LINHA_F>60</LINHA_F><CREATE_DATE_I>1900-10-17</CREATE_DATE_I></ListarFornecedores></soap:Body></soap:Envelope>*/
+                  var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarUsuarios xmlns="http://tempuri.org/"><SEGM_COD>MC</SEGM_COD></ListarUsuarios></soap:Body></soap:Envelope>';
 
                   //var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedores xmlns="http://tempuri.org/"><FEIR_COD>1</FEIR_COD><LINHA_I>1</LINHA_I><LINHA_F>20</LINHA_F><CREATE_DATE_I>2010-04-10</CREATE_DATE_I><CREATE_DATE_F>2050-04-10</CREATE_DATE_F></ListarFornecedores></soap:Body></soap:Envelope>';
 
