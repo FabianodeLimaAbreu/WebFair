@@ -125,61 +125,29 @@ var App={
 	* @memberOf Login#
 	*/
 	submitTemp:function(a){
-        var EMAIL_TO,EMAIL_FROM,EMAIL_SUBJECT,EMAIL_BODY,EMAIL_CC,status,last,last_request,EMAIL_CC_list=[];
-
-        /*EMAIL_TO=this.tempcookie.opt[1].CONT_EMAIL;
-        EMAIL_FROM=this.tempcookie.opt[2].USU_EMAIL;*/
-        EMAIL_CC=this.tempcookie.opt[2].SEGM_COD;
-        console.dir(this.tempcookie);
+        var EMAIL_TO,EMAIL_FROM,EMAIL_SUBJECT,EMAIL_BODY;
+        EMAIL_TO=this.tempcookie.opt[1].CONT_EMAIL;
+        EMAIL_FROM=this.tempcookie.opt[2].USU_EMAIL;
         EMAIL_SUBJECT=$("textarea[name='TEMP_SUBJECT']").val();
         EMAIL_BODY=$("textarea[name='TEMP_BODY']").val();
-        EMAIL_TO="fabianoabreu@focustextil.com.br";
-        EMAIL_FROM="fabianoabreu@focustextil.com.br";
 
-        var core=this;
-        status=setInterval(function(){
-            last_request=!0;
-            $.ajax({
-                type: "POST",
-                url: nodePath+"EnviarEmail",
-                contentType: "text/xml; charset=utf-8",
-                dataType: "xml",
-                crossDomain: true,
-                context: core,
-                data: '<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarUsuarios xmlns="http://tempuri.org/"><SEGM_COD>'+EMAIL_CC+'</SEGM_COD></ListarUsuarios></soap:Body></soap:Envelope>',
-                success:function(data, status, req){
-                    var emails_list;
-                    emails_list=jQuery.parseJSON($(req.responseXML).text()).unique();
-                    emails_list.forEach(function(el, index) {
-                        if(el.USU_RECEIVE_EMAIL){
-                            EMAIL_CC_list.push(el.USU_EMAIL);
-                        }
-                    });
-                    last_request=!1; 
-                },
-                error: core.processError
-            });
-            clearInterval(status);
-        },100);
+        /*EMAIL_TO="fabianoabreu@focustextil.com.br";
+        EMAIL_FROM="fabianoabreu@focustextil.com.br";*/
 
-        last=setInterval(function(){
-          //console.log(!context.ajaxrequest && goout && !last_request);
-          if(!last_request){
-            $.support.cors=true;
-            $.ajax({
-                type: "POST",
-                url: nodePath+"EnviarEmail",
-                contentType: "text/xml; charset=utf-8",
-                dataType: "xml",
-                crossDomain: true,
-                context: core,
-                data: '<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><EnviarEmail xmlns="http://tempuri.org/"><email><EMAIL_FROM>'+EMAIL_FROM+'</EMAIL_FROM><EMAIL_TO>'+EMAIL_TO+'</EMAIL_TO><EMAIL_CC>'+EMAIL_CC_list.join(";")+'</EMAIL_CC><EMAIL_SUBJECT>'+EMAIL_SUBJECT.replace("&", "%%")+'</EMAIL_SUBJECT><EMAIL_BODY>'+EMAIL_BODY.replace(/(\r\n|\n|\r)/gm, "\r\n").replace("&", "%%")+'</EMAIL_BODY><USU_COD>1</USU_COD></email></EnviarEmail></soap:Body></soap:Envelope>',
-                success: core.emailSent,
-                error: core.processError
-            });
-            clearInterval(last);
-          }
-        },100);
+		var core=this;
+        $.support.cors=true;
+        core.ajaxrequest=!0;                                                                        
+        $.ajax({
+            type: "POST",
+            url: nodePath+"EnviarEmail",
+            contentType: "text/xml; charset=utf-8",
+            dataType: "xml",
+            crossDomain: true,
+            context: core,
+            data: '<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><EnviarEmail xmlns="http://tempuri.org/"><email><EMAIL_FROM>'+EMAIL_FROM+'</EMAIL_FROM><EMAIL_TO>'+EMAIL_TO+'</EMAIL_TO><EMAIL_SUBJECT>'+EMAIL_SUBJECT.replace("&", "%%")+'</EMAIL_SUBJECT><EMAIL_BODY>'+EMAIL_BODY.replace(/(\r\n|\n|\r)/gm, "\r\n").replace("&", "%%")+'</EMAIL_BODY><USU_COD>1</USU_COD></email></EnviarEmail></soap:Body></soap:Envelope>',
+            success: core.emailSent,
+            error: core.processError
+        });
 	},
     emailSent:function(data, status, req){
         var modal=new Modal(!1,"Email enviado com sucesso!!!");

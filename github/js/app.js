@@ -125,7 +125,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.fairval="";
       this.fornval="";
       this.amosval="";
-      this.fornclick="";
       this.initialTimeAmos='2000-01-01';
       this.endTimeAmos='2020-10-10';
       this.initialTimeForn='2000-01-01';
@@ -171,9 +170,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         setDate:this.proxy(this.setDate),
         usr:this.usr,
         fair:this.fair,
-        modal:this.modal,
-        setFornClick:this.proxy(this.setFornClick),
-        savingCookie:this.proxy(this.savingCookie)
+        modal:this.modal
       });
 
       this.detail = new Detail({
@@ -202,8 +199,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         getAmosVal:this.proxy(this.getAmosVal),
         getPage:this.proxy(this.getPage),
         getInitialTime:this.proxy(this.getInitialTime),
-        getEndTime:this.proxy(this.getEndTime),
-        setCookieFair:this.proxy(this.setCookieFair)
+        getEndTime:this.proxy(this.getEndTime)
       });
       this.filter = new Filter({
         getloading: this.proxy(this.getloading),
@@ -246,7 +242,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               this.combofilter=this.cookieamostras[0].combofilter;
               this.fstatus=this.cookieamostras[0].fstatus;
               this.nsort=this.cookieamostras[0].nsort;
-              this.fornclick=this.cookieamostras[0].fornclick;
                               console.dir(this.cookieamostras[0]);
 
             }
@@ -272,7 +267,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 this.combofilter=this.cookieamostras[0].combofilter;
                 this.fstatus=this.cookieamostras[0].fstatus;
                 this.nsort=this.cookieamostras[0].nsort;
-                this.fornclick=this.cookieamostras[0].fornclick;
                                 console.dir(this.cookieamostras[0]);
 
               }
@@ -339,7 +333,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 
           if(this.cookiefornecedores.length){
             //console.dir(this.cookiefornecedores);
-            //console.dir(this.cookiefornecedores);
+          //console.dir(this.cookiefornecedores);
             this.initialTimeForn=this.cookiefornecedores[0].dates[0];
             this.endTimeForn=this.cookiefornecedores[0].dates[1];
             this.prices=this.cookiefornecedores[0].prices;
@@ -347,11 +341,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             this.fstatus=this.cookiefornecedores[0].fstatus;
             this.nsort=this.cookiefornecedores[0].nsort;
             this.combofilter=this.cookiefornecedores[0].combofilter;
-            this.fornclick=this.cookiefornecedores[0].fornclick;
-            console.dir(this.cookiefornecedores[0]);
+                            console.dir(this.cookiefornecedores[0]);
 
 
-            if(a == this.cookiefornecedores[0].fairval && b === this.cookiefornecedores[0].fornval){
+            if(a == this.cookiefornecedores[0].fairval && b === this.cookiefornecedores[0].fornval  && c === this.cookiefornecedores[0].amosval ){
               //console.log("bateu parametros do cookie");
               this.initialTimeForn=this.cookiefornecedores[0].dates[0];
               this.endTimeForn=this.cookiefornecedores[0].dates[1];
@@ -360,7 +353,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               this.combofilter=this.cookiefornecedores[0].combofilter;
               this.fstatus=this.cookiefornecedores[0].fstatus;
               this.nsort=this.cookiefornecedores[0].nsort;
-              this.fornclick=this.cookiefornecedores[0].fornclick;
               console.dir(this.cookiefornecedores[0]);
 
             }
@@ -377,7 +369,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             if(jQuery.parseJSON($.cookie("posscroll"+"fornecedores"))){
 
               this.cookiefornecedores.push(jQuery.parseJSON($.cookie("posscroll"+"fornecedores")));
-              if(a == this.cookiefornecedores[0].fairval && b === this.cookiefornecedores[0].fornval){
+              if(a == this.cookiefornecedores[0].fairval && b === this.cookiefornecedores[0].fornval  && c === this.cookiefornecedores[0].amosval ){
                 //console.dir(this.cookiefornecedores[0]);
                 //console.log("bateu parametros do cookie");
                 this.initialTimeForn=this.cookiefornecedores[0].dates[0];
@@ -387,7 +379,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 this.combofilter=this.cookiefornecedores[0].combofilter;
                 this.fstatus=this.cookiefornecedores[0].fstatus;
                 this.nsort=this.cookiefornecedores[0].nsort;  
-                this.fornclick=this.cookiefornecedores[0].fornclick;
                 console.dir(this.cookiefornecedores[0]);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
               }
               else{
@@ -510,14 +501,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           this.fairval=a.fair;
           this.amosval=a.code;
         }
-      }); 
+      });
     },
     PassCookie:function(){
       //Pesquisar amostras de acordo com ultima pesquisa de fornecedores e vice versa
       var url="";
       if(this.page === "amostras"){
         if(this.cookiefornecedores.length){
-          url=this.page+"/"+(this.cookiefornecedores[0].fairval || "padrao")+"/"+(this.cookiefornecedores[0].fornclick ||  this.cookiefornecedores[0].fornval ||"padrao")+"/"+(this.cookiefornecedores[0].amosval || "padrao");
+          url=this.page+"/"+(this.cookiefornecedores[0].fairval || "padrao")+"/"+(this.cookiefornecedores[0].fornval || "padrao")+"/"+(this.cookiefornecedores[0].amosval || "padrao");
           this.navigate(url, !0);
         }
       }
@@ -627,6 +618,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               $(".fair option").each(function(a,b){
                 if(parseInt($(b).attr("value")) ==  parseInt(context.fairval)){
                   $(b).attr("selected","selected");
+                  
                 }
               });
             }
@@ -1003,7 +995,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.setloading(!0,!1);
       this.fairval=$(".bselect.fair").find("option:selected").val();
       this.fornval=this.bforn.val();
-      this.fornclick=this.fornval;
       this.amosval=$(".form-control-search").val();
       this.reset();
       
@@ -1024,7 +1015,24 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             return !0;
           }
 
-          this.savingCookie(this.page);
+          var scroll={
+            "fornval":''+this.fornval,
+            "fairval":''+this.fairval,
+            "amosval":''+this.amosval,
+            "dates":[this.initialTimeForn,this.endTimeForn],
+            "prices":this.prices,
+            "refine":this.filter.list,
+            "combofilter":this.combofilter,
+            "fstatus":this.fstatus,
+            "nsort":this.nsort,
+            "view":""+this.view,
+            "posscroll":(this.posscroll || 0),
+            "total":(this.total || 20)
+          };
+          $.cookie.json = !0;
+          this.cookiefornecedores=[];
+          this.cookiefornecedores.push(scroll);
+          $.cookie("posscroll"+this.page, scroll, {expires:7, path:"/"});
 
           this.mode="fornecedores/"+(this.fairval || "padrao")+"/"+(this.fornval || "padrao")+"/"+(this.amosval || "padrao");
           this.navigate(this.mode, !1);
@@ -1055,7 +1063,24 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             FORN_DESC="";
           }
 
-          this.savingCookie(this.page);
+          var scroll={
+            "fornval":''+this.fornval,
+            "fairval":''+this.fairval,
+            "amosval":''+this.amosval,
+            "dates":[this.initialTimeAmos,this.endTimeAmos],
+            "prices":this.prices,
+            "refine":this.filter.list,
+            "combofilter":this.combofilter,
+            "fstatus":this.fstatus,
+            "nsort":this.nsort,
+            "view":""+this.view,
+            "posscroll":(this.posscroll || 0),
+            "total":(this.total || 20)
+          };
+          $.cookie.json = !0;
+          this.cookieamostras=[];
+          this.cookieamostras.push(scroll);
+          $.cookie("posscroll"+this.page, scroll, {expires:7, path:"/"});
 
           this.mode="amostras/"+(this.fairval || "padrao")+"/"+(this.fornval || "padrao")+"/"+(this.amosval || "padrao");
           this.navigate(this.mode, !1);
@@ -1518,7 +1543,24 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             $(".changeview button.b"+this.view).addClass('sel');
           }
           if(!this.cookieamostras.length){
-            this.savingCookie(this.page);
+            var scroll={
+              "fornval":''+this.fornval,
+              "fairval":''+this.fairval,
+              "amosval":""+this.amosval,
+              "dates":[this.initialTimeAmos,this.endTimeAmos],
+              "prices":this.prices,
+              "refine":this.filter.list,
+              "combofilter":this.combofilter,
+              "fstatus":this.fstatus,
+              "nsort":this.nsort,
+              "view":""+this.view,
+              "posscroll":(this.posscroll || 0),
+              "total":(this.total || 20)
+            };
+            $.cookie.json = !0;
+            this.cookieamostras=[];
+            this.cookieamostras.push(scroll);
+            $.cookie("posscroll"+this.page, scroll, {expires:7, path:"/"});
           }
           
 
@@ -1545,7 +1587,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               "fornval":''+this.fornval,
               "fairval":''+this.fairval,
               "amosval":''+this.amosval,
-              "fornclick":''+this.fornclick,
               "dates":[this.initialTimeForn,this.endTimeForn],
               "prices":this.prices,
               "refine":this.filter.list,
@@ -2539,7 +2580,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         "fornval":''+this.fornval,
         "fairval":''+this.fairval,
         "amosval":""+this.amosval,
-        "fornclick":""+this.fornclick,
         "prices":this.prices,
         "refine":this.filter.list,
         "combofilter":this.combofilter,
@@ -3191,9 +3231,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       $(".overview-container").remove();
       this.fairval=$(a.target).find("option:selected").val();
       this.fornval=this.bforn.val();
-      this.fornclick=this.fornval;
-      this.amosval=$(".form-control-search").val() || "";
-      this.savingCookie(this.page);
+      this.amosval=$(".form-control-search").val();
 
 
       if (this.page === "amostras") {
@@ -3470,8 +3508,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             this.fornval="alt"+a.val();
           }
         }
-        this.fornclick=this.fornval;
-        this.savingCookie(this.page);
         
         this.resetFilters();
         this.mode=this.page+"/"+((""+this.fairval).replace(" ","_") || "padrao")+"/"+((""+this.fornval).replace(" ","_") || "padrao")+"/"+((""+this.amosval).replace(" ","_") || "padrao");
@@ -3499,7 +3535,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         }
         else{
           this.fornval=a.target.value;
-          this.fornclick=this.fornval;
           this.spotlight.close();
         }
       }
@@ -3534,9 +3569,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
     },
     setSegm:function(a){
       this.segm=a;
-    },
-    setFornClick:function(a){
-      this.fornclick=a;
     },
     /**
     * `Set the loading state`
@@ -3616,80 +3648,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         return this.data;
       }
     },
-    savingCookie:function(what,tofornclick,valforn){
-      if(tofornclick){
-        if($.cookie("cookiefornecedores")){
-          this.cookieamostras.push(jQuery.parseJSON($.cookie("posscroll"+"cookiefornecedores")));
-          var scroll={
-            "fornval":''+this.cookiefornecedores[0].fornval,
-            "fairval":''+this.cookiefornecedores[0].fairval,
-            "amosval":''+this.cookiefornecedores[0].amosval,
-            "fornclick":''+valforn,
-            "dates":this.cookiefornecedores[0].dates[0],
-            "prices":this.cookiefornecedores[0].prices,
-            "refine":this.cookiefornecedores[0].refine,
-            "combofilter":this.cookiefornecedores[0].combofilter,
-            "fstatus":this.cookiefornecedores[0].fstatus,
-            "nsort":this.cookiefornecedores[0].nsort,
-            "view":""+this.cookiefornecedores[0].view,
-            "posscroll":(this.cookiefornecedores[0].posscroll || 0),
-            "total":(this.cookiefornecedores[0].total || 20)
-          }
-
-          console.dir(this.cookiefornecedores[0]); 
-          console.dir(this.fornecedores.item);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
-        }
-        else{
-          var scroll={
-            "fornval":''+this.fornval,
-            "fairval":''+this.fairval,
-            "amosval":''+this.amosval,
-            "fornclick":''+(valforn || ""),
-            "dates":[this.initialTimeAmos,this.endTimeAmos],
-            "prices":this.prices,
-            "refine":this.filter.list,
-            "combofilter":this.combofilter,
-            "fstatus":this.fstatus,
-            "nsort":this.nsort,
-            "view":""+this.view,
-            "posscroll":(this.posscroll || 0),
-            "total":(this.total || 20)
-          }
-          /*console.log("WINDOW 0");
-          //debugger;
-          $(".container-fullsize.scroller").scrollTop(0);*/
-        }
-      }
-      else{
-        var scroll={
-          "fornval":''+this.fornval,
-          "fairval":''+this.fairval,
-          "amosval":''+this.amosval,
-          "fornclick":''+this.fornclick,
-          "dates":[this.initialTimeAmos,this.endTimeAmos],
-          "prices":this.prices,
-          "refine":this.filter.list,
-          "combofilter":this.combofilter,
-          "fstatus":this.fstatus,
-          "nsort":this.nsort,
-          "view":""+this.view,
-          "posscroll":(this.posscroll || 0),
-          "total":(this.total || 20)
-        };
-        
-      }
-      $.cookie.json = !0;
-      this["cookie"+what]=[];
-      this["cookie"+what].push(scroll);
-      //console.dir(e.cookiefair);
-      $.cookie("posscroll"+what, scroll, {expires:7, path:"/"});
-    },
-    setCookieFair:function(page,val){
-      if(this["cookie"+page].length){
-        this["cookie"+page][0].fornclick = val;
-        this["cookie"+page][0].fornval = val;
-      }
-    },
     scroll:function(z) {
       var b, c, f, clone,e = this;
       z = z || $(".container-fullsize.scroller");
@@ -3727,9 +3685,25 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 
             if(d<f){
               //console.log("entrou");
-              e.posscroll=d;
-              e.total=b;
-              e.savingCookie("amostras");
+              var scroll={
+                "fornval":''+e.fornval,
+                "fairval":''+e.fairval,
+                "amosval":''+e.amosval,
+                "dates":[e.initialTimeAmos,e.endTimeAmos],
+                "prices":e.prices,
+                "refine":e.filter.list,
+                "combofilter":e.combofilter,
+                "fstatus":e.fstatus,
+                "nsort":e.nsort,
+                "view":""+e.view,
+                "posscroll":d,
+                "total":b
+              };
+              $.cookie.json = !0;
+              e.cookieamostras=[];
+              e.cookieamostras.push(scroll);
+              //console.dir(e.cookiefair);
+              $.cookie("posscroll"+"amostras", scroll, {expires:7, path:"/"});
             }
 
 
@@ -3754,9 +3728,24 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             f= $("#table").height()-$(".scroller").outerHeight();
 
             if(d<f){
-              e.posscroll=d;
-              e.total=b;
-              e.savingCookie("fornecedores");
+              var scroll={
+                "fornval":''+e.fornval,
+                "fairval":''+e.fairval,
+                "amosval":''+e.amosval,
+                "dates":[e.initialTimeForn,e.endTimeForn],
+                "prices":e.prices,
+                "refine":e.filter.list,
+                "combofilter":e.combofilter,
+                "fstatus":e.fstatus,
+                "nsort":e.nsort,
+                "view":""+e.view,
+                "posscroll":d,
+                "total":b
+              };
+              $.cookie.json = !0;
+              e.cookiefornecedores=[];
+              e.cookiefornecedores.push(scroll);
+              $.cookie("posscroll"+"fornecedores", scroll, {expires:7, path:"/"});
             }
             
             if (d >= f && b) {
@@ -3895,7 +3884,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.fairval="";
       this.fornval="";
       this.amosval="";
-      this.fornclick="";
       //this.nsort="AMOS_DESC";
       this.nsort="";
       /*this.initialTime='2000-01-01';
