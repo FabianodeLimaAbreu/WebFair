@@ -599,6 +599,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       }
       $(".zoomContainer").remove();
       $(".nav-menu a").removeClass('sel');
+      $(".container").empty();
+      $(".container").load("../views/"+$(this).attr("name")+".html");
       this.container.load("pages/"+hash+".html",function( response, status, xhr){
         switch(context.page){
           case "amostras":
@@ -678,6 +680,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                   context.ajaxrequest=!1;
                   context.createComponent(context.fair,context.bfair,'fair');
                   clearInterval(status);
+
+                  
                 }
               },100);
             }

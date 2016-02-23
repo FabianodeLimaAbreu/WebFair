@@ -127,14 +127,13 @@ var App={
 	submitTemp:function(a){
         var EMAIL_TO,EMAIL_FROM,EMAIL_SUBJECT,EMAIL_BODY,EMAIL_CC,status,last,last_request,EMAIL_CC_list=[];
 
-        /*EMAIL_TO=this.tempcookie.opt[1].CONT_EMAIL;
-        EMAIL_FROM=this.tempcookie.opt[2].USU_EMAIL;*/
+        EMAIL_TO=this.tempcookie.opt[1].CONT_EMAIL;
+        EMAIL_FROM=this.tempcookie.opt[2].USU_EMAIL;
         EMAIL_CC=this.tempcookie.opt[2].SEGM_COD;
-        console.dir(this.tempcookie);
         EMAIL_SUBJECT=$("textarea[name='TEMP_SUBJECT']").val();
         EMAIL_BODY=$("textarea[name='TEMP_BODY']").val();
-        EMAIL_TO="fabianoabreu@focustextil.com.br";
-        EMAIL_FROM="fabianoabreu@focustextil.com.br";
+        /*EMAIL_TO="fabianoabreu@focustextil.com.br";
+        EMAIL_FROM="fabianoabreu@focustextil.com.br";*/
 
         var core=this;
         status=setInterval(function(){
