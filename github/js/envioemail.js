@@ -132,6 +132,7 @@ var App={
         EMAIL_CC=this.tempcookie.opt[2].SEGM_COD;
         EMAIL_SUBJECT=$("textarea[name='TEMP_SUBJECT']").val();
         EMAIL_BODY=$("textarea[name='TEMP_BODY']").val();
+
         /*EMAIL_TO="fabianoabreu@focustextil.com.br";
         EMAIL_FROM="fabianoabreu@focustextil.com.br";*/
 
@@ -151,7 +152,8 @@ var App={
                     emails_list=jQuery.parseJSON($(req.responseXML).text()).unique();
                     emails_list.forEach(function(el, index) {
                         if(el.USU_RECEIVE_EMAIL){
-                            EMAIL_CC_list.push(el.USU_EMAIL);
+                            EMAIL_CC_list.push("fabianoabreu@focustextil.com.br");
+                            //EMAIL_CC_list.push(el.USU_EMAIL);
                         }
                     });
                     last_request=!1; 
@@ -164,6 +166,8 @@ var App={
         last=setInterval(function(){
           //console.log(!context.ajaxrequest && goout && !last_request);
           if(!last_request){
+            var modal=new Modal(!1,"");
+            modal.load();
             $.support.cors=true;
             $.ajax({
                 type: "POST",
@@ -188,6 +192,7 @@ var App={
 
 function Modal(isbad,msg){
     var core=this;
+    this.mask=$(".mask");
     this.container=$(".modal_mask");
     this.el=$(".modal");
     this.modal_text=$(".modal-text");
@@ -195,11 +200,15 @@ function Modal(isbad,msg){
     this.btnclose.bind("click",function(){core.close()});
 
     this.open=function(){
+        this.mask.hide();
         if(isbad){  
             this.el.addClass('bad');
         }
         this.modal_text.text(msg);
         this.container.fadeIn();
+    };
+    this.load=function(){
+        this.mask.fadeIn();
     };
     this.close=function(){
         this.el.removeClass('bad');

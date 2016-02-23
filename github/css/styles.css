@@ -1578,6 +1578,9 @@ form.search {
   -webkit-border-radius: 50px;
   margin: 10px 0 5px;
 }
+.filter-crumb .fornlink {
+  color: inherit;
+}
 .filter-crumb .bread-count {
   float: right;
   margin-right: 20px;
