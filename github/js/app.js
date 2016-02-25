@@ -247,7 +247,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               this.fstatus=this.cookieamostras[0].fstatus;
               this.nsort=this.cookieamostras[0].nsort;
               this.fornclick=this.cookieamostras[0].fornclick;
-                              console.dir(this.cookieamostras[0]);
+                              //console.dir(this.cookieamostras[0]);
 
             }
             else{
@@ -263,7 +263,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             if(jQuery.parseJSON($.cookie('posscroll'+this.page))){
               this.cookieamostras.push(jQuery.parseJSON($.cookie('posscroll'+this.page)));
               if(a == this.cookieamostras[0].fairval && b === this.cookieamostras[0].fornval  && c === this.cookieamostras[0].amosval ){
-                console.dir(this.cookieamostras[0]);
+                //console.dir(this.cookieamostras[0]);
                 //console.log("bateu parametros do cookie");
                 this.initialTimeAmos=this.cookieamostras[0].dates[0];
                 this.endTimeAmos=this.cookieamostras[0].dates[1];
@@ -273,7 +273,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 this.fstatus=this.cookieamostras[0].fstatus;
                 this.nsort=this.cookieamostras[0].nsort;
                 this.fornclick=this.cookieamostras[0].fornclick;
-                                console.dir(this.cookieamostras[0]);
+                                //console.dir(this.cookieamostras[0]);
 
               }
               else{
@@ -348,7 +348,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             this.nsort=this.cookiefornecedores[0].nsort;
             this.combofilter=this.cookiefornecedores[0].combofilter;
             this.fornclick=this.cookiefornecedores[0].fornclick;
-            console.dir(this.cookiefornecedores[0]);
+            //console.dir(this.cookiefornecedores[0]);
 
 
             if(a == this.cookiefornecedores[0].fairval && b === this.cookiefornecedores[0].fornval){
@@ -361,7 +361,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               this.fstatus=this.cookiefornecedores[0].fstatus;
               this.nsort=this.cookiefornecedores[0].nsort;
               this.fornclick=this.cookiefornecedores[0].fornclick;
-              console.dir(this.cookiefornecedores[0]);
+              //console.dir(this.cookiefornecedores[0]);
 
             }
             else{
@@ -388,7 +388,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 this.fstatus=this.cookiefornecedores[0].fstatus;
                 this.nsort=this.cookiefornecedores[0].nsort;  
                 this.fornclick=this.cookiefornecedores[0].fornclick;
-                console.dir(this.cookiefornecedores[0]);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+                //console.dir(this.cookiefornecedores[0]);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
               }
               else{
                 console.log("WINDOW 0");
@@ -1541,7 +1541,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           this.filterTemplate();
           break;
         case 'fornecedores':
-          console.dir(a);
+          //console.dir(a);
           $("input[name='initial_date']").datepicker('setDate', this.initialTimeForn.slice(0,4)+'-'+this.initialTimeForn.slice(5, 7)+"-"+this.initialTimeForn.slice(8, 10));
           $("input[name='end_date']").datepicker('setDate', this.endTimeForn.slice(0,4)+'-'+this.endTimeForn.slice(5, 7)+"-"+this.endTimeForn.slice(8, 10));
 
@@ -1973,7 +1973,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                     else if(e.page === "fornecedores"){
                       if(e.cookiefornecedores.length){
                         //debugger;
-                        console.log(e.cookiefornecedores[0].posscroll);
+                        //console.log(e.cookiefornecedores[0].posscroll);
                         $(".container-fullsize.scroller").scrollTop(e.cookiefornecedores[0].posscroll);
                       }
                     }
@@ -2038,10 +2038,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                       $(".overview").append('<div class="overview-container"><div class="filter-crumb"><a href="#" class="fornlink"><p class="bread-search">Mostrando:<span class="spec">0</span><span> de </span><span class="specall">0</span><span> Amostras </span><span class="specforn"> de 0 Fornecedores</span></a></p></div><ul class="viewport"></ul></div>');
                     }
                     else if(h.FORN_ID !== a[k-1].FORN_ID){
-                      //debugger;
                       var view_container=$(".overview-container");
                       view_container=$(view_container).eq(view_container.length-1);
-                      view_container.find(".fornlink").attr("href","#fornecedores/edit/"+h.FORN_ID);
+                      //view_container.find(".fornlink").attr("href","#fornecedores/edit/"+h.FORN_ID);
                       view_container.find(".bread-search .spec").text(view_container.find(".viewport .thumbnail").length);
                       $(".overview").append('<div class="overview-container"><div class="filter-crumb"><a href="#" class="fornlink"><p class="bread-search">Mostrando:<span class="spec">0</span><span> de </span><span class="specall">0</span><span> Amostras </span><span class="specforn"> de 0 Fornecedores</span></p></a></div><ul class="viewport"></ul></div>');
                       countf++;
@@ -2053,6 +2052,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                     view_container.find(".bread-search .spec").text(view_container.find(".viewport .thumbnail").length+1);
                     view_container.find(".bread-search .specall").text(a.length);
                     view_container.find(".bread-search .specforn").text("/ "+h.FORN_DESC);
+                    if(h.CONT_PRINCIPAL){
+                      $(".filter-crumb").addClass('has-maincontact');
+                    }
                 } else {
                     var count="COUNT_FORN";
                     if(context.page === "amostras"){
@@ -2074,7 +2076,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                           else if(h.FORN_ID !== a[k-1].FORN_ID){
                             var view_container=$(".overview-container");
                             view_container=$(view_container).eq(view_container.length-1);
-                            view_container.find(".fornlink").attr("href","#fornecedores/edit/"+h.FORN_ID);
+                            //view_container.find(".fornlink").attr("href","#fornecedores/edit/"+h.FORN_ID);
                             view_container.find(".bread-search .spec").text(view_container.find("tbody tr").length);
                             $(".floatThead").append('<div class="overview-container"><div class="filter-crumb"><a href="#" class="fornlink"><p class="bread-search">Mostrando:<span class="spec">0</span><span> de </span><span class="specall">0</span><span> Amostras </span><span class="specforn"> de 0 Fornecedores</span></p></a></div><table id="table" class="table-striped table-large"><thead><tr><th></th><th>Fornecedor</th><th>Codigo</th><th>Data</th><th><button type="button" class="caption-icons-icon justit bfisica nothas unable">Fisica</button></th><th>Preco Inicial</th><th>M/kg</th><th><button type="button" class="caption-icons-icon justit bfav nothas unable">Favorita</button></th><th><button type="button" class="caption-icons-icon justit bhomologado nothas unable">Homologada</button></th><th><button type="button" class="caption-icons-icon justit bnote">Anotacoes</button></th>'+/*<th><button type="button" class="icon bannex">Anexo</button></th>*/'<th><button type="button" class="caption-icons-icon justit bemail">Email</button></th><th>Tecimento</th><th>Base</th><th>Grupo</th><th>Sub-Grupo</th><th>Composicao</th><th class="tlast">Status</th></tr></thead><tbody></tbody></div>');
                             countf++;
@@ -2085,6 +2087,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                           view_container.find(".bread-search .spec").text(view_container.find("tbody tr").length+1);
                           view_container.find(".bread-search .specall").text(a.length);
                           view_container.find(".bread-search .specforn").text("/ "+h.FORN_DESC);
+                          if(h.CONT_PRINCIPAL){
+                            $(".filter-crumb").addClass('has-maincontact');
+                          }
 
                         }
 
@@ -2112,7 +2117,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                           //debugger;
                           $(".container-fullsize.scroller").scrollTop(e.cookieamostras[0].posscroll);
                           //debugger;
-                          console.dir($(".container-fullsize.scroller"));
+                          //console.dir($(".container-fullsize.scroller"));
                         }
                       }
                       else if( e.page === "fornecedores"){
@@ -2120,7 +2125,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                           //debugger;
                           $(".container-fullsize.scroller").scrollTop(e.cookiefornecedores[0].posscroll);
                           //debugger;
-                          console.dir($(".container-fullsize.scroller"));
+                          //console.dir($(".container-fullsize.scroller"));
                         }
                       }
                       clearInterval(f), e.setloading(!1);
@@ -2609,7 +2614,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       //console.log("clicou");
       var i,context=this,error=!1;
       if(!this.select_items.length){
-        if($(".overview-container").length<1){
+        if($(".overview-container").length>=1){
           this.modal.open("message","Selecione ao menos um item",!1,!0);
           return !1;
         }
@@ -2937,7 +2942,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 
     },
     setCompositions:function(a){
-      console.log("SET COMPOSITIONS");
+      //console.log("SET COMPOSITIONS");
       var length,context=this,l=0,obj,status;
       if($(a.target).prop("tagName") ===  "SPAN"){
         a.preventDefault();
@@ -3033,7 +3038,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       //this.callService("gravarAmostraComposicao","102004997","<Composition><COMP_COD>CL_1</COMP_COD><COMP_OTHERS></COMP_OTHERS><TP_COMP_ID>1</TP_COMP_ID></Composition>");
     },
     compChange:function(ev){
-      console.log("COMP CHANGE");
+      //console.log("COMP CHANGE");
       ev.preventDefault();
       var aux,html="",context=this;
       if(typeof ev === "object"){
@@ -3650,8 +3655,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             "total":(this.cookiefornecedores[0].total || 20)
           }
 
-          console.dir(this.cookiefornecedores[0]); 
-          console.dir(this.fornecedores.item);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+          //console.dir(this.cookiefornecedores[0]); 
+          //console.dir(this.fornecedores.item);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
         }
         else{
           var scroll={
@@ -3707,15 +3712,15 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
     scroll:function(z) {
       var b, c, f, clone,e = this;
       z = z || $(".container-fullsize.scroller");
-      console.log("DEU SCROLL");
+      //console.log("DEU SCROLL");
       //$.hasData(z[0]) && z.unbind("scroll");
       //console.dir(e.content.itens);
-      console.dir(z);
+      //console.dir(z);
       if (!e.content.itens) {
         return !1;
       }
       z.scroll(function() {
-        console.log(e.page);
+        //console.log(e.page);
         if (e.loading || e.page === "detail") {
           return!1;
         }
@@ -3747,7 +3752,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             }
 
 
-            console.log(d+" , "+f);
+            //console.log(d+" , "+f);
             if (d >= f && b) {
               e.content.page++;
               e.setloading(!0,!1);

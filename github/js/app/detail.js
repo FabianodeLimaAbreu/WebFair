@@ -1300,7 +1300,7 @@ setFav:function(a){
   }*/
   if(this.setfair && !$("html").hasClass('view_forn') && (this.lasttab !== this.tab)){
     //console.log("SALVANDO");
-    console.log(this.lasttab);
+    //console.log(this.lasttab);
     this.setloading(!0,!1);
     switch (this.lasttab){
       case 'dados':

@@ -242,8 +242,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.fairval="";
       this.fornval="";
       this.amosval="";
-      this.initialTime='2000-01-01';
-      this.endTime='2020-10-10';
+      this.fornclick="";
+      this.initialTimeAmos='2000-01-01';
+      this.endTimeAmos='2020-10-10';
+      this.initialTimeForn='2000-01-01';
+      this.endTimeForn='2020-10-10';
+
       this.unable_select=!1;
       this.combofilter={
         "FLAG_FISICA":{"clicked":0,"code":0},
@@ -260,7 +264,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       if(!this.usr)
         window.location.href = 'login.html';
 
-      this.cookiefair=[];
+      this.cookiefornecedores=[];
+      this.cookieamostras=[]
 
       this.header.addClass("goDown");
       
@@ -283,7 +288,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         setDate:this.proxy(this.setDate),
         usr:this.usr,
         fair:this.fair,
-        modal:this.modal
+        modal:this.modal,
+        setFornClick:this.proxy(this.setFornClick),
+        savingCookie:this.proxy(this.savingCookie)
       });
 
       this.detail = new Detail({
@@ -299,7 +306,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         deleteNote:this.proxy(this.deleteNote),
         usr:this.usr,
         modal:this.modal,
-        cookiefair:this.cookiefair
+        cookieamostras:this.cookieamostras
       });
 
       this.spotlight = new Spotlight({
@@ -312,7 +319,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         getAmosVal:this.proxy(this.getAmosVal),
         getPage:this.proxy(this.getPage),
         getInitialTime:this.proxy(this.getInitialTime),
-        getEndTime:this.proxy(this.getEndTime)
+        getEndTime:this.proxy(this.getEndTime),
+        setCookieFair:this.proxy(this.setCookieFair)
       });
       this.filter = new Filter({
         getloading: this.proxy(this.getloading),
@@ -336,59 +344,66 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           $("html").attr("class","").addClass(this.page);
           //this.restartValues();
           this.PassCookie();
-          this.initialTime='2000-01-01';
-          this.endTime='2020-10-10';
           this.writePage(this.page);
         },
         "amostras/*fairval/*fornval/*amosval":function(res){
           var a,b,c;
+          this.page ="amostras";
           this.filterisdone=!0;
           this.fairval = a=res.fairval !== "padrao" ? parseInt(res.fairval) : ""; 
           this.fornval = b=res.fornval !== "padrao" ? res.fornval.replace("_"," ").replace("_"," ").replace("_"," ") : "";
           this.amosval = c=res.amosval !== "padrao" ? res.amosval.replace("_"," ").replace("_"," ").replace("_"," ") : ""; 
-
-          if(this.cookiefair.length){
-            if(a == this.cookiefair[0].fairval &amp;&amp; b === this.cookiefair[0].fornval  &amp;&amp; c === this.cookiefair[0].amosval ){
+          if(this.cookieamostras.length){
+            if(a == this.cookieamostras[0].fairval &amp;&amp; b === this.cookieamostras[0].fornval  &amp;&amp; c === this.cookieamostras[0].amosval ){
               //console.log("bateu parametros do cookie");
-              this.initialTime=this.cookiefair[0].dates[0];
-              this.endTime=this.cookiefair[0].dates[1];
-              this.prices=this.cookiefair[0].prices;
-              this.refine=this.cookiefair[0].refine;
-              this.combofilter=this.cookiefair[0].combofilter;
-              this.fstatus=this.cookiefair[0].fstatus;
-              this.nsort=this.cookiefair[0].nsort;
+              this.initialTimeAmos=this.cookieamostras[0].dates[0];
+              this.endTimeAmos=this.cookieamostras[0].dates[1];
+              this.prices=this.cookieamostras[0].prices;
+              this.refine=this.cookieamostras[0].refine;
+              this.combofilter=this.cookieamostras[0].combofilter;
+              this.fstatus=this.cookieamostras[0].fstatus;
+              this.nsort=this.cookieamostras[0].nsort;
+              this.fornclick=this.cookieamostras[0].fornclick;
+                              //console.dir(this.cookieamostras[0]);
+
             }
             else{
               //console.log("WINDOW 0");
-              this.cookiefair=[];
-              $.removeCookie('posscroll', { path: '/' });
+              this.cookieamostras=[];
+              $.removeCookie('posscroll'+this.page, { path: '/' });
+              //debugger;
               $(".container-fullsize.scroller").scrollTop(0);
             }
           }
           else{
             //console.log("nao achou");
-            if(jQuery.parseJSON($.cookie("posscroll"))){
-              this.cookiefair.push(jQuery.parseJSON($.cookie("posscroll")));
-              if(a == this.cookiefair[0].fairval &amp;&amp; b === this.cookiefair[0].fornval  &amp;&amp; c === this.cookiefair[0].amosval ){
-                console.dir(this.cookiefair[0]);
+            if(jQuery.parseJSON($.cookie('posscroll'+this.page))){
+              this.cookieamostras.push(jQuery.parseJSON($.cookie('posscroll'+this.page)));
+              if(a == this.cookieamostras[0].fairval &amp;&amp; b === this.cookieamostras[0].fornval  &amp;&amp; c === this.cookieamostras[0].amosval ){
+                //console.dir(this.cookieamostras[0]);
                 //console.log("bateu parametros do cookie");
-                this.initialTime=this.cookiefair[0].dates[0];
-                this.endTime=this.cookiefair[0].dates[1];
-                this.prices=this.cookiefair[0].prices;
-                this.refine=this.cookiefair[0].refine;
-                this.combofilter=this.cookiefair[0].combofilter;
-                this.fstatus=this.cookiefair[0].fstatus;
-                this.nsort=this.cookiefair[0].nsort;
+                this.initialTimeAmos=this.cookieamostras[0].dates[0];
+                this.endTimeAmos=this.cookieamostras[0].dates[1];
+                this.prices=this.cookieamostras[0].prices;
+                this.refine=this.cookieamostras[0].refine;
+                this.combofilter=this.cookieamostras[0].combofilter;
+                this.fstatus=this.cookieamostras[0].fstatus;
+                this.nsort=this.cookieamostras[0].nsort;
+                this.fornclick=this.cookieamostras[0].fornclick;
+                                //console.dir(this.cookieamostras[0]);
+
               }
               else{
                 //console.log("WINDOW 0");
-                this.cookiefair=[];
-                $.removeCookie('posscroll', { path: '/' });
+                //debugger;
+                this.cookieamostras=[];
+                $.removeCookie('posscroll'+this.page, { path: '/' });
                 $(".container-fullsize.scroller").scrollTop(0);
               }
             }
             else{
               //console.log("WINDOW 0");
+              //debugger;
               $(".container-fullsize.scroller").scrollTop(0);
             }
           }
@@ -419,8 +434,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             }
           }
           a="&lt;FEIR_COD>"+a+"&lt;/FEIR_COD>";
-          var context=this;
-          this.page ="amostras";
           $("html").attr("class","").addClass(this.page);
           this.writePage(this.page);
           this.setloading(!0,!1);
@@ -430,8 +443,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           var context=this;
           this.page ="fornecedores";
           //this.restartValues();
-          this.initialTime='2000-01-01';
-          this.endTime='2020-10-10';
           this.PassCookie();
           $("html").attr("class","").addClass(this.page);
           this.writePage(this.page);
@@ -443,67 +454,82 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           this.amosval = c=res.amosval !== "padrao" ? res.amosval.replace("_"," ").replace("_"," ").replace("_"," ") : ""; 
 
 
-          if(this.cookiefair.length){
-            //console.dir(this.cookiefair);
-          //console.dir(this.cookiefair);
-            this.initialTime=this.cookiefair[0].dates[0];
-            this.endTime=this.cookiefair[0].dates[1];
-            this.prices=this.cookiefair[0].prices;
-            this.refine=this.cookiefair[0].refine;
-            this.fstatus=this.cookiefair[0].fstatus;
-            this.nsort=this.cookiefair[0].nsort;
-            this.combofilter=this.cookiefair[0].combofilter;
+          if(this.cookiefornecedores.length){
+            //console.dir(this.cookiefornecedores);
+            //console.dir(this.cookiefornecedores);
+            this.initialTimeForn=this.cookiefornecedores[0].dates[0];
+            this.endTimeForn=this.cookiefornecedores[0].dates[1];
+            this.prices=this.cookiefornecedores[0].prices;
+            this.refine=this.cookiefornecedores[0].refine;
+            this.fstatus=this.cookiefornecedores[0].fstatus;
+            this.nsort=this.cookiefornecedores[0].nsort;
+            this.combofilter=this.cookiefornecedores[0].combofilter;
+            this.fornclick=this.cookiefornecedores[0].fornclick;
+            //console.dir(this.cookiefornecedores[0]);
 
-            if(a == this.cookiefair[0].fairval &amp;&amp; b === this.cookiefair[0].fornval  &amp;&amp; c === this.cookiefair[0].amosval ){
+
+            if(a == this.cookiefornecedores[0].fairval &amp;&amp; b === this.cookiefornecedores[0].fornval){
               //console.log("bateu parametros do cookie");
-              this.initialTime=this.cookiefair[0].dates[0];
-              this.endTime=this.cookiefair[0].dates[1];
-              this.prices=this.cookiefair[0].prices;
-              this.refine=this.cookiefair[0].refine;
-              this.combofilter=this.cookiefair[0].combofilter;
-              this.fstatus=this.cookiefair[0].fstatus;
-              this.nsort=this.cookiefair[0].nsort;
+              this.initialTimeForn=this.cookiefornecedores[0].dates[0];
+              this.endTimeForn=this.cookiefornecedores[0].dates[1];
+              this.prices=this.cookiefornecedores[0].prices;
+              this.refine=this.cookiefornecedores[0].refine;
+              this.combofilter=this.cookiefornecedores[0].combofilter;
+              this.fstatus=this.cookiefornecedores[0].fstatus;
+              this.nsort=this.cookiefornecedores[0].nsort;
+              this.fornclick=this.cookiefornecedores[0].fornclick;
+              //console.dir(this.cookiefornecedores[0]);
+
             }
             else{
-              //console.log("WINDOW 0");
-              this.cookiefair=[];
-              $.removeCookie('posscroll', { path: '/' });
+              console.log("WINDOW 0");
+              this.cookiefornecedores=[];
+              $.removeCookie('posscroll'+"fornecedores", { path: '/' });
+              //debugger;
               $(".container-fullsize.scroller").scrollTop(0);
             }
           }
           else{
             //console.log("nao achou");
-            if(jQuery.parseJSON($.cookie("posscroll"))){
-              this.cookiefair.push(jQuery.parseJSON($.cookie("posscroll")));
-              if(a == this.cookiefair[0].fairval &amp;&amp; b === this.cookiefair[0].fornval  &amp;&amp; c === this.cookiefair[0].amosval ){
-                //console.dir(this.cookiefair[0]);
+            if(jQuery.parseJSON($.cookie("posscroll"+"fornecedores"))){
+
+              this.cookiefornecedores.push(jQuery.parseJSON($.cookie("posscroll"+"fornecedores")));
+              if(a == this.cookiefornecedores[0].fairval &amp;&amp; b === this.cookiefornecedores[0].fornval){
+                //console.dir(this.cookiefornecedores[0]);
                 //console.log("bateu parametros do cookie");
-                this.initialTime=this.cookiefair[0].dates[0];
-                this.endTime=this.cookiefair[0].dates[1];
-                this.prices=this.cookiefair[0].prices;
-                this.refine=this.cookiefair[0].refine;
-                this.combofilter=this.cookiefair[0].combofilter;
-                this.fstatus=this.cookiefair[0].fstatus;
-                this.nsort=this.cookiefair[0].nsort;
+                this.initialTimeForn=this.cookiefornecedores[0].dates[0];
+                this.endTimeForn=this.cookiefornecedores[0].dates[1];
+                this.prices=this.cookiefornecedores[0].prices;
+                this.refine=this.cookiefornecedores[0].refine;
+                this.combofilter=this.cookiefornecedores[0].combofilter;
+                this.fstatus=this.cookiefornecedores[0].fstatus;
+                this.nsort=this.cookiefornecedores[0].nsort;  
+                this.fornclick=this.cookiefornecedores[0].fornclick;
+                //console.dir(this.cookiefornecedores[0]);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
               }
               else{
-                //console.log("WINDOW 0");
-                this.cookiefair=[];
-                $.removeCookie('posscroll', { path: '/' });
+                console.log("WINDOW 0");
+                this.cookiefornecedores=[];
+                $.removeCookie('posscroll'+"fornecedores", { path: '/' });
+
+                //debugger;
                 $(".container-fullsize.scroller").scrollTop(0);
               }
             }
             else{
-              //console.log("WINDOW 0");
+              console.log("WINDOW 0");
+              //debugger;
               $(".container-fullsize.scroller").scrollTop(0);
             }
           }
+
           //console.dir(this.cookiefair[0]);
           this.fairval = a=res.fairval !== "padrao" ? parseInt(res.fairval) : ""; 
           this.fornval = b=res.fornval !== "padrao" ? res.fornval.replace("_"," ").replace("_"," ").replace("_"," ") : "";
           this.amosval = c=res.amosval !== "padrao" ? res.amosval.replace("_"," ").replace("_"," ").replace("_"," ") : ""; 
 
           if(isNaN(b)){
+
             if(b){
               if(b.slice(0, 3) === "alt"){
                 b=b.slice(3,(b.length));
@@ -587,8 +613,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         "template_email/*func":function(a){
           var context=this
           $("html").attr("class","template_email add_temp");
-          this.writePage(this.page);;
           this.page ="template_cadastro";
+          this.writePage(this.page);
         },
         "gestao":function(){
           var context=this;
@@ -601,14 +627,23 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           this.fairval=a.fair;
           this.amosval=a.code;
         }
-      });
+      }); 
     },
     PassCookie:function(){
+      //Pesquisar amostras de acordo com ultima pesquisa de fornecedores e vice versa
       var url="";
-      if(this.cookiefair.length){
-        url=this.page+"/"+(this.cookiefair[0].fairval || "padrao")+"/"+(this.cookiefair[0].fornval || "padrao")+"/"+(this.cookiefair[0].amosval || "padrao");
-        this.navigate(url, !0);
-
+      if(this.page === "amostras"){
+        if(this.cookiefornecedores.length){
+          url=this.page+"/"+(this.cookiefornecedores[0].fairval || "padrao")+"/"+(this.cookiefornecedores[0].fornclick ||  this.cookiefornecedores[0].fornval ||"padrao")+"/"+(this.cookiefornecedores[0].amosval || "padrao");
+          this.navigate(url, !0);
+        }
+      }
+      else{
+        if(this.cookieamostras.length){
+          url=this.page+"/"+(this.cookieamostras[0].fairval || "padrao")+"/"+(this.cookieamostras[0].fornval || "padrao")+"/"+(this.cookieamostras[0].amosval || "padrao");
+          this.navigate(url, !0);
+        }
+        
       }
     },
 
@@ -709,7 +744,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               $(".fair option").each(function(a,b){
                 if(parseInt($(b).attr("value")) ==  parseInt(context.fairval)){
                   $(b).attr("selected","selected");
-                  
                 }
               });
             }
@@ -1084,36 +1118,46 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 
     submitDateFilter:function(a){
       this.setloading(!0,!1);
-      this.initialTime=$("input[name='initial_date']").val() || ("2000"+"-"+"01"+"-"+"01");
-      this.endTime=$("input[name='end_date']").val() || ("2020-"+"10"+"-"+"10");
       this.fairval=$(".bselect.fair").find("option:selected").val();
       this.fornval=this.bforn.val();
+      this.fornclick=this.fornval;
       this.amosval=$(".form-control-search").val();
       this.reset();
       
       this.resetFilters();
-
-      if(this.cookiefair.length){
-        this.cookiefair[0].posscroll=0;
-      }
       switch (this.page){
         case "fornecedores":
+          this.initialTimeForn=$("input[name='initial_date']").val() || ("2000"+"-"+"01"+"-"+"01");
+          this.endTimeForn=$("input[name='end_date']").val() || ("2020-"+"10"+"-"+"10");
+          if(this.cookiefornecedores.length){
+            //debugger;
+            this.cookiefornecedores[0].posscroll=0;
+          }
           if(!this.fairval &amp;&amp; !this.fornval){
             this.mode="fornecedores/"+"padrao"+"/"+"padrao"+"/"+"padrao";
             this.navigate(this.mode, !1);
-            this.callService("fornecedores",'&lt;FEIR_COD>'+this.fairval+'&lt;/FEIR_COD>','&lt;LINHA_I>1&lt;/LINHA_I>','&lt;LINHA_F>20000&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+this.initialTime+'&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>'+this.endTime+'&lt;/CREATE_DATE_F>');
+            this.callService("fornecedores",'&lt;FEIR_COD>'+this.fairval+'&lt;/FEIR_COD>','&lt;LINHA_I>1&lt;/LINHA_I>','&lt;LINHA_F>20000&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+this.initialTimeForn+'&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>'+this.endTimeForn+'&lt;/CREATE_DATE_F>');
             //this.modal.open("message","Selecione ao menos uma feira para filtrar!!!",!1,!0);
             return !0;
           }
+
+          this.savingCookie(this.page);
+
           this.mode="fornecedores/"+(this.fairval || "padrao")+"/"+(this.fornval || "padrao")+"/"+(this.amosval || "padrao");
           this.navigate(this.mode, !1);
-          this.callService("fornecedores",'&lt;FORN_DESC>'+this.fornval+'&lt;/FORN_DESC>','&lt;FEIR_COD>'+this.fairval+'&lt;/FEIR_COD>','&lt;LINHA_I>'+(this.content.page*20+1)+'&lt;/LINHA_I>','&lt;LINHA_F>20000&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+this.initialTime+'&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>'+this.endTime+'&lt;/CREATE_DATE_F>');
+          this.callService("fornecedores",'&lt;FORN_DESC>'+this.fornval+'&lt;/FORN_DESC>','&lt;FEIR_COD>'+this.fairval+'&lt;/FEIR_COD>','&lt;LINHA_I>'+(this.content.page*20+1)+'&lt;/LINHA_I>','&lt;LINHA_F>20000&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+this.initialTimeForn+'&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>'+this.endTimeForn+'&lt;/CREATE_DATE_F>');
           break;
         case "amostras":
+          this.initialTimeAmos=$("input[name='initial_date']").val() || ("2000"+"-"+"01"+"-"+"01");
+          this.endTimeAmos=$("input[name='end_date']").val() || ("2020-"+"10"+"-"+"10");
+          if(this.cookieamostras.length){
+            //debugger;
+            this.cookieamostras[0].posscroll=0;
+          }
           if(!this.fairval &amp;&amp; !this.fornval &amp;&amp; !this.amosval){
             //this.mode="amostras/"+"padrao"+"/"+"padrao"+"/"+"padrao";
             //this.navigate(this.mode, !1);
-            this.callService("amostras",'&lt;FEIR_COD>'+this.fairval+'&lt;/FEIR_COD>','&lt;LINHA_I>1&lt;/LINHA_I>','&lt;LINHA_F>20000&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+this.initialTime+'&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>'+this.endTime+'&lt;/CREATE_DATE_F>');
+            this.callService("amostras",'&lt;FEIR_COD>'+this.fairval+'&lt;/FEIR_COD>','&lt;LINHA_I>1&lt;/LINHA_I>','&lt;LINHA_F>20000&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+this.initialTimeAmos+'&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>'+this.endTimeAmos+'&lt;/CREATE_DATE_F>');
             //this.modal.open("message","Selecione ao menos uma feira para filtrar!!!",!1,!0);
             return !0;
           }
@@ -1127,9 +1171,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           else{
             FORN_DESC="";
           }
+
+          this.savingCookie(this.page);
+
           this.mode="amostras/"+(this.fairval || "padrao")+"/"+(this.fornval || "padrao")+"/"+(this.amosval || "padrao");
           this.navigate(this.mode, !1);
-          this.callService("amostras",'&lt;AMOS_DESC>'+this.amosval+'&lt;/AMOS_DESC>','&lt;FEIR_COD>'+this.fairval+'&lt;/FEIR_COD>',FORN_DESC,'&lt;LINHA_I>'+(this.content.page*20+1)+'&lt;/LINHA_I>','&lt;LINHA_F>20000&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+this.initialTime+'&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>'+this.endTime+'&lt;/CREATE_DATE_F>');
+          this.callService("amostras",'&lt;AMOS_DESC>'+this.amosval+'&lt;/AMOS_DESC>','&lt;FEIR_COD>'+this.fairval+'&lt;/FEIR_COD>',FORN_DESC,'&lt;LINHA_I>'+(this.content.page*20+1)+'&lt;/LINHA_I>','&lt;LINHA_F>20000&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+this.initialTimeAmos+'&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>'+this.endTimeAmos+'&lt;/CREATE_DATE_F>');
           break;
       }
       $(".date-filter").removeClass("sel");
@@ -1236,11 +1283,15 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           return !1;
       }
       /*if (this.loading){
-        return !1;
+              return !1;
       }*/ 
       $(".thumbnail .icon").attr("class","icon");
       $("html").attr("class","amostras");
       this.select_items.length=0;
+      if(this.cookieamostras[0]){
+        //debugger;
+        this.cookieamostras[0].posscroll=0;
+      }
       a.hasClass("sel") || (this.viewBtn.removeClass("sel"), a.addClass("sel"), this.view = a.attr('alt'), this.setdata(this.data, "amostras"));
     },
     setMenu:function(loja){
@@ -1294,6 +1345,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;ListarFornecedores xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+''+e+''+f+'&lt;/ListarFornecedores>&lt;/soap:Body>&lt;/soap:Envelope>',
             callback:function(data,req){
               core.convertData(data,req,name,!0);
+            }
+          },
+          {
+            'name':'singleForn',
+            'serviceName':'ListarFornecedores',
+            'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;ListarFornecedores xmlns="http://tempuri.org/">'+a+'&lt;/ListarFornecedores>&lt;/soap:Body>&lt;/soap:Envelope>',
+            callback:function(data,req){
+              return core.fornecedores.open(jQuery.parseJSON($(req.responseXML).text()).unique()[0]);
             }
           },
           {
@@ -1454,7 +1513,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         $.support.cors=true;
         soapRequest.filter(function(a,b){
           if(a['name'] === name){
-            console.log(a['code']);
+            //console.log(a['code']);
             core.callback=a['callback'];
             core.ajaxrequest=!0;                                                                        
             $.ajax({
@@ -1486,7 +1545,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           }
           if(core.page ===  "amostras"){
             //core.callService(core.page,a,b,c,'&lt;LINHA_I>'+(core.content.page*core.itens_by_page+1)+'&lt;/LINHA_I>','&lt;LINHA_F>'+((core.content.page+1)*core.itens_by_page)+'&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+core.initialTime+'&lt;/CREATE_DATE_I>',"&lt;CREATE_DATE_F>"+core.endTime+"&lt;/CREATE_DATE_F>");
-            core.callService(core.page,a,b,c,'&lt;LINHA_I>'+(core.content.page*core.itens_by_page+1)+'&lt;/LINHA_I>','&lt;LINHA_F>20000&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+core.initialTime+'&lt;/CREATE_DATE_I>',"&lt;CREATE_DATE_F>"+core.endTime+"&lt;/CREATE_DATE_F>");
+            core.callService(core.page,a,b,c,'&lt;LINHA_I>'+(core.content.page*core.itens_by_page+1)+'&lt;/LINHA_I>','&lt;LINHA_F>20000&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+core.initialTimeAmos+'&lt;/CREATE_DATE_I>',"&lt;CREATE_DATE_F>"+core.endTimeAmos+"&lt;/CREATE_DATE_F>");
           }
           else{
             if(typeof fstatus !== "undefined"){
@@ -1495,7 +1554,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             else{
               fstatus="";
             }
-            core.callService(core.page,a,b,fstatus,'&lt;LINHA_I>'+(core.content.page*core.itens_by_page+1)+'&lt;/LINHA_I>','&lt;LINHA_F>'+((core.content.page+1)*core.itens_by_page)+'&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+core.initialTime+'&lt;/CREATE_DATE_I>',"&lt;CREATE_DATE_F>"+core.endTime+"&lt;/CREATE_DATE_F>");
+            core.callService(core.page,a,b,fstatus,'&lt;LINHA_I>'+(core.content.page*core.itens_by_page+1)+'&lt;/LINHA_I>','&lt;LINHA_F>'+((core.content.page+1)*core.itens_by_page)+'&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+core.initialTimeForn+'&lt;/CREATE_DATE_I>',"&lt;CREATE_DATE_F>"+core.endTimeForn+"&lt;/CREATE_DATE_F>");
             //core.callService(core.page,a,b,'&lt;LINHA_I>'+(core.content.page*core.itens_by_page+1)+'&lt;/LINHA_I>','&lt;LINHA_F>20000&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+core.initialTime+'&lt;/CREATE_DATE_I>',"&lt;CREATE_DATE_F>"+core.endTime+"&lt;/CREATE_DATE_F>");
           }
         }
@@ -1568,14 +1627,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       
 
       if (!this.data.length &amp;&amp; b !="local") {    
-        return this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0), $(".overview-container").remove(),$('&lt;div class="brea">&lt;/div>d-search').find(".spec").text("0 Resultados"),$("input[name='initial_date']").datepicker('setDate', this.initialTime.slice(0,4)+'-'+this.initialTime.slice(5, 7)+"-"+this.initialTime.slice(8, 10)),$("input[name='end_date']").datepicker('setDate', this.endTime.slice(0,4)+'-'+this.endTime.slice(5, 7)+"-"+this.endTime.slice(8, 10)),this.setloading(!1);;
+        return this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0), $(".overview-container").remove(),$('&lt;div class="brea">&lt;/div>d-search').find(".spec").text("0 Resultados"),this.page === "amostras" ? $("input[name='initial_date']").datepicker('setDate', this.initialTimeAmos.slice(0,4)+'-'+this.initialTimeAmos.slice(5, 7)+"-"+this.initialTimeAmos.slice(8, 10)) &amp;&amp; $("input[name='end_date']").datepicker('setDate', this.endTimeAmos.slice(0,4)+'-'+this.endTimeAmos.slice(5, 7)+"-"+this.endTimeAmos.slice(8, 10)) :($("input[name='initial_date']").datepicker('setDate', this.initialTimeAmos.slice(0,4)+'-'+this.initialTimeAmos.slice(5, 7)+"-"+this.initialTimeAmos.slice(8, 10)) &amp;&amp; $("input[name='end_date']").datepicker('setDate', this.endTimeAmos.slice(0,4)+'-'+this.endTimeAmos.slice(5, 7)+"-"+this.endTimeAmos.slice(8, 10))), this.setloading(!1);
         //return this.modal.open(),this.breadEl.find('.bread-colec a').text("").removeClass('active'),this.setloading(!1), this.searchEl.find('input').blur();
       }  
       switch(b){
         case 'amostras':
           //this.data = a.sortBy(this.nsort);
           this.data = a;
-          console.dir(this.data);
+          //console.dir(this.data);
           this.content.changeview(this.view);
           //this.filter.checklist(a);
           //$(".changeview button.b"+this.view);
@@ -1583,25 +1642,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             $(".changeview button").removeClass('sel');
             $(".changeview button.b"+this.view).addClass('sel');
           }
-          if(!this.cookiefair.length){
-            var scroll={
-              "fornval":''+this.fornval,
-              "fairval":''+this.fairval,
-              "amosval":""+this.amosval,
-              "dates":[this.initialTime,this.endTime],
-              "prices":this.prices,
-              "refine":this.filter.list,
-              "combofilter":this.combofilter,
-              "fstatus":this.fstatus,
-              "nsort":this.nsort,
-              "view":""+this.view,
-              "posscroll":(this.posscroll || 0),
-              "total":(this.total || 20)
-            };
-            $.cookie.json = !0;
-            this.cookiefair=[];
-            this.cookiefair.push(scroll);
-            $.cookie("posscroll", scroll, {expires:7, path:"/"});
+          if(!this.cookieamostras.length){
+            this.savingCookie(this.page);
           }
           
 
@@ -1616,12 +1658,33 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           this.filterTemplate();
           break;
         case 'fornecedores':
-          console.dir(a);
-          $("input[name='initial_date']").datepicker('setDate', this.initialTime.slice(0,4)+'-'+this.initialTime.slice(5, 7)+"-"+this.initialTime.slice(8, 10));
-          $("input[name='end_date']").datepicker('setDate', this.endTime.slice(0,4)+'-'+this.endTime.slice(5, 7)+"-"+this.endTime.slice(8, 10));
+          //console.dir(a);
+          $("input[name='initial_date']").datepicker('setDate', this.initialTimeForn.slice(0,4)+'-'+this.initialTimeForn.slice(5, 7)+"-"+this.initialTimeForn.slice(8, 10));
+          $("input[name='end_date']").datepicker('setDate', this.endTimeForn.slice(0,4)+'-'+this.endTimeForn.slice(5, 7)+"-"+this.endTimeForn.slice(8, 10));
 
           this.data = a.sortBy("FORN_ID");
           this.content.changeview("list");
+
+          if(!this.cookiefornecedores.length){
+            var scroll={
+              "fornval":''+this.fornval,
+              "fairval":''+this.fairval,
+              "amosval":''+this.amosval,
+              "fornclick":''+this.fornclick,
+              "dates":[this.initialTimeForn,this.endTimeForn],
+              "prices":this.prices,
+              "refine":this.filter.list,
+              "combofilter":this.combofilter,
+              "fstatus":this.fstatus,
+              "nsort":this.nsort,
+              "view":""+this.view,
+              "posscroll":(this.posscroll || 0),
+              "total":(this.total || 20)
+            };
+            $.cookie.json = !0;
+            this.cookiefornecedores=[];
+            this.cookiefornecedores.push(scroll);
+          }
           this.createbox(this.data, this.content.page, !0,"list");
           break;
         case 'local':
@@ -1631,7 +1694,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         default:
           //console.log("ALGO ERRADO");
       }
-      ("images" !== this.view) ? this.scroll($("table tbody")) : this.scroll();
+      ("images" !== this.view) ? this.scroll($(".container-fullsize.scroller")) : this.scroll();
             
     },
     callRequest:function(data, status, req){
@@ -1653,7 +1716,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             else{
               this.fornecedores.noteid=jQuery.parseJSON($(req.responseXML).text()).OBJ_ID;
             }
-            
           }
           if(this.page === "detail" &amp;&amp; jQuery.parseJSON($(req.responseXML).text()).OBJ_ID){
             this.detail.noteid=jQuery.parseJSON($(req.responseXML).text()).OBJ_ID;
@@ -1854,11 +1916,20 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                         //console.dir(view_container.find("tbody tr"));
                         view_container.find(".bread-search .spec").text(view_container.find("tbody tr").length);
                       }
+                      if(e.cookieamostras.length){
+                        //debugger;
+                        //console.log("scroll: "+e.cookiefair[0].posscroll);
+                        $(".container-fullsize.scroller").scrollTop(e.cookieamostras[0].posscroll);
+                      }
                     }
-                    if(e.cookiefair.length){
-                      //console.log("scroll: "+e.cookiefair[0].posscroll);
-                      $(".container-fullsize.scroller").scrollTop(e.cookiefair[0].posscroll);
+                    else{
+                      if(e.cookiefornecedores.length){
+                        //debugger;
+                        //console.log("scroll: "+e.cookiefair[0].posscroll);
+                        $(".container-fullsize.scroller").scrollTop(e.cookiefornecedores[0].posscroll);
+                      }
                     }
+                    
                 }
 
                 if ("images" === c &amp;&amp; l > 0) {
@@ -1965,9 +2036,19 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                         e.active.create(g.render());
                         return $("tbody .bstar").unbind("click").bind("click",function(a){context.starForn(a)}),l--,k++;
                     } else {
-                        if(e.cookiefair.length){
-                          $(".container-fullsize.scroller").scrollTop(e.cookiefair[0].posscroll);
+                        if(e.page === "amostras"){
+                          if(e.cookieamostras.length){
+                            //debugger;
+                            $(".container-fullsize.scroller").scrollTop(e.cookieamostras[0].posscroll);
+                          }
                         }
+                        else{
+                          if(e.cookiefornecedores.length){
+                            //debugger;
+                            $(".container-fullsize.scroller").scrollTop(e.cookiefornecedores[0].posscroll);
+                          }
+                        }
+                        
                         clearInterval(f), e.setloading(!1);
                     }
                 }
@@ -1998,13 +2079,20 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                         view_container=$(view_container).eq(view_container.length-1);
                         view_container.find(".bread-search .spec").text(view_container.find("tbody tr").length);
                       }
+                      if(e.cookieamostras.length){
+                        //debugger;
+                        $(".container-fullsize.scroller").scrollTop(e.cookieamostras[0].posscroll);
+                      }
                     }
                     else if(e.page === "local"){
                       view_container.find(".bread-search .spec").text(k+1);
                     }
-                    
-                    if(e.cookiefair.length){
-                      $(".container-fullsize.scroller").scrollTop(e.cookiefair.posscroll);
+                    else if(e.page === "fornecedores"){
+                      if(e.cookiefornecedores.length){
+                        //debugger;
+                        //console.log(e.cookiefornecedores[0].posscroll);
+                        $(".container-fullsize.scroller").scrollTop(e.cookiefornecedores[0].posscroll);
+                      }
                     }
                 }
 
@@ -2064,18 +2152,20 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 
                     // Mostrando (box sendo carregados)
                     if(k === 0){
-                      $(".overview").append('&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;/div>&lt;ul class="viewport">&lt;/ul>&lt;/div>');
+                      $(".overview").append('&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;a href="#" class="fornlink">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/a>&lt;/p>&lt;/div>&lt;ul class="viewport">&lt;/ul>&lt;/div>');
                     }
                     else if(h.FORN_ID !== a[k-1].FORN_ID){
                       var view_container=$(".overview-container");
                       view_container=$(view_container).eq(view_container.length-1);
+                      //view_container.find(".fornlink").attr("href","#fornecedores/edit/"+h.FORN_ID);
                       view_container.find(".bread-search .spec").text(view_container.find(".viewport .thumbnail").length);
-                      $(".overview").append('&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;/div>&lt;ul class="viewport">&lt;/ul>&lt;/div>');
+                      $(".overview").append('&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;a href="#" class="fornlink">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;/a>&lt;/div>&lt;ul class="viewport">&lt;/ul>&lt;/div>');
                       countf++;
                     }
  
                     var view_container=$(".overview-container");
                     view_container=$(view_container).eq(view_container.length-1);
+                    view_container.find(".fornlink").attr("href","#fornecedores/edit/"+h.FORN_ID);
                     view_container.find(".bread-search .spec").text(view_container.find(".viewport .thumbnail").length+1);
                     view_container.find(".bread-search .specall").text(a.length);
                     view_container.find(".bread-search .specforn").text("/ "+h.FORN_DESC);
@@ -2095,20 +2185,23 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                     if (l > 0) {
                         if(e.page === "amostras"){
                           if(k === 0){
-                            $(".floatThead").append('&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;/div>&lt;table id="table" class="table-striped table-large">&lt;thead>&lt;tr>&lt;th>&lt;/th>&lt;th>Fornecedor&lt;/th>&lt;th>Codigo&lt;/th>&lt;th>Data&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfisica nothas unable">Fisica&lt;/button>&lt;/th>&lt;th>Preco Inicial&lt;/th>&lt;th>M/kg&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfav nothas unable">Favorita&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bhomologado nothas unable">Homologada&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bnote">Anotacoes&lt;/button>&lt;/th>'+/*&lt;th>&lt;button type="button" class="icon bannex">Anexo&lt;/button>&lt;/th>*/'&lt;th>&lt;button type="button" class="caption-icons-icon justit bemail">Email&lt;/button>&lt;/th>&lt;th>Tecimento&lt;/th>&lt;th>Base&lt;/th>&lt;th>Grupo&lt;/th>&lt;th>Sub-Grupo&lt;/th>&lt;th>Composicao&lt;/th>&lt;th class="tlast">Status&lt;/th>&lt;/tr>&lt;/thead>&lt;tbody>&lt;/tbody>&lt;/div>');
+                            $(".floatThead").append('&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;a href="#" class="fornlink">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;/a>&lt;/div>&lt;table id="table" class="table-striped table-large">&lt;thead>&lt;tr>&lt;th>&lt;/th>&lt;th>Fornecedor&lt;/th>&lt;th>Codigo&lt;/th>&lt;th>Data&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfisica nothas unable">Fisica&lt;/button>&lt;/th>&lt;th>Preco Inicial&lt;/th>&lt;th>M/kg&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfav nothas unable">Favorita&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bhomologado nothas unable">Homologada&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bnote">Anotacoes&lt;/button>&lt;/th>'+/*&lt;th>&lt;button type="button" class="icon bannex">Anexo&lt;/button>&lt;/th>*/'&lt;th>&lt;button type="button" class="caption-icons-icon justit bemail">Email&lt;/button>&lt;/th>&lt;th>Tecimento&lt;/th>&lt;th>Base&lt;/th>&lt;th>Grupo&lt;/th>&lt;th>Sub-Grupo&lt;/th>&lt;th>Composicao&lt;/th>&lt;th class="tlast">Status&lt;/th>&lt;/tr>&lt;/thead>&lt;tbody>&lt;/tbody>&lt;/div>');
                           }
                           else if(h.FORN_ID !== a[k-1].FORN_ID){
                             var view_container=$(".overview-container");
                             view_container=$(view_container).eq(view_container.length-1);
+                            //view_container.find(".fornlink").attr("href","#fornecedores/edit/"+h.FORN_ID);
                             view_container.find(".bread-search .spec").text(view_container.find("tbody tr").length);
-                            $(".floatThead").append('&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;/div>&lt;table id="table" class="table-striped table-large">&lt;thead>&lt;tr>&lt;th>&lt;/th>&lt;th>Fornecedor&lt;/th>&lt;th>Codigo&lt;/th>&lt;th>Data&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfisica nothas unable">Fisica&lt;/button>&lt;/th>&lt;th>Preco Inicial&lt;/th>&lt;th>M/kg&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfav nothas unable">Favorita&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bhomologado nothas unable">Homologada&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bnote">Anotacoes&lt;/button>&lt;/th>'+/*&lt;th>&lt;button type="button" class="icon bannex">Anexo&lt;/button>&lt;/th>*/'&lt;th>&lt;button type="button" class="caption-icons-icon justit bemail">Email&lt;/button>&lt;/th>&lt;th>Tecimento&lt;/th>&lt;th>Base&lt;/th>&lt;th>Grupo&lt;/th>&lt;th>Sub-Grupo&lt;/th>&lt;th>Composicao&lt;/th>&lt;th class="tlast">Status&lt;/th>&lt;/tr>&lt;/thead>&lt;tbody>&lt;/tbody>&lt;/div>');
+                            $(".floatThead").append('&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;a href="#" class="fornlink">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;/a>&lt;/div>&lt;table id="table" class="table-striped table-large">&lt;thead>&lt;tr>&lt;th>&lt;/th>&lt;th>Fornecedor&lt;/th>&lt;th>Codigo&lt;/th>&lt;th>Data&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfisica nothas unable">Fisica&lt;/button>&lt;/th>&lt;th>Preco Inicial&lt;/th>&lt;th>M/kg&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfav nothas unable">Favorita&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bhomologado nothas unable">Homologada&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bnote">Anotacoes&lt;/button>&lt;/th>'+/*&lt;th>&lt;button type="button" class="icon bannex">Anexo&lt;/button>&lt;/th>*/'&lt;th>&lt;button type="button" class="caption-icons-icon justit bemail">Email&lt;/button>&lt;/th>&lt;th>Tecimento&lt;/th>&lt;th>Base&lt;/th>&lt;th>Grupo&lt;/th>&lt;th>Sub-Grupo&lt;/th>&lt;th>Composicao&lt;/th>&lt;th class="tlast">Status&lt;/th>&lt;/tr>&lt;/thead>&lt;tbody>&lt;/tbody>&lt;/div>');
                             countf++;
                           }
                           var view_container=$(".overview-container");
                           view_container=$(view_container).eq(view_container.length-1);
+                          view_container.find(".fornlink").attr("href","#fornecedores/edit/"+h.FORN_ID);
                           view_container.find(".bread-search .spec").text(view_container.find("tbody tr").length+1);
                           view_container.find(".bread-search .specall").text(a.length);
                           view_container.find(".bread-search .specforn").text("/ "+h.FORN_DESC);
+
                         }
 
                         g = new Box({
@@ -2130,8 +2223,21 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                       if(c === "list"){
                         $("button.main_opt_button.bselect.bsel").trigger('click');
                       }
-                      if(e.cookiefair.length){
-                        $(".container-fullsize.scroller").scrollTop(e.cookiefair[0].posscroll);
+                      if(e.page === "amostras"){
+                        if(e.cookieamostras.length){
+                          //debugger;
+                          $(".container-fullsize.scroller").scrollTop(e.cookieamostras[0].posscroll);
+                          //debugger;
+                          //console.dir($(".container-fullsize.scroller"));
+                        }
+                      }
+                      else if( e.page === "fornecedores"){
+                        if(e.cookiefornecedores.length){
+                          //debugger;
+                          $(".container-fullsize.scroller").scrollTop(e.cookiefornecedores[0].posscroll);
+                          //debugger;
+                          //console.dir($(".container-fullsize.scroller"));
+                        }
                       }
                       clearInterval(f), e.setloading(!1);
                     }
@@ -2198,12 +2304,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       a.preventDefault();
       var obj=$(a.target);
     },
-    sortItems : function(a){
+    sortItems : function(a,b){
+      //debugger; 
       var type,i,length,temp=[],aux=[];
       if($(a.target).hasClass("sel") || this.loading){
         return !1;
       }
-      type=$(a.target).attr("name");
+      type=$(a.target).attr("name") || this.nsort;
       $("html").attr("class","amostras");
       this.content.clean();
       $(".overview-container").remove();
@@ -2219,6 +2326,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           length= this.data.length;
           temp = this.data.sortBy(type).unique();
         }
+        if(b){
+          $(".tooltip.borderby .bcircle").each(function(index, el) {
+            if($(el).attr("name") === type){
+              $(el).addClass('sel');
+            }
+          });
+          return temp;
+        }
         this.createbox(temp, this.content.page,!1,!1,(this.content.page + 1)*20);
       }
       else{
@@ -2233,6 +2348,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         }
         for(i=length;i>=0;i--){
           temp.push(aux[i]);
+        }
+        if(b){
+          $(".tooltip.borderby .bcircle").each(function(index, el) {
+            if($(el).attr("name") === type){
+              $(el).addClass('sel');
+            }
+          });
+          return temp.unique();
         }
         this.createbox(temp.unique(), this.content.page,!1,!1,(this.content.page + 1)*20);
         //this.createbox(temp.unique(), this.content.page,!1,!1,length);
@@ -2420,7 +2543,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         this.fstatus=$(ev.target).attr("name").bool();
       }
       $(ev.target).toggleClass("sel");
+      //debugger;
       $(".container-fullsize.scroller").scrollTop(0);
+      this.cookieamostras[0].posscroll=0;
       this.itens = $([]);
       this.itens.remove();
       this.unable_select=!1;
@@ -2436,7 +2561,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       }
       this.Componentfilter(this.data, 0, !0);
     },AmosByPrice:function(){
+      //debugger;
       $(".container-fullsize.scroller").scrollTop(0);
+      this.cookieamostras[0].posscroll=0;
       this.itens = $([]);
       this.itens.remove();
       this.unable_select=!1;
@@ -2448,6 +2575,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
     },
     makeComboFilter:function(){
       $(".container-fullsize.scroller").scrollTop(0);
+      this.cookieamostras[0].posscroll=0;
       var is_set=!1;
       this.itens = $([]);
       this.itens.remove();
@@ -2477,6 +2605,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       var aux,context=this,status,i;
       if(this.filter.list.length){
         $(".refine-container").addClass('has');
+        //$(".container-fullsize.scroller").scrollTop(0);
+        //this.cookieamostras[0].posscroll=0;
         if(!data.length){
           return this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0), $('.bread-search').find(".spec").text("0 Resultados");
         }
@@ -2534,33 +2664,56 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         return !1;
       }
 
+      var pos=0;
       var scroll={
         "fornval":''+this.fornval,
         "fairval":''+this.fairval,
         "amosval":""+this.amosval,
-        "dates":[this.initialTime,this.endTime],
+        "fornclick":""+this.fornclick,
         "prices":this.prices,
         "refine":this.filter.list,
         "combofilter":this.combofilter,
         "fstatus":this.fstatus,
         "nsort":this.nsort,
         "view":""+this.view,
-        "posscroll":this.cookiefair[0].posscroll,
         "total": 20
       };
 
-      if(this.prices[0] != this.cookiefair[0].prices[0] || this.prices[1] != this.cookiefair[0].prices[1] || context.fstatus !== this.cookiefair[0].fstatus || this.cookiefair[0].combofilter.is_set !== context.combofilter.is_set){
-        scroll.posscroll=0;
+      if(this.page === "amostras"){
+        pos = this.cookieamostras[0].posscroll;
+        scroll.dates=[this.initialTimeAmos,this.endTimeAmos];
+        scroll.posscroll=pos;
+      }
+      else{
+        pos = this.cookiefornecedores[0].posscroll;
+        scroll.dates=[this.initialTimeForn,this.initialTimeForn];
+        scroll.posscroll=pos;
+      }
+
+      if(this.prices[0] != this.cookieamostras[0].prices[0] || this.prices[1] != this.cookieamostras[0].prices[1] || context.fstatus !== this.cookieamostras[0].fstatus || this.cookieamostras[0].combofilter.is_set !== context.combofilter.is_set &amp;&amp; this.page == "amostras"){
+        this.cookieamostras[0].posscroll=0;
       }
       
-      $.cookie.json = !0;
-      this.cookiefair=[];
-      this.cookiefair.push(scroll);
+      if(this.page === "amostras"){
+        $.cookie.json = !0;
+        this.cookieamostras=[];
+        this.cookieamostras.push(scroll);
+      }
+      else{
+        $.cookie.json = !0;
+        this.cookiefornecedores=[];
+        this.cookiefornecedores.push(scroll);
+      }
+     
       if(!this.filter.list.length){
         //debugger;
         this.data=aux;
       }  
       this.setloading(!1);
+      if(this.nsort !== ""){
+        //debugger;
+        this.fdata=this.sortItems(this.fdata,!0);
+      }
       this.createbox(this.fdata, page,d,view,haslength);
     },
 
@@ -2697,7 +2850,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
     CleanFilter:function(){
       var scroll;
       this.resetFilters();
-      $.removeCookie('posscroll', { path: '/' });
+      $.removeCookie('posscroll'+this.page, { path: '/' });
       this.mode="amostras/"+(this.fairval || "padrao")+"/"+(this.fornval.replace(" ","_") || "padrao")+"/"+(this.amosval.replace(" ","_") || "padrao");
       /*scroll=this.cookiefair[0];
       this.restartValues();
@@ -2884,7 +3037,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         this.setloading(!1);
         return !1;
       }
-      this.createbox(this.fdata, this.content.page, !0,"list");
+      this.createbox(this.fdata, this.content.page, !0,"list"); 
     },
     showSubCategories:function(a){
       a.preventDefault();
@@ -2900,7 +3053,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 
     },
     setCompositions:function(a){
-      console.log("SET COMPOSITIONS");
+      //console.log("SET COMPOSITIONS");
       var length,context=this,l=0,obj,status;
       if($(a.target).prop("tagName") ===  "SPAN"){
         a.preventDefault();
@@ -2996,7 +3149,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       //this.callService("gravarAmostraComposicao","102004997","&lt;Composition>&lt;COMP_COD>CL_1&lt;/COMP_COD>&lt;COMP_OTHERS>&lt;/COMP_OTHERS>&lt;TP_COMP_ID>1&lt;/TP_COMP_ID>&lt;/Composition>");
     },
     compChange:function(ev){
-      console.log("COMP CHANGE");
+      //console.log("COMP CHANGE");
       ev.preventDefault();
       var aux,html="",context=this;
       if(typeof ev === "object"){
@@ -3096,11 +3249,22 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
     getPage:function(){
       return this.page;
     },
-    getInitialTime:function(){
-      return this.initialTime;
+    getInitialTime:function(a){
+      if(a){
+        return this.initialTimeAmos;
+      }
+      else{
+        return this.initialTimeForn;
+      }
+      
     },
-    getEndTime:function(){
-      return this.endTime;
+    getEndTime:function(a){
+      if(a){
+        return this.endTimeAmos;
+      }
+      else{
+        return this.endTimeForn;
+      }
     },
     changeCity:function(val){
       var country,city,context=this,arr=[];
@@ -3141,13 +3305,15 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       /*this.initialTime='2000-01-01';
       this.endTime='2020-10-10';*/
       //this.scroller=0;
+      //debugger;
       if(this.page === "fornecedor_cadastro"){
         this.fornecedores.setfair=$(a.target).find("option:selected").val();
         this.submit("&lt;FEIR_COD>"+this.fairval+"&lt;/FEIR_COD>",!1,!1,!0);
         return !1;
       }
       this.restartValues();
-      $.removeCookie('posscroll', { path: '/' });
+      $.removeCookie('posscrollamostras', { path: '/' });
+      $.removeCookie('posscrollfornecedores', { path: '/' });
       $(".container-fullsize.scroller").scrollTop(0);
       //this.reopenFilter();
       this.itens_by_page=this.itens_page_default;
@@ -3155,7 +3321,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       $(".overview-container").remove();
       this.fairval=$(a.target).find("option:selected").val();
       this.fornval=this.bforn.val();
-      this.amosval=$(".form-control-search").val();
+      this.fornclick=this.fornval;
+      this.amosval=$(".form-control-search").val() || "";
+      this.savingCookie(this.page);
 
 
       if (this.page === "amostras") {
@@ -3432,6 +3600,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             this.fornval="alt"+a.val();
           }
         }
+        this.fornclick=this.fornval;
+        this.savingCookie(this.page);
         
         this.resetFilters();
         this.mode=this.page+"/"+((""+this.fairval).replace(" ","_") || "padrao")+"/"+((""+this.fornval).replace(" ","_") || "padrao")+"/"+((""+this.amosval).replace(" ","_") || "padrao");
@@ -3459,6 +3629,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         }
         else{
           this.fornval=a.target.value;
+          this.fornclick=this.fornval;
           this.spotlight.close();
         }
       }
@@ -3493,6 +3664,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
     },
     setSegm:function(a){
       this.segm=a;
+    },
+    setFornClick:function(a){
+      this.fornclick=a;
     },
     /**
     * `Set the loading state`
@@ -3572,15 +3746,92 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         return this.data;
       }
     },
+    savingCookie:function(what,tofornclick,valforn){
+      if(tofornclick){
+        if($.cookie("cookiefornecedores")){
+          this.cookieamostras.push(jQuery.parseJSON($.cookie("posscroll"+"cookiefornecedores")));
+          var scroll={
+            "fornval":''+this.cookiefornecedores[0].fornval,
+            "fairval":''+this.cookiefornecedores[0].fairval,
+            "amosval":''+this.cookiefornecedores[0].amosval,
+            "fornclick":''+valforn,
+            "dates":this.cookiefornecedores[0].dates[0],
+            "prices":this.cookiefornecedores[0].prices,
+            "refine":this.cookiefornecedores[0].refine,
+            "combofilter":this.cookiefornecedores[0].combofilter,
+            "fstatus":this.cookiefornecedores[0].fstatus,
+            "nsort":this.cookiefornecedores[0].nsort,
+            "view":""+this.cookiefornecedores[0].view,
+            "posscroll":(this.cookiefornecedores[0].posscroll || 0),
+            "total":(this.cookiefornecedores[0].total || 20)
+          }
+
+          //console.dir(this.cookiefornecedores[0]); 
+          //console.dir(this.fornecedores.item);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+        }
+        else{
+          var scroll={
+            "fornval":''+this.fornval,
+            "fairval":''+this.fairval,
+            "amosval":''+this.amosval,
+            "fornclick":''+(valforn || ""),
+            "dates":[this.initialTimeAmos,this.endTimeAmos],
+            "prices":this.prices,
+            "refine":this.filter.list,
+            "combofilter":this.combofilter,
+            "fstatus":this.fstatus,
+            "nsort":this.nsort,
+            "view":""+this.view,
+            "posscroll":(this.posscroll || 0),
+            "total":(this.total || 20)
+          }
+          /*console.log("WINDOW 0");
+          //debugger;
+          $(".container-fullsize.scroller").scrollTop(0);*/
+        }
+      }
+      else{
+        var scroll={
+          "fornval":''+this.fornval,
+          "fairval":''+this.fairval,
+          "amosval":''+this.amosval,
+          "fornclick":''+this.fornclick,
+          "dates":[this.initialTimeAmos,this.endTimeAmos],
+          "prices":this.prices,
+          "refine":this.filter.list,
+          "combofilter":this.combofilter,
+          "fstatus":this.fstatus,
+          "nsort":this.nsort,
+          "view":""+this.view,
+          "posscroll":(this.posscroll || 0),
+          "total":(this.total || 20)
+        };
+        
+      }
+      $.cookie.json = !0;
+      this["cookie"+what]=[];
+      this["cookie"+what].push(scroll);
+      //console.dir(e.cookiefair);
+      $.cookie("posscroll"+what, scroll, {expires:7, path:"/"});
+    },
+    setCookieFair:function(page,val){
+      if(this["cookie"+page].length){
+        this["cookie"+page][0].fornclick = val;
+        this["cookie"+page][0].fornval = val;
+      }
+    },
     scroll:function(z) {
       var b, c, f, clone,e = this;
       z = z || $(".container-fullsize.scroller");
-      $.hasData(z[0]) &amp;&amp; z.unbind("scroll");
+      //console.log("DEU SCROLL");
+      //$.hasData(z[0]) &amp;&amp; z.unbind("scroll");
       //console.dir(e.content.itens);
+      //console.dir(z);
       if (!e.content.itens) {
         return !1;
       }
       z.scroll(function() {
+        //console.log(e.page);
         if (e.loading || e.page === "detail") {
           return!1;
         }
@@ -3606,29 +3857,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 
             if(d&lt;f){
               //console.log("entrou");
-              var scroll={
-                "fornval":''+e.fornval,
-                "fairval":''+e.fairval,
-                "amosval":""+e.amosval,
-                "dates":[e.initialTime,e.endTime],
-                "prices":e.prices,
-                "refine":e.filter.list,
-                "combofilter":e.combofilter,
-                "fstatus":e.fstatus,
-                "nsort":e.nsort,
-                "view":""+e.view,
-                "posscroll":d,
-                "total":b
-              };
-              $.cookie.json = !0;
-              e.cookiefair=[];
-              e.cookiefair.push(scroll);
-              //console.dir(e.cookiefair);
-              $.cookie("posscroll", scroll, {expires:7, path:"/"});
+              e.posscroll=d;
+              e.total=b;
+              e.savingCookie("amostras");
             }
 
 
-            console.log(d+" , "+f);
+            //console.log(d+" , "+f);
             if (d >= f &amp;&amp; b) {
               e.content.page++;
               e.setloading(!0,!1);
@@ -3637,36 +3872,21 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             }
             break;
           case "fornecedores":
-            var $table = $('#table');
+            /*var $table = $('#table');
             $table.floatThead({
                 scrollContainer: function($table){
                 return $table.closest('.scroller');
               }
-            });
+            });*/
 
             d = z.scrollTop();
             b = e.content.itens.length;
             f= $("#table").height()-$(".scroller").outerHeight();
 
             if(d&lt;f){
-              var scroll={
-                "fornval":''+e.fornval,
-                "fairval":''+e.fairval,
-                "amosval":""+e.amosval,
-                "dates":[e.initialTime,e.endTime],
-                "prices":e.prices,
-                "refine":e.filter.list,
-                "combofilter":e.combofilter,
-                "fstatus":e.fstatus,
-                "nsort":e.nsort,
-                "view":""+e.view,
-                "posscroll":d,
-                "total":b
-              };
-              $.cookie.json = !0;
-              e.cookiefair=[];
-              e.cookiefair.push(scroll);
-              $.cookie("posscroll", scroll, {expires:7, path:"/"});
+              e.posscroll=d;
+              e.total=b;
+              e.savingCookie("fornecedores");
             }
             
             if (d >= f &amp;&amp; b) {
@@ -3681,13 +3901,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             //console.log("SCROLL CADASTRO");
             break;
           case "local":
-            var $table = $('#table');
+            /*var $table = $('#table');
             $table.floatThead({
                 scrollContainer: function($table){
                 return $table.closest('.scroller');
               }
             });
-            $(".floatThead-container").css({'left':"50%","margin-left":"-458px"});
+            $(".floatThead-container").css({'left':"50%","margin-left":"-458px"});*/
             //$(".floatThead-table").css({'left':"50%","margin-left":"502px"});
             d = z.scrollTop();
             b = e.content.itens.length;
@@ -3707,13 +3927,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             }
             break;
           case "template_email":
-            var $table = $('#table');
+            /*var $table = $('#table');
             $table.floatThead({
                 scrollContainer: function($table){
                 return $table.closest('.scroller');
               }
             });
-            $(".floatThead-container").css({'left':"50%","margin-left":"-458px"});
+            $(".floatThead-container").css({'left':"50%","margin-left":"-458px"});*/
             d = z.scrollTop();
             b = e.content.itens.length;
             f= $("#table").height()-$(".scroller").outerHeight();
@@ -3731,9 +3951,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
     reopenFilter:function(data,page,d,view,haslength){
       //this.setloading(!0,!1);
       this.filterisdone=!1;
-      $("input[name='initial_date']").datepicker('setDate', this.initialTime.slice(0,4)+'-'+this.initialTime.slice(5, 7)+"-"+this.initialTime.slice(8, 10));
-      $("input[name='end_date']").datepicker('setDate', this.endTime.slice(0,4)+'-'+this.endTime.slice(5, 7)+"-"+this.endTime.slice(8, 10));
-      
+      if(this.page === "amostras"){
+        $("input[name='initial_date']").datepicker('setDate', this.initialTimeAmos.slice(0,4)+'-'+this.initialTimeAmos.slice(5, 7)+"-"+this.initialTimeAmos.slice(8, 10));
+        $("input[name='end_date']").datepicker('setDate', this.endTimeAmos.slice(0,4)+'-'+this.endTimeAmos.slice(5, 7)+"-"+this.endTimeAmos.slice(8, 10));
+      }
+      else{
+        $("input[name='initial_date']").datepicker('setDate', this.initialTimeForn.slice(0,4)+'-'+this.initialTimeForn.slice(5, 7)+"-"+this.initialTimeForn.slice(8, 10));
+        $("input[name='end_date']").datepicker('setDate', this.endTimeForn.slice(0,4)+'-'+this.endTimeForn.slice(5, 7)+"-"+this.endTimeForn.slice(8, 10));
+      }
       if(this.prices.length){
         //Fazer o trigger no filtro
         $(".main_opt_item.tooltip.tooltip-selectable").eq(0).addClass('has');
@@ -3761,7 +3986,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         this.filter.data=this.data;
       }
 
-      if(this.initialTime !== "2000-01-01" || this.endTime !== "2020-10-10"){
+      if(this.page === "amostras" &amp;&amp; (this.initialTime !== "2000-01-01" || this.endTime !== "2020-10-10")){
         $(".date-filter").parent().addClass('has');
       }
       else{
@@ -3788,18 +4013,24 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       //Var to storage the basic data
       //console.log("restartValues");
       this.unable_select=!1;
-      this.cookiefair=[];
+      if(this.page === "amostras"){
+        this.cookieamostras=[];
+      }
+      else{
+        this.cookiefornecedores=[];
+      }
       this.prices=[];
       this.refine=[];
       this.fstatus=null;
       this.fairval="";
       this.fornval="";
       this.amosval="";
+      this.fornclick="";
       //this.nsort="AMOS_DESC";
       this.nsort="";
       /*this.initialTime='2000-01-01';
       this.endTime='2020-10-10';*/
-      $.removeCookie('posscroll', { path: '/' });
+      $.removeCookie('posscroll'+this.page, { path: '/' });
       this.combofilter={
         "FLAG_FISICA":{"clicked":0,"code":0},
         "FLAG_PRIORIDADE":{"clicked":0,"code":0},
@@ -3842,8 +4073,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       $(".tooltip-filter").removeClass('has');
 
       $(".refine a").removeClass('sel').addClass('unsel');
+      $(".topcount").text("").addClass('hide');
       $(".not-autoshow").removeClass('sel');
       $(".sub-refine").addClass('hide').hide().find("ul").empty();
+
+      //Filter list
+      //this.filterlist.length=0;
+
     }
   });
   new App;
@@ -3869,7 +4105,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Wed Jan 20th 2016 using the <a
+		on Wed Feb 24th 2016 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>

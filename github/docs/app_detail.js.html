@@ -136,7 +136,7 @@ elements:{
   //window.history.go(-1);
   //$(window).scrollTop(this.scrollp);
 
-  cookie=$.cookie("posscroll");
+  cookie=$.cookie("posscroll"+"amostras");
   this.on = !1;
   this.mode="amostras/"+(cookie.fairval || "padrao")+"/"+(cookie.fornval || "padrao")+"/"+(cookie.amosval || "padrao");
   this.navigate(this.mode, !0);
@@ -156,6 +156,10 @@ callerEvents:function(){
     return !1;
   });
   $(".bnext").unbind("click").bind("click",function(){
+
+
+
+    
     context.nextSample();
     return !1;
   });
@@ -569,6 +573,8 @@ open: function(a){
   if(!this.item){
     return !1;
   }
+  this.setFornClick=this.item.FORN_DESC;
+  this.savingCookie("fornecedores",!0,this.item.FORN_DESC);
   //$("html").attr("class","fornecedor_cadastro edit_forn");
   $("input").removeAttr('disabled');
   $("select").removeAttr('disabled');
@@ -611,6 +617,8 @@ open: function(a){
 
 },requestCancel:function(){
   this.on = !1;
+  this.setFornClick="";
+  this.savingCookie("fornecedores",!0,"");
   window.location.hash="fornecedores";
 },stopOnMore:function(ev){
   ev.stopPropagation();
@@ -1409,6 +1417,7 @@ setFav:function(a){
   }*/
   if(this.setfair &amp;&amp; !$("html").hasClass('view_forn') &amp;&amp; (this.lasttab !== this.tab)){
     //console.log("SALVANDO");
+    //console.log(this.lasttab);
     this.setloading(!0,!1);
     switch (this.lasttab){
       case 'dados':
@@ -1496,6 +1505,8 @@ setFav:function(a){
             });
             if(goout){
               context.on = !1;
+              context.setFornClick="";
+              context.savingCookie("fornecedores",!0,"");
               window.history.go(-1);
             }
             if(complet){
@@ -1563,12 +1574,12 @@ setFav:function(a){
         if($(".ScrollSpy .nav-item button.complet").length === 5){
           //console.log("cadastro completo");
           context.ajaxrequest=!0;
-          this.callService("GravarFornecedor",'&lt;FORN_ID>'+context.item.FORN_ID+'&lt;/FORN_ID>',html+""+pattern,"&lt;FORN_DESC>"+context.item.FORN_DESC+"&lt;/FORN_DESC>",'&lt;FORN_STATUS>1&lt;/FORN_STATUS>&lt;FORN_INATIVO>0&lt;/FORN_INATIVO>','&lt;action>U&lt;/action>');
+          this.callService("GravarFornecedor",'&lt;FORN_ID>'+context.item.FORN_ID+'&lt;/FORN_ID>',html+""+pattern,"&lt;FORN_DESC>"+$("input[name='FORN_DESC']").val()+"&lt;/FORN_DESC>",'&lt;FORN_STATUS>1&lt;/FORN_STATUS>&lt;FORN_INATIVO>0&lt;/FORN_INATIVO>','&lt;action>U&lt;/action>');
         }
         else{
           //console.log("cadastro incompleto");
           context.ajaxrequest=!0;
-          this.callService("GravarFornecedor",'&lt;FORN_ID>'+context.item.FORN_ID+'&lt;/FORN_ID>',html+""+pattern,"&lt;FORN_DESC>"+context.item.FORN_DESC+"&lt;/FORN_DESC>",'&lt;FORN_STATUS>0&lt;/FORN_STATUS>&lt;FORN_INATIVO>0&lt;/FORN_INATIVO>','&lt;action>U&lt;/action>');
+          this.callService("GravarFornecedor",'&lt;FORN_ID>'+context.item.FORN_ID+'&lt;/FORN_ID>',html+""+pattern,"&lt;FORN_DESC>"+$("input[name='FORN_DESC']").val()+"&lt;/FORN_DESC>",'&lt;FORN_STATUS>0&lt;/FORN_STATUS>&lt;FORN_INATIVO>0&lt;/FORN_INATIVO>','&lt;action>U&lt;/action>');
         }
 
         var status,last;
@@ -1591,6 +1602,8 @@ setFav:function(a){
           //console.log(!context.ajaxrequest &amp;&amp; goout &amp;&amp; !last_request);
           if(!context.ajaxrequest &amp;&amp; goout &amp;&amp; !last_request){
             context.on = !1;
+            context.setFornClick="";
+            context.savingCookie("fornecedores",!0,"");
             window.history.go(-1);
             clearInterval(last);
           }
@@ -1629,12 +1642,12 @@ setFav:function(a){
         if($(".ScrollSpy .nav-item button.complet").length === 5){
           //console.log("cadastro completo");
           context.ajaxrequest=!0;
-          this.callService("GravarFornecedor",'&lt;FORN_ID>'+context.item.FORN_ID+'&lt;/FORN_ID>',html+""+pattern,"&lt;FORN_DESC>"+context.item.FORN_DESC+"&lt;/FORN_DESC>",'&lt;FORN_STATUS>1&lt;/FORN_STATUS>&lt;FORN_INATIVO>0&lt;/FORN_INATIVO>','&lt;action>U&lt;/action>');
+          this.callService("GravarFornecedor",'&lt;FORN_ID>'+context.item.FORN_ID+'&lt;/FORN_ID>',html+""+pattern,"&lt;FORN_DESC>"+$("input[name='FORN_DESC']").val()+"&lt;/FORN_DESC>",'&lt;FORN_STATUS>1&lt;/FORN_STATUS>&lt;FORN_INATIVO>0&lt;/FORN_INATIVO>','&lt;action>U&lt;/action>');
         }
         else{
           //console.log("cadastro incompleto");
           context.ajaxrequest=!0;
-          this.callService("GravarFornecedor",'&lt;FORN_ID>'+context.item.FORN_ID+'&lt;/FORN_ID>',html+""+pattern,"&lt;FORN_DESC>"+context.item.FORN_DESC+"&lt;/FORN_DESC>",'&lt;FORN_STATUS>0&lt;/FORN_STATUS>&lt;FORN_INATIVO>0&lt;/FORN_INATIVO>','&lt;action>U&lt;/action>');
+          this.callService("GravarFornecedor",'&lt;FORN_ID>'+context.item.FORN_ID+'&lt;/FORN_ID>',html+""+pattern,"&lt;FORN_DESC>"+$("input[name='FORN_DESC']").val()+"&lt;/FORN_DESC>",'&lt;FORN_STATUS>0&lt;/FORN_STATUS>&lt;FORN_INATIVO>0&lt;/FORN_INATIVO>','&lt;action>U&lt;/action>');
         }
         var status,last;
         status=setInterval(function(){
@@ -1656,6 +1669,8 @@ setFav:function(a){
         last=setInterval(function(){
           //console.log(!context.ajaxrequest &amp;&amp; goout &amp;&amp; !last_request);
           if(!context.ajaxrequest &amp;&amp; goout &amp;&amp; !last_request){
+            context.setFornClick="";
+            context.savingCookie("fornecedores",!0,"");
             context.on = !1;
             window.history.go(-1);
             clearInterval(last);
@@ -1694,12 +1709,12 @@ setFav:function(a){
         if($(".ScrollSpy .nav-item button.complet").length === 5){
           //console.log("cadastro completo");
           context.ajaxrequest=!0;
-          this.callService("GravarFornecedor",'&lt;FORN_ID>'+context.item.FORN_ID+'&lt;/FORN_ID>',html+""+pattern,"&lt;FORN_DESC>"+context.item.FORN_DESC+"&lt;/FORN_DESC>",'&lt;FORN_STATUS>1&lt;/FORN_STATUS>&lt;FORN_INATIVO>0&lt;/FORN_INATIVO>','&lt;action>U&lt;/action>');
+          this.callService("GravarFornecedor",'&lt;FORN_ID>'+context.item.FORN_ID+'&lt;/FORN_ID>',html+""+pattern,"&lt;FORN_DESC>"+$("input[name='FORN_DESC']").val()+"&lt;/FORN_DESC>",'&lt;FORN_STATUS>1&lt;/FORN_STATUS>&lt;FORN_INATIVO>0&lt;/FORN_INATIVO>','&lt;action>U&lt;/action>');
         }
         else{
           //console.log("cadastro incompleto");
           context.ajaxrequest=!0;
-          this.callService("GravarFornecedor",'&lt;FORN_ID>'+context.item.FORN_ID+'&lt;/FORN_ID>',html+""+pattern,"&lt;FORN_DESC>"+context.item.FORN_DESC+"&lt;/FORN_DESC>",'&lt;FORN_STATUS>0&lt;/FORN_STATUS>&lt;FORN_INATIVO>0&lt;/FORN_INATIVO>','&lt;action>U&lt;/action>');
+          this.callService("GravarFornecedor",'&lt;FORN_ID>'+context.item.FORN_ID+'&lt;/FORN_ID>',html+""+pattern,"&lt;FORN_DESC>"+$("input[name='FORN_DESC']").val()+"&lt;/FORN_DESC>",'&lt;FORN_STATUS>0&lt;/FORN_STATUS>&lt;FORN_INATIVO>0&lt;/FORN_INATIVO>','&lt;action>U&lt;/action>');
         }
         var status,last;
         status=setInterval(function(){
@@ -1721,6 +1736,8 @@ setFav:function(a){
           //console.log(!context.ajaxrequest &amp;&amp; goout &amp;&amp; !last_request);
           if(!context.ajaxrequest &amp;&amp; goout &amp;&amp; !last_request){
             context.on = !1;
+            context.setFornClick="";
+            context.savingCookie("fornecedores",!0,"");
             window.history.go(-1);
             clearInterval(last);
           }
@@ -1756,12 +1773,12 @@ setFav:function(a){
         if($(".ScrollSpy .nav-item button.complet").length === 5){
           //console.log("cadastro completo");
           context.ajaxrequest=!0;
-          this.callService("GravarFornecedor",'&lt;FORN_ID>'+context.item.FORN_ID+'&lt;/FORN_ID>',html+""+pattern,"&lt;FORN_DESC>"+context.item.FORN_DESC+"&lt;/FORN_DESC>",'&lt;FORN_STATUS>1&lt;/FORN_STATUS>&lt;FORN_INATIVO>0&lt;/FORN_INATIVO>','&lt;action>U&lt;/action>');
+          this.callService("GravarFornecedor",'&lt;FORN_ID>'+context.item.FORN_ID+'&lt;/FORN_ID>',html+""+pattern,"&lt;FORN_DESC>"+$("input[name='FORN_DESC']").val()+"&lt;/FORN_DESC>",'&lt;FORN_STATUS>1&lt;/FORN_STATUS>&lt;FORN_INATIVO>0&lt;/FORN_INATIVO>','&lt;action>U&lt;/action>');
         }
         else{
           //console.log("cadastro incompleto");
           context.ajaxrequest=!0;
-          this.callService("GravarFornecedor",'&lt;FORN_ID>'+context.item.FORN_ID+'&lt;/FORN_ID>',html+""+pattern,"&lt;FORN_DESC>"+context.item.FORN_DESC+"&lt;/FORN_DESC>",'&lt;FORN_STATUS>0&lt;/FORN_STATUS>&lt;FORN_INATIVO>0&lt;/FORN_INATIVO>','&lt;action>U&lt;/action>');
+          this.callService("GravarFornecedor",'&lt;FORN_ID>'+context.item.FORN_ID+'&lt;/FORN_ID>',html+""+pattern,"&lt;FORN_DESC>"+$("input[name='FORN_DESC']").val()+"&lt;/FORN_DESC>",'&lt;FORN_STATUS>0&lt;/FORN_STATUS>&lt;FORN_INATIVO>0&lt;/FORN_INATIVO>','&lt;action>U&lt;/action>');
         }
         var status,last;
         status=setInterval(function(){
@@ -1801,9 +1818,9 @@ setFav:function(a){
   var result;
   this.setloading(!0,!1);
   this.item = {};
-  result=[];
   this.reset();
-  if(!isNaN(code)){
+  this.callService("singleForn",'&lt;FEIR_COD>&lt;/FEIR_COD>&lt;FORN_ID>'+code+'&lt;/FORN_ID>&lt;FORN_STATUS>0&lt;/FORN_STATUS>&lt;LINHA_I>1&lt;/LINHA_I>&lt;LINHA_F>20&lt;/LINHA_F>');
+  /*if(!isNaN(code)){
     result=this.getdata(code);
   }
   if(result.length){
@@ -1811,17 +1828,6 @@ setFav:function(a){
   }
   else{
     this.open(this.item);
-    //this.open(jQuery.parseJSON('{"AMOS_COD":null,"AMOS_COTACAO_KG":0,"AMOS_COTACAO_M":0,"AMOS_DESC":"TESTE NACIONAL","AMOS_ENV_EMAIL":0,"AMOS_GRAMATURA_M":0,"AMOS_GRAMATURA_ML":0,"AMOS_HOMOLOGAR":0,"AMOS_ID":200000101,"AMOS_LARGURA_TOTAL":0,"AMOS_LARGURA_UTIL":0,"AMOS_ONCAS":0,"AMOS_PRECO":0,"AMOS_PRECO_UM":"","AMOS_STATUS":0,"BASE_COD":null,"BASE_DESC":"","COMPOSITIONS":[{"COMP_COD":"CJ ","COMP_DESC":"JUTE","TP_COMP_ID":0},{"COMP_COD":"CJ ","COMP_DESC":"JUTE","TP_COMP_ID":0}],"CREATE_DATE":"\/Date(1339642800000-0300)\/","FEIR_COD":"1 ","FEIR_DESC":"FOCUS TEXTIL - Sao Paulo\/Brazil","FLAG_FISICA":0,"FLAG_PRIORIDADE":0,"FORN_DESC":"TESTE FORNECEDOR IMPORTADORNECEDOR","FORN_ID":4200083,"GRUP_COD":null,"GRUP_DESC":"","IMG_PATH_SAMPLE":"","IMG_PATH_TICKET":"","NOTES":[],"SEGM_COD":"ML","SEGM_DESC":null,"SUBG_COD":null,"SUBG_DESC":"","TECI_COD":null,"TECI_DESC":"","USU_COD":36}'));
-  }
-  /*result=this.getdata(code);
-  console.dir(result);
-  if(result.length){
-    this.open(result[0]);
-    this.nextsample=result[1];
-  }
-  else{
-    //this.open(jQuery.parseJSON('{"AMOS_COD":null,"AMOS_COTACAO_KG":0,"AMOS_COTACAO_M":0,"AMOS_DESC":"TESTE NACIONAL","AMOS_ENV_EMAIL":0,"AMOS_GRAMATURA_M":0,"AMOS_GRAMATURA_ML":0,"AMOS_HOMOLOGAR":0,"AMOS_ID":200000101,"AMOS_LARGURA_TOTAL":0,"AMOS_LARGURA_UTIL":0,"AMOS_ONCAS":0,"AMOS_PRECO":0,"AMOS_PRECO_UM":"","AMOS_STATUS":0,"BASE_COD":null,"BASE_DESC":"","COMPOSITIONS":[{"COMP_COD":"CJ ","COMP_DESC":"JUTE","TP_COMP_ID":0},{"COMP_COD":"CJ ","COMP_DESC":"JUTE","TP_COMP_ID":0}],"CREATE_DATE":"\/Date(1339642800000-0300)\/","FEIR_COD":"1 ","FEIR_DESC":"FOCUS TEXTIL - Sao Paulo\/Brazil","FLAG_FISICA":0,"FLAG_PRIORIDADE":0,"FORN_DESC":"TESTE FORNECEDOR IMPORTADORNECEDOR","FORN_ID":4200083,"GRUP_COD":null,"GRUP_DESC":"","IMG_PATH_SAMPLE":"","IMG_PATH_TICKET":"","NOTES":[],"SEGM_COD":"ML","SEGM_DESC":null,"SUBG_COD":null,"SUBG_DESC":"","TECI_COD":null,"TECI_DESC":"","USU_COD":36}'));
-    this.open(jQuery.parseJSON('{"AMOS_COD":null,"AMOS_COTACAO_KG":0,"AMOS_COTACAO_M":0,"AMOS_DESC":"TESTE NACIONAL","AMOS_ENV_EMAIL":0,"AMOS_GRAMATURA_M":0,"AMOS_GRAMATURA_ML":0,"AMOS_HOMOLOGAR":0,"AMOS_ID":200000101,"AMOS_LARGURA_TOTAL":0,"AMOS_LARGURA_UTIL":0,"AMOS_ONCAS":0,"AMOS_PRECO":0,"AMOS_PRECO_UM":"","AMOS_STATUS":0,"BASE_COD":null,"BASE_DESC":"","COMPOSITIONS":[{"COMP_COD":"CA ","COMP_DESC":"ACETATE","TP_COMP_ID":0},{"COMP_COD":"CJ ","COMP_DESC":"JUTE","TP_COMP_ID":0}],"CREATE_DATE":"\/Date(1339642800000-0300)\/","FEIR_COD":"1 ","FEIR_DESC":"FOCUS TEXTIL - Sao Paulo\/Brazil","FLAG_FISICA":0,"FLAG_PRIORIDADE":0,"FORN_DESC":"TESTE FORNECEDOR IMPORTADORNECEDOR","FORN_ID":4200083,"GRUP_COD":null,"GRUP_DESC":"","IMG_PATH_SAMPLE":"","IMG_PATH_TICKET":"","NOTES":[{"CREATE_DATE":"\/Date(1436508000000-0300)\/","NOTA_DESC":"Teste de Anotação2","NOTA_ID":339,"OBJ_ID":200000101,"PLAT_ID":0,"SEGM_DESC":"Todos ","TP_NOTA_ID":2,"USU_COD":36,"USU_NOME":"JACQUES STERN"}],"SEGM_COD":"ML","SEGM_DESC":null,"SUBG_COD":null,"SUBG_DESC":"","TECI_COD":null,"TECI_DESC":"","USU_COD":36}'));
   }*/
 },reset:function(){
   this.item = {};
@@ -1868,7 +1874,7 @@ setFav:function(a){
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Wed Jan 20th 2016 using the <a
+		on Wed Feb 24th 2016 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>
