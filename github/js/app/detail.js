@@ -456,6 +456,7 @@ open: function(a){
   if(!this.item){
     return !1;
   }
+  //console.dir(this.item);
   this.setFornClick=this.item.FORN_DESC;
   this.savingCookie("fornecedores",!0,this.item.FORN_DESC);
   //$("html").attr("class","fornecedor_cadastro edit_forn");

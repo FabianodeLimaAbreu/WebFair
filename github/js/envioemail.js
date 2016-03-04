@@ -127,16 +127,17 @@ var App={
 	submitTemp:function(a){
         var EMAIL_TO,EMAIL_FROM,EMAIL_SUBJECT,EMAIL_BODY,EMAIL_CC,status,last,last_request,EMAIL_CC_list=[];
 
-        EMAIL_TO=this.tempcookie.opt[1].CONT_EMAIL;
-        EMAIL_FROM=this.tempcookie.opt[2].USU_EMAIL;
+        /*EMAIL_TO=this.tempcookie.opt[1].CONT_EMAIL;
+        EMAIL_FROM=this.tempcookie.opt[2].USU_EMAIL;*/
         EMAIL_CC=this.tempcookie.opt[2].SEGM_COD;
         EMAIL_SUBJECT=$("textarea[name='TEMP_SUBJECT']").val();
         EMAIL_BODY=$("textarea[name='TEMP_BODY']").val();
 
-        /*EMAIL_TO="fabianoabreu@focustextil.com.br";
-        EMAIL_FROM="fabianoabreu@focustextil.com.br";*/
+        EMAIL_TO="fabianoabreu@focustextil.com.br";
+        EMAIL_FROM="fabianoabreu@focustextil.com.br";
 
         var core=this;
+
         status=setInterval(function(){
             last_request=!0;
             $.ajax({
@@ -185,8 +186,71 @@ var App={
         },100);
 	},
     emailSent:function(data, status, req){
-        var modal=new Modal(!1,"Email enviado com sucesso!!!");
-        modal.open();
+        this.setEmailSent(this.tempcookie.opt[0]);
+    },
+    setEmailSent:function(a){
+        console.dir(a);
+        var length,core=this,l=0,obj,status;
+        length=a.length;
+        var day,date,month;
+        date=new Date();
+        if(parseInt(date.getDate())<10){
+          day="0"+parseInt(date.getDate());
+        }
+        else{
+          day=date.getDate();
+        }
+
+        if((parseInt(date.getMonth())+1)<10){
+          month="0"+parseInt(date.getMonth()+1);
+        }
+        else{
+          month=parseInt(date.getMonth()+1);
+        }
+
+        date=""+date.getFullYear()+"-"+month+"-"+day;
+
+        console.dir(a);
+        status=setInterval(function(){
+            if(l<length){
+
+                $.support.cors=true;
+                $.ajax({
+                    type: "POST",
+                    url: nodePath+'ListarAmostras',
+                    contentType: "text/xml; charset=utf-8",
+                    dataType: "xml",
+                    crossDomain: true,
+                    context: core,
+                    data: '<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarAmostras xmlns="http://tempuri.org/"><AMOS_ID>'+a[l].AMOS_ID+'</AMOS_ID><FEIR_COD></FEIR_COD><LINHA_I>1</LINHA_I><LINHA_F>20000</LINHA_F><CREATE_DATE_I>2000-01-01</CREATE_DATE_I><SEGM_COD>'+core.tempcookie.opt[2].SEGM_COD+'</SEGM_COD></ListarAmostras></soap:Body></soap:Envelope>',
+                    success: function(data, status, req){
+                        var html="",pattern="";
+                        var item=jQuery.parseJSON($(req.responseXML).text());
+                        pattern+="<AMOS_ID>"+parseInt(item[0].AMOS_ID)+"</AMOS_ID><FORN_ID>"+parseInt(item[0].FORN_ID)+"</FORN_ID><FEIR_COD>"+parseInt(item[0].FEIR_COD)+"</FEIR_COD><USU_COD>"+parseInt(item[0].USU_COD)+"</USU_COD><AMOS_DESC>"+item[0].AMOS_DESC+"</AMOS_DESC><AMOS_STATUS>"+item[0].AMOS_STATUS+"</AMOS_STATUS><AMOS_ENV_EMAIL>1</AMOS_ENV_EMAIL><TECI_COD>"+(item[0].TECI_COD || "")+"</TECI_COD><BASE_COD>"+(item[0].BASE_COD || "")+"</BASE_COD><GRUP_COD>"+(item[0].GRUP_COD || "")+"</GRUP_COD><SUBG_COD>"+(item[0].SUBG_COD || "")+"</SUBG_COD><SEGM_COD>"+(item[0].SEGM_COD || "")+"</SEGM_COD><FLAG_PRIORIDADE>"+item[0].FLAG_PRIORIDADE+"</FLAG_PRIORIDADE><AMOS_HOMOLOGAR>"+item[0].AMOS_HOMOLOGAR+"</AMOS_HOMOLOGAR><FLAG_FISICA>"+item[0].FLAG_FISICA+"</FLAG_FISICA><CREATE_DATE>"+date+"</CREATE_DATE>";
+                        html+="<AMOS_PRECO>"+item[0].AMOS_PRECO+"</AMOS_PRECO><AMOS_LARGURA_TOTAL>"+item[0].AMOS_LARGURA_TOTAL+"</AMOS_LARGURA_TOTAL><AMOS_GRAMATURA_M>"+item[0].AMOS_GRAMATURA_M+"</AMOS_GRAMATURA_M><AMOS_COTACAO_KG>"+item[0].AMOS_COTACAO_KG+"</AMOS_COTACAO_KG><AMOS_LARGURA_UTIL>"+item[0].AMOS_LARGURA_UTIL+"</AMOS_LARGURA_UTIL><AMOS_GRAMATURA_ML>"+item[0].AMOS_GRAMATURA_ML+"</AMOS_GRAMATURA_ML><AMOS_ONCAS>"+item[0].AMOS_ONCAS+"</AMOS_ONCAS><AMOS_PRECO_UM>"+item[0].AMOS_PRECO_UM+"</AMOS_PRECO_UM>";
+                        $.support.cors=true;
+                        console.log('<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarAmostra xmlns="http://tempuri.org/"><sample>'+pattern+''+html+'</sample><action>U</action></GravarAmostra></soap:Body></soap:Envelope>FIMMM');
+                        $.ajax({
+                            type: "POST",
+                            url: nodePath+'GravarAmostra',
+                            contentType: "text/xml; charset=utf-8",
+                            dataType: "xml",
+                            crossDomain: true,
+                            context: core,
+                            data: '<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarAmostra xmlns="http://tempuri.org/"><sample>'+pattern+''+html+'</sample><action>U</action></GravarAmostra></soap:Body></soap:Envelope>',
+                            error: core.processError
+                        });
+                    },
+                    error: core.processError
+                });
+                l++;
+            }
+            else{  
+                clearInterval(status);
+                var modal=new Modal(!1,"Email enviado com sucesso!!!");
+                modal.open();
+            }
+        },200);
     }
 };
 
@@ -213,7 +277,14 @@ function Modal(isbad,msg){
     this.close=function(){
         this.el.removeClass('bad');
         this.container.fadeOut();
+        $.removeCookie('tempforn', { path: '/' });
+        $.removeCookie('sendemail', { path: '/' });
         window.close();
     }
 }
 App.init();
+
+$(window).bind('beforeunload', function(event) {
+    $.removeCookie('tempforn', { path: '/' });
+    $.removeCookie('sendemail', { path: '/' });
+});

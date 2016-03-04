@@ -1121,7 +1121,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       else{
         this.data.filter(function(element,i){
           if(element.AMOS_ID === parseInt($(a.target).attr("name"))){
-            context.select_items.push({"AMOS_ID":parseInt(element.AMOS_ID),"AMOS_DESC":element.AMOS_DESC,"FORN_ID":element.FORN_ID,"FORN_DESC":element.FORN_DESC});
+            //            context.select_items.push({"AMOS_ID":parseInt(element.AMOS_ID),"AMOS_DESC":element.AMOS_DESC,"FORN_ID":element.FORN_ID,"FORN_DESC":element.FORN_DESC});
+            context.select_items.push(element);
           }
         });
       }
@@ -1980,7 +1981,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 }
 
                 if ("images" === c && l > 0) {
-                  //console.log("images: "+h.AMOS_ID+" , "+v);
+                  //console.log("images: "+h.AMOS_ID+" , "+h.AMOS_DESC+" , "+h.CONT_PRINCIPAL);
 
                     if (h && v === h.AMOS_ID){
                       l--;
@@ -2682,8 +2683,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             }
           }
           else{
-            for(j=0;j<this.select_items.length;j++){
+            /*for(j=0;j<this.select_items.length;j++){
               amos_sel.push(this.select_items[j]);
+            }*/
+            for(j=0;j<this.select_items.length;j++){  
+              amos_sel.push({"AMOS_ID":this.select_items[j].AMOS_ID,"AMOS_DESC":this.select_items[j].AMOS_DESC});
             }
             if(any_principal){
                 if(!amos_sel.length){
@@ -2691,14 +2695,16 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                   return !1;
                 }
 
+
                 listtemplates=this.email.filter(function(a,b){
                   return a;
                   /*Seguindo demanda da segunda etapa do projeto webfair (93 Manter Todas os templates de email juntos (Cotação e Agradecimento))
                   06/01/2015*/
                 });
 
+                //debugger;
                 item[0].CONTACTS.forEach(function(element,index){
-                  if(element.CONT_EMAIL.length && !contemail.length){
+                  if((element.CONT_EMAIL.length && !contemail.length) && !isEmail(element.CONT_EMAIL)){
                     contemail=element.CONT_EMAIL;
                     context.modal.open("message","O contato principal deste fornecedor não possui email cadastrado!!!",!1,!0);
                     //context.modal.open("contacts",item[0],!1,!1);
@@ -2713,9 +2719,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 });
             }
             else{
+              //debugger;
               /*for(j=0;j<this.select_items.length;j++){  
                 amos_sel.push(this.select_items[j].AMOS_DESC);
               }*/
+
               //console.log("email para: "+email);
               listtemplates=this.email.filter(function(a,b){
                 return a;
@@ -2728,6 +2736,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               var tempforn={
                 "opt":[item[0]]
               }
+              // console.dir(temp);
+              // console.dir(tempforn);
               $.cookie("sendemail", temp, {expires:7, path:"/"});
               $.cookie("tempforn", tempforn, {expires:7, path:"/"});
               context.modal.open("template",[listtemplates,amos_sel,contemail,item[0]],!1,!1);
