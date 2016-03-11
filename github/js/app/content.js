@@ -409,11 +409,18 @@ window.Box = Spine.Controller.sub({init:function() {
     else{
       if($("html").hasClass('edit')){
         $(".bselect[name='bselection-edit']").addClass('sel');
+        result+="<button type='button' name='"+a.AMOS_ID+"' class='icon bselection-edit";
       }
       else{
         $(".bselect[name='bselection']").addClass('sel');
+        result+="<button type='button' name='"+a.AMOS_ID+"' class='icon bselection"; //bselection
       }
-      result+="<button type='button' name='"+a.AMOS_ID+"' class='icon bselection bselection-big'></button>"; //bselection
+      if(this.is_selected || (this.fornidselect === a.FORN_ID)){
+        result+=" sel'></button>"; //bselection
+      }
+      else{
+        result+="'></button>"; //bselection
+      }
     }
     //result+="<a href='#detail/"+parseInt(a.FEIR_COD)+"/"+a.AMOS_DESC+"'><div class='thumbnail' id="+a.AMOS_ID+"><button type='button' name='"+a.AMOS_ID+"' class='icon'></button>"; //bselection
 

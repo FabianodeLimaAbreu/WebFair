@@ -207,7 +207,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       "click .hash":"addHash",
       "focus .info-template textarea":"focusArea",
       "click .filterlist a":"setComboFilter",
-      "click .combofilter":"makeComboFilter"
+      "click .combofilter":"makeComboFilter",
+      "click .remain_text":"TakeAllSamples",
+      "click .select_all":"SelectAllSamples"
     },
     init:function(){
       this.view = "images";
@@ -237,6 +239,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.prices=[];
       this.refine=[];
       this.select_items=[];
+      this.fornidselect=0;
       this.fstatus=null;
       this.cadstatus=undefined;
       this.fairval="";
@@ -249,6 +252,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.endTimeForn='2020-10-10';
 
       this.unable_select=!1;
+      this.is_selected=!1;
       this.combofilter={
         "FLAG_FISICA":{"clicked":0,"code":0},
         "FLAG_PRIORIDADE":{"clicked":0,"code":0},
@@ -1238,7 +1242,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       else{
         this.data.filter(function(element,i){
           if(element.AMOS_ID === parseInt($(a.target).attr("name"))){
-            context.select_items.push({"AMOS_ID":parseInt(element.AMOS_ID),"AMOS_DESC":element.AMOS_DESC,"FORN_ID":element.FORN_ID,"FORN_DESC":element.FORN_DESC});
+            //            context.select_items.push({"AMOS_ID":parseInt(element.AMOS_ID),"AMOS_DESC":element.AMOS_DESC,"FORN_ID":element.FORN_ID,"FORN_DESC":element.FORN_DESC});
+            context.select_items.push(element);
           }
         });
       }
@@ -1513,7 +1518,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         $.support.cors=true;
         soapRequest.filter(function(a,b){
           if(a['name'] === name){
-            //console.log(a['code']);
+            console.log(a['code']);
             core.callback=a['callback'];
             core.ajaxrequest=!0;                                                                        
             $.ajax({
@@ -1634,7 +1639,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         case 'amostras':
           //this.data = a.sortBy(this.nsort);
           this.data = a;
-          //console.dir(this.data);
+          console.dir(this.data);
           this.content.changeview(this.view);
           //this.filter.checklist(a);
           //$(".changeview button.b"+this.view);
@@ -1954,6 +1959,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                             tag : n,
                             usr:e.usr,
                             unable_select:e.unable_select,
+                            is_selected:e.is_selected,
+                            fornidselect:e.fornidselect,
                             // reloadcart : e.proxy(e.reloadcart),
                             detail : e.detail,
                             url : this
@@ -1975,6 +1982,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                             tag : n,
                             usr:e.usr,
                             unable_select:e.unable_select,
+                            is_selected:e.is_selected,
+                            fornidselect:e.fornidselect,
                             // reloadcart : e.proxy(e.reloadcart),
                             detail : e.detail,
                             url : a
@@ -1986,13 +1995,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 
                     // Mostrando (box sendo carregados)
                     if(k === 0){
-                      $(".overview").append('&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;/div>&lt;ul class="viewport">&lt;/ul>&lt;/div>');
+                      $(".overview").append('&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;button type="button" class="bdefault select_all hide" name="'+h.FORN_ID+'">Selecionar Todos&lt;/button>&lt;/div>&lt;ul class="viewport">&lt;/ul>&lt;/div>');
                     }
                     else if(h.FORN_ID !== a[k-1].FORN_ID){
                       var view_container=$(".overview-container");
                       view_container=$(view_container).eq(view_container.length-1);
                       view_container.find(".bread-search .spec").text(view_container.find(".viewport .thumbnail").length);
-                      $(".overview").append('&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;/div>&lt;ul class="viewport">&lt;/ul>&lt;/div>');
+                      $(".overview").append('&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;button type="button" class="bdefault select_all hide" name="'+h.FORN_ID+'">Selecionar Todos&lt;/button>&lt;/div>&lt;ul class="viewport">&lt;/ul>&lt;/div>');
                       countf++;
                     }
  
@@ -2006,13 +2015,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                     if (l > 0) {
                       if(e.page === "amostras"){
                         if(k === 0){
-                          $(".floatThead").append('&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;/div>&lt;table id="table" class="table-striped table-large">&lt;thead>&lt;tr>&lt;th>&lt;/th>&lt;th>Fornecedor&lt;/th>&lt;th>Código&lt;/th>&lt;th>Data&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfisica nothas unable">Fisica&lt;/button>&lt;/th>&lt;th>Preco Inicial&lt;/th>&lt;th>M/kg&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfav nothas unable">Favorita&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bhomologado nothas unable">Homologada&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bnote">Anotacoes&lt;/button>&lt;/th>'+/*&lt;th>&lt;button type="button" class="icon bannex">Anexo&lt;/button>&lt;/th>*/'&lt;th>&lt;button type="button" class="caption-icons-icon justit bemail">Email&lt;/button>&lt;/th>&lt;th>Tecimento&lt;/th>&lt;th>Base&lt;/th>&lt;th>Grupo&lt;/th>&lt;th>Sub-Grupo&lt;/th>&lt;th>Composicao&lt;/th>&lt;th class="tlast">Status&lt;/th>&lt;/tr>&lt;/thead>&lt;tbody>&lt;/tbody>&lt;/div>');
+                          $(".floatThead").append('&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;button type="button" class="bdefault select_all hide" name="'+h.FORN_ID+'">Selecionar Todos&lt;/button>&lt;/div>&lt;table id="table" class="table-striped table-large">&lt;thead>&lt;tr>&lt;th>&lt;/th>&lt;th>Fornecedor&lt;/th>&lt;th>Código&lt;/th>&lt;th>Data&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfisica nothas unable">Fisica&lt;/button>&lt;/th>&lt;th>Preco Inicial&lt;/th>&lt;th>M/kg&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfav nothas unable">Favorita&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bhomologado nothas unable">Homologada&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bnote">Anotacoes&lt;/button>&lt;/th>'+/*&lt;th>&lt;button type="button" class="icon bannex">Anexo&lt;/button>&lt;/th>*/'&lt;th>&lt;button type="button" class="caption-icons-icon justit bemail">Email&lt;/button>&lt;/th>&lt;th>Tecimento&lt;/th>&lt;th>Base&lt;/th>&lt;th>Grupo&lt;/th>&lt;th>Sub-Grupo&lt;/th>&lt;th>Composicao&lt;/th>&lt;th class="tlast">Status&lt;/th>&lt;/tr>&lt;/thead>&lt;tbody>&lt;/tbody>&lt;/div>');
                         }
                         else if(h.FORN_ID !== a[k-1].FORN_ID){
                           var view_container=$(".overview-container");
                           view_container=$(view_container).eq(view_container.length-1);
                           view_container.find(".bread-search .spec").text(view_container.find("tbody tr").length);
-                          $(".floatThead").append('&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;/div>&lt;table id="table" class="table-striped table-large">&lt;thead>&lt;tr>&lt;th>&lt;/th>&lt;th>Fornecedor&lt;/th>&lt;th>Código&lt;/th>&lt;th>Data&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfisica nothas unable">Fisica&lt;/button>&lt;/th>&lt;th>Preco Inicial&lt;/th>&lt;th>M/kg&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfav nothas unable">Favorita&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bhomologado nothas unable">Homologada&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bnote">Anotacoes&lt;/button>&lt;/th>'+/*&lt;th>&lt;button type="button" class="icon bannex">Anexo&lt;/button>&lt;/th>*/'&lt;th>&lt;button type="button" class="caption-icons-icon justit bemail">Email&lt;/button>&lt;/th>&lt;th>Tecimento&lt;/th>&lt;th>Base&lt;/th>&lt;th>Grupo&lt;/th>&lt;th>Sub-Grupo&lt;/th>&lt;th>Composicao&lt;/th>&lt;th class="tlast">Status&lt;/th>&lt;/tr>&lt;/thead>&lt;tbody>&lt;/tbody>&lt;/div>');
+                          $(".floatThead").append('&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;button type="button" class="bdefault select_all hide" name="'+h.FORN_ID+'">Selecionar Todos&lt;/button>&lt;/div>&lt;table id="table" class="table-striped table-large">&lt;thead>&lt;tr>&lt;th>&lt;/th>&lt;th>Fornecedor&lt;/th>&lt;th>Código&lt;/th>&lt;th>Data&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfisica nothas unable">Fisica&lt;/button>&lt;/th>&lt;th>Preco Inicial&lt;/th>&lt;th>M/kg&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfav nothas unable">Favorita&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bhomologado nothas unable">Homologada&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bnote">Anotacoes&lt;/button>&lt;/th>'+/*&lt;th>&lt;button type="button" class="icon bannex">Anexo&lt;/button>&lt;/th>*/'&lt;th>&lt;button type="button" class="caption-icons-icon justit bemail">Email&lt;/button>&lt;/th>&lt;th>Tecimento&lt;/th>&lt;th>Base&lt;/th>&lt;th>Grupo&lt;/th>&lt;th>Sub-Grupo&lt;/th>&lt;th>Composicao&lt;/th>&lt;th class="tlast">Status&lt;/th>&lt;/tr>&lt;/thead>&lt;tbody>&lt;/tbody>&lt;/div>');
                           countf++;
                         }
                         var view_container=$(".overview-container");
@@ -2028,6 +2037,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                             tag : n,
                             detail : e.detail,
                             unable_select:e.unable_select,
+                            is_selected:e.is_selected,
+                            fornidselect:e.fornidselect,
                             modal : e.modal,
                             usr:e.usr,
                             page: e.page
@@ -2097,7 +2108,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 }
 
                 if ("images" === c &amp;&amp; l > 0) {
-                  //console.log("images: "+h.AMOS_ID+" , "+v);
+                  //console.log("images: "+h.AMOS_ID+" , "+h.AMOS_DESC+" , "+h.CONT_PRINCIPAL);
 
                     if (h &amp;&amp; v === h.AMOS_ID){
                       l--;
@@ -2119,6 +2130,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                             tag : n,
                             usr:e.usr,
                             unable_select:e.unable_select,
+                            is_selected:e.is_selected,
+                            fornidselect:e.fornidselect,
                             // reloadcart : e.proxy(e.reloadcart),
                             detail : e.detail,
                             url : this
@@ -2141,6 +2154,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                             tag : n,
                             usr:e.usr,
                             unable_select:e.unable_select,
+                            is_selected:e.is_selected,
+                            fornidselect:e.fornidselect,
                             // reloadcart : e.proxy(e.reloadcart),
                             detail : e.detail,
                             url : a
@@ -2152,14 +2167,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 
                     // Mostrando (box sendo carregados)
                     if(k === 0){
-                      $(".overview").append('&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;a href="#" class="fornlink">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/a>&lt;/p>&lt;/div>&lt;ul class="viewport">&lt;/ul>&lt;/div>');
+                      $(".overview").append('&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;a href="#" class="fornlink">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/a>&lt;/p>&lt;button type="button" class="bdefault select_all hide" name="'+h.FORN_ID+'">Selecionar Todos&lt;/button>&lt;/div>&lt;ul class="viewport">&lt;/ul>&lt;/div>');
                     }
                     else if(h.FORN_ID !== a[k-1].FORN_ID){
                       var view_container=$(".overview-container");
                       view_container=$(view_container).eq(view_container.length-1);
                       //view_container.find(".fornlink").attr("href","#fornecedores/edit/"+h.FORN_ID);
                       view_container.find(".bread-search .spec").text(view_container.find(".viewport .thumbnail").length);
-                      $(".overview").append('&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;a href="#" class="fornlink">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;/a>&lt;/div>&lt;ul class="viewport">&lt;/ul>&lt;/div>');
+                      $(".overview").append('&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;a href="#" class="fornlink">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;/a>&lt;button type="button" class="bdefault select_all hide" name="'+h.FORN_ID+'">Selecionar Todos&lt;/button>&lt;/div>&lt;ul class="viewport">&lt;/ul>&lt;/div>');
                       countf++;
                     }
  
@@ -2169,6 +2184,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                     view_container.find(".bread-search .spec").text(view_container.find(".viewport .thumbnail").length+1);
                     view_container.find(".bread-search .specall").text(a.length);
                     view_container.find(".bread-search .specforn").text("/ "+h.FORN_DESC);
+                    if(h.CONT_PRINCIPAL){
+                      $(".filter-crumb").addClass('has-maincontact');
+                    }
                 } else {
                     var count="COUNT_FORN";
                     if(context.page === "amostras"){
@@ -2185,14 +2203,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                     if (l > 0) {
                         if(e.page === "amostras"){
                           if(k === 0){
-                            $(".floatThead").append('&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;a href="#" class="fornlink">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;/a>&lt;/div>&lt;table id="table" class="table-striped table-large">&lt;thead>&lt;tr>&lt;th>&lt;/th>&lt;th>Fornecedor&lt;/th>&lt;th>Codigo&lt;/th>&lt;th>Data&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfisica nothas unable">Fisica&lt;/button>&lt;/th>&lt;th>Preco Inicial&lt;/th>&lt;th>M/kg&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfav nothas unable">Favorita&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bhomologado nothas unable">Homologada&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bnote">Anotacoes&lt;/button>&lt;/th>'+/*&lt;th>&lt;button type="button" class="icon bannex">Anexo&lt;/button>&lt;/th>*/'&lt;th>&lt;button type="button" class="caption-icons-icon justit bemail">Email&lt;/button>&lt;/th>&lt;th>Tecimento&lt;/th>&lt;th>Base&lt;/th>&lt;th>Grupo&lt;/th>&lt;th>Sub-Grupo&lt;/th>&lt;th>Composicao&lt;/th>&lt;th class="tlast">Status&lt;/th>&lt;/tr>&lt;/thead>&lt;tbody>&lt;/tbody>&lt;/div>');
+                            $(".floatThead").append('&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;a href="#" class="fornlink">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;/a>&lt;button type="button" class="bdefault select_all hide" name="'+h.FORN_ID+'">Selecionar Todos&lt;/button>&lt;/div>&lt;table id="table" class="table-striped table-large">&lt;thead>&lt;tr>&lt;th>&lt;/th>&lt;th>Fornecedor&lt;/th>&lt;th>Codigo&lt;/th>&lt;th>Data&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfisica nothas unable">Fisica&lt;/button>&lt;/th>&lt;th>Preco Inicial&lt;/th>&lt;th>M/kg&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfav nothas unable">Favorita&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bhomologado nothas unable">Homologada&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bnote">Anotacoes&lt;/button>&lt;/th>'+/*&lt;th>&lt;button type="button" class="icon bannex">Anexo&lt;/button>&lt;/th>*/'&lt;th>&lt;button type="button" class="caption-icons-icon justit bemail">Email&lt;/button>&lt;/th>&lt;th>Tecimento&lt;/th>&lt;th>Base&lt;/th>&lt;th>Grupo&lt;/th>&lt;th>Sub-Grupo&lt;/th>&lt;th>Composicao&lt;/th>&lt;th class="tlast">Status&lt;/th>&lt;/tr>&lt;/thead>&lt;tbody>&lt;/tbody>&lt;/div>');
                           }
                           else if(h.FORN_ID !== a[k-1].FORN_ID){
                             var view_container=$(".overview-container");
                             view_container=$(view_container).eq(view_container.length-1);
                             //view_container.find(".fornlink").attr("href","#fornecedores/edit/"+h.FORN_ID);
                             view_container.find(".bread-search .spec").text(view_container.find("tbody tr").length);
-                            $(".floatThead").append('&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;a href="#" class="fornlink">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;/a>&lt;/div>&lt;table id="table" class="table-striped table-large">&lt;thead>&lt;tr>&lt;th>&lt;/th>&lt;th>Fornecedor&lt;/th>&lt;th>Codigo&lt;/th>&lt;th>Data&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfisica nothas unable">Fisica&lt;/button>&lt;/th>&lt;th>Preco Inicial&lt;/th>&lt;th>M/kg&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfav nothas unable">Favorita&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bhomologado nothas unable">Homologada&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bnote">Anotacoes&lt;/button>&lt;/th>'+/*&lt;th>&lt;button type="button" class="icon bannex">Anexo&lt;/button>&lt;/th>*/'&lt;th>&lt;button type="button" class="caption-icons-icon justit bemail">Email&lt;/button>&lt;/th>&lt;th>Tecimento&lt;/th>&lt;th>Base&lt;/th>&lt;th>Grupo&lt;/th>&lt;th>Sub-Grupo&lt;/th>&lt;th>Composicao&lt;/th>&lt;th class="tlast">Status&lt;/th>&lt;/tr>&lt;/thead>&lt;tbody>&lt;/tbody>&lt;/div>');
+                            $(".floatThead").append('&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;a href="#" class="fornlink">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;/a>&lt;button type="button" class="bdefault select_all hide" name="'+h.FORN_ID+'">Selecionar Todos&lt;/button>&lt;/div>&lt;table id="table" class="table-striped table-large">&lt;thead>&lt;tr>&lt;th>&lt;/th>&lt;th>Fornecedor&lt;/th>&lt;th>Codigo&lt;/th>&lt;th>Data&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfisica nothas unable">Fisica&lt;/button>&lt;/th>&lt;th>Preco Inicial&lt;/th>&lt;th>M/kg&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfav nothas unable">Favorita&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bhomologado nothas unable">Homologada&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bnote">Anotacoes&lt;/button>&lt;/th>'+/*&lt;th>&lt;button type="button" class="icon bannex">Anexo&lt;/button>&lt;/th>*/'&lt;th>&lt;button type="button" class="caption-icons-icon justit bemail">Email&lt;/button>&lt;/th>&lt;th>Tecimento&lt;/th>&lt;th>Base&lt;/th>&lt;th>Grupo&lt;/th>&lt;th>Sub-Grupo&lt;/th>&lt;th>Composicao&lt;/th>&lt;th class="tlast">Status&lt;/th>&lt;/tr>&lt;/thead>&lt;tbody>&lt;/tbody>&lt;/div>');
                             countf++;
                           }
                           var view_container=$(".overview-container");
@@ -2201,6 +2219,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                           view_container.find(".bread-search .spec").text(view_container.find("tbody tr").length+1);
                           view_container.find(".bread-search .specall").text(a.length);
                           view_container.find(".bread-search .specforn").text("/ "+h.FORN_DESC);
+                          if(h.CONT_PRINCIPAL){
+                            $(".filter-crumb").addClass('has-maincontact');
+                          }
 
                         }
 
@@ -2210,6 +2231,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                             tag : n,
                             detail : e.detail,
                             unable_select:e.unable_select,
+                            is_selected:e.is_selected,
+                            fornidselect:e.fornidselect,
                             modal : e.modal,
                             usr:e.usr,
                             page: e.page
@@ -2383,6 +2406,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         this.select_items=[];
         this.unable_select=!1;
         $(a.target).removeClass("sel");
+        $(".remain_text").addClass('hide').removeClass('sel');
+        $(".select_all").addClass('hide').removeClass('sel');
         $(".thumbnail .icon").attr("class","icon");
         $("html").attr("class","amostras");
         this.action_name="";
@@ -2390,6 +2415,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       else if($(a.target).hasClass("sel") &amp;&amp; this.view === "list"){
         this.select_items=[];
         $(".icon.bselection").removeClass('sel');
+        $(".remain_text").addClass('hide').removeClass('sel');
+        $(".select_all").addClass('hide').removeClass('sel');
       }
       else{
         //Inicia gravação
@@ -2397,9 +2424,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         this.unable_select=!0;
         $(".bsel").removeClass("sel");
         $(a.target).addClass("sel");
+        $(".remain_text").removeClass('hide').removeClass('sel');
+        $(".select_all").removeClass('hide').removeClass('sel');
         $(".thumbnail .icon").attr("class","icon").addClass($(a.target).attr("name"));
         $("html").attr("class","amostras").addClass("select");
-        
         if($(a.target).hasClass("bedit") &amp;&amp; !$(a.target).hasClass('unable')){
           $("html").addClass("edit");
         }
@@ -2549,6 +2577,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.itens = $([]);
       this.itens.remove();
       this.unable_select=!1;
+      this.is_selected=!1;
       this.content.reset();
       $(".overview-container").remove();
       this.order_box.find("button").removeClass("sel");
@@ -2567,6 +2596,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.itens = $([]);
       this.itens.remove();
       this.unable_select=!1;
+      this.is_selected=!1;
       this.content.reset();
       this.order_box.find("button").removeClass("sel");
       $(".overview-container").remove();
@@ -2580,6 +2610,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.itens = $([]);
       this.itens.remove();
       this.unable_select=!1;
+      this.is_selected=!1;
       this.content.reset();
       this.order_box.find("button").removeClass("sel");
       $(".overview-container").remove();
@@ -2598,7 +2629,45 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       }
       this.Componentfilter(this.data, 0, !0);
     },
-
+    TakeAllSamples:function(a){
+      if($(a.target).hasClass('sel')){
+        this.is_selected=!1;
+        this.select_items=[];
+        $(a.target).removeClass("sel");
+        $(".select_all ").removeClass('hide');
+        $(".thumbnail .icon").removeClass('sel'); 
+      }
+      else{
+        this.is_selected=!0;
+        this.select_items=this.data;
+        $(a.target).addClass("sel");
+        $(".select_all ").removeClass('sel').addClass('hide');
+        $(".thumbnail .icon").addClass('sel');
+      }
+    },
+    SelectAllSamples:function(a){
+      var target,ctx=this;
+      target=$(a.target);
+      if(target.hasClass("sel")){
+        target.removeClass("sel");
+        this.fornidselect=0;
+        target.closest('.overview-container').find(".thumbnail .icon").removeClass('sel');
+        this.select_items=[];
+      }
+      else{
+        $(".select_all ").removeClass('sel');
+        $(".thumbnail .icon").removeClass('sel');
+        target.addClass("sel");
+        target.closest('.overview-container').find(".thumbnail .icon").addClass('sel');
+        this.fornidselect=parseInt(target.attr("name"));
+        this.select_items=[];
+        this.data.filter(function(el,index) {
+          if(parseInt(target.attr("name")) === el.FORN_ID){
+            ctx.select_items.push(el);
+          }
+        });
+      }   
+    },
 
     Componentfilter:function(data,page,d,view,haslength){
       //Componente para todos os filtros, vou passar em todo o data e filtrar todos os filtros sempre que o filtro for mudado.
@@ -2723,9 +2792,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
     sendEmail:function(){
       //debugger;
       //console.log("clicou");
+      console.dir(this.select_items);
       var i,context=this,error=!1;
       if(!this.select_items.length){
-        if($(".overview-container").length&lt;1){
+        if($(".overview-container").length>=1){
           this.modal.open("message","Selecione ao menos um item",!1,!0);
           return !1;
         }
@@ -2793,8 +2863,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             }
           }
           else{
-            for(j=0;j&lt;this.select_items.length;j++){
+            /*for(j=0;j&lt;this.select_items.length;j++){
               amos_sel.push(this.select_items[j]);
+            }*/
+            for(j=0;j&lt;this.select_items.length;j++){  
+              amos_sel.push({"AMOS_ID":this.select_items[j].AMOS_ID,"AMOS_DESC":this.select_items[j].AMOS_DESC});
             }
             if(any_principal){
                 if(!amos_sel.length){
@@ -2802,14 +2875,16 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                   return !1;
                 }
 
+
                 listtemplates=this.email.filter(function(a,b){
                   return a;
                   /*Seguindo demanda da segunda etapa do projeto webfair (93 Manter Todas os templates de email juntos (Cotação e Agradecimento))
                   06/01/2015*/
                 });
 
+                //debugger;
                 item[0].CONTACTS.forEach(function(element,index){
-                  if(element.CONT_EMAIL.length &amp;&amp; !contemail.length){
+                  if((element.CONT_EMAIL.length &amp;&amp; !contemail.length) &amp;&amp; !isEmail(element.CONT_EMAIL)){
                     contemail=element.CONT_EMAIL;
                     context.modal.open("message","O contato principal deste fornecedor não possui email cadastrado!!!",!1,!0);
                     //context.modal.open("contacts",item[0],!1,!1);
@@ -2824,9 +2899,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 });
             }
             else{
+              //debugger;
               /*for(j=0;j&lt;this.select_items.length;j++){  
                 amos_sel.push(this.select_items[j].AMOS_DESC);
               }*/
+
               //console.log("email para: "+email);
               listtemplates=this.email.filter(function(a,b){
                 return a;
@@ -2839,6 +2916,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               var tempforn={
                 "opt":[item[0]]
               }
+              // console.dir(temp);
+              // console.dir(tempforn);
               $.cookie("sendemail", temp, {expires:7, path:"/"});
               $.cookie("tempforn", tempforn, {expires:7, path:"/"});
               context.modal.open("template",[listtemplates,amos_sel,contemail,item[0]],!1,!1);
@@ -3053,6 +3132,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 
     },
     setCompositions:function(a){
+      //debugger;
       //console.log("SET COMPOSITIONS");
       var length,context=this,l=0,obj,status;
       if($(a.target).prop("tagName") ===  "SPAN"){
@@ -3149,6 +3229,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       //this.callService("gravarAmostraComposicao","102004997","&lt;Composition>&lt;COMP_COD>CL_1&lt;/COMP_COD>&lt;COMP_OTHERS>&lt;/COMP_OTHERS>&lt;TP_COMP_ID>1&lt;/TP_COMP_ID>&lt;/Composition>");
     },
     compChange:function(ev){
+      //debugger;
       //console.log("COMP CHANGE");
       ev.preventDefault();
       var aux,html="",context=this;
@@ -4005,6 +4086,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.itens.remove();
       this.filter.reset();
       this.unable_select=!1;
+      this.is_selected=!1;
+      this.fornidselect=0;
       this.thanks=!1;
       this.content.reset();
       //$("#table").floatThead('destroy');
@@ -4013,6 +4096,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       //Var to storage the basic data
       //console.log("restartValues");
       this.unable_select=!1;
+      this.is_selected=!1;
+      this.fornidselect=0;
       if(this.page === "amostras"){
         this.cookieamostras=[];
       }
@@ -4105,7 +4190,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Wed Feb 24th 2016 using the <a
+		on Fri Mar 11th 2016 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>

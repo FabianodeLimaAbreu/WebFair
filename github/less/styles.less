@@ -1522,7 +1522,7 @@ form.search{
 		width: 100%;
 		margin: 0;
 		padding: 0;
-		height: 30px;
+		min-height: 30px;
 		display: block;
 		.main_opt_item{
 			display: inline-block;
@@ -1587,6 +1587,34 @@ form.search{
 						.item-cleafilter;
 					}
 				}
+				&.bsel{
+					max-width: 30px;
+					line-height: 15px;
+					.remain_text{
+						display: none;
+					}
+					&.sel{
+						.remain_text{
+							display: block;
+						}
+					}
+				}
+			}
+		}
+		ul.first{
+			width: 75px;
+			position: relative;
+			float: left;
+			.main_opt_item{
+				min-width: 75px;
+			    height: auto;
+			    .main_opt_button{
+					min-width: 75px;
+					height: auto;
+			    }
+			    .remain_text{
+			    	line-height: 15px;
+			    }
 			}
 		}
 		&.large{
@@ -1611,15 +1639,28 @@ form.search{
 	-webkit-border-radius: 50px;
 	margin: 10px 0 5px;
 	&.has-maincontact{
-		&:after{
+		&:before{
 			content: "";
 			.sprite;
 			.other_maincontact;
 			position: relative;
-			float: right;
-			margin-right: 10px;
+			float: left;
 		}
 	}
+	.bdefault{
+		line-height: 20px;
+		font-size: 1em;
+		height: 20px;
+		float: right;
+	}
+	/*&:after{
+		content: "Selecionar Todos";
+		position: relative;
+		float: right;
+		background: #71abcc;
+		border-radius: 20px;
+		padding: 0 10px;
+	}*/
 	.fornlink{
 		color: inherit;
 	}

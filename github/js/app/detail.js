@@ -39,10 +39,6 @@ callerEvents:function(){
     return !1;
   });
   $(".bnext").unbind("click").bind("click",function(){
-
-
-
-    
     context.nextSample();
     return !1;
   });
