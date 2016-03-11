@@ -1236,14 +1236,23 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       a.preventDefault();
       if($(a.target).hasClass("sel")){
         this.select_items = this.select_items.filter(function(element,i){
-           return element.AMOS_ID !== parseInt($(a.target).attr("name"));
+          if(element.AMOS_ID !== parseInt($(a.target).attr("name"))){
+            return {
+              'AMOS_DESC':element.AMOS_DESC,
+              'AMOS_ID':element.AMOS_ID,
+              'FORN_ID':element.FORN_ID,
+            };
+          }
         });
       }
       else{
         this.data.filter(function(element,i){
           if(element.AMOS_ID === parseInt($(a.target).attr("name"))){
-            //            context.select_items.push({"AMOS_ID":parseInt(element.AMOS_ID),"AMOS_DESC":element.AMOS_DESC,"FORN_ID":element.FORN_ID,"FORN_DESC":element.FORN_DESC});
-            context.select_items.push(element);
+            context.select_items.push({
+              'AMOS_DESC':element.AMOS_DESC,
+              'AMOS_ID':element.AMOS_ID,
+              'FORN_ID':element.FORN_ID,
+            });
           }
         });
       }
@@ -1389,7 +1398,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             'serviceName':'GravarAmostra',
             'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;GravarAmostra xmlns="http://tempuri.org/">&lt;sample>'+a+''+b+'&lt;/sample>&lt;action>'+c+'&lt;/action>&lt;/GravarAmostra>&lt;/soap:Body>&lt;/soap:Envelope>',
             'callback':function(){
-              core.setloading(!1);
+              if(d !== "PROMISSE"){
+                core.setloading(!1);
+              }
             }
           },
           {
@@ -1412,7 +1423,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             'serviceName':'GravarAmostraComposicao',
             'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;GravarAmostraComposicao xmlns="http://tempuri.org/">&lt;AMOS_ID>'+a+'&lt;/AMOS_ID>&lt;compositions>'+b+'&lt;/compositions>&lt;/GravarAmostraComposicao>&lt;/soap:Body>&lt;/soap:Envelope>',
             'callback':function(){
-              core.setloading(!1);
+              if(c !== "PROMISSE"){
+                core.setloading(!1);
+              }
             }
           },
           {
@@ -2663,7 +2676,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         this.select_items=[];
         this.data.filter(function(el,index) {
           if(parseInt(target.attr("name")) === el.FORN_ID){
-            ctx.select_items.push(el);
+            ctx.select_items.push({
+              'AMOS_DESC':el.AMOS_DESC,
+              'AMOS_ID':el.AMOS_ID,
+              'FORN_ID':el.FORN_ID,
+            });
           }
         });
       }   
@@ -2909,6 +2926,16 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 return a;
               });
 
+              /*if(amos_sel.length>20){
+                var f,i=0,arr=[],l=amos_sel.length;
+                f = setInterval(function() {
+                  //k = (0*length), l = length
+                  if(i &lt; length){}
+                },100);
+                arr.push(amos_sel.slice(i, end))
+                
+              }
+              return !1;*/
               $.cookie.json = !0;
               var temp={
                 "opt":[amos_sel,contemail,this.usr]
@@ -3166,12 +3193,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 html+="&lt;Composition>&lt;COMP_COD>"+$(el).attr("href").replace("#","")+"&lt;/COMP_COD>&lt;COMP_OTHERS>&lt;/COMP_OTHERS>&lt;TP_COMP_ID>1&lt;/TP_COMP_ID>&lt;/Composition>";
               }
             });
-            context.callService("gravarAmostraComposicao",context.select_items[l].AMOS_ID,html);     
+            context.setloading(!0,!1);
+            context.callService("gravarAmostraComposicao",context.select_items[l].AMOS_ID,html,"PROMISSE");     
             l++;
           }
           else{
-            clearInterval(status);
             context.setloading(!1);
+            clearInterval(status);
           }
         },200);
       }
@@ -3211,8 +3239,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                   elem[obj.attr("name").replace("_COD","_DESC")]=obj.attr("title");
                   pattern+="&lt;AMOS_ID>"+parseInt(elem.AMOS_ID)+"&lt;/AMOS_ID>&lt;FORN_ID>"+parseInt(elem.FORN_ID)+"&lt;/FORN_ID>&lt;FEIR_COD>"+parseInt(elem.FEIR_COD)+"&lt;/FEIR_COD>&lt;USU_COD>"+parseInt(elem.USU_COD)+"&lt;/USU_COD>&lt;AMOS_DESC>"+elem.AMOS_DESC+"&lt;/AMOS_DESC>&lt;AMOS_STATUS>"+elem.AMOS_STATUS+"&lt;/AMOS_STATUS>&lt;AMOS_ENV_EMAIL>"+elem.AMOS_ENV_EMAIL+"&lt;/AMOS_ENV_EMAIL>&lt;TECI_COD>"+(elem.TECI_COD || "")+"&lt;/TECI_COD>&lt;BASE_COD>"+(elem.BASE_COD || "")+"&lt;/BASE_COD>&lt;GRUP_COD>"+(elem.GRUP_COD || "")+"&lt;/GRUP_COD>&lt;SUBG_COD>"+(elem.SUBG_COD || "")+"&lt;/SUBG_COD>&lt;SEGM_COD>"+(elem.SEGM_COD || "")+"&lt;/SEGM_COD>&lt;FLAG_PRIORIDADE>"+elem.FLAG_PRIORIDADE+"&lt;/FLAG_PRIORIDADE>&lt;AMOS_HOMOLOGAR>"+elem.AMOS_HOMOLOGAR+"&lt;/AMOS_HOMOLOGAR>&lt;FLAG_FISICA>"+elem.FLAG_FISICA+"&lt;/FLAG_FISICA>&lt;CREATE_DATE>"+date+"&lt;/CREATE_DATE>";
                   html+="&lt;AMOS_DESC>"+elem.AMOS_DESC+"&lt;/AMOS_DESC>&lt;AMOS_PRECO>"+elem.AMOS_PRECO+"&lt;/AMOS_PRECO>&lt;AMOS_LARGURA_TOTAL>"+elem.AMOS_LARGURA_TOTAL+"&lt;/AMOS_LARGURA_TOTAL>&lt;AMOS_GRAMATURA_M>"+elem.AMOS_GRAMATURA_M+"&lt;/AMOS_GRAMATURA_M>&lt;AMOS_COTACAO_KG>"+elem.AMOS_COTACAO_KG+"&lt;/AMOS_COTACAO_KG>&lt;AMOS_LARGURA_UTIL>"+elem.AMOS_LARGURA_UTIL+"&lt;/AMOS_LARGURA_UTIL>&lt;AMOS_GRAMATURA_ML>"+elem.AMOS_GRAMATURA_ML+"&lt;/AMOS_GRAMATURA_ML>&lt;AMOS_ONCAS>"+elem.AMOS_ONCAS+"&lt;/AMOS_ONCAS>&lt;AMOS_PRECO_UM>"+elem.AMOS_PRECO_UM+"&lt;/AMOS_PRECO_UM>";
-
-                  context.callService("gravarAmostras",pattern,html,"U");
+                  context.callService("gravarAmostras",pattern,html,"U","PROMISSE");
                 }
               });
               
@@ -3220,8 +3247,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             l++;
           }
           else{
-            clearInterval(status);
             context.setloading(!1);
+            clearInterval(status);
           }
         },200);
       }

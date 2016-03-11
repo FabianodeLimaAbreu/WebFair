@@ -1281,7 +1281,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             'serviceName':'GravarAmostra',
             'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarAmostra xmlns="http://tempuri.org/"><sample>'+a+''+b+'</sample><action>'+c+'</action></GravarAmostra></soap:Body></soap:Envelope>',
             'callback':function(){
-              core.setloading(!1);
+              if(d !== "PROMISSE"){
+                core.setloading(!1);
+              }
             }
           },
           {
@@ -1304,7 +1306,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             'serviceName':'GravarAmostraComposicao',
             'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarAmostraComposicao xmlns="http://tempuri.org/"><AMOS_ID>'+a+'</AMOS_ID><compositions>'+b+'</compositions></GravarAmostraComposicao></soap:Body></soap:Envelope>',
             'callback':function(){
-              core.setloading(!1);
+              if(c !== "PROMISSE"){
+                core.setloading(!1);
+              }
             }
           },
           {
@@ -2805,6 +2809,16 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 return a;
               });
 
+              /*if(amos_sel.length>20){
+                var f,i=0,arr=[],l=amos_sel.length;
+                f = setInterval(function() {
+                  //k = (0*length), l = length
+                  if(i < length){}
+                },100);
+                arr.push(amos_sel.slice(i, end))
+                
+              }
+              return !1;*/
               $.cookie.json = !0;
               var temp={
                 "opt":[amos_sel,contemail,this.usr]
@@ -3062,12 +3076,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 html+="<Composition><COMP_COD>"+$(el).attr("href").replace("#","")+"</COMP_COD><COMP_OTHERS></COMP_OTHERS><TP_COMP_ID>1</TP_COMP_ID></Composition>";
               }
             });
-            context.callService("gravarAmostraComposicao",context.select_items[l].AMOS_ID,html);     
+            context.setloading(!0,!1);
+            context.callService("gravarAmostraComposicao",context.select_items[l].AMOS_ID,html,"PROMISSE");     
             l++;
           }
           else{
-            clearInterval(status);
             context.setloading(!1);
+            clearInterval(status);
           }
         },200);
       }
@@ -3107,8 +3122,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                   elem[obj.attr("name").replace("_COD","_DESC")]=obj.attr("title");
                   pattern+="<AMOS_ID>"+parseInt(elem.AMOS_ID)+"</AMOS_ID><FORN_ID>"+parseInt(elem.FORN_ID)+"</FORN_ID><FEIR_COD>"+parseInt(elem.FEIR_COD)+"</FEIR_COD><USU_COD>"+parseInt(elem.USU_COD)+"</USU_COD><AMOS_DESC>"+elem.AMOS_DESC+"</AMOS_DESC><AMOS_STATUS>"+elem.AMOS_STATUS+"</AMOS_STATUS><AMOS_ENV_EMAIL>"+elem.AMOS_ENV_EMAIL+"</AMOS_ENV_EMAIL><TECI_COD>"+(elem.TECI_COD || "")+"</TECI_COD><BASE_COD>"+(elem.BASE_COD || "")+"</BASE_COD><GRUP_COD>"+(elem.GRUP_COD || "")+"</GRUP_COD><SUBG_COD>"+(elem.SUBG_COD || "")+"</SUBG_COD><SEGM_COD>"+(elem.SEGM_COD || "")+"</SEGM_COD><FLAG_PRIORIDADE>"+elem.FLAG_PRIORIDADE+"</FLAG_PRIORIDADE><AMOS_HOMOLOGAR>"+elem.AMOS_HOMOLOGAR+"</AMOS_HOMOLOGAR><FLAG_FISICA>"+elem.FLAG_FISICA+"</FLAG_FISICA><CREATE_DATE>"+date+"</CREATE_DATE>";
                   html+="<AMOS_DESC>"+elem.AMOS_DESC+"</AMOS_DESC><AMOS_PRECO>"+elem.AMOS_PRECO+"</AMOS_PRECO><AMOS_LARGURA_TOTAL>"+elem.AMOS_LARGURA_TOTAL+"</AMOS_LARGURA_TOTAL><AMOS_GRAMATURA_M>"+elem.AMOS_GRAMATURA_M+"</AMOS_GRAMATURA_M><AMOS_COTACAO_KG>"+elem.AMOS_COTACAO_KG+"</AMOS_COTACAO_KG><AMOS_LARGURA_UTIL>"+elem.AMOS_LARGURA_UTIL+"</AMOS_LARGURA_UTIL><AMOS_GRAMATURA_ML>"+elem.AMOS_GRAMATURA_ML+"</AMOS_GRAMATURA_ML><AMOS_ONCAS>"+elem.AMOS_ONCAS+"</AMOS_ONCAS><AMOS_PRECO_UM>"+elem.AMOS_PRECO_UM+"</AMOS_PRECO_UM>";
-
-                  context.callService("gravarAmostras",pattern,html,"U");
+                  context.callService("gravarAmostras",pattern,html,"U","PROMISSE");
                 }
               });
               
@@ -3116,8 +3130,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             l++;
           }
           else{
-            clearInterval(status);
             context.setloading(!1);
+            clearInterval(status);
           }
         },200);
       }
