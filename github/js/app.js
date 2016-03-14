@@ -1565,7 +1565,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 
           this.data = a.sortBy("FORN_ID");
           this.content.changeview("list");
-
+          console.dir(this.data);
           if(!this.cookiefornecedores.length){
             var scroll={
               "fornval":''+this.fornval,
@@ -2828,8 +2828,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               }
               // console.dir(temp);
               // console.dir(tempforn);
-              $.cookie("sendemail", temp, {expires:7, path:"/"});
-              $.cookie("tempforn", tempforn, {expires:7, path:"/"});
+              /*$.cookie("sendemail", temp, {expires:7, path:"/"});
+              $.cookie("tempforn", tempforn, {expires:7, path:"/"});*/
+              localStorage.setItem('sendemail', JSON.stringify(temp));
+              localStorage.setItem('tempforn', JSON.stringify(tempforn));
               context.modal.open("template",[listtemplates,amos_sel,contemail,item[0]],!1,!1);
             }
           }

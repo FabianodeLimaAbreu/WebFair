@@ -41,14 +41,12 @@ var App={
 		this.usr = jQuery.parseJSON($.cookie("webfair")); 
 		this.tempcookie=null;
         this.tempforn=null;
-        this.tempforn=$.cookie("tempforn");
-		this.tempcookie=$.cookie("sendemail"); 
 		if(!this.usr)
             window.location.href = 'login.html';
 
-        if(this.tempcookie && this.tempforn){
-        	this.tempcookie=jQuery.parseJSON(this.tempcookie);
-            this.tempforn=jQuery.parseJSON(this.tempforn);
+        if(jQuery.parseJSON(localStorage.getItem('tempforn')) && jQuery.parseJSON(localStorage.getItem('sendemail'))){
+            this.tempforn=jQuery.parseJSON(localStorage.getItem('tempforn'));
+            this.tempcookie=jQuery.parseJSON(localStorage.getItem('sendemail'));
             this.elements.loginName.text(this.tempcookie.opt[2].USU_NOME);
             this.elements.loginId.text(this.tempcookie.opt[2].SEGM_DESC);
         }
@@ -277,14 +275,12 @@ function Modal(isbad,msg){
     this.close=function(){
         this.el.removeClass('bad');
         this.container.fadeOut();
-        $.removeCookie('tempforn', { path: '/' });
-        $.removeCookie('sendemail', { path: '/' });
+        localStorage.clear();
         window.close();
     }
 }
 App.init();
 
 $(window).bind('beforeunload', function(event) {
-    $.removeCookie('tempforn', { path: '/' });
-    $.removeCookie('sendemail', { path: '/' });
+    localStorage.clear();
 });
