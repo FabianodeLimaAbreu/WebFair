@@ -10,9 +10,22 @@
             }
             $(document).ready(function () {
               $("#btnCallWebService").click(function (event) {
-                  var wsUrl = "../../WebService.asmx?op=GravarAmostra";
+                  var wsUrl = "../../WebService.asmx?op=ListarAmostras";
 
-                  var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarAmostra xmlns="http://tempuri.org/"><sample>undefined<AMOS_ID>200000021</AMOS_ID><FORN_ID>4200000</FORN_ID><FEIR_COD>1</FEIR_COD><USU_COD>36</USU_COD><AMOS_DESC>UNIQUETEX UNQ-D-0288</AMOS_DESC><AMOS_STATUS>0</AMOS_STATUS><AMOS_ENV_EMAIL>1</AMOS_ENV_EMAIL><TECI_COD>P</TECI_COD><BASE_COD>11</BASE_COD><GRUP_COD>NP</GRUP_COD><SUBG_COD></SUBG_COD><SEGM_COD>MC</SEGM_COD><FLAG_PRIORIDADE>0</FLAG_PRIORIDADE><AMOS_HOMOLOGAR>0</AMOS_HOMOLOGAR><FLAG_FISICA>0</FLAG_FISICA><CREATE_DATE>2016-03-02</CREATE_DATE>undefined<AMOS_PRECO>0</AMOS_PRECO><AMOS_LARGURA_TOTAL>0</AMOS_LARGURA_TOTAL><AMOS_GRAMATURA_M>166</AMOS_GRAMATURA_M><AMOS_COTACAO_KG>0</AMOS_COTACAO_KG><AMOS_LARGURA_UTIL>0</AMOS_LARGURA_UTIL><AMOS_GRAMATURA_ML>244</AMOS_GRAMATURA_ML><AMOS_ONCAS>0</AMOS_ONCAS><AMOS_PRECO_UM></AMOS_PRECO_UM></sample><action>U</action></GravarAmostra></soap:Body></soap:Envelope>';
+                  var soapRequest ='<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarAmostras xmlns="http://tempuri.org/"><FEIR_COD></FEIR_COD><LINHA_I>1</LINHA_I><LINHA_F>20000</LINHA_F><CREATE_DATE_I>2000-03-11</CREATE_DATE_I><CREATE_DATE_F>2020-10-10</CREATE_DATE_F><SEGM_COD>MC</SEGM_COD></ListarAmostras></soap:Body></soap:Envelope>';
+
+
+
+
+
+                  <?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarAmostras xmlns="http://tempuri.org/"><FEIR_COD>18</FEIR_COD><LINHA_I>1</LINHA_I><LINHA_F>20000</LINHA_F><CREATE_DATE_I>2000-01-01</CREATE_DATE_I><CREATE_DATE_F>2020-10-10</CREATE_DATE_F><SEGM_COD>MC</SEGM_COD></ListarAmostras></soap:Body></soap:Envelope>
+
+
+
+
+
+
+
 
                   /*<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarAmostra xmlns="http://tempuri.org/"><sample><AMOS_ID>102003577</AMOS_ID><FORN_ID>4200283</FORN_ID><FEIR_COD>14</FEIR_COD><USU_COD>2</USU_COD><AMOS_DESC>GB-A93</AMOS_DESC><AMOS_STATUS>0</AMOS_STATUS><AMOS_ENV_EMAIL>1</AMOS_ENV_EMAIL><TECI_COD></TECI_COD><BASE_COD></BASE_COD><GRUP_COD></GRUP_COD><SUBG_COD></SUBG_COD><SEGM_COD>MC</SEGM_COD><FLAG_PRIORIDADE>0</FLAG_PRIORIDADE><AMOS_HOMOLOGAR>0</AMOS_HOMOLOGAR><FLAG_FISICA>1</FLAG_FISICA><CREATE_DATE>2016-02-29</CREATE_DATE><AMOS_DESC>GB-A93</AMOS_DESC><AMOS_PRECO>0</AMOS_PRECO><AMOS_LARGURA_TOTAL>0</AMOS_LARGURA_TOTAL><AMOS_GRAMATURA_M>0</AMOS_GRAMATURA_M><AMOS_COTACAO_KG>0</AMOS_COTACAO_KG><AMOS_LARGURA_UTIL>0</AMOS_LARGURA_UTIL><AMOS_GRAMATURA_ML>0</AMOS_GRAMATURA_ML><AMOS_ONCAS>0</AMOS_ONCAS><AMOS_PRECO_UM></AMOS_PRECO_UM></sample><action>U</action></GravarAmostra></soap:Body></soap:Envelope>*/
 

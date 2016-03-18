@@ -125,6 +125,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.fornidselect=0;
       this.fstatus=null;
       this.cadstatus=undefined;
+      this.cadprincipal=undefined;
       this.fairval="";
       this.fornval="";
       this.amosval="";
@@ -207,7 +208,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         getPage:this.proxy(this.getPage),
         getInitialTime:this.proxy(this.getInitialTime),
         getEndTime:this.proxy(this.getEndTime),
-        setCookieFair:this.proxy(this.setCookieFair)
+        setCookieFair:this.proxy(this.setCookieFair),
+        getContPrincipalFornecedores:this.proxy(this.getContPrincipalFornecedores)
       });
       this.filter = new Filter({
         getloading: this.proxy(this.getloading),
@@ -530,7 +532,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           url=this.page+"/"+(this.cookieamostras[0].fairval || "padrao")+"/"+(this.cookieamostras[0].fornval || "padrao")+"/"+(this.cookieamostras[0].amosval || "padrao");
           this.navigate(url, !0);
         }
-        
       }
     },
 
@@ -1021,9 +1022,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             this.cookiefornecedores[0].posscroll=0;
           }
           if(!this.fairval && !this.fornval){
+            var vprincipal="";
+            if(typeof this.cadprincipal !== "undefined"){
+              vprincipal="<CONT_PRINCIPAL>"+this.cadprincipal+"</CONT_PRINCIPAL>";
+            }
             this.mode="fornecedores/"+"padrao"+"/"+"padrao"+"/"+"padrao";
             this.navigate(this.mode, !1);
-            this.callService("fornecedores",'<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>1</LINHA_I>','<LINHA_F>20000</LINHA_F>','<CREATE_DATE_I>'+this.initialTimeForn+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTimeForn+'</CREATE_DATE_F>');
+            this.callService("fornecedores",'<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>1</LINHA_I>','<LINHA_F>20000</LINHA_F>','<CREATE_DATE_I>'+this.initialTimeForn+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTimeForn+'</CREATE_DATE_F>',vprincipal);
             //this.modal.open("message","Selecione ao menos uma feira para filtrar!!!",!1,!0);
             return !0;
           }
@@ -1032,7 +1037,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 
           this.mode="fornecedores/"+(this.fairval || "padrao")+"/"+(this.fornval || "padrao")+"/"+(this.amosval || "padrao");
           this.navigate(this.mode, !1);
-          this.callService("fornecedores",'<FORN_DESC>'+this.fornval+'</FORN_DESC>','<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>'+(this.content.page*20+1)+'</LINHA_I>','<LINHA_F>20000</LINHA_F>','<CREATE_DATE_I>'+this.initialTimeForn+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTimeForn+'</CREATE_DATE_F>');
+          this.callService("fornecedores",'<FORN_DESC>'+this.fornval+'</FORN_DESC>','<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>'+(this.content.page*20+1)+'</LINHA_I>','<LINHA_F>20000</LINHA_F>','<CREATE_DATE_I>'+this.initialTimeForn+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTimeForn+'</CREATE_DATE_F>',vprincipal);
           break;
         case "amostras":
           this.initialTimeAmos=$("input[name='initial_date']").val() || ("2000"+"-"+"01"+"-"+"01");
@@ -1239,7 +1244,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           {
             'name':'fornecedores',
             'serviceName':'ListarFornecedores',
-            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedores xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+''+e+''+f+'</ListarFornecedores></soap:Body></soap:Envelope>',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedores xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+''+e+''+f+g+'<SEGM_COD>'+core.usr.SEGM_COD+'</SEGM_COD></ListarFornecedores></soap:Body></soap:Envelope>',
             callback:function(data,req){
               core.convertData(data,req,name,!0);
             }
@@ -1431,8 +1436,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           }
         });
     },
-    submit:function(a,b,c,d,fstatus){
-      var status,core=this;
+    submit:function(a,b,c,d,fstatus,fprincipal){
+      var status,vprincipal,core=this;
       var b=b || "";
       var c=c || "";
       status=setInterval(function(){
@@ -1455,7 +1460,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             else{
               fstatus="";
             }
-            core.callService(core.page,a,b,fstatus,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>'+((core.content.page+1)*core.itens_by_page)+'</LINHA_F>','<CREATE_DATE_I>'+core.initialTimeForn+'</CREATE_DATE_I>',"<CREATE_DATE_F>"+core.endTimeForn+"</CREATE_DATE_F>");
+            if(typeof fprincipal !== "undefined"){
+              vprincipal="<CONT_PRINCIPAL>"+fprincipal+"</CONT_PRINCIPAL>";
+            }
+            else{
+              vprincipal="";
+            }
+            core.callService(core.page,a,b,fstatus,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>'+((core.content.page+1)*core.itens_by_page)+'</LINHA_F>','<CREATE_DATE_I>'+core.initialTimeForn+'</CREATE_DATE_I>'+"<CREATE_DATE_F>"+core.endTimeForn+"</CREATE_DATE_F>",vprincipal);
             //core.callService(core.page,a,b,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>20000</LINHA_F>','<CREATE_DATE_I>'+core.initialTime+'</CREATE_DATE_I>',"<CREATE_DATE_F>"+core.endTime+"</CREATE_DATE_F>");
           }
         }
@@ -2310,6 +2321,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       }
       else if($(a.target).hasClass("sel") && this.view === "list"){
         this.select_items=[];
+        this.unable_select=!1;
+        $(a.target).removeClass("sel");
         $(".icon.bselection").removeClass('sel');
         $(".remain_text").addClass('hide').removeClass('sel');
         $(".select_all").addClass('hide').removeClass('sel');
@@ -2360,28 +2373,24 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
     },*/
 
     filterForn:function(ev){
-      var status;
       this.reset();
-      
       if($(ev.target).find("option:selected").val().length){
-        this.cadstatus=$(ev.target).find("option:selected").val().bool();
+        if($(ev.target).attr('name') === "FORN_STATUS"){
+          this.cadstatus=$(ev.target).find("option:selected").val().bool();
+        }
+        else{
+          this.cadprincipal=$(ev.target).find("option:selected").val();
+        }
       }
       else{
-        this.cadstatus=undefined;
-      }
-      this.submit("<FEIR_COD>"+(this.fairval || "")+"</FEIR_COD>","<FORN_DESC>"+(this.fornval || "")+"</FORN_DESC>",(this.amosval || ""),!0,this.cadstatus);
-      //e.setloading(!0,!1);
-      //e.submit("<FEIR_COD>"+(e.fairval || "")+"</FEIR_COD>","<FORN_DESC>"+(e.fornval || "")+"</FORN_DESC>",(e.amosval || ""),!0);
-      /*this.fdata = aux.filter(function(a,b){
-        if(Boolean(a[$(ev.target).find("option:selected").attr("name")]) === $(ev.target).find("option:selected").val().bool()){
-          return a;
+        if($(ev.target).attr('name') === "FORN_STATUS"){
+          this.cadstatus=undefined;
         }
-      });
-      this.data=aux;
-      //console.dir(this.fdata);
-      //this.content.page = 0;
-      this.createbox(this.fdata, this.content.page, !0,"list");*/
-      //console.dir(typeof Boolean($(a.target).find("option:selected").val()));
+        else{
+          this.cadprincipal=undefined;
+        }  
+      }
+      this.submit("<FEIR_COD>"+(this.fairval || "")+"</FEIR_COD>","<FORN_DESC>"+(this.fornval || "")+"</FORN_DESC>",(this.amosval || ""),!0,this.cadstatus,this.cadprincipal);
     },
     starForn:function(ev){
       var el,i,html="",diff=!1,item,context=this;
@@ -2531,30 +2540,53 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         this.select_items=[];
         $(a.target).removeClass("sel");
         $(".select_all ").removeClass('hide');
-        $(".thumbnail .icon").removeClass('sel'); 
+        if(this.view === "images"){
+          $(".thumbnail .icon").removeClass('sel'); 
+        }
+        else{
+          $(".icon.bselection").removeClass('sel'); 
+        }
       }
       else{
         this.is_selected=!0;
         this.select_items=this.data;
         $(a.target).addClass("sel");
         $(".select_all ").removeClass('sel').addClass('hide');
-        $(".thumbnail .icon").addClass('sel');
+        if(this.view === "images"){
+          $(".thumbnail .icon").addClass('sel'); 
+        }
+        else{
+          $(".icon.bselection").addClass('sel'); 
+        }
       }
     },
+
     SelectAllSamples:function(a){
       var target,ctx=this;
       target=$(a.target);
       if(target.hasClass("sel")){
         target.removeClass("sel");
         this.fornidselect=0;
-        target.closest('.overview-container').find(".thumbnail .icon").removeClass('sel');
+        if(this.view === "images"){
+          target.closest('.overview-container').find(".thumbnail .icon").removeClass('sel');
+        }
+        else{
+          target.closest('.overview-container').find(".icon.bselection").removeClass('sel');
+        }
         this.select_items=[];
       }
       else{
         $(".select_all ").removeClass('sel');
         $(".thumbnail .icon").removeClass('sel');
+        $(".icon .bselection").removeClass('sel');
         target.addClass("sel");
-        target.closest('.overview-container').find(".thumbnail .icon").addClass('sel');
+
+        if(this.view === "images"){
+          target.closest('.overview-container').find(".thumbnail .icon").addClass('sel');
+        }
+        else{
+          target.closest('.overview-container').find(".icon.bselection").addClass('sel');
+        }
         this.fornidselect=parseInt(target.attr("name"));
         this.select_items=[];
         this.data.filter(function(el,index) {
@@ -3197,6 +3229,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       }
     },
     setEmailSent:function(a){
+      /*This method was changed since 15-03-2016 by Isaac
+      Now When click to send a email, the sample is checked by sent, but db base just is changed when in the new window
+      The email is sent, otherwise when user press F5, all samples will be equal.*/
       var length,context=this,l=0,obj,status;
       length=a.length;
       this.setloading(!0,!1);
@@ -3205,7 +3240,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             var html="",pattern="";
             context.data.filter(function(elem,index){
               if(elem.AMOS_ID == a[l]){
-                var day,date,month;
+                /*var day,date,month;
                 date=new Date();
                 if(parseInt(date.getDate())<10){
                   day="0"+parseInt(date.getDate());
@@ -3221,11 +3256,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                   month=parseInt(date.getMonth()+1);
                 }
 
-                date=""+date.getFullYear()+"-"+month+"-"+day;
+                date=""+date.getFullYear()+"-"+month+"-"+day;*/
                 $(".bemail[name='"+elem.AMOS_ID+"']").removeClass('disabled');
-                pattern+="<AMOS_ID>"+parseInt(elem.AMOS_ID)+"</AMOS_ID><FORN_ID>"+parseInt(elem.FORN_ID)+"</FORN_ID><FEIR_COD>"+parseInt(elem.FEIR_COD)+"</FEIR_COD><USU_COD>"+parseInt(elem.USU_COD)+"</USU_COD><AMOS_DESC>"+elem.AMOS_DESC+"</AMOS_DESC><AMOS_STATUS>"+elem.AMOS_STATUS+"</AMOS_STATUS><AMOS_ENV_EMAIL>1</AMOS_ENV_EMAIL><TECI_COD>"+(elem.TECI_COD || "")+"</TECI_COD><BASE_COD>"+(elem.BASE_COD || "")+"</BASE_COD><GRUP_COD>"+(elem.GRUP_COD || "")+"</GRUP_COD><SUBG_COD>"+(elem.SUBG_COD || "")+"</SUBG_COD><SEGM_COD>"+(elem.SEGM_COD || "")+"</SEGM_COD><FLAG_PRIORIDADE>"+elem.FLAG_PRIORIDADE+"</FLAG_PRIORIDADE><AMOS_HOMOLOGAR>"+elem.AMOS_HOMOLOGAR+"</AMOS_HOMOLOGAR><FLAG_FISICA>"+elem.FLAG_FISICA+"</FLAG_FISICA><CREATE_DATE>"+date+"</CREATE_DATE>";
+                /*pattern+="<AMOS_ID>"+parseInt(elem.AMOS_ID)+"</AMOS_ID><FORN_ID>"+parseInt(elem.FORN_ID)+"</FORN_ID><FEIR_COD>"+parseInt(elem.FEIR_COD)+"</FEIR_COD><USU_COD>"+parseInt(elem.USU_COD)+"</USU_COD><AMOS_DESC>"+elem.AMOS_DESC+"</AMOS_DESC><AMOS_STATUS>"+elem.AMOS_STATUS+"</AMOS_STATUS><AMOS_ENV_EMAIL>1</AMOS_ENV_EMAIL><TECI_COD>"+(elem.TECI_COD || "")+"</TECI_COD><BASE_COD>"+(elem.BASE_COD || "")+"</BASE_COD><GRUP_COD>"+(elem.GRUP_COD || "")+"</GRUP_COD><SUBG_COD>"+(elem.SUBG_COD || "")+"</SUBG_COD><SEGM_COD>"+(elem.SEGM_COD || "")+"</SEGM_COD><FLAG_PRIORIDADE>"+elem.FLAG_PRIORIDADE+"</FLAG_PRIORIDADE><AMOS_HOMOLOGAR>"+elem.AMOS_HOMOLOGAR+"</AMOS_HOMOLOGAR><FLAG_FISICA>"+elem.FLAG_FISICA+"</FLAG_FISICA><CREATE_DATE>"+date+"</CREATE_DATE>";
                 html+="<AMOS_DESC>"+elem.AMOS_DESC+"</AMOS_DESC><AMOS_PRECO>"+elem.AMOS_PRECO+"</AMOS_PRECO><AMOS_LARGURA_TOTAL>"+elem.AMOS_LARGURA_TOTAL+"</AMOS_LARGURA_TOTAL><AMOS_GRAMATURA_M>"+elem.AMOS_GRAMATURA_M+"</AMOS_GRAMATURA_M><AMOS_COTACAO_KG>"+elem.AMOS_COTACAO_KG+"</AMOS_COTACAO_KG><AMOS_LARGURA_UTIL>"+elem.AMOS_LARGURA_UTIL+"</AMOS_LARGURA_UTIL><AMOS_GRAMATURA_ML>"+elem.AMOS_GRAMATURA_ML+"</AMOS_GRAMATURA_ML><AMOS_ONCAS>"+elem.AMOS_ONCAS+"</AMOS_ONCAS><AMOS_PRECO_UM>"+elem.AMOS_PRECO_UM+"</AMOS_PRECO_UM>";
-                context.callService("gravarAmostras",pattern,html,"U");
+                context.callService("gravarAmostras",pattern,html,"U");*/
               }
             });
           l++;
@@ -3713,6 +3748,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       a && !this.loading ? (this.maskEl.fadeIn(), this.loading = !0) : !1 === a && this.loading && (this.maskEl.fadeOut(), this.loading = !1);
       return this.loading;
     },
+    
 
     getdata:function(filter){
       if(filter){
@@ -3812,6 +3848,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         this["cookie"+page][0].fornclick = val;
         this["cookie"+page][0].fornval = val;
       }
+    },
+    getContPrincipalFornecedores:function(){
+      return this.cadprincipal;
     },
     scroll:function(z) {
       var b, c, f, clone,e = this;

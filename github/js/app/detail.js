@@ -1699,7 +1699,7 @@ setFav:function(a){
   this.setloading(!0,!1);
   this.item = {};
   this.reset();
-  this.callService("singleForn",'<FEIR_COD></FEIR_COD><FORN_ID>'+code+'</FORN_ID><FORN_STATUS>0</FORN_STATUS><LINHA_I>1</LINHA_I><LINHA_F>20</LINHA_F>');
+  this.callService("singleForn",'<FEIR_COD></FEIR_COD><FORN_ID>'+code+'</FORN_ID><LINHA_I>1</LINHA_I><LINHA_F>20</LINHA_F>');
   /*if(!isNaN(code)){
     result=this.getdata(code);
   }

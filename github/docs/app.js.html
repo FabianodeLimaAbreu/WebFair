@@ -1682,7 +1682,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 
           this.data = a.sortBy("FORN_ID");
           this.content.changeview("list");
-
+          console.dir(this.data);
           if(!this.cookiefornecedores.length){
             var scroll={
               "fornval":''+this.fornval,
@@ -2487,18 +2487,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         this.cadstatus=undefined;
       }
       this.submit("&lt;FEIR_COD>"+(this.fairval || "")+"&lt;/FEIR_COD>","&lt;FORN_DESC>"+(this.fornval || "")+"&lt;/FORN_DESC>",(this.amosval || ""),!0,this.cadstatus);
-      //e.setloading(!0,!1);
-      //e.submit("&lt;FEIR_COD>"+(e.fairval || "")+"&lt;/FEIR_COD>","&lt;FORN_DESC>"+(e.fornval || "")+"&lt;/FORN_DESC>",(e.amosval || ""),!0);
-      /*this.fdata = aux.filter(function(a,b){
-        if(Boolean(a[$(ev.target).find("option:selected").attr("name")]) === $(ev.target).find("option:selected").val().bool()){
-          return a;
-        }
-      });
-      this.data=aux;
-      //console.dir(this.fdata);
-      //this.content.page = 0;
-      this.createbox(this.fdata, this.content.page, !0,"list");*/
-      //console.dir(typeof Boolean($(a.target).find("option:selected").val()));
     },
     starForn:function(ev){
       var el,i,html="",diff=!1,item,context=this;
@@ -2648,14 +2636,24 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         this.select_items=[];
         $(a.target).removeClass("sel");
         $(".select_all ").removeClass('hide');
-        $(".thumbnail .icon").removeClass('sel'); 
+        if(this.view === "images"){
+          $(".thumbnail .icon").removeClass('sel'); 
+        }
+        else{
+          $(".icon.bselection").removeClass('sel'); 
+        }
       }
       else{
         this.is_selected=!0;
         this.select_items=this.data;
         $(a.target).addClass("sel");
         $(".select_all ").removeClass('sel').addClass('hide');
-        $(".thumbnail .icon").addClass('sel');
+        if(this.view === "images"){
+          $(".thumbnail .icon").addClass('sel'); 
+        }
+        else{
+          $(".icon.bselection").addClass('sel'); 
+        }
       }
     },
     SelectAllSamples:function(a){
@@ -2945,8 +2943,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               }
               // console.dir(temp);
               // console.dir(tempforn);
-              $.cookie("sendemail", temp, {expires:7, path:"/"});
-              $.cookie("tempforn", tempforn, {expires:7, path:"/"});
+              /*$.cookie("sendemail", temp, {expires:7, path:"/"});
+              $.cookie("tempforn", tempforn, {expires:7, path:"/"});*/
+              localStorage.setItem('sendemail', JSON.stringify(temp));
+              localStorage.setItem('tempforn', JSON.stringify(tempforn));
               context.modal.open("template",[listtemplates,amos_sel,contemail,item[0]],!1,!1);
             }
           }
@@ -3312,6 +3312,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       }
     },
     setEmailSent:function(a){
+      /*This method was changed since 15-03-2016 by Isaac
+      Now When click to send a email, the sample is checked by sent, but db base just is changed when in the new window
+      The email is sent, otherwise when user press F5, all samples will be equal.*/
       var length,context=this,l=0,obj,status;
       length=a.length;
       this.setloading(!0,!1);
@@ -3320,7 +3323,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             var html="",pattern="";
             context.data.filter(function(elem,index){
               if(elem.AMOS_ID == a[l]){
-                var day,date,month;
+                /*var day,date,month;
                 date=new Date();
                 if(parseInt(date.getDate())&lt;10){
                   day="0"+parseInt(date.getDate());
@@ -3336,11 +3339,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                   month=parseInt(date.getMonth()+1);
                 }
 
-                date=""+date.getFullYear()+"-"+month+"-"+day;
+                date=""+date.getFullYear()+"-"+month+"-"+day;*/
                 $(".bemail[name='"+elem.AMOS_ID+"']").removeClass('disabled');
-                pattern+="&lt;AMOS_ID>"+parseInt(elem.AMOS_ID)+"&lt;/AMOS_ID>&lt;FORN_ID>"+parseInt(elem.FORN_ID)+"&lt;/FORN_ID>&lt;FEIR_COD>"+parseInt(elem.FEIR_COD)+"&lt;/FEIR_COD>&lt;USU_COD>"+parseInt(elem.USU_COD)+"&lt;/USU_COD>&lt;AMOS_DESC>"+elem.AMOS_DESC+"&lt;/AMOS_DESC>&lt;AMOS_STATUS>"+elem.AMOS_STATUS+"&lt;/AMOS_STATUS>&lt;AMOS_ENV_EMAIL>1&lt;/AMOS_ENV_EMAIL>&lt;TECI_COD>"+(elem.TECI_COD || "")+"&lt;/TECI_COD>&lt;BASE_COD>"+(elem.BASE_COD || "")+"&lt;/BASE_COD>&lt;GRUP_COD>"+(elem.GRUP_COD || "")+"&lt;/GRUP_COD>&lt;SUBG_COD>"+(elem.SUBG_COD || "")+"&lt;/SUBG_COD>&lt;SEGM_COD>"+(elem.SEGM_COD || "")+"&lt;/SEGM_COD>&lt;FLAG_PRIORIDADE>"+elem.FLAG_PRIORIDADE+"&lt;/FLAG_PRIORIDADE>&lt;AMOS_HOMOLOGAR>"+elem.AMOS_HOMOLOGAR+"&lt;/AMOS_HOMOLOGAR>&lt;FLAG_FISICA>"+elem.FLAG_FISICA+"&lt;/FLAG_FISICA>&lt;CREATE_DATE>"+date+"&lt;/CREATE_DATE>";
+                /*pattern+="&lt;AMOS_ID>"+parseInt(elem.AMOS_ID)+"&lt;/AMOS_ID>&lt;FORN_ID>"+parseInt(elem.FORN_ID)+"&lt;/FORN_ID>&lt;FEIR_COD>"+parseInt(elem.FEIR_COD)+"&lt;/FEIR_COD>&lt;USU_COD>"+parseInt(elem.USU_COD)+"&lt;/USU_COD>&lt;AMOS_DESC>"+elem.AMOS_DESC+"&lt;/AMOS_DESC>&lt;AMOS_STATUS>"+elem.AMOS_STATUS+"&lt;/AMOS_STATUS>&lt;AMOS_ENV_EMAIL>1&lt;/AMOS_ENV_EMAIL>&lt;TECI_COD>"+(elem.TECI_COD || "")+"&lt;/TECI_COD>&lt;BASE_COD>"+(elem.BASE_COD || "")+"&lt;/BASE_COD>&lt;GRUP_COD>"+(elem.GRUP_COD || "")+"&lt;/GRUP_COD>&lt;SUBG_COD>"+(elem.SUBG_COD || "")+"&lt;/SUBG_COD>&lt;SEGM_COD>"+(elem.SEGM_COD || "")+"&lt;/SEGM_COD>&lt;FLAG_PRIORIDADE>"+elem.FLAG_PRIORIDADE+"&lt;/FLAG_PRIORIDADE>&lt;AMOS_HOMOLOGAR>"+elem.AMOS_HOMOLOGAR+"&lt;/AMOS_HOMOLOGAR>&lt;FLAG_FISICA>"+elem.FLAG_FISICA+"&lt;/FLAG_FISICA>&lt;CREATE_DATE>"+date+"&lt;/CREATE_DATE>";
                 html+="&lt;AMOS_DESC>"+elem.AMOS_DESC+"&lt;/AMOS_DESC>&lt;AMOS_PRECO>"+elem.AMOS_PRECO+"&lt;/AMOS_PRECO>&lt;AMOS_LARGURA_TOTAL>"+elem.AMOS_LARGURA_TOTAL+"&lt;/AMOS_LARGURA_TOTAL>&lt;AMOS_GRAMATURA_M>"+elem.AMOS_GRAMATURA_M+"&lt;/AMOS_GRAMATURA_M>&lt;AMOS_COTACAO_KG>"+elem.AMOS_COTACAO_KG+"&lt;/AMOS_COTACAO_KG>&lt;AMOS_LARGURA_UTIL>"+elem.AMOS_LARGURA_UTIL+"&lt;/AMOS_LARGURA_UTIL>&lt;AMOS_GRAMATURA_ML>"+elem.AMOS_GRAMATURA_ML+"&lt;/AMOS_GRAMATURA_ML>&lt;AMOS_ONCAS>"+elem.AMOS_ONCAS+"&lt;/AMOS_ONCAS>&lt;AMOS_PRECO_UM>"+elem.AMOS_PRECO_UM+"&lt;/AMOS_PRECO_UM>";
-                context.callService("gravarAmostras",pattern,html,"U");
+                context.callService("gravarAmostras",pattern,html,"U");*/
               }
             });
           l++;
@@ -3828,6 +3831,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       a &amp;&amp; !this.loading ? (this.maskEl.fadeIn(), this.loading = !0) : !1 === a &amp;&amp; this.loading &amp;&amp; (this.maskEl.fadeOut(), this.loading = !1);
       return this.loading;
     },
+    
 
     getdata:function(filter){
       if(filter){
@@ -4196,7 +4200,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
   });
   new App;
   Spine.Route.setup();
-});</pre>
+});
+</pre>
 	</article>
 </section>
 
@@ -4217,7 +4222,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Fri Mar 11th 2016 using the <a
+		on Thu Mar 17th 2016 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>
