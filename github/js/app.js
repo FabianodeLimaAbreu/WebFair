@@ -350,10 +350,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             this.endTimeForn=this.cookiefornecedores[0].dates[1];
             this.prices=this.cookiefornecedores[0].prices;
             this.refine=this.cookiefornecedores[0].refine;
-            this.fstatus=this.cookiefornecedores[0].fstatus;
+            this.cadstatus=this.cookiefornecedores[0].fstatus;
+            this.cadprincipal=this.cookiefornecedores[0].cadprincipal;
+            this.fornclick=this.cookiefornecedores[0].fornclick;
             this.nsort=this.cookiefornecedores[0].nsort;
             this.combofilter=this.cookiefornecedores[0].combofilter;
-            this.fornclick=this.cookiefornecedores[0].fornclick;
             //console.dir(this.cookiefornecedores[0]);
 
 
@@ -364,7 +365,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               this.prices=this.cookiefornecedores[0].prices;
               this.refine=this.cookiefornecedores[0].refine;
               this.combofilter=this.cookiefornecedores[0].combofilter;
-              this.fstatus=this.cookiefornecedores[0].fstatus;
+              this.cadstatus=this.cookiefornecedores[0].fstatus;
+              this.cadprincipal=this.cookiefornecedores[0].cadprincipal;
+              this.fornclick=this.cookiefornecedores[0].fornclick;
               this.nsort=this.cookiefornecedores[0].nsort;
               this.fornclick=this.cookiefornecedores[0].fornclick;
               //console.dir(this.cookiefornecedores[0]);
@@ -391,7 +394,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 this.prices=this.cookiefornecedores[0].prices;
                 this.refine=this.cookiefornecedores[0].refine;
                 this.combofilter=this.cookiefornecedores[0].combofilter;
-                this.fstatus=this.cookiefornecedores[0].fstatus;
+                this.cadstatus=this.cookiefornecedores[0].fstatus;
+                this.cadprincipal=this.cookiefornecedores[0].cadprincipal;
                 this.nsort=this.cookiefornecedores[0].nsort;  
                 this.fornclick=this.cookiefornecedores[0].fornclick;
                 //console.dir(this.cookiefornecedores[0]);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
@@ -456,7 +460,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           $("html").attr("class","").addClass(this.page);
           this.writePage(this.page);
           this.setloading(!0,!1);
-          this.submit(a,b,c,!1);
+          this.submit(a,b,c,!1,this.cadstatus,this.cadprincipal);
         },
         "fornecedores/*func/*code":function(a){
           var context=this;
@@ -1466,6 +1470,22 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             else{
               vprincipal="";
             }
+
+            $("input[name='initial_date']").datepicker('setDate', core.initialTimeForn.slice(0,4)+'-'+core.initialTimeForn.slice(5, 7)+"-"+core.initialTimeForn.slice(8, 10));
+            $("input[name='end_date']").datepicker('setDate', core.endTimeForn.slice(0,4)+'-'+core.endTimeForn.slice(5, 7)+"-"+core.endTimeForn.slice(8, 10));
+            
+            $("select[name='FORN_STATUS']").find("option").each(function(index, el) {
+              if($(el).attr("value").bool() === core.cadstatus){
+                $(el).attr('selected', 'selected');
+              }
+            });
+
+            $("select[name='CONT_PRINCIPAL']").find("option").each(function(index, el) {
+              if($(el).attr("value") === core.cadprincipal){
+                $(el).attr('selected', 'selected');
+              }
+            });
+
             core.callService(core.page,a,b,fstatus,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>'+((core.content.page+1)*core.itens_by_page)+'</LINHA_F>','<CREATE_DATE_I>'+core.initialTimeForn+'</CREATE_DATE_I>'+"<CREATE_DATE_F>"+core.endTimeForn+"</CREATE_DATE_F>",vprincipal);
             //core.callService(core.page,a,b,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>20000</LINHA_F>','<CREATE_DATE_I>'+core.initialTime+'</CREATE_DATE_I>',"<CREATE_DATE_F>"+core.endTime+"</CREATE_DATE_F>");
           }
@@ -1587,7 +1607,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               "prices":this.prices,
               "refine":this.filter.list,
               "combofilter":this.combofilter,
-              "fstatus":this.fstatus,
+              "fstatus":this.cadstatus,
+              "cadprincipal":this.cadprincipal,
               "nsort":this.nsort,
               "view":""+this.view,
               "posscroll":(this.posscroll || 0),
@@ -2390,6 +2411,25 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           this.cadprincipal=undefined;
         }  
       }
+      var scroll={
+        "fornval":''+this.fornval,
+        "fairval":''+this.fairval,
+        "amosval":''+this.amosval,
+        "fornclick":''+(this.fornclick || ""),
+        "dates":[this.initialTimeForn,this.endTimeForn],
+        "prices":this.prices,
+        "refine":this.filter.list,
+        "combofilter":this.combofilter,
+        "fstatus":this.cadstatus,
+        "nsort":this.nsort,
+        "cadprincipal":this.cadprincipal,
+        "view":""+this.view,
+        "posscroll":(this.posscroll || 0),
+        "total":(this.total || 20)
+      }
+
+      $.cookie.json = !0;
+      $.cookie("posscroll"+"fornecedores", scroll, {expires:7, path:"/"});
       this.submit("<FEIR_COD>"+(this.fairval || "")+"</FEIR_COD>","<FORN_DESC>"+(this.fornval || "")+"</FORN_DESC>",(this.amosval || ""),!0,this.cadstatus,this.cadprincipal);
     },
     starForn:function(ev){
@@ -3777,26 +3817,47 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
     },
     savingCookie:function(what,tofornclick,valforn){
       if(tofornclick){
-        if($.cookie("cookiefornecedores")){
-          this.cookieamostras.push(jQuery.parseJSON($.cookie("posscroll"+"cookiefornecedores")));
-          var scroll={
-            "fornval":''+this.cookiefornecedores[0].fornval,
-            "fairval":''+this.cookiefornecedores[0].fairval,
-            "amosval":''+this.cookiefornecedores[0].amosval,
-            "fornclick":''+valforn,
-            "dates":this.cookiefornecedores[0].dates[0],
-            "prices":this.cookiefornecedores[0].prices,
-            "refine":this.cookiefornecedores[0].refine,
-            "combofilter":this.cookiefornecedores[0].combofilter,
-            "fstatus":this.cookiefornecedores[0].fstatus,
-            "nsort":this.cookiefornecedores[0].nsort,
-            "view":""+this.cookiefornecedores[0].view,
-            "posscroll":(this.cookiefornecedores[0].posscroll || 0),
-            "total":(this.cookiefornecedores[0].total || 20)
-          }
+        if(what === "fornecedores"){
+          if($.cookie("cookiefornecedores")){
+            this.cookiefornecedores.push(jQuery.parseJSON($.cookie("posscroll"+"cookiefornecedores")));
+            var scroll={
+              "fornval":''+this.cookiefornecedores[0].fornval,
+              "fairval":''+this.cookiefornecedores[0].fairval,
+              "amosval":''+this.cookiefornecedores[0].amosval,
+              "fornclick":''+valforn,
+              "dates":this.cookiefornecedores[0].dates[0],
+              "prices":this.cookiefornecedores[0].prices,
+              "refine":this.cookiefornecedores[0].refine,
+              "combofilter":this.cookiefornecedores[0].combofilter,
+              "fstatus":this.cookiefornecedores[0].cadstatus,
+              "nsort":this.cookiefornecedores[0].nsort,
+              "view":""+this.cookiefornecedores[0].view,
+              "cadprincipal":this.cookiefornecedores[0].cadprincipal,
+              "posscroll":(this.cookiefornecedores[0].posscroll || 0),
+              "total":(this.cookiefornecedores[0].total || 20)
+            }
 
-          //console.dir(this.cookiefornecedores[0]); 
-          //console.dir(this.fornecedores.item);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+            //console.dir(this.cookiefornecedores[0]); 
+            //console.dir(this.fornecedores.item);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+          }
+          else{
+            var scroll={
+              "fornval":''+this.fornval,
+              "fairval":''+this.fairval,
+              "amosval":''+this.amosval,
+              "fornclick":''+(valforn || ""),
+              "dates":[this.initialTimeForn,this.endTimeForn],
+              "prices":this.prices,
+              "refine":this.filter.list,
+              "combofilter":this.combofilter,
+              "fstatus":this.cadstatus,
+              "nsort":this.nsort,
+              "cadprincipal":this.cadprincipal,
+              "view":""+this.view,
+              "posscroll":(this.posscroll || 0),
+              "total":(this.total || 20)
+            }
+          }
         }
         else{
           var scroll={
@@ -3810,6 +3871,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             "combofilter":this.combofilter,
             "fstatus":this.fstatus,
             "nsort":this.nsort,
+            "cadprincipal":this.cadprincipal,
             "view":""+this.view,
             "posscroll":(this.posscroll || 0),
             "total":(this.total || 20)
@@ -3820,21 +3882,42 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         }
       }
       else{
-        var scroll={
-          "fornval":''+this.fornval,
-          "fairval":''+this.fairval,
-          "amosval":''+this.amosval,
-          "fornclick":''+this.fornclick,
-          "dates":[this.initialTimeAmos,this.endTimeAmos],
-          "prices":this.prices,
-          "refine":this.filter.list,
-          "combofilter":this.combofilter,
-          "fstatus":this.fstatus,
-          "nsort":this.nsort,
-          "view":""+this.view,
-          "posscroll":(this.posscroll || 0),
-          "total":(this.total || 20)
-        };
+        if(what === "amostras"){
+          var scroll={
+            "fornval":''+this.fornval,
+            "fairval":''+this.fairval,
+            "amosval":''+this.amosval,
+            "fornclick":''+this.fornclick,
+            "dates":[this.initialTimeAmos,this.endTimeAmos],
+            "prices":this.prices,
+            "refine":this.filter.list,
+            "combofilter":this.combofilter,
+            "fstatus":this.fstatus,
+            "nsort":this.nsort,
+            "view":""+this.view,
+            "cadprincipal":this.cadprincipal,
+            "posscroll":(this.posscroll || 0),
+            "total":(this.total || 20)
+          };
+        }
+        else{
+          var scroll={
+            "fornval":''+this.fornval,
+            "fairval":''+this.fairval,
+            "amosval":''+this.amosval,
+            "fornclick":''+this.fornclick,
+            "dates":[this.initialTimeForn,this.endTimeForn],
+            "prices":this.prices,
+            "refine":this.filter.list,
+            "combofilter":this.combofilter,
+            "fstatus":this.cadstatus,
+            "nsort":this.nsort,
+            "view":""+this.view,
+            "cadprincipal":this.cadprincipal,
+            "posscroll":(this.posscroll || 0),
+            "total":(this.total || 20)
+          };
+        }
         
       }
       $.cookie.json = !0;
@@ -3925,7 +4008,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               //console.log("chegou");
               e.content.page++;
               e.setloading(!0,!1);
-              e.submit("<FEIR_COD>"+(e.fairval || "")+"</FEIR_COD>","<FORN_DESC>"+(e.fornval || "")+"</FORN_DESC>",(e.amosval || ""),!0,e.cadstatus);
+              e.submit("<FEIR_COD>"+(e.fairval || "")+"</FEIR_COD>","<FORN_DESC>"+(e.fornval || "")+"</FORN_DESC>",(e.amosval || ""),!0,e.cadstatus,e.cadprincipal);
               //e.createbox(e.data, e.content.page, !0,"list");
             }
             break;
@@ -4058,6 +4141,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.prices=[];
       this.refine=[];
       this.fstatus=null;
+      this.cadstatus=undefined;
+      this.cadprincipal=undefined;
       this.fairval="";
       this.fornval="";
       this.amosval="";
@@ -4092,6 +4177,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       $(".main_opt_item.tooltip.tooltip-selectable").eq(0).removeClass('has');
 
       this.fstatus=null;
+      this.cadstatus=undefined;
+      this.cadprincipal=undefined;
       $(".status button").removeClass('sel');
       $(".status.tooltip-selectable").removeClass('has');
       //this.nsort="AMOS_DESC";
@@ -4113,6 +4200,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       $(".not-autoshow").removeClass('sel');
       $(".sub-refine").addClass('hide').hide().find("ul").empty();
 
+      $("select[name='FORN_STATUS']").find("option").removeAttr('selected');
+      $("select[name='CONT_PRINCIPAL']").find("option").removeAttr('selected');
       //Filter list
       //this.filterlist.length=0;
 

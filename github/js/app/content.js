@@ -20,7 +20,7 @@ window.Spotlight = Spine.Controller.sub({
     //"click .spotlight button":"select"
   }, 
   select:function(a) {
-    var fair="<FEIR_COD>",name="<FORN_ID>",amos="<AMOS_DESC>";
+    var fair="<FEIR_COD>",name="<FORN_ID>",amos="<AMOS_DESC>",vprincipal="";
     if("object" === typeof a) {
      a = $(a.target);
     }else {
@@ -80,13 +80,16 @@ window.Spotlight = Spine.Controller.sub({
       this.close();
     }
     else{
+      if(typeof this.getContPrincipalFornecedores() !== "undefined"){
+        vprincipal='<CONT_PRINCIPAL>'+this.getContPrincipalFornecedores()+'</CONT_PRINCIPAL>';
+      }
       //this.savingCookie("fornecedores");
       $(".container-fullsize.scroller").scrollTop(0);
       this.setCookieFair("fornecedores",this.getFornVal().replace(" ","_"));
       this.mode="fornecedores/"+((""+this.getFairVal()).replace(" ","_") || "padrao")+"/"+((""+this.getFornVal()).replace(" ","_") || "padrao")+"/"+"padrao";
       //console.log(this.mode);
       this.navigate(this.mode, !1);
-      this.callService("fornecedores",fair,name,'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20'+'</LINHA_F>','<CREATE_DATE_I>'+this.getInitialTime(!1)+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.getEndTime(!1)+'</CREATE_DATE_F>','<CONT_PRINCIPAL>'+this.getContPrincipalFornecedores()+'</CONT_PRINCIPAL>');
+      this.callService("fornecedores",fair,name,'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20'+'</LINHA_F>','<CREATE_DATE_I>'+this.getInitialTime(!1)+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.getEndTime(!1)+'</CREATE_DATE_F>',vprincipal);
       //this.callService("fornecedores",fair,name,'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20000'+'</LINHA_F>','<CREATE_DATE_I>'+this.getInitialTime()+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.getEndTime()+'</CREATE_DATE_F>');
       this.close();
     }
