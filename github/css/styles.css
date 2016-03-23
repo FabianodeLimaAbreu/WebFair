@@ -442,23 +442,23 @@ header .logo-print {
 .menu .menu-item a.bmenu-legend:after {
   width: 30px;
   height: 30px;
-  background-position: -10px -50px;
+  background-position: -10px -530px;
   left: 10px;
 }
 .menu .menu-item a.bmenu-settings:after {
   width: 30px;
   height: 30px;
-  background-position: -10px -530px;
+  background-position: -10px -570px;
 }
 .menu .menu-item a.bmenu-send_receive:after {
   width: 40px;
   height: 30px;
-  background-position: -10px -290px;
+  background-position: -10px -330px;
 }
 .menu .menu-item a.bmenu-logoff:after {
   width: 25px;
   height: 30px;
-  background-position: -10px -250px;
+  background-position: -10px -90px;
   right: 2px;
   left: 0;
 }
@@ -486,7 +486,7 @@ header .logo-print {
 .tooltip-item.bselect span.icon.bselection:hover:after {
   width: 15px;
   height: 15px;
-  background-position: -10px -1825px;
+  background-position: -35px -1865px;
   width: 25px;
 }
 .tooltip-item.bannex-leg:after {
@@ -498,13 +498,13 @@ header .logo-print {
   background: url("../images/sprite.png") top left no-repeat;
   width: 10px;
   height: 25px;
-  background-position: -35px -570px;
+  background-position: -10px -610px;
 }
 .tooltip-item.bannex-leg.add:after {
   left: 20px;
   width: 15px;
   height: 25px;
-  background-position: -10px -570px;
+  background-position: -30px -610px;
 }
 .tooltip-item.bcircle {
   cursor: pointer;
@@ -518,7 +518,7 @@ header .logo-print {
   background: url("../images/sprite.png") top left no-repeat;
   width: 20px;
   height: 20px;
-  background-position: -10px -1159px;
+  background-position: -10px -1139px;
 }
 .tooltip-item.bcircle.bcicle-other {
   display: inline;
@@ -528,7 +528,7 @@ header .logo-print {
 .tooltip-item.bcircle:hover:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -889px;
+  background-position: -10px -1169px;
 }
 .tooltip-item.bsquare {
   cursor: pointer;
@@ -542,7 +542,7 @@ header .logo-print {
   background: url("../images/sprite.png") top left no-repeat;
   width: 20px;
   height: 20px;
-  background-position: -10px -1129px;
+  background-position: -10px -1109px;
 }
 .tooltip-item.bsquare.bcicle-other {
   display: inline;
@@ -552,7 +552,7 @@ header .logo-print {
 .tooltip-item.bsquare:hover:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -979px;
+  background-position: -10px -959px;
 }
 .tooltip-item.btrash-big:after {
   left: 10px;
@@ -591,7 +591,7 @@ header .logo-print {
   background: url("../images/sprite.png") top left no-repeat;
   width: 30px;
   height: 30px;
-  background-position: -10px -450px;
+  background-position: -10px -290px;
 }
 .tooltip-item.tooltip-item-supplier.bminus {
   cursor: pointer;
@@ -615,7 +615,7 @@ header .logo-print {
   background: url("../images/sprite.png") top left no-repeat;
   width: 30px;
   height: 30px;
-  background-position: -10px -330px;
+  background-position: -10px -50px;
 }
 .tooltip-content {
   float: left;
@@ -738,7 +738,7 @@ header .logo-print {
 .tooltip-content.filter li a:before {
   margin-top: -5px;
   background: url("../images/sprite.png") top left no-repeat;
-  background-position: -10px -1129px;
+  background-position: -10px -1109px;
   content: "";
   width: 20px;
   height: 20px;
@@ -749,7 +749,7 @@ header .logo-print {
   background: url("../images/sprite.png") top left no-repeat;
   width: 20px;
   height: 20px;
-  background-position: -10px -979px;
+  background-position: -10px -959px;
 }
 .tooltip-content.filter .filterlist {
   border-right: solid 1px #e6ebf0;
@@ -1473,17 +1473,17 @@ form.search {
 .container-fullsize .right-list .bimages:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1369px;
+  background-position: -10px -1229px;
 }
 .container-fullsize .right-list .blist:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1339px;
+  background-position: -10px -1349px;
 }
 .container-fullsize .right-list .bedit:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1219px;
+  background-position: -10px -1619px;
 }
 .container-fullsize .main_opt {
   position: relative;
@@ -1545,7 +1545,7 @@ form.search {
 .container-fullsize .main_opt .main_opt_item .main_opt_button.bemail:after {
   width: 20px;
   height: 15px;
-  background-position: -10px -1775px;
+  background-position: -10px -1815px;
 }
 .container-fullsize .main_opt .main_opt_item .main_opt_button.bemail.disabled {
   cursor: default;
@@ -1553,12 +1553,12 @@ form.search {
 .container-fullsize .main_opt .main_opt_item .main_opt_button.bemail.disabled:after {
   width: 20px;
   height: 15px;
-  background-position: -10px -1875px;
+  background-position: -10px -1915px;
 }
 .container-fullsize .main_opt .main_opt_item .main_opt_button.btrash:after {
   width: 19px;
   height: 20px;
-  background-position: -10px -799px;
+  background-position: -10px -839px;
 }
 .container-fullsize .main_opt .main_opt_item .main_opt_button.bsel {
   max-width: 30px;
@@ -1617,7 +1617,7 @@ form.search {
   background: url("../images/sprite.png") top left no-repeat;
   width: 20px;
   height: 20px;
-  background-position: -10px -739px;
+  background-position: -10px -779px;
   position: relative;
   float: left;
 }
@@ -1730,7 +1730,7 @@ form.search {
   display: inline-block;
   width: 10px;
   height: 10px;
-  background-position: -40px -769px;
+  background-position: -40px -779px;
   position: relative;
   float: right;
   right: 5px;
@@ -1739,7 +1739,7 @@ form.search {
 .aside-edit .category li .category_button.actived:after {
   width: 10px;
   height: 10px;
-  background-position: -40px -739px;
+  background-position: -39px -839px;
 }
 .aside-edit .category .sub_category {
   padding: 0;
@@ -1821,6 +1821,15 @@ form.search {
 .navbar .navbar-nav li:hover {
   border-bottom: none;
   background: #fff;
+}
+.doubled-contact {
+  display: block;
+  margin: 4px 26px;
+  position: absolute;
+  background: url("../images/sprite.png") top left no-repeat;
+  width: 30px;
+  height: 30px;
+  background-position: -10px -10px;
 }
 /*********************************
 ************************************	TABLE ***************************/
@@ -2015,7 +2024,7 @@ form.search {
   background: url("../images/sprite.png") top left no-repeat;
   width: 20px;
   height: 20px;
-  background-position: -10px -949px;
+  background-position: -10px -929px;
   display: inline-block;
   position: relative;
   margin-right: 5px;
@@ -2030,7 +2039,7 @@ form.search {
 .detail .detail-sample-container .sample-buttons li button.btag:after {
   width: 20px;
   height: 17px;
-  background-position: -10px -1668px;
+  background-position: -10px -1708px;
   top: 5px;
   left: 10px;
   float: left;
@@ -2403,7 +2412,7 @@ form.search {
   background: url("../images/sprite.png") top left no-repeat;
   width: 21px;
   height: 22px;
-  background-position: -10px -707px;
+  background-position: -10px -715px;
   margin: 10px 10px 0 0;
   float: right;
 }
@@ -2442,7 +2451,7 @@ form.search {
 .modal.bad .alertclose {
   width: 21px;
   height: 22px;
-  background-position: -10px -675px;
+  background-position: -10px -747px;
 }
 .modal.bad span {
   background: url(../images/alert.png) 0 -80px;
@@ -2611,7 +2620,7 @@ div.modalie {
   background: url("../images/sprite.png") top left no-repeat;
   width: 20px;
   height: 20px;
-  background-position: -10px -859px;
+  background-position: -10px -869px;
   display: inline-block;
   position: relative;
   margin-right: 5px;
@@ -2639,7 +2648,7 @@ div.modalie {
   margin: 3px 0 0 8px;
   width: 15px;
   height: 15px;
-  background-position: -10px -1800px;
+  background-position: -10px -1865px;
 }
 .icon.newuser {
   margin-bottom: 10px;
@@ -2653,7 +2662,7 @@ div.modalie {
   background: url("../images/sprite.png") top left no-repeat;
   width: 16px;
   height: 17px;
-  background-position: -10px -1695px;
+  background-position: -10px -1735px;
   top: 6px;
   left: 5px;
 }
@@ -2663,7 +2672,7 @@ div.modalie {
 .icon.close-temp:before {
   width: 15px;
   height: 15px;
-  background-position: -10px -1850px;
+  background-position: -35px -1965px;
 }
 .icon.gotop:after {
   content: "";
@@ -2676,7 +2685,7 @@ div.modalie {
   background: url("../images/sprite.png") top left no-repeat;
   width: 15px;
   height: 15px;
-  background-position: -10px -1850px;
+  background-position: -35px -1965px;
   margin: 1px -8px 0 10px;
 }
 .icon.finishit {
@@ -2694,7 +2703,7 @@ div.modalie {
   background: url("../images/sprite.png") top left no-repeat;
   width: 14px;
   height: 12px;
-  background-position: -36px -1695px;
+  background-position: -36px -1735px;
   margin: 3px -8px 0 10px;
 }
 .icon.delete,
@@ -2709,7 +2718,7 @@ div.modalie {
   background: url("../images/sprite.png") top left no-repeat;
   width: 16px;
   height: 19px;
-  background-position: -10px -1639px;
+  background-position: -10px -1679px;
   display: inline-block;
   position: relative;
   margin-right: 5px;
@@ -2724,7 +2733,7 @@ div.modalie {
   background: url("../images/sprite.png") top left no-repeat;
   width: 16px;
   height: 19px;
-  background-position: -10px -1639px;
+  background-position: -10px -1679px;
   margin: 0 7px 0 0;
 }
 .icon.bgoselect,
@@ -2739,7 +2748,7 @@ div.modalie {
   background: url("../images/sprite.png") top left no-repeat;
   width: 15px;
   height: 15px;
-  background-position: -10px -1800px;
+  background-position: -10px -1865px;
   display: inline-block;
   position: relative;
   margin-right: 5px;
@@ -2761,7 +2770,7 @@ div.modalie {
   background: url("../images/sprite.png") top left no-repeat;
   width: 15px;
   height: 15px;
-  background-position: -35px -1800px;
+  background-position: -10px -1840px;
   display: inline-block;
   position: absolute;
   margin-right: 5px;
@@ -2784,7 +2793,7 @@ div.modalie {
   background: url("../images/sprite.png") top left no-repeat;
   width: 20px;
   height: 20px;
-  background-position: -10px -1219px;
+  background-position: -10px -1619px;
   display: inline-block;
   position: relative;
   margin-right: 5px;
@@ -2805,14 +2814,14 @@ div.modalie {
 .icon.save-temp:before {
   width: 17px;
   height: 17px;
-  background-position: -10px -1722px;
+  background-position: -10px -1762px;
 }
 .icon.send-temp:before {
   margin: 0 0 0 0;
   top: 7px;
   width: 26px;
   height: 20px;
-  background-position: -10px -1009px;
+  background-position: -10px -989px;
 }
 .icon.edit-big {
   background: none;
@@ -2825,7 +2834,7 @@ div.modalie {
   background: url("../images/sprite.png") top left no-repeat;
   width: 30px;
   height: 30px;
-  background-position: -10px -10px;
+  background-position: -10px -490px;
   display: block;
   position: relative;
   content: "";
@@ -2857,7 +2866,7 @@ div.modalie {
   background: url("../images/sprite.png") top left no-repeat;
   width: 25px;
   height: 30px;
-  background-position: -10px -490px;
+  background-position: -10px -450px;
   display: block;
   position: relative;
   content: "";
@@ -2866,7 +2875,7 @@ div.modalie {
   background: url("../images/sprite.png") top left no-repeat;
   width: 30px;
   height: 30px;
-  background-position: -10px -450px;
+  background-position: -10px -290px;
   display: block;
   position: relative;
   content: "";
@@ -2894,7 +2903,7 @@ div.modalie {
   background: url("../images/sprite.png") top left no-repeat;
   width: 10px;
   height: 25px;
-  background-position: -35px -570px;
+  background-position: -10px -610px;
   display: block;
   position: relative;
   content: "";
@@ -2929,7 +2938,7 @@ div.modalie {
 .icon.bzoom:after {
   width: 15px;
   height: 15px;
-  background-position: -35px -1850px;
+  background-position: -35px -1890px;
   display: block;
   left: 0;
   top: 0;
@@ -2942,7 +2951,7 @@ div.modalie {
 .icon.bselection:after {
   width: 15px;
   height: 15px;
-  background-position: -10px -1825px;
+  background-position: -35px -1865px;
   display: block;
   left: 0;
   top: 0;
@@ -2952,26 +2961,26 @@ div.modalie {
 .icon.bselection:hover:after {
   width: 15px;
   height: 15px;
-  background-position: -35px -1825px;
+  background-position: -10px -1890px;
   width: 25px;
 }
 .icon.bselection.sel:after {
   width: 15px;
   height: 15px;
-  background-position: -35px -1825px;
+  background-position: -10px -1890px;
   width: 25px;
 }
 .icon.bselection.sel:hover:after {
   width: 15px;
   height: 15px;
-  background-position: -10px -1825px;
+  background-position: -35px -1865px;
   width: 20px;
   margin-left: 5px;
 }
 .icon.bselection-edit:after {
   width: 15px;
   height: 15px;
-  background-position: -10px -1950px;
+  background-position: -10px -1990px;
   display: block;
   left: 0;
   top: 0;
@@ -2979,17 +2988,17 @@ div.modalie {
 .icon.bselection-edit:hover:after {
   width: 15px;
   height: 15px;
-  background-position: -10px -1925px;
+  background-position: -10px -1965px;
 }
 .icon.bselection-edit.sel:after {
   width: 15px;
   height: 15px;
-  background-position: -10px -1925px;
+  background-position: -10px -1965px;
 }
 .icon.bselection-edit.sel:hover:after {
   width: 15px;
   height: 15px;
-  background-position: -10px -1950px;
+  background-position: -10px -1990px;
 }
 .caption-icons-icon.justit {
   position: relative;
@@ -3017,17 +3026,17 @@ div.modalie {
 .caption-icons-icon.bstatus.complet:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1189px;
+  background-position: -10px -1199px;
 }
 .caption-icons-icon.bstatus.incomplet:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1309px;
+  background-position: -10px -1319px;
 }
 .caption-icons-icon.bemail:after {
   width: 20px;
   height: 15px;
-  background-position: -10px -1775px;
+  background-position: -10px -1815px;
 }
 .caption-icons-icon.bemail.disabled {
   cursor: default;
@@ -3035,27 +3044,27 @@ div.modalie {
 .caption-icons-icon.bemail.disabled:after {
   width: 20px;
   height: 15px;
-  background-position: -10px -1875px;
+  background-position: -10px -1915px;
 }
 .caption-icons-icon.bhomologado.has:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1519px;
+  background-position: -10px -1499px;
 }
 .caption-icons-icon.bhomologado.has:hover:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1549px;
+  background-position: -10px -1529px;
 }
 .caption-icons-icon.bhomologado.nothas:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1549px;
+  background-position: -10px -1529px;
 }
 .caption-icons-icon.bhomologado.nothas:hover:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1519px;
+  background-position: -10px -1499px;
 }
 .caption-icons-icon.bhomologado.unable:hover {
   cursor: default;
@@ -3063,17 +3072,17 @@ div.modalie {
 .caption-icons-icon.bhomologado.unable:hover:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1549px;
+  background-position: -10px -1529px;
 }
 .caption-icons-icon.bnote:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1249px;
+  background-position: -10px -1259px;
 }
 .caption-icons-icon.btrash:after {
   width: 19px;
   height: 20px;
-  background-position: -10px -799px;
+  background-position: -10px -839px;
 }
 .caption-icons-icon.btrash-big {
   cursor: pointer;
@@ -3081,32 +3090,32 @@ div.modalie {
 .caption-icons-icon.btrash-big:after {
   width: 25px;
   height: 30px;
-  background-position: -10px -490px;
+  background-position: -10px -450px;
 }
 .caption-icons-icon.sender_legend:after {
   width: 26px;
   height: 20px;
-  background-position: -10px -1039px;
+  background-position: -10px -1019px;
 }
 .caption-icons-icon.bfisica.has:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1459px;
+  background-position: -10px -1439px;
 }
 .caption-icons-icon.bfisica.has:hover:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1489px;
+  background-position: -10px -1469px;
 }
 .caption-icons-icon.bfisica.nothas:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1489px;
+  background-position: -10px -1469px;
 }
 .caption-icons-icon.bfisica.nothas:hover:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1459px;
+  background-position: -10px -1439px;
 }
 .caption-icons-icon.bfisica.unable:hover {
   cursor: default;
@@ -3114,27 +3123,27 @@ div.modalie {
 .caption-icons-icon.bfisica.unable:hover:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1489px;
+  background-position: -10px -1469px;
 }
 .caption-icons-icon.bfav.has:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1399px;
+  background-position: -10px -1379px;
 }
 .caption-icons-icon.bfav.has:hover:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1429px;
+  background-position: -10px -1409px;
 }
 .caption-icons-icon.bfav.nothas:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1429px;
+  background-position: -10px -1409px;
 }
 .caption-icons-icon.bfav.nothas:hover:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1399px;
+  background-position: -10px -1379px;
 }
 .caption-icons-icon.bfav.unable:hover {
   cursor: default;
@@ -3142,38 +3151,38 @@ div.modalie {
 .caption-icons-icon.bfav.unable:hover:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1429px;
+  background-position: -10px -1409px;
 }
 .caption-icons-icon.bedit_mini:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1099px;
+  background-position: -10px -1079px;
 }
 .caption-icons-icon.bstar.has:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1609px;
+  background-position: -10px -1589px;
 }
 .caption-icons-icon.bstar.nothas:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -1579px;
+  background-position: -10px -1559px;
 }
 .caption-icons-icon.bstar.middle:after {
   width: 20px;
   height: 20px;
-  background-position: -10px -919px;
+  background-position: -10px -899px;
 }
 .caption-icons-icon.bannex_file.has:after {
   width: 15px;
   height: 25px;
-  background-position: -10px -570px;
+  background-position: -30px -610px;
   margin-left: 7px;
 }
 .caption-icons-icon.bannex.has:after {
   width: 10px;
   height: 25px;
-  background-position: -35px -570px;
+  background-position: -10px -610px;
   margin-left: 9px;
 }
 .detail-status .caption-icons-icon.bstatus {
@@ -3230,28 +3239,28 @@ div.modalie {
 .thumbnail .icon.bselection-edit:after {
   width: 30px;
   height: 30px;
-  background-position: -10px -90px;
+  background-position: -10px -130px;
   margin-left: 5px;
 }
 .thumbnail .icon.bselection-edit:hover:after {
   width: 30px;
   height: 30px;
-  background-position: -10px -90px;
+  background-position: -10px -130px;
 }
 .thumbnail .icon.bselection-edit.sel:after {
   width: 30px;
   height: 30px;
-  background-position: -10px -90px;
+  background-position: -10px -130px;
 }
 .thumbnail .icon.bselection-edit.sel:hover:after {
   width: 30px;
   height: 30px;
-  background-position: -10px -130px;
+  background-position: -10px -170px;
 }
 .thumbnail .icon.bselection:after {
   width: 30px;
   height: 30px;
-  background-position: -10px -170px;
+  background-position: -10px -210px;
 }
 .thumbnail .icon.bselection:hover {
   background: #555555;
@@ -3259,7 +3268,7 @@ div.modalie {
 .thumbnail .icon.bselection:hover:after {
   width: 30px;
   height: 30px;
-  background-position: -10px -210px;
+  background-position: -10px -250px;
 }
 .thumbnail .icon.bselection.sel {
   background: #555555;
@@ -3267,7 +3276,7 @@ div.modalie {
 .thumbnail .icon.bselection.sel:after {
   width: 30px;
   height: 30px;
-  background-position: -10px -210px;
+  background-position: -10px -250px;
 }
 .thumbnail .icon.bselection.sel:hover {
   background: #fff;
@@ -3275,7 +3284,7 @@ div.modalie {
 .thumbnail .icon.bselection.sel:hover:after {
   width: 30px;
   height: 30px;
-  background-position: -10px -210px;
+  background-position: -10px -250px;
 }
 .thumbnail .caption-icons-icon {
   margin: 0;
@@ -3393,48 +3402,48 @@ th {
 .sprite {
   background: url("../images/sprite.png") top left no-repeat;
 }
-.item-edit_big {
+.contact30 {
   width: 30px;
   height: 30px;
   background-position: -10px -10px;
 }
-.menu-legend {
+.insiders-less {
   width: 30px;
   height: 30px;
   background-position: -10px -50px;
 }
-.insiders-edit_gray_big {
-  width: 30px;
+.menu-logoff {
+  width: 25px;
   height: 30px;
   background-position: -10px -90px;
 }
-.insiders-edit_blue_big {
+.insiders-edit_gray_big {
   width: 30px;
   height: 30px;
   background-position: -10px -130px;
 }
-.item_select_big {
+.insiders-edit_blue_big {
   width: 30px;
   height: 30px;
   background-position: -10px -170px;
 }
-.item_selected_big {
+.item_select_big {
   width: 30px;
   height: 30px;
   background-position: -10px -210px;
 }
-.menu-logoff {
-  width: 25px;
+.item_selected_big {
+  width: 30px;
   height: 30px;
   background-position: -10px -250px;
 }
-.menu-send_receive {
-  width: 40px;
+.actions-plus_blue {
+  width: 30px;
   height: 30px;
   background-position: -10px -290px;
 }
-.insiders-less {
-  width: 30px;
+.menu-send_receive {
+  width: 40px;
   height: 30px;
   background-position: -10px -330px;
 }
@@ -3448,310 +3457,315 @@ th {
   height: 30px;
   background-position: -10px -410px;
 }
-.actions-plus_blue {
-  width: 30px;
-  height: 30px;
-  background-position: -10px -450px;
-}
 .actions-trash_blue {
   width: 25px;
   height: 30px;
+  background-position: -10px -450px;
+}
+.item-edit_big {
+  width: 30px;
+  height: 30px;
   background-position: -10px -490px;
 }
-.menu-settings {
+.menu-legend {
   width: 30px;
   height: 30px;
   background-position: -10px -530px;
 }
-.actions_annex {
-  width: 15px;
-  height: 25px;
+.menu-settings {
+  width: 30px;
+  height: 30px;
   background-position: -10px -570px;
 }
 .status-annex {
   width: 10px;
   height: 25px;
-  background-position: -35px -570px;
+  background-position: -10px -610px;
+}
+.actions_annex {
+  width: 15px;
+  height: 25px;
+  background-position: -30px -610px;
 }
 .actions-export {
   width: 25px;
   height: 25px;
-  background-position: -10px -605px;
+  background-position: -10px -645px;
 }
 .actions-export_hover {
   width: 25px;
   height: 25px;
-  background-position: -10px -640px;
-}
-.badx {
-  width: 21px;
-  height: 22px;
-  background-position: -10px -675px;
+  background-position: -10px -680px;
 }
 .x {
   width: 21px;
   height: 22px;
-  background-position: -10px -707px;
+  background-position: -10px -715px;
+}
+.badx {
+  width: 21px;
+  height: 22px;
+  background-position: -10px -747px;
 }
 .other_maincontact {
   width: 20px;
   height: 20px;
-  background-position: -10px -739px;
-}
-.insiders-photo {
-  width: 20px;
-  height: 20px;
-  background-position: -10px -769px;
-}
-.item-cleafilter {
-  width: 19px;
-  height: 20px;
-  background-position: -10px -799px;
+  background-position: -10px -779px;
 }
 .insiders-camera {
   width: 25px;
   height: 20px;
-  background-position: -10px -829px;
+  background-position: -10px -809px;
+}
+.item-cleafilter {
+  width: 19px;
+  height: 20px;
+  background-position: -10px -839px;
 }
 .actions-plus {
   width: 20px;
   height: 20px;
-  background-position: -10px -859px;
-}
-.other_dot {
-  width: 20px;
-  height: 20px;
-  background-position: -10px -889px;
+  background-position: -10px -869px;
 }
 .item-middle_fav {
   width: 20px;
   height: 20px;
-  background-position: -10px -919px;
+  background-position: -10px -899px;
 }
 .actions_sample {
   width: 20px;
   height: 20px;
-  background-position: -10px -949px;
+  background-position: -10px -929px;
 }
 .other_square_notdot_selected {
   width: 20px;
   height: 20px;
-  background-position: -10px -979px;
+  background-position: -10px -959px;
 }
 .actions-sender_btn {
   width: 26px;
   height: 20px;
-  background-position: -10px -1009px;
+  background-position: -10px -989px;
 }
 .actions-sender_legend {
   width: 26px;
   height: 20px;
-  background-position: -10px -1039px;
+  background-position: -10px -1019px;
 }
 .menu-send_receive_mini {
   width: 25px;
   height: 20px;
-  background-position: -10px -1069px;
+  background-position: -10px -1049px;
 }
 .actions-edit-mini {
   width: 20px;
   height: 20px;
-  background-position: -10px -1099px;
+  background-position: -10px -1079px;
 }
 .other_square_notdot {
   width: 20px;
   height: 20px;
-  background-position: -10px -1129px;
+  background-position: -10px -1109px;
 }
 .other_notdot {
   width: 20px;
   height: 20px;
-  background-position: -10px -1159px;
+  background-position: -10px -1139px;
+}
+.other_dot {
+  width: 20px;
+  height: 20px;
+  background-position: -10px -1169px;
 }
 .status_check {
   width: 20px;
   height: 20px;
-  background-position: -10px -1189px;
-}
-.actions-edit {
-  width: 20px;
-  height: 20px;
-  background-position: -10px -1219px;
-}
-.insiders-notepad_black {
-  width: 20px;
-  height: 20px;
-  background-position: -10px -1249px;
-}
-.insiders-notepad {
-  width: 20px;
-  height: 20px;
-  background-position: -10px -1279px;
-}
-.status-warning {
-  width: 20px;
-  height: 20px;
-  background-position: -10px -1309px;
-}
-.opt_list {
-  width: 20px;
-  height: 20px;
-  background-position: -10px -1339px;
+  background-position: -10px -1199px;
 }
 .opt_images {
   width: 20px;
   height: 20px;
-  background-position: -10px -1369px;
+  background-position: -10px -1229px;
+}
+.insiders-notepad_black {
+  width: 20px;
+  height: 20px;
+  background-position: -10px -1259px;
+}
+.insiders-notepad {
+  width: 20px;
+  height: 20px;
+  background-position: -10px -1289px;
+}
+.status-warning {
+  width: 20px;
+  height: 20px;
+  background-position: -10px -1319px;
+}
+.opt_list {
+  width: 20px;
+  height: 20px;
+  background-position: -10px -1349px;
 }
 .item-heart_selected {
   width: 20px;
   height: 20px;
-  background-position: -10px -1399px;
+  background-position: -10px -1379px;
 }
 .item-heart {
   width: 20px;
   height: 20px;
-  background-position: -10px -1429px;
+  background-position: -10px -1409px;
 }
 .item-fisica_selected {
   width: 20px;
   height: 20px;
-  background-position: -10px -1459px;
+  background-position: -10px -1439px;
 }
 .item-fisica {
   width: 20px;
   height: 20px;
-  background-position: -10px -1489px;
+  background-position: -10px -1469px;
 }
 .item-homologado_selected {
   width: 20px;
   height: 20px;
-  background-position: -10px -1519px;
+  background-position: -10px -1499px;
 }
 .item-homologado {
   width: 20px;
   height: 20px;
-  background-position: -10px -1549px;
+  background-position: -10px -1529px;
 }
 .item-not_fav {
   width: 20px;
   height: 20px;
-  background-position: -10px -1579px;
+  background-position: -10px -1559px;
 }
 .item-fav {
   width: 20px;
   height: 20px;
-  background-position: -10px -1609px;
+  background-position: -10px -1589px;
+}
+.actions-edit {
+  width: 20px;
+  height: 20px;
+  background-position: -10px -1619px;
+}
+.insiders-photo {
+  width: 20px;
+  height: 20px;
+  background-position: -10px -1649px;
 }
 .actions-trash {
   width: 16px;
   height: 19px;
-  background-position: -10px -1639px;
+  background-position: -10px -1679px;
 }
 .actions_tag {
   width: 20px;
   height: 17px;
-  background-position: -10px -1668px;
+  background-position: -10px -1708px;
 }
 .hashtag {
   width: 16px;
   height: 17px;
-  background-position: -10px -1695px;
+  background-position: -10px -1735px;
 }
 .actions_save {
   width: 17px;
   height: 17px;
-  background-position: -10px -1722px;
+  background-position: -10px -1762px;
 }
 .white_x {
   width: 15px;
   height: 16px;
-  background-position: -10px -1749px;
+  background-position: -10px -1789px;
 }
 .open-down {
   width: 15px;
   height: 16px;
-  background-position: -35px -1749px;
+  background-position: -35px -1789px;
 }
 .item-email_black {
   width: 20px;
   height: 15px;
-  background-position: -10px -1775px;
-}
-.actions-arrow_left_left {
-  width: 15px;
-  height: 15px;
-  background-position: -10px -1800px;
+  background-position: -10px -1815px;
 }
 .actions-arrow_right_right {
   width: 15px;
   height: 15px;
-  background-position: -35px -1800px;
-}
-.item_select_small {
-  width: 15px;
-  height: 15px;
-  background-position: -10px -1825px;
-}
-.item_selected_small {
-  width: 15px;
-  height: 15px;
-  background-position: -35px -1825px;
-}
-.other-go_top {
-  width: 15px;
-  height: 15px;
-  background-position: -10px -1850px;
-}
-.item-email_disabled {
-  width: 20px;
-  height: 15px;
-  background-position: -10px -1875px;
-}
-.item-email {
-  width: 20px;
-  height: 15px;
-  background-position: -10px -1900px;
-}
-.actions_zoom {
-  width: 15px;
-  height: 15px;
-  background-position: -35px -1850px;
-}
-.insiders-edit_gray {
-  width: 15px;
-  height: 15px;
-  background-position: -10px -1925px;
+  background-position: -10px -1840px;
 }
 .opt_ordering {
   width: 15px;
   height: 15px;
-  background-position: -35px -1925px;
+  background-position: -35px -1840px;
+}
+.actions-arrow_left_left {
+  width: 15px;
+  height: 15px;
+  background-position: -10px -1865px;
+}
+.item_select_small {
+  width: 15px;
+  height: 15px;
+  background-position: -35px -1865px;
+}
+.item_selected_small {
+  width: 15px;
+  height: 15px;
+  background-position: -10px -1890px;
+}
+.actions_zoom {
+  width: 15px;
+  height: 15px;
+  background-position: -35px -1890px;
+}
+.item-email_disabled {
+  width: 20px;
+  height: 15px;
+  background-position: -10px -1915px;
+}
+.item-email {
+  width: 20px;
+  height: 15px;
+  background-position: -10px -1940px;
+}
+.insiders-edit_gray {
+  width: 15px;
+  height: 15px;
+  background-position: -10px -1965px;
+}
+.other-go_top {
+  width: 15px;
+  height: 15px;
+  background-position: -35px -1965px;
 }
 .insiders-edit_blue {
   width: 15px;
   height: 15px;
-  background-position: -10px -1950px;
+  background-position: -10px -1990px;
 }
 .opt_search {
   width: 12px;
   height: 12px;
-  background-position: -36px -1639px;
+  background-position: -36px -1679px;
 }
 .check {
   width: 14px;
   height: 12px;
-  background-position: -36px -1695px;
-}
-.other-arrow_down {
-  width: 10px;
-  height: 10px;
-  background-position: -40px -739px;
+  background-position: -36px -1735px;
 }
 .other-arrow_right {
   width: 10px;
   height: 10px;
-  background-position: -40px -769px;
+  background-position: -40px -779px;
+}
+.other-arrow_down {
+  width: 10px;
+  height: 10px;
+  background-position: -39px -839px;
 }
 /***************
 *********************HOME e busca
@@ -3922,7 +3936,7 @@ label {
   background: url("../images/sprite.png") top left no-repeat;
   width: 15px;
   height: 15px;
-  background-position: -35px -1925px;
+  background-position: -35px -1840px;
   position: relative;
   float: left;
   content: "";
@@ -3937,7 +3951,7 @@ label {
   background: url("../images/sprite.png") top left no-repeat;
   width: 25px;
   height: 25px;
-  background-position: -10px -640px;
+  background-position: -10px -680px;
   position: relative;
   float: left;
   content: "";
@@ -3950,7 +3964,7 @@ label {
 .bdefault.export.disabled:after {
   width: 25px;
   height: 25px;
-  background-position: -10px -605px;
+  background-position: -10px -645px;
 }
 .fake-form {
   position: relative;
@@ -4378,7 +4392,7 @@ form textarea {
   background: url("../images/sprite.png") top left no-repeat;
   width: 15px;
   height: 16px;
-  background-position: -35px -1749px;
+  background-position: -35px -1789px;
   margin: 2px 0 0 1px ;
 }
 .open-info:hover {
@@ -4621,7 +4635,7 @@ form textarea {
   background: url("../images/sprite.png") top left no-repeat;
   width: 15px;
   height: 16px;
-  background-position: -10px -1749px;
+  background-position: -10px -1789px;
 }
 .cnt-nav label.cnt-close1 {
   top: 25px;
@@ -4637,7 +4651,7 @@ form textarea {
   background: url("../images/sprite.png") top left no-repeat;
   width: 15px;
   height: 15px;
-  background-position: -35px -1800px;
+  background-position: -10px -1840px;
 }
 .cnt-nav label.cnt-prev span {
   margin: 8px 0 0 6px;
@@ -4647,7 +4661,7 @@ form textarea {
   background: url("../images/sprite.png") top left no-repeat;
   width: 15px;
   height: 15px;
-  background-position: -10px -1800px;
+  background-position: -10px -1865px;
 }
 input:checked + .cnt-slide-container .cnt-slide {
   opacity: 1;

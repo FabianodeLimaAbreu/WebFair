@@ -242,6 +242,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.fornidselect=0;
       this.fstatus=null;
       this.cadstatus=undefined;
+      this.cadprincipal=undefined;
       this.fairval="";
       this.fornval="";
       this.amosval="";
@@ -324,7 +325,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         getPage:this.proxy(this.getPage),
         getInitialTime:this.proxy(this.getInitialTime),
         getEndTime:this.proxy(this.getEndTime),
-        setCookieFair:this.proxy(this.setCookieFair)
+        setCookieFair:this.proxy(this.setCookieFair),
+        getContPrincipalFornecedores:this.proxy(this.getContPrincipalFornecedores)
       });
       this.filter = new Filter({
         getloading: this.proxy(this.getloading),
@@ -465,10 +467,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             this.endTimeForn=this.cookiefornecedores[0].dates[1];
             this.prices=this.cookiefornecedores[0].prices;
             this.refine=this.cookiefornecedores[0].refine;
-            this.fstatus=this.cookiefornecedores[0].fstatus;
+            this.cadstatus=this.cookiefornecedores[0].fstatus;
+            this.cadprincipal=this.cookiefornecedores[0].cadprincipal;
+            this.fornclick=this.cookiefornecedores[0].fornclick;
             this.nsort=this.cookiefornecedores[0].nsort;
             this.combofilter=this.cookiefornecedores[0].combofilter;
-            this.fornclick=this.cookiefornecedores[0].fornclick;
             //console.dir(this.cookiefornecedores[0]);
 
 
@@ -479,7 +482,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               this.prices=this.cookiefornecedores[0].prices;
               this.refine=this.cookiefornecedores[0].refine;
               this.combofilter=this.cookiefornecedores[0].combofilter;
-              this.fstatus=this.cookiefornecedores[0].fstatus;
+              this.cadstatus=this.cookiefornecedores[0].fstatus;
+              this.cadprincipal=this.cookiefornecedores[0].cadprincipal;
+              this.fornclick=this.cookiefornecedores[0].fornclick;
               this.nsort=this.cookiefornecedores[0].nsort;
               this.fornclick=this.cookiefornecedores[0].fornclick;
               //console.dir(this.cookiefornecedores[0]);
@@ -506,7 +511,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 this.prices=this.cookiefornecedores[0].prices;
                 this.refine=this.cookiefornecedores[0].refine;
                 this.combofilter=this.cookiefornecedores[0].combofilter;
-                this.fstatus=this.cookiefornecedores[0].fstatus;
+                this.cadstatus=this.cookiefornecedores[0].fstatus;
+                this.cadprincipal=this.cookiefornecedores[0].cadprincipal;
                 this.nsort=this.cookiefornecedores[0].nsort;  
                 this.fornclick=this.cookiefornecedores[0].fornclick;
                 //console.dir(this.cookiefornecedores[0]);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
@@ -571,7 +577,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           $("html").attr("class","").addClass(this.page);
           this.writePage(this.page);
           this.setloading(!0,!1);
-          this.submit(a,b,c,!1);
+          this.submit(a,b,c,!1,this.cadstatus,this.cadprincipal);
         },
         "fornecedores/*func/*code":function(a){
           var context=this;
@@ -647,7 +653,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           url=this.page+"/"+(this.cookieamostras[0].fairval || "padrao")+"/"+(this.cookieamostras[0].fornval || "padrao")+"/"+(this.cookieamostras[0].amosval || "padrao");
           this.navigate(url, !0);
         }
-        
       }
     },
 
@@ -1138,9 +1143,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             this.cookiefornecedores[0].posscroll=0;
           }
           if(!this.fairval &amp;&amp; !this.fornval){
+            var vprincipal="";
+            if(typeof this.cadprincipal !== "undefined"){
+              vprincipal="&lt;CONT_PRINCIPAL>"+this.cadprincipal+"&lt;/CONT_PRINCIPAL>";
+            }
             this.mode="fornecedores/"+"padrao"+"/"+"padrao"+"/"+"padrao";
             this.navigate(this.mode, !1);
-            this.callService("fornecedores",'&lt;FEIR_COD>'+this.fairval+'&lt;/FEIR_COD>','&lt;LINHA_I>1&lt;/LINHA_I>','&lt;LINHA_F>20000&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+this.initialTimeForn+'&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>'+this.endTimeForn+'&lt;/CREATE_DATE_F>');
+            this.callService("fornecedores",'&lt;FEIR_COD>'+this.fairval+'&lt;/FEIR_COD>','&lt;LINHA_I>1&lt;/LINHA_I>','&lt;LINHA_F>20000&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+this.initialTimeForn+'&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>'+this.endTimeForn+'&lt;/CREATE_DATE_F>',vprincipal);
             //this.modal.open("message","Selecione ao menos uma feira para filtrar!!!",!1,!0);
             return !0;
           }
@@ -1149,7 +1158,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 
           this.mode="fornecedores/"+(this.fairval || "padrao")+"/"+(this.fornval || "padrao")+"/"+(this.amosval || "padrao");
           this.navigate(this.mode, !1);
-          this.callService("fornecedores",'&lt;FORN_DESC>'+this.fornval+'&lt;/FORN_DESC>','&lt;FEIR_COD>'+this.fairval+'&lt;/FEIR_COD>','&lt;LINHA_I>'+(this.content.page*20+1)+'&lt;/LINHA_I>','&lt;LINHA_F>20000&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+this.initialTimeForn+'&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>'+this.endTimeForn+'&lt;/CREATE_DATE_F>');
+          this.callService("fornecedores",'&lt;FORN_DESC>'+this.fornval+'&lt;/FORN_DESC>','&lt;FEIR_COD>'+this.fairval+'&lt;/FEIR_COD>','&lt;LINHA_I>'+(this.content.page*20+1)+'&lt;/LINHA_I>','&lt;LINHA_F>20000&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+this.initialTimeForn+'&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>'+this.endTimeForn+'&lt;/CREATE_DATE_F>',vprincipal);
           break;
         case "amostras":
           this.initialTimeAmos=$("input[name='initial_date']").val() || ("2000"+"-"+"01"+"-"+"01");
@@ -1331,6 +1340,17 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             }
           },
           {
+            //FEIR_COD e FORN_ID are optional fields
+            'name':'singleSample',
+            'serviceName':'ListarAmostras',
+            'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;ListarAmostras xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+''+e+''+f+'&lt;SEGM_COD>'+(core.usr.SEGM_COD === "TD" ? "" : core.usr.SEGM_COD)+'&lt;/SEGM_COD>&lt;/ListarAmostras>&lt;/soap:Body>&lt;/soap:Envelope>',
+            callback:function(data,req){
+              var item=jQuery.parseJSON($(req.responseXML).text()).unique();
+              this.setDate(item);
+              return core.detail.open(item[0]);
+            }
+          },
+          {
             'name':'delete',
             'serviceName':'GravarAnotacao',
             'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;GravarAnotacao xmlns="http://tempuri.org/">&lt;note>&lt;NOTA_ID>'+a+'&lt;/NOTA_ID>&lt;USU_COD>'+b+'&lt;/USU_COD>&lt;PLAT_ID>2&lt;/PLAT_ID>&lt;CREATE_DATE>2016-07-08&lt;/CREATE_DATE>&lt;/note>&lt;action>D&lt;/action>&lt;/GravarAnotacao>&lt;/soap:Body>&lt;/soap:Envelope>',
@@ -1356,7 +1376,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           {
             'name':'fornecedores',
             'serviceName':'ListarFornecedores',
-            'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;ListarFornecedores xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+''+e+''+f+'&lt;/ListarFornecedores>&lt;/soap:Body>&lt;/soap:Envelope>',
+            'code':'&lt;?xml version="1.0" encoding="utf-8"?>&lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">&lt;soap:Body>&lt;ListarFornecedores xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+''+e+''+f+g+'&lt;SEGM_COD>'+core.usr.SEGM_COD+'&lt;/SEGM_COD>&lt;/ListarFornecedores>&lt;/soap:Body>&lt;/soap:Envelope>',
             callback:function(data,req){
               core.convertData(data,req,name,!0);
             }
@@ -1548,8 +1568,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           }
         });
     },
-    submit:function(a,b,c,d,fstatus){
-      var status,core=this;
+    submit:function(a,b,c,d,fstatus,fprincipal){
+      var status,vprincipal,core=this;
       var b=b || "";
       var c=c || "";
       status=setInterval(function(){
@@ -1572,7 +1592,29 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             else{
               fstatus="";
             }
-            core.callService(core.page,a,b,fstatus,'&lt;LINHA_I>'+(core.content.page*core.itens_by_page+1)+'&lt;/LINHA_I>','&lt;LINHA_F>'+((core.content.page+1)*core.itens_by_page)+'&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+core.initialTimeForn+'&lt;/CREATE_DATE_I>',"&lt;CREATE_DATE_F>"+core.endTimeForn+"&lt;/CREATE_DATE_F>");
+            if(typeof fprincipal !== "undefined"){
+              vprincipal="&lt;CONT_PRINCIPAL>"+fprincipal+"&lt;/CONT_PRINCIPAL>";
+            }
+            else{
+              vprincipal="";
+            }
+
+            $("input[name='initial_date']").datepicker('setDate', core.initialTimeForn.slice(0,4)+'-'+core.initialTimeForn.slice(5, 7)+"-"+core.initialTimeForn.slice(8, 10));
+            $("input[name='end_date']").datepicker('setDate', core.endTimeForn.slice(0,4)+'-'+core.endTimeForn.slice(5, 7)+"-"+core.endTimeForn.slice(8, 10));
+            
+            $("select[name='FORN_STATUS']").find("option").each(function(index, el) {
+              if($(el).attr("value").bool() === core.cadstatus){
+                $(el).attr('selected', 'selected');
+              }
+            });
+
+            $("select[name='CONT_PRINCIPAL']").find("option").each(function(index, el) {
+              if($(el).attr("value") === core.cadprincipal){
+                $(el).attr('selected', 'selected');
+              }
+            });
+
+            core.callService(core.page,a,b,fstatus,'&lt;LINHA_I>'+(core.content.page*core.itens_by_page+1)+'&lt;/LINHA_I>','&lt;LINHA_F>'+((core.content.page+1)*core.itens_by_page)+'&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+core.initialTimeForn+'&lt;/CREATE_DATE_I>'+"&lt;CREATE_DATE_F>"+core.endTimeForn+"&lt;/CREATE_DATE_F>",vprincipal);
             //core.callService(core.page,a,b,'&lt;LINHA_I>'+(core.content.page*core.itens_by_page+1)+'&lt;/LINHA_I>','&lt;LINHA_F>20000&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+core.initialTime+'&lt;/CREATE_DATE_I>',"&lt;CREATE_DATE_F>"+core.endTime+"&lt;/CREATE_DATE_F>");
           }
         }
@@ -1693,7 +1735,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               "prices":this.prices,
               "refine":this.filter.list,
               "combofilter":this.combofilter,
-              "fstatus":this.fstatus,
+              "fstatus":this.cadstatus,
+              "cadprincipal":this.cadprincipal,
               "nsort":this.nsort,
               "view":""+this.view,
               "posscroll":(this.posscroll || 0),
@@ -2427,6 +2470,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       }
       else if($(a.target).hasClass("sel") &amp;&amp; this.view === "list"){
         this.select_items=[];
+        this.unable_select=!1;
+        $(a.target).removeClass("sel");
         $(".icon.bselection").removeClass('sel');
         $(".remain_text").addClass('hide').removeClass('sel');
         $(".select_all").addClass('hide').removeClass('sel');
@@ -2477,16 +2522,43 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
     },*/
 
     filterForn:function(ev){
-      var status;
       this.reset();
-      
       if($(ev.target).find("option:selected").val().length){
-        this.cadstatus=$(ev.target).find("option:selected").val().bool();
+        if($(ev.target).attr('name') === "FORN_STATUS"){
+          this.cadstatus=$(ev.target).find("option:selected").val().bool();
+        }
+        else{
+          this.cadprincipal=$(ev.target).find("option:selected").val();
+        }
       }
       else{
-        this.cadstatus=undefined;
+        if($(ev.target).attr('name') === "FORN_STATUS"){
+          this.cadstatus=undefined;
+        }
+        else{
+          this.cadprincipal=undefined;
+        }  
       }
-      this.submit("&lt;FEIR_COD>"+(this.fairval || "")+"&lt;/FEIR_COD>","&lt;FORN_DESC>"+(this.fornval || "")+"&lt;/FORN_DESC>",(this.amosval || ""),!0,this.cadstatus);
+      var scroll={
+        "fornval":''+this.fornval,
+        "fairval":''+this.fairval,
+        "amosval":''+this.amosval,
+        "fornclick":''+(this.fornclick || ""),
+        "dates":[this.initialTimeForn,this.endTimeForn],
+        "prices":this.prices,
+        "refine":this.filter.list,
+        "combofilter":this.combofilter,
+        "fstatus":this.cadstatus,
+        "nsort":this.nsort,
+        "cadprincipal":this.cadprincipal,
+        "view":""+this.view,
+        "posscroll":(this.posscroll || 0),
+        "total":(this.total || 20)
+      }
+
+      $.cookie.json = !0;
+      $.cookie("posscroll"+"fornecedores", scroll, {expires:7, path:"/"});
+      this.submit("&lt;FEIR_COD>"+(this.fairval || "")+"&lt;/FEIR_COD>","&lt;FORN_DESC>"+(this.fornval || "")+"&lt;/FORN_DESC>",(this.amosval || ""),!0,this.cadstatus,this.cadprincipal);
     },
     starForn:function(ev){
       var el,i,html="",diff=!1,item,context=this;
@@ -2656,20 +2728,33 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         }
       }
     },
+
     SelectAllSamples:function(a){
       var target,ctx=this;
       target=$(a.target);
       if(target.hasClass("sel")){
         target.removeClass("sel");
         this.fornidselect=0;
-        target.closest('.overview-container').find(".thumbnail .icon").removeClass('sel');
+        if(this.view === "images"){
+          target.closest('.overview-container').find(".thumbnail .icon").removeClass('sel');
+        }
+        else{
+          target.closest('.overview-container').find(".icon.bselection").removeClass('sel');
+        }
         this.select_items=[];
       }
       else{
         $(".select_all ").removeClass('sel');
         $(".thumbnail .icon").removeClass('sel');
+        $(".icon .bselection").removeClass('sel');
         target.addClass("sel");
-        target.closest('.overview-container').find(".thumbnail .icon").addClass('sel');
+
+        if(this.view === "images"){
+          target.closest('.overview-container').find(".thumbnail .icon").addClass('sel');
+        }
+        else{
+          target.closest('.overview-container').find(".icon.bselection").addClass('sel');
+        }
         this.fornidselect=parseInt(target.attr("name"));
         this.select_items=[];
         this.data.filter(function(el,index) {
@@ -3860,26 +3945,47 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
     },
     savingCookie:function(what,tofornclick,valforn){
       if(tofornclick){
-        if($.cookie("cookiefornecedores")){
-          this.cookieamostras.push(jQuery.parseJSON($.cookie("posscroll"+"cookiefornecedores")));
-          var scroll={
-            "fornval":''+this.cookiefornecedores[0].fornval,
-            "fairval":''+this.cookiefornecedores[0].fairval,
-            "amosval":''+this.cookiefornecedores[0].amosval,
-            "fornclick":''+valforn,
-            "dates":this.cookiefornecedores[0].dates[0],
-            "prices":this.cookiefornecedores[0].prices,
-            "refine":this.cookiefornecedores[0].refine,
-            "combofilter":this.cookiefornecedores[0].combofilter,
-            "fstatus":this.cookiefornecedores[0].fstatus,
-            "nsort":this.cookiefornecedores[0].nsort,
-            "view":""+this.cookiefornecedores[0].view,
-            "posscroll":(this.cookiefornecedores[0].posscroll || 0),
-            "total":(this.cookiefornecedores[0].total || 20)
-          }
+        if(what === "fornecedores"){
+          if($.cookie("cookiefornecedores")){
+            this.cookiefornecedores.push(jQuery.parseJSON($.cookie("posscroll"+"cookiefornecedores")));
+            var scroll={
+              "fornval":''+this.cookiefornecedores[0].fornval,
+              "fairval":''+this.cookiefornecedores[0].fairval,
+              "amosval":''+this.cookiefornecedores[0].amosval,
+              "fornclick":''+valforn,
+              "dates":this.cookiefornecedores[0].dates[0],
+              "prices":this.cookiefornecedores[0].prices,
+              "refine":this.cookiefornecedores[0].refine,
+              "combofilter":this.cookiefornecedores[0].combofilter,
+              "fstatus":this.cookiefornecedores[0].cadstatus,
+              "nsort":this.cookiefornecedores[0].nsort,
+              "view":""+this.cookiefornecedores[0].view,
+              "cadprincipal":this.cookiefornecedores[0].cadprincipal,
+              "posscroll":(this.cookiefornecedores[0].posscroll || 0),
+              "total":(this.cookiefornecedores[0].total || 20)
+            }
 
-          //console.dir(this.cookiefornecedores[0]); 
-          //console.dir(this.fornecedores.item);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+            //console.dir(this.cookiefornecedores[0]); 
+            //console.dir(this.fornecedores.item);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+          }
+          else{
+            var scroll={
+              "fornval":''+this.fornval,
+              "fairval":''+this.fairval,
+              "amosval":''+this.amosval,
+              "fornclick":''+(valforn || ""),
+              "dates":[this.initialTimeForn,this.endTimeForn],
+              "prices":this.prices,
+              "refine":this.filter.list,
+              "combofilter":this.combofilter,
+              "fstatus":this.cadstatus,
+              "nsort":this.nsort,
+              "cadprincipal":this.cadprincipal,
+              "view":""+this.view,
+              "posscroll":(this.posscroll || 0),
+              "total":(this.total || 20)
+            }
+          }
         }
         else{
           var scroll={
@@ -3893,6 +3999,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             "combofilter":this.combofilter,
             "fstatus":this.fstatus,
             "nsort":this.nsort,
+            "cadprincipal":this.cadprincipal,
             "view":""+this.view,
             "posscroll":(this.posscroll || 0),
             "total":(this.total || 20)
@@ -3903,21 +4010,42 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         }
       }
       else{
-        var scroll={
-          "fornval":''+this.fornval,
-          "fairval":''+this.fairval,
-          "amosval":''+this.amosval,
-          "fornclick":''+this.fornclick,
-          "dates":[this.initialTimeAmos,this.endTimeAmos],
-          "prices":this.prices,
-          "refine":this.filter.list,
-          "combofilter":this.combofilter,
-          "fstatus":this.fstatus,
-          "nsort":this.nsort,
-          "view":""+this.view,
-          "posscroll":(this.posscroll || 0),
-          "total":(this.total || 20)
-        };
+        if(what === "amostras"){
+          var scroll={
+            "fornval":''+this.fornval,
+            "fairval":''+this.fairval,
+            "amosval":''+this.amosval,
+            "fornclick":''+this.fornclick,
+            "dates":[this.initialTimeAmos,this.endTimeAmos],
+            "prices":this.prices,
+            "refine":this.filter.list,
+            "combofilter":this.combofilter,
+            "fstatus":this.fstatus,
+            "nsort":this.nsort,
+            "view":""+this.view,
+            "cadprincipal":this.cadprincipal,
+            "posscroll":(this.posscroll || 0),
+            "total":(this.total || 20)
+          };
+        }
+        else{
+          var scroll={
+            "fornval":''+this.fornval,
+            "fairval":''+this.fairval,
+            "amosval":''+this.amosval,
+            "fornclick":''+this.fornclick,
+            "dates":[this.initialTimeForn,this.endTimeForn],
+            "prices":this.prices,
+            "refine":this.filter.list,
+            "combofilter":this.combofilter,
+            "fstatus":this.cadstatus,
+            "nsort":this.nsort,
+            "view":""+this.view,
+            "cadprincipal":this.cadprincipal,
+            "posscroll":(this.posscroll || 0),
+            "total":(this.total || 20)
+          };
+        }
         
       }
       $.cookie.json = !0;
@@ -3931,6 +4059,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         this["cookie"+page][0].fornclick = val;
         this["cookie"+page][0].fornval = val;
       }
+    },
+    getContPrincipalFornecedores:function(){
+      return this.cadprincipal;
     },
     scroll:function(z) {
       var b, c, f, clone,e = this;
@@ -4005,7 +4136,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               //console.log("chegou");
               e.content.page++;
               e.setloading(!0,!1);
-              e.submit("&lt;FEIR_COD>"+(e.fairval || "")+"&lt;/FEIR_COD>","&lt;FORN_DESC>"+(e.fornval || "")+"&lt;/FORN_DESC>",(e.amosval || ""),!0,e.cadstatus);
+              e.submit("&lt;FEIR_COD>"+(e.fairval || "")+"&lt;/FEIR_COD>","&lt;FORN_DESC>"+(e.fornval || "")+"&lt;/FORN_DESC>",(e.amosval || ""),!0,e.cadstatus,e.cadprincipal);
               //e.createbox(e.data, e.content.page, !0,"list");
             }
             break;
@@ -4138,6 +4269,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.prices=[];
       this.refine=[];
       this.fstatus=null;
+      this.cadstatus=undefined;
+      this.cadprincipal=undefined;
       this.fairval="";
       this.fornval="";
       this.amosval="";
@@ -4172,6 +4305,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       $(".main_opt_item.tooltip.tooltip-selectable").eq(0).removeClass('has');
 
       this.fstatus=null;
+      this.cadstatus=undefined;
+      this.cadprincipal=undefined;
       $(".status button").removeClass('sel');
       $(".status.tooltip-selectable").removeClass('has');
       //this.nsort="AMOS_DESC";
@@ -4193,6 +4328,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       $(".not-autoshow").removeClass('sel');
       $(".sub-refine").addClass('hide').hide().find("ul").empty();
 
+      $("select[name='FORN_STATUS']").find("option").removeAttr('selected');
+      $("select[name='CONT_PRINCIPAL']").find("option").removeAttr('selected');
       //Filter list
       //this.filterlist.length=0;
 
@@ -4200,8 +4337,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
   });
   new App;
   Spine.Route.setup();
-});
-</pre>
+});</pre>
 	</article>
 </section>
 
@@ -4222,7 +4358,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Thu Mar 17th 2016 using the <a
+		on Wed Mar 23rd 2016 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>

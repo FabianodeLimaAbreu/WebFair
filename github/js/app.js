@@ -1223,6 +1223,17 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             }
           },
           {
+            //FEIR_COD e FORN_ID are optional fields
+            'name':'singleSample',
+            'serviceName':'ListarAmostras',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarAmostras xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+''+e+''+f+'<SEGM_COD>'+(core.usr.SEGM_COD === "TD" ? "" : core.usr.SEGM_COD)+'</SEGM_COD></ListarAmostras></soap:Body></soap:Envelope>',
+            callback:function(data,req){
+              var item=jQuery.parseJSON($(req.responseXML).text()).unique();
+              this.setDate(item);
+              return core.detail.open(item[0]);
+            }
+          },
+          {
             'name':'delete',
             'serviceName':'GravarAnotacao',
             'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarAnotacao xmlns="http://tempuri.org/"><note><NOTA_ID>'+a+'</NOTA_ID><USU_COD>'+b+'</USU_COD><PLAT_ID>2</PLAT_ID><CREATE_DATE>2016-07-08</CREATE_DATE></note><action>D</action></GravarAnotacao></soap:Body></soap:Envelope>',

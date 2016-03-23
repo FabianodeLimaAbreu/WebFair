@@ -590,7 +590,8 @@ window.Box = Spine.Controller.sub({init:function() {
           else{
             result+="<td><button type='button' class='caption-icons-icon justit bstar nothas' name='"+a.FORN_ID+"'></button></td>";
           }
-
+          /*To attend Demand: 0 Alerta para mais de dois contatos principais cadastrado
+          <td><span class='doubled-contact'></span></td>*/
           result+="<td><button type='button' class='caption-icons-icon justit bstatus "+status+"' title='"+status.capitalize()+"'>"+status+"</button></td>";
           return result;
         }
