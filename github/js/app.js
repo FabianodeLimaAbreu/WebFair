@@ -236,6 +236,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           this.writePage(this.page);
         },
         "amostras/*fairval/*fornval/*amosval":function(res){
+         //debugger;
           var a,b,c;
           this.page ="amostras";
           this.filterisdone=!0;
