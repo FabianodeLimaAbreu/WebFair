@@ -405,7 +405,7 @@ window.Box = Spine.Controller.sub({init:function() {
     email= a.AMOS_ENV_EMAIL? "sent":"disabled";
 
     //Creating result
-    result+="<a href='#detail/"+parseInt(a.FEIR_COD)+"/"+a.AMOS_DESC+"'><div class='thumbnail' id='"+a.AMOS_ID+"''>";
+    result+="<a href='#detail/"+parseInt(a.FEIR_COD)+"/"+a.AMOS_ID+"'><div class='thumbnail' id='"+a.AMOS_ID+"''>";
     if(!this.unable_select){
       result+="<button type='button' name='"+a.AMOS_ID+"' class='icon'></button>"; //bselection
     }

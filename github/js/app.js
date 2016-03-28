@@ -260,7 +260,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             else{
               //console.log("WINDOW 0");
               this.cookieamostras=[];
-              $.removeCookie('posscroll'+this.page, { path: '/' });
+              $.removeCookie('posscroll'+this.page, { path: '/' }); 
               //debugger;
               $(".container-fullsize.scroller").scrollTop(0);
             }
@@ -2267,8 +2267,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       a.preventDefault();
       var obj=$(a.target);
     },
-    sortItems : function(a,b){
-      //debugger; 
+    /*sortItems : function(a,b){
       var type,i,length,temp=[],aux=[];
       if($(a.target).hasClass("sel") || this.loading){
         return !1;
@@ -2279,6 +2278,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       $(".overview-container").remove();
       this.order_box.find("button").removeClass("sel");
       $(a.target).addClass("sel");
+      //console.dir(this.fdata);
       if(type !== "BIGPRICE"){
         this.nsort=type;
         if(this.fdata.length){
@@ -2323,7 +2323,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         this.createbox(temp.unique(), this.content.page,!1,!1,(this.content.page + 1)*20);
         //this.createbox(temp.unique(), this.content.page,!1,!1,length);
       }
-    },
+    },*/
     enableSelect : function(a){
       var status;
       var context=this;
@@ -2404,6 +2404,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.createbox(this.fdata, this.content.page, !0,"list");
       //console.dir(typeof Boolean($(a.target).find("option:selected").val()));
     },*/
+
 
     filterForn:function(ev){
       this.reset();
@@ -2652,8 +2653,102 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         });
       }   
     },
-
+    sortItems : function(a,b){
+      //debugger;
+      var type,i,length,temp=[],aux=[];
+      if($(a.target).hasClass("sel") || this.loading){
+        return !1;
+      }
+      type=$(a.target).attr("name") || this.nsort;
+      $("html").attr("class","amostras");
+      this.content.clean();
+      $(".overview-container").remove();
+      this.order_box.find("button").removeClass("sel");
+      $(a.target).addClass("sel");
+      //console.dir(this.fdata);
+      switch(type){
+        case 'BIGPRICE':
+          this.nsort="AMOS_PRECO";
+          if(this.fdata.length){
+            length= this.fdata.length-1;
+            aux = this.fdata.sortBy(this.nsort).unique();
+          }
+          else{
+            length= this.data.length-1;
+            aux = this.data.sortBy(this.nsort).unique();
+          }
+          for(i=length;i>=0;i--){
+            temp.push(aux[i]);
+          }
+          if(b){
+            $(".tooltip.borderby .bcircle").each(function(index, el) {
+              if($(el).attr("name") === type){
+                $(el).addClass('sel');
+              }
+            });
+            return temp.unique();
+          }
+          
+          break;
+        case 'CREATE_DATE':
+          this.nsort=type;
+          if(this.fdata.length){
+            length= this.fdata.length-1;
+            temp = this.fdata.sort(function(a,b){
+              var parts1 = a.CREATE_DATE.split("/");
+              var parts2 = b.CREATE_DATE.split("/");
+              // Turn your strings into dates, and then subtract them
+              // to get a value that is either negative, positive, or zero.
+              return new Date(parts2[2], parts2[1] - 1, parts2[0]) - new Date(parts1[2], parts1[1] - 1, parts1[0]);
+            });
+          }
+          else{
+            length= this.data.length-1;
+            temp = this.data.sort(function(a,b){
+              var parts1 = a.CREATE_DATE.split("/");
+              var parts2 = b.CREATE_DATE.split("/");
+              // Turn your strings into dates, and then subtract them
+              // to get a value that is either negative, positive, or zero.
+              return new Date(parts2[2], parts2[1] - 1, parts2[0]) - new Date(parts1[2], parts1[1] - 1, parts1[0]);
+            });
+          }
+          if(b){
+            $(".tooltip.borderby .bcircle").each(function(index, el) {
+              if($(el).attr("name") === type){
+                $(el).addClass('sel');
+              }
+            });
+            return temp.unique();
+          }
+          break;
+        default:
+          this.nsort=type;
+          if(this.fdata.length){
+            length= this.fdata.length;
+            temp = this.fdata.sortBy(type).unique();
+          }
+          else{
+            length= this.data.length;
+            temp = this.data.sortBy(type).unique();
+          }
+          if(b){
+            $(".tooltip.borderby .bcircle").each(function(index, el) {
+              if($(el).attr("name") === type){
+                $(el).addClass('sel');
+              }
+            });
+            return temp;
+          }
+          break;
+      }
+      this.fdata=temp;
+      this.createbox(temp.unique(), this.content.page,!1,!1,(this.content.page + 1)*20);
+    },
+    sortItemsTeste:function(data,b){
+      return data;
+    },
     Componentfilter:function(data,page,d,view,haslength){
+      //debugger;
       //Componente para todos os filtros, vou passar em todo o data e filtrar todos os filtros sempre que o filtro for mudado.
       var aux,context=this,status,i;
       if(this.filter.list.length){
@@ -2668,7 +2763,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       }
       else{
         $(".refine-container").removeClass('has');
-        aux=this.data;
+        if(this.nsort.length){
+          aux=this.fdata;
+        }
+        else{
+          aux=this.data;
+        }
       }
       this.prices=[];
       this.prices.push($("input[name='initial_price']").val() || 0);
@@ -2765,8 +2865,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.setloading(!1);
       if(this.nsort !== ""){
         //debugger;
-        this.fdata=this.sortItems(this.fdata,!0);
+
+        //this.fdata=this.sortItems(this.fdata,!0);
+        this.fdata=this.sortItemsTeste(this.fdata,!0);
+        console.dir(this.fdata);
       }
+      console.dir(this.fdata);
       this.createbox(this.fdata, page,d,view,haslength);
     },
 
@@ -2959,7 +3063,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         $(".info-template.item"+id).find(".custombuttons").removeClass('hide');
       }
     },
-    toggleTemplate:function(a){   
+    toggleTemplate:function(a){ 
       var el;
       if($(a.target).prop("tagName") ===  "SPAN"){
         el=$(a.target).parent();
@@ -3805,12 +3909,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
     getdata:function(filter){
       if(filter){
         var context=this,itens=[];
-        this.data.filter(function(a,b){
+        this.fdata.filter(function(a,b){
           if(a.AMOS_ID){
             if(a.AMOS_ID == filter){
               itens.push(a);
-              itens.push(context.data[b-1]);
-              itens.push(context.data[b+1]);
+              itens.push(context.fdata[b-1]);
+              itens.push(context.fdata[b+1]);
               return itens;
             }
           }
@@ -3824,7 +3928,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         return itens;
       }
       else{
-        return this.data;
+        return this.fdata;
       }
     },
     savingCookie:function(what,tofornclick,valforn){
