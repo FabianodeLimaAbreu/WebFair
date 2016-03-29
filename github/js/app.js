@@ -1577,8 +1577,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       switch(b){
         case 'amostras':
           //this.data = a.sortBy(this.nsort);
+          //debugger;
           this.data = a;
-          console.dir(this.data);
           this.content.changeview(this.view);
           //this.filter.checklist(a);
           //$(".changeview button.b"+this.view);
@@ -2267,63 +2267,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       a.preventDefault();
       var obj=$(a.target);
     },
-    /*sortItems : function(a,b){
-      var type,i,length,temp=[],aux=[];
-      if($(a.target).hasClass("sel") || this.loading){
-        return !1;
-      }
-      type=$(a.target).attr("name") || this.nsort;
-      $("html").attr("class","amostras");
-      this.content.clean();
-      $(".overview-container").remove();
-      this.order_box.find("button").removeClass("sel");
-      $(a.target).addClass("sel");
-      //console.dir(this.fdata);
-      if(type !== "BIGPRICE"){
-        this.nsort=type;
-        if(this.fdata.length){
-          length= this.fdata.length;
-          temp = this.fdata.sortBy(type).unique();
-        }
-        else{
-          length= this.data.length;
-          temp = this.data.sortBy(type).unique();
-        }
-        if(b){
-          $(".tooltip.borderby .bcircle").each(function(index, el) {
-            if($(el).attr("name") === type){
-              $(el).addClass('sel');
-            }
-          });
-          return temp;
-        }
-        this.createbox(temp, this.content.page,!1,!1,(this.content.page + 1)*20);
-      }
-      else{
-        this.nsort="AMOS_PRECO";
-        if(this.fdata.length){
-          length= this.fdata.length-1;
-          aux = this.fdata.sortBy(this.nsort).unique();
-        }
-        else{
-          length= this.data.length-1;
-          aux = this.data.sortBy(this.nsort).unique();
-        }
-        for(i=length;i>=0;i--){
-          temp.push(aux[i]);
-        }
-        if(b){
-          $(".tooltip.borderby .bcircle").each(function(index, el) {
-            if($(el).attr("name") === type){
-              $(el).addClass('sel');
-            }
-          });
-          return temp.unique();
-        }
-        this.createbox(temp.unique(), this.content.page,!1,!1,(this.content.page + 1)*20);
-        //this.createbox(temp.unique(), this.content.page,!1,!1,length);
-      }
-    },*/
     enableSelect : function(a){
       var status;
       var context=this;
@@ -2654,7 +2597,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       }   
     },
     sortItems : function(a,b){
-      //debugger;
+      debugger;
       var type,i,length,temp=[],aux=[];
       if($(a.target).hasClass("sel") || this.loading){
         return !1;
@@ -2684,6 +2627,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           for(i=length;i>=0;i--){
             temp.push(aux[i]);
           }
+          this.nsort="BIGPRICE";
           if(b){
             $(".tooltip.borderby .bcircle").each(function(index, el) {
               if($(el).attr("name") === type){
@@ -2747,9 +2691,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       }
       this.fdata=temp;
       this.createbox(temp.unique(), this.content.page,!1,!1,(this.content.page + 1)*20);
-    },
-    sortItemsTeste:function(data,b){
-      return data;
     },
     Componentfilter:function(data,page,d,view,haslength){
       //debugger;
@@ -2868,14 +2809,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       }  
       this.setloading(!1);
       if(this.nsort !== ""){
-        //debugger;
-
-        //this.fdata=this.sortItems(this.fdata,!0);
-        //this.fdata=this.sortItemsTeste(this.fdata,!0);
         this.fdata=this.sortItems(this.fdata,!0);
-        console.dir(this.fdata);
       }
-      console.dir(this.fdata);
       this.createbox(this.fdata, page,d,view,haslength);
     },
 
