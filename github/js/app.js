@@ -2661,11 +2661,15 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       }
       type=$(a.target).attr("name") || this.nsort;
       $("html").attr("class","amostras");
-      this.content.clean();
-      $(".overview-container").remove();
+      if(!b){
+        this.content.page=0;
+        $(".container-fullsize.scroller").scrollTop(0);
+        this.cookieamostras[0].posscroll=0;
+        this.content.clean();
+        $(".overview-container").remove();
+      }
       this.order_box.find("button").removeClass("sel");
       $(a.target).addClass("sel");
-      //console.dir(this.fdata);
       switch(type){
         case 'BIGPRICE':
           this.nsort="AMOS_PRECO";
@@ -2763,7 +2767,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       }
       else{
         $(".refine-container").removeClass('has');
-        if(this.nsort.length){
+        if(this.nsort.length && this.fdata.length){
           aux=this.fdata;
         }
         else{
@@ -2867,7 +2871,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         //debugger;
 
         //this.fdata=this.sortItems(this.fdata,!0);
-        this.fdata=this.sortItemsTeste(this.fdata,!0);
+        //this.fdata=this.sortItemsTeste(this.fdata,!0);
+        this.fdata=this.sortItems(this.fdata,!0);
         console.dir(this.fdata);
       }
       console.dir(this.fdata);
@@ -4103,6 +4108,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             }
             break;
           case "fornecedores":
+
             /*var $table = $('#table');
             $table.floatThead({
                 scrollContainer: function($table){
