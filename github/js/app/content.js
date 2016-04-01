@@ -333,10 +333,10 @@ window.Content = Spine.Controller.sub({
       this.itens = $(".overview-container tbody").find('tr');
     }
     else{
-      var view=this.itens = $("#table tbody");
+      var view=this.itens = $("#table.writter tbody");
       $("body").attr("class","").addClass("list");
-      a.appendTo($("#table tbody"));
-      this.itens = $("#table tbody").find('tr');
+      a.appendTo($("#table.writter tbody"));
+      this.itens = $("#table.writter tbody").find('tr');
     }
   }, clean:function() {
     this.itens.remove();
