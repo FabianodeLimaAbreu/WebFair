@@ -1195,9 +1195,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       $(".thumbnail .icon").attr("class","icon");
       $("html").attr("class","amostras");
       this.select_items.length=0;
-      if(this.cookieamostras[0]){
+      if(this.page === "amostras"){
         //debugger;
         this.cookieamostras[0].posscroll=0;
+        this.content.page=0;
       }
       a.hasClass("sel") || (this.viewBtn.removeClass("sel"), a.addClass("sel"), this.view = a.attr('alt'), this.setdata(this.data, "amostras"));
     },
@@ -1588,7 +1589,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           if(!this.cookieamostras.length){
             this.savingCookie(this.page);
           }
-          
 
           //REOPEN
           //this.createbox(this.data, this.content.page, !0);
