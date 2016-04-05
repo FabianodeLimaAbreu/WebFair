@@ -25,6 +25,7 @@
 
 //SIZES
 .s-four{width: 140px;}
+.s-two{max-width: 200px !important;}
 .s-one{width: 110px;}
 .s-eight{width: 180px !important;max-width: 180px !important;}
 .s-five{width: 50px}
@@ -124,10 +125,15 @@ body{
 	display: none !important;
 }
 
-/*.zoomContainer{
-	width: 418px !important;
-	overflow: hidden;
-}*/
+.zoomContainer{
+	&.has-rotate{
+		-webkit-transform:rotate(270deg);
+		-moz-transform:rotate(270deg);
+		-o-transform:rotate(270deg);
+		transform:rotate(270deg);
+		top: 245.5px;
+	}
+}
 /****************
 *********************************		 HOME 				*******************/
 .entrada{
@@ -2098,6 +2104,13 @@ form.search{
 			width: 248px;
 			height: auto;
 			border-radius: 0 0 10px 10px;
+			&.has-rotate{
+				-webkit-transform:rotate(270deg);
+				-moz-transform:rotate(270deg);
+				-o-transform:rotate(270deg);
+				transform:rotate(270deg);
+				top: 245.5px;
+			}
 		}
 	}
 	.description-overview{

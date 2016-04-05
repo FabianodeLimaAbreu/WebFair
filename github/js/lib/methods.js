@@ -1,11 +1,11 @@
-var imgPath= "http://192.168.10.100/webfair/ifairimg/";
-// var imgPath= "http://bdb/ifair_img/";
+//var imgPath= "http://192.168.10.100/webfair/ifairimg/";
+ var imgPath= "http://bdb/ifair_img/";
 
 var stringServer ="http://192.168.10.100/WebService.asmx?op=";
 //var stringServer ="http://ifair.focustextil.com.br/WebService.asmx?op";
 
-// var link = "http://192.168.10.100/webfair/index.html";
-var link = "http://ifair.focustextil.com.br/webfair/index.html";
+ var link = "http://192.168.10.100/webfair/index.html";
+//var link = "http://ifair.focustextil.com.br/webfair/index.html";
 var nodePath = "../WebService.asmx?op=", scrollTop = document.documentElement ? document.documentElement.scrollTop : document.body.scrollTop;
 window.console = window.console || {log:function() {
 }};

@@ -1558,9 +1558,15 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       }
     },
     processError:function(data, status, req){
-      //console.log("DEU ERRO");
+      //console.log("DEU ERRO: ");
       this.ajaxrequest=!1;
       this.fornecedores.ajaxrequest=!1;
+      if(data.status === 500){
+        return this.modal.open("message","Servidor instável, tente novamente ou aguarde alguns instantes!!!",!1,!0), this.setloading(!1);
+      }
+      else{
+        return this.modal.open("message","Um erro ocorreu!!!",!1,!0), this.setloading(!1);
+      }      
     },
     setdata:function(a,b){  
       var i,length;
@@ -1579,6 +1585,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           //this.data = a.sortBy(this.nsort);
           //debugger;
           this.data = a;
+          console.dir(a);
           this.content.changeview(this.view);
           //this.filter.checklist(a);
           //$(".changeview button.b"+this.view);
@@ -1997,7 +2004,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                             $(".container-fullsize.scroller").scrollTop(e.cookiefornecedores[0].posscroll);
                           }
                         }
-                        
                         clearInterval(f), e.setloading(!1);
                     }
                 }
@@ -4274,6 +4280,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.prices=[];
       $(".main_opt_item.tooltip.tooltip-selectable").eq(0).removeClass('has');
 
+
       this.fstatus=null;
       this.cadstatus=undefined;
       this.cadprincipal=undefined;
@@ -4291,7 +4298,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         "is_set":0
       };
       $(".filterlist a").removeClass('sel');
-      $(".tooltip-filter").removeClass('has');
+      $(".tooltip-fi0lter").removeClass('has');
 
       $(".refine a").removeClass('sel').addClass('unsel');
       $(".topcount").text("").addClass('hide');
@@ -4302,9 +4309,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       $("select[name='CONT_PRINCIPAL']").find("option").removeAttr('selected');
       //Filter list
       //this.filterlist.length=0;
-
     }
   });
   new App;
   Spine.Route.setup();
 });
+

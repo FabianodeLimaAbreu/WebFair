@@ -458,6 +458,11 @@ window.Box = Spine.Controller.sub({init:function() {
 
     result+="<li><button type='button' class='caption-icons-icon justit setitem bfisica "+fisica+"' name='"+a.AMOS_ID+"' title='Fisica'></button></li><li><button type='button' class='caption-icons-icon justit setitem bfav "+fav+"' name='"+a.AMOS_ID+"' title='Favoritar'></button></li></ul>";
     result+="<div class='caption-desc'><p><span>Código da Amostra: </span><span>"+a.AMOS_DESC+"</span></p><p><span>Fornecedor: </span><span>"+a.FORN_DESC+"</span></p><p><span>Data: </span><span>"+a.CREATE_DATE+"</span></p>";
+    if(this.usr.SEGM_COD === "TD"){
+      result+="<p><span>Segmento: </span><span>"+a.SEGM_COD+"</span></p>";
+    }
+
+      
     if(annex){
       result+="<button type='button' class='icon bannex'></button>";
     }
