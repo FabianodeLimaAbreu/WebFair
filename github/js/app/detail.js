@@ -989,12 +989,13 @@ setFav:function(a){
     }
     $(".note ul").append(result);
 
+    this.setDate(context.item.CONTACTS);
     if(context.item.CONTACTS.length>1){
       //Mais de um contato/
       //console.log("tem Mais de um contato");
       for(var i=(context.item.CONTACTS.length-1);i>=0;i--){
         var template="",temp="";
-        temp='<div class="supplier-form-container contact contact'+(i+1)+' actived cont"><h2><span>Contato '+(i+1)+'</span></h2>';
+        temp='<div class="supplier-form-container contact contact'+(i+1)+' actived cont"><h2><span>Contato '+(i+1)+' - '+context.item.CONTACTS[i].CREATE_DATE+'</span></h2>';
         template+='<div class="supplier-photo-side"><div class="photo-container">';
         if(context.item.CONTACTS[i].IMG_PATH_CONTATO.length){
           //template+='<img src="http://bdb/ifair_img/'+context.item.CONTACTS[i].IMG_PATH_CONTATO+'" width="100%">';
@@ -1055,7 +1056,7 @@ setFav:function(a){
         //Tem apenas 1 contato
         //console.log("Tem apenas 1 contato");
         var template="",temp="",cont="",template2="";
-        temp+='<div class="supplier-form-container contact contact1 actived cont"><h2><span>Contato 1</span></h2><div class="supplier-photo-side"><div class="photo-container">';
+        temp+='<div class="supplier-form-container contact contact1 actived cont"><h2><span>Contato 1 - '+context.item.CONTACTS[0].CREATE_DATE+'</span></h2><div class="supplier-photo-side"><div class="photo-container">';
         if(context.item.CONTACTS[0].IMG_PATH_CONTATO.length){
           //template+='<img src="http://bdb/ifair_img/'+context.item.CONTACTS[i].IMG_PATH_CONTATO+'" width="100%">';
           template+='<img src="'+imgPath+context.item.CONTACTS[0].IMG_PATH_CONTATO+'" width="100%"  name="'+context.item.CONTACTS[0].CONT_ID+'">';        } 

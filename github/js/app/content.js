@@ -458,9 +458,11 @@ window.Box = Spine.Controller.sub({init:function() {
 
     result+="<li><button type='button' class='caption-icons-icon justit setitem bfisica "+fisica+"' name='"+a.AMOS_ID+"' title='Fisica'></button></li><li><button type='button' class='caption-icons-icon justit setitem bfav "+fav+"' name='"+a.AMOS_ID+"' title='Favoritar'></button></li></ul>";
     result+="<div class='caption-desc'><p><span>Código da Amostra: </span><span>"+a.AMOS_DESC+"</span></p><p><span>Fornecedor: </span><span>"+a.FORN_DESC+"</span></p><p><span>Data: </span><span>"+a.CREATE_DATE+"</span></p>";
+    /*
+    To attend 806 demand
     if(this.usr.SEGM_COD === "TD"){
       result+="<p><span>Segmento: </span><span>"+a.SEGM_COD+"</span></p>";
-    }
+    }*/
 
       
     if(annex){
@@ -500,7 +502,7 @@ window.Box = Spine.Controller.sub({init:function() {
     switch (this.page){
       case "fornecedores":
         if(a){
-          var result="",i,status,nome_contato,segmento=[],middlefav="";
+          var result="",i,status,nome_contato,segmento=[],contatos_date=[],middlefav="";
           status= a.FORN_STATUS ? "complet":"incomplet";
           result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.FORN_DESC+"</a></td>"+"<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.FEIR_DESC+"</a></td>"+"<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.CREATE_DATE+"</a></td>";
           
@@ -514,6 +516,7 @@ window.Box = Spine.Controller.sub({init:function() {
             }
             if(scont.length){
               result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>";
+              this.setDate(scont);
               for(i=0;i<scont.length;i++){
                 if(scont[i].CONT_NOME.length){
                   nome_contato=scont[i].CONT_NOME;
@@ -521,6 +524,8 @@ window.Box = Spine.Controller.sub({init:function() {
                 else{
                   nome_contato="SEM NOME";
                 }
+                
+                contatos_date.push(scont[i].CREATE_DATE);
                 segmento.push(scont[i].SEGM_DESC);
                 result+=""+nome_contato+"<br/>";
               }
@@ -534,6 +539,9 @@ window.Box = Spine.Controller.sub({init:function() {
             result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'></a></td>";
           }
 
+          if(contatos_date.length){
+            result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+contatos_date.join("<br/>")+"</a></td>";
+          }
           if(segmento.length){
             result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+segmento.join("<br/>")+"</a></td>";
           }
@@ -683,3 +691,5 @@ window.Box = Spine.Controller.sub({init:function() {
     }
   }
 });
+
+

@@ -1549,7 +1549,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         }
         else{
           search="<AMOS_ID>"+$(a.target).val()+"</AMOS_ID>";
-        }
+        } 
         this.amosval=$(a.target).val();
         this.setloading(!0,!1);
         this.mode="amostras/"+((""+this.fairval).replace(" ","_") || "padrao")+"/"+(this.fornval.replace(" ","_") || "padrao")+"/"+($(a.target).val().replace(" ","_") || "padrao");
@@ -1608,7 +1608,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           this.filterTemplate();
           break;
         case 'fornecedores':
-          //console.dir(a);
+          console.dir(a);
           $("input[name='initial_date']").datepicker('setDate', this.initialTimeForn.slice(0,4)+'-'+this.initialTimeForn.slice(5, 7)+"-"+this.initialTimeForn.slice(8, 10));
           $("input[name='end_date']").datepicker('setDate', this.endTimeForn.slice(0,4)+'-'+this.endTimeForn.slice(5, 7)+"-"+this.endTimeForn.slice(8, 10));
 
@@ -4298,7 +4298,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         "is_set":0
       };
       $(".filterlist a").removeClass('sel');
-      $(".tooltip-fi0lter").removeClass('has');
+      $(".tooltip-filter").removeClass('has');
 
       $(".refine a").removeClass('sel').addClass('unsel');
       $(".topcount").text("").addClass('hide');
@@ -4314,4 +4314,5 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
   new App;
   Spine.Route.setup();
 });
+
 
