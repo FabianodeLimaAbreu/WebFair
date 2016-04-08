@@ -3518,8 +3518,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       var indice_forn=[
         {"code":"FORN_DESC","name":"Fornecedor"},
         {"code":"FEIR_DESC","name":"Local da Coleta"},
-        {"code":"CREATE_DATE","name":"Data"},
+        {"code":"CREATE_DATE","name":"Criacao do fornecedor"},
         {"code":"CONTACTS","name":"Contatos"},
+        {"code":"CONTACTS_CREATE_DATE","name":"Cadastro do Contato"},
         {"code":"SEGM_DESC","name":"Segmento"},
         {"code":"NOTES","name":"Anotacoes"},
         {"code":"FAVORITES","name":"Favoritos"},
@@ -3639,8 +3640,22 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 if(fdata[i].CONTACTS.length){
                   //console.log(fdata[i].FORN_DESC);
                   tab_text+="<td>";
+                  this.setDate(fdata[i].CONTACTS);
                   for(var k=0;k<fdata[i].CONTACTS.length;k++){
                     tab_text+="<p>"+(fdata[i].CONTACTS[k].CONT_NOME || "SEM NOME")+"</p>";
+                  }
+                  tab_text+="</td>";
+                }
+                else{
+                  tab_text+="<td></td>";
+                }
+                break;
+              case "CONTACTS_CREATE_DATE":
+                if(fdata[i].CONTACTS.length){
+                  //console.log(fdata[i].FORN_DESC);
+                  tab_text+="<td>";
+                  for(var k=0;k<fdata[i].CONTACTS.length;k++){
+                    tab_text+="<p>"+(fdata[i].CONTACTS[k].CREATE_DATE || "")+"</p>";
                   }
                   tab_text+="</td>";
                 }
