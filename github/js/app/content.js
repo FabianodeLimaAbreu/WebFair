@@ -76,7 +76,7 @@ window.Spotlight = Spine.Controller.sub({
       this.mode="amostras/"+((""+this.getFairVal()).replace(" ","_") || "padrao")+"/"+((""+this.getFornVal()).replace(" ","_") || "padrao")+"/"+((""+this.getAmosVal()).replace(" ","_") || "padrao");
       this.navigate(this.mode, !1);
       //this.callService("amostras",fair,name,amos,'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20'+'</LINHA_F>','<CREATE_DATE_I>2000-01-01</CREATE_DATE_I>','<CREATE_DATE_F>2020-01-01</CREATE_DATE_F>');
-      this.callService("amostras",fair,name,amos,'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20000'+'</LINHA_F>','<CREATE_DATE_I>'+this.getInitialTime(!0)+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.getEndTime(!0)+'</CREATE_DATE_F>');
+      this.callService("amostras",fair,name,amos,'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20000'+'</LINHA_F>',(this.getInitialTime(!0) ? '<CREATE_DATE_I>'+this.getInitialTime(!0)+'</CREATE_DATE_I>' : ""),(this.getEndTime(!0) ? '<CREATE_DATE_F>'+this.getEndTime(!0)+'</CREATE_DATE_F>' : ""));
       this.close();
     }
     else{
@@ -89,7 +89,7 @@ window.Spotlight = Spine.Controller.sub({
       this.mode="fornecedores/"+((""+this.getFairVal()).replace(" ","_") || "padrao")+"/"+((""+this.getFornVal()).replace(" ","_") || "padrao")+"/"+"padrao";
       //console.log(this.mode);
       this.navigate(this.mode, !1);
-      this.callService("fornecedores",fair,name,'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20'+'</LINHA_F>','<CREATE_DATE_I>'+this.getInitialTime(!1)+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.getEndTime(!1)+'</CREATE_DATE_F>',vprincipal);
+      this.callService("fornecedores",fair,name,'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20'+'</LINHA_F>',(this.getInitialTime(!0) ? '<CREATE_DATE_I>'+this.getInitialTime(!0)+'</CREATE_DATE_I>' : ""),(this.getEndTime(!0) ? '<CREATE_DATE_F>'+this.getEndTime(!0)+'</CREATE_DATE_F>' : ""),vprincipal);
       //this.callService("fornecedores",fair,name,'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20000'+'</LINHA_F>','<CREATE_DATE_I>'+this.getInitialTime()+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.getEndTime()+'</CREATE_DATE_F>');
       this.close();
     }
@@ -542,6 +542,9 @@ window.Box = Spine.Controller.sub({init:function() {
           if(contatos_date.length){
             result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+contatos_date.join("<br/>")+"</a></td>";
           }
+          else{
+            result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'></td>";
+          }
           if(segmento.length){
             result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+segmento.join("<br/>")+"</a></td>";
           }
@@ -654,6 +657,9 @@ window.Box = Spine.Controller.sub({init:function() {
         //annex ? result+="<td><button type='button' class='icon bannex'>Sim/button></td>" : result+="<td></td>";
         result+="<td><button type='button' class='caption-icons-icon justit bemail "+email+"' name='"+a.AMOS_ID+"'>"+(email === "sent" ? "Sim" : "Nao")+"</button></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.TECI_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.BASE_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.GRUP_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.SUBG_DESC+"</a></td>";
         if(a.COMPOSITIONS.length){
+
+
+          
           var concat=[];
           result+="<td>";
           for(i=0;i<a.COMPOSITIONS.length;i++){

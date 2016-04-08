@@ -130,10 +130,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.fornval="";
       this.amosval="";
       this.fornclick="";
-      this.initialTimeAmos='2000-01-01';
-      this.endTimeAmos='2020-10-10';
-      this.initialTimeForn='2000-01-01';
-      this.endTimeForn='2020-10-10';
+      this.initialTimeAmos=null;
+      this.endTimeAmos=null;
+      this.initialTimeForn=null;
+      this.endTimeForn=null;
 
       this.unable_select=!1;
       this.is_selected=!1;
@@ -1020,8 +1020,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.resetFilters();
       switch (this.page){
         case "fornecedores":
-          this.initialTimeForn=$("input[name='initial_date']").val() || ("2000"+"-"+"01"+"-"+"01");
-          this.endTimeForn=$("input[name='end_date']").val() || ("2020-"+"10"+"-"+"10");
+          this.initialTimeForn=$("input[name='initial_date']").val() || null;
+          this.endTimeForn=$("input[name='end_date']").val() || null;
           if(this.cookiefornecedores.length){
             //debugger;
             this.cookiefornecedores[0].posscroll=0;
@@ -1033,7 +1033,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             }
             this.mode="fornecedores/"+"padrao"+"/"+"padrao"+"/"+"padrao";
             this.navigate(this.mode, !1);
-            this.callService("fornecedores",'<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>1</LINHA_I>','<LINHA_F>20000</LINHA_F>','<CREATE_DATE_I>'+this.initialTimeForn+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTimeForn+'</CREATE_DATE_F>',vprincipal);
+            this.callService("fornecedores",'<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>1</LINHA_I>','<LINHA_F>20000</LINHA_F>',(this.initialTimeForn ? '<CREATE_DATE_I>'+this.initialTimeForn+'</CREATE_DATE_I>' : ""),(this.endTimeForn ? '<CREATE_DATE_F>'+this.endTimeForn+'</CREATE_DATE_F>' : ""),vprincipal);
             //this.modal.open("message","Selecione ao menos uma feira para filtrar!!!",!1,!0);
             return !0;
           }
@@ -1042,11 +1042,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 
           this.mode="fornecedores/"+(this.fairval || "padrao")+"/"+(this.fornval || "padrao")+"/"+(this.amosval || "padrao");
           this.navigate(this.mode, !1);
-          this.callService("fornecedores",'<FORN_DESC>'+this.fornval+'</FORN_DESC>','<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>'+(this.content.page*20+1)+'</LINHA_I>','<LINHA_F>20000</LINHA_F>','<CREATE_DATE_I>'+this.initialTimeForn+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTimeForn+'</CREATE_DATE_F>',vprincipal);
+          this.callService("fornecedores",'<FORN_DESC>'+this.fornval+'</FORN_DESC>','<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>'+(this.content.page*20+1)+'</LINHA_I>','<LINHA_F>20000</LINHA_F>',(this.initialTimeForn ? '<CREATE_DATE_I>'+this.initialTimeForn+'</CREATE_DATE_I>' : ""),(this.endTimeForn ? '<CREATE_DATE_F>'+this.endTimeForn+'</CREATE_DATE_F>' : ""),vprincipal);
           break;
         case "amostras":
-          this.initialTimeAmos=$("input[name='initial_date']").val() || ("2000"+"-"+"01"+"-"+"01");
-          this.endTimeAmos=$("input[name='end_date']").val() || ("2020-"+"10"+"-"+"10");
+          this.initialTimeAmos=$("input[name='initial_date']").val() || null;
+          this.endTimeAmos=$("input[name='end_date']").val() || null;
           if(this.cookieamostras.length){
             //debugger;
             this.cookieamostras[0].posscroll=0;
@@ -1054,7 +1054,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           if(!this.fairval && !this.fornval && !this.amosval){
             //this.mode="amostras/"+"padrao"+"/"+"padrao"+"/"+"padrao";
             //this.navigate(this.mode, !1);
-            this.callService("amostras",'<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>1</LINHA_I>','<LINHA_F>20000</LINHA_F>','<CREATE_DATE_I>'+this.initialTimeAmos+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTimeAmos+'</CREATE_DATE_F>');
+            this.callService("amostras",'<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>1</LINHA_I>','<LINHA_F>20000</LINHA_F>',(this.initialTimeAmos ? '<CREATE_DATE_I>'+this.initialTimeAmos+'</CREATE_DATE_I>' : ""),(this.endTimeAmos ? '<CREATE_DATE_F>'+this.endTimeAmos+'</CREATE_DATE_F>' : ""));
             //this.modal.open("message","Selecione ao menos uma feira para filtrar!!!",!1,!0);
             return !0;
           }
@@ -1073,7 +1073,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 
           this.mode="amostras/"+(this.fairval || "padrao")+"/"+(this.fornval || "padrao")+"/"+(this.amosval || "padrao");
           this.navigate(this.mode, !1);
-          this.callService("amostras",'<AMOS_DESC>'+this.amosval+'</AMOS_DESC>','<FEIR_COD>'+this.fairval+'</FEIR_COD>',FORN_DESC,'<LINHA_I>'+(this.content.page*20+1)+'</LINHA_I>','<LINHA_F>20000</LINHA_F>','<CREATE_DATE_I>'+this.initialTimeAmos+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.endTimeAmos+'</CREATE_DATE_F>');
+          this.callService("amostras",'<AMOS_DESC>'+this.amosval+'</AMOS_DESC>','<FEIR_COD>'+this.fairval+'</FEIR_COD>',FORN_DESC,'<LINHA_I>'+(this.content.page*20+1)+'</LINHA_I>','<LINHA_F>20000</LINHA_F>',(this.initialTimeAmos ? '<CREATE_DATE_I>'+this.initialTimeAmos+'</CREATE_DATE_I>' : ""),(this.endTimeAmos ? '<CREATE_DATE_F>'+this.endTimeAmos+'</CREATE_DATE_F>' : ""));
           break;
       }
       $(".date-filter").removeClass("sel");
@@ -1454,6 +1454,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         });
     },
     submit:function(a,b,c,d,fstatus,fprincipal){
+      //debugger;
       var status,vprincipal,core=this;
       var b=b || "";
       var c=c || "";
@@ -1468,7 +1469,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           }
           if(core.page ===  "amostras"){
             //core.callService(core.page,a,b,c,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>'+((core.content.page+1)*core.itens_by_page)+'</LINHA_F>','<CREATE_DATE_I>'+core.initialTime+'</CREATE_DATE_I>',"<CREATE_DATE_F>"+core.endTime+"</CREATE_DATE_F>");
-            core.callService(core.page,a,b,c,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>20000</LINHA_F>','<CREATE_DATE_I>'+core.initialTimeAmos+'</CREATE_DATE_I>',"<CREATE_DATE_F>"+core.endTimeAmos+"</CREATE_DATE_F>");
+            core.callService(core.page,a,b,c,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>20000</LINHA_F>',(core.initialTimeAmos ? '<CREATE_DATE_I>'+core.initialTimeAmos+'</CREATE_DATE_I>' : ""),(core.endTimeAmos ? '<CREATE_DATE_F>'+core.endTimeAmos+'</CREATE_DATE_F>' : ""));
           }
           else{
             if(typeof fstatus !== "undefined"){
@@ -1484,8 +1485,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               vprincipal="";
             }
 
-            $("input[name='initial_date']").datepicker('setDate', core.initialTimeForn.slice(0,4)+'-'+core.initialTimeForn.slice(5, 7)+"-"+core.initialTimeForn.slice(8, 10));
-            $("input[name='end_date']").datepicker('setDate', core.endTimeForn.slice(0,4)+'-'+core.endTimeForn.slice(5, 7)+"-"+core.endTimeForn.slice(8, 10));
+            $("input[name='initial_date']").datepicker('setDate', (core.initialTimeForn && core.initialTimeForn.slice(0,4)+'-'+core.initialTimeForn.slice(5, 7)+"-"+core.initialTimeForn.slice(8, 10)));
+            $("input[name='end_date']").datepicker('setDate', (core.endTimeForn && core.endTimeForn.slice(0,4)+'-'+core.endTimeForn.slice(5, 7)+"-"+core.endTimeForn.slice(8, 10)));
             
             $("select[name='FORN_STATUS']").find("option").each(function(index, el) {
               if($(el).attr("value").bool() === core.cadstatus){
@@ -1498,7 +1499,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 $(el).attr('selected', 'selected');
               }
             });
-            core.callService(core.page,a,b,fstatus,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>'+((core.content.page+1)*core.itens_by_page)+'</LINHA_F>','<CREATE_DATE_I>'+core.initialTimeForn+'</CREATE_DATE_I>'+"<CREATE_DATE_F>"+core.endTimeForn+"</CREATE_DATE_F>",vprincipal);
+            core.callService(core.page,a,b,fstatus,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>'+((core.content.page+1)*core.itens_by_page)+'</LINHA_F>',(core.initialTimeForn ? '<CREATE_DATE_I>'+core.initialTimeForn+'</CREATE_DATE_I>' : "")+(core.endTimeForn ? '<CREATE_DATE_F>'+core.endTimeForn+'</CREATE_DATE_F>' : ""),vprincipal);
             //core.callService(core.page,a,b,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>20000</LINHA_F>','<CREATE_DATE_I>'+core.initialTime+'</CREATE_DATE_I>',"<CREATE_DATE_F>"+core.endTime+"</CREATE_DATE_F>");
           }
         }
@@ -1561,6 +1562,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       //console.log("DEU ERRO: ");
       this.ajaxrequest=!1;
       this.fornecedores.ajaxrequest=!1;
+      if(this.page === "fornecedor_cadastro"){
+        //This condicional code is used now because I need that the web service be fixed to receive special caracteres like in supplier's name.
+        //Then in order to avoid be showing erros to user in gravarFornecedor Web Service, I don't show any error message in supplier's cad page.
+        return !0;
+      }
       if(data.status === 500){
         return this.modal.open("message","Servidor instável, tente novamente ou aguarde alguns instantes!!!",!1,!0), this.setloading(!1);
       }
@@ -1577,7 +1583,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       
 
       if (!this.data.length && b !="local") {    
-        return this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0), $(".overview-container").remove(),$('<div class="brea"></div>d-search').find(".spec").text("0 Resultados"),this.page === "amostras" ? $("input[name='initial_date']").datepicker('setDate', this.initialTimeAmos.slice(0,4)+'-'+this.initialTimeAmos.slice(5, 7)+"-"+this.initialTimeAmos.slice(8, 10)) && $("input[name='end_date']").datepicker('setDate', this.endTimeAmos.slice(0,4)+'-'+this.endTimeAmos.slice(5, 7)+"-"+this.endTimeAmos.slice(8, 10)) :($("input[name='initial_date']").datepicker('setDate', this.initialTimeAmos.slice(0,4)+'-'+this.initialTimeAmos.slice(5, 7)+"-"+this.initialTimeAmos.slice(8, 10)) && $("input[name='end_date']").datepicker('setDate', this.endTimeAmos.slice(0,4)+'-'+this.endTimeAmos.slice(5, 7)+"-"+this.endTimeAmos.slice(8, 10))), this.setloading(!1);
+        return this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0), $(".overview-container").remove(),$('<div class="brea"></div>d-search').find(".spec").text("0 Resultados"),this.page === "amostras" ? $("input[name='initial_date']").datepicker('setDate', (this.initialTimeAmos && this.initialTimeAmos.slice(0,4)+'-'+this.initialTimeAmos.slice(5, 7)+"-"+this.initialTimeAmos.slice(8, 10))) && $("input[name='end_date']").datepicker('setDate', (this.endTimeAmos && this.endTimeAmos.slice(0,4)+'-'+this.endTimeAmos.slice(5, 7)+"-"+this.endTimeAmos.slice(8, 10))) :$("input[name='initial_date']").datepicker('setDate', (this.initialTimeAmos && this.initialTimeAmos.slice(0,4)+'-'+this.initialTimeAmos.slice(5, 7)+"-"+this.initialTimeAmos.slice(8, 10))) && $("input[name='end_date']").datepicker('setDate', (this.endTimeAmos && this.endTimeAmos.slice(0,4)+'-'+this.endTimeAmos.slice(5, 7)+"-"+this.endTimeAmos.slice(8, 10))), this.setloading(!1);
         //return this.modal.open(),this.breadEl.find('.bread-colec a').text("").removeClass('active'),this.setloading(!1), this.searchEl.find('input').blur();
       }  
       switch(b){
@@ -1608,9 +1614,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           this.filterTemplate();
           break;
         case 'fornecedores':
-          console.dir(a);
-          $("input[name='initial_date']").datepicker('setDate', this.initialTimeForn.slice(0,4)+'-'+this.initialTimeForn.slice(5, 7)+"-"+this.initialTimeForn.slice(8, 10));
-          $("input[name='end_date']").datepicker('setDate', this.endTimeForn.slice(0,4)+'-'+this.endTimeForn.slice(5, 7)+"-"+this.endTimeForn.slice(8, 10));
+          if(this.initialTimeForn !== null || this.endTimeForn !== null){
+            $(".date-filter").parent().addClass('has');
+          }
+          else{
+            $(".date-filter").parent().removeClass('has');
+          }
+          $("input[name='initial_date']").datepicker('setDate', (this.initialTimeForn && this.initialTimeForn.slice(0,4)+'-'+this.initialTimeForn.slice(5, 7)+"-"+this.initialTimeForn.slice(8, 10)));
+          $("input[name='end_date']").datepicker('setDate', (this.endTimeForn && this.endTimeForn.slice(0,4)+'-'+this.endTimeForn.slice(5, 7)+"-"+this.endTimeForn.slice(8, 10)));
 
           this.data = a.sortBy("FORN_ID");
           this.content.changeview("list");
@@ -1722,12 +1733,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               this.setdata(this.data,"fornecedores");
             }
             else{
-              var temp=jQuery.parseJSON($(req.responseXML).text()).sortBy('FORN_ID');
-              /*console.dir(temp);
-              console.dir(this.data);*/
+              var temp=jQuery.parseJSON($(req.responseXML).text()).unique().sortBy('FORN_ID');
+              /*console.dir(this.data);*/
               this.setDate(temp);
+              console.dir(temp);
               this.data=this.data.concat(temp);
-              //console.dir(this.data);
+              console.dir(this.data);
               this.createbox(this.data, this.content.page, !0,"list");
             }
             break;
@@ -2043,8 +2054,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                       view_container.find(".bread-search .spec").text(k+1);
                     }
                     else if(e.page === "fornecedores"){
-                      console.dir(e.cookiefornecedores);
-                      console.dir(e.cookieamostras);
                       if(e.cookiefornecedores.length){
                         //debugger;
                         //console.log(e.cookiefornecedores[0].posscroll);
@@ -2360,8 +2369,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
     },
     changeFair:function(a){
       //console.log("mudou feira, RESETOU COOKIE")
-      /*this.initialTime='2000-01-01';
-      this.endTime='2020-10-10';*/
+      /*this.initialTime=null;
+      this.endTime=null;*/
       //this.scroller=0;
       //debugger;
       if(this.page === "fornecedor_cadastro"){
@@ -2402,6 +2411,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         });
         this.createbox(this.fair, this.content.page, !0,"list");
       }
+
+
+
       this.callService("cities",'<PAIS_COD>'+$(a.target).find("option:selected").val()+'</PAIS_COD>','<PAIS_DESC></PAIS_DESC>','<REGI_COD></REGI_COD>','<REGI_DESC></REGI_DESC>');
       //this.setdata(this.fair,"local");
     },
@@ -2480,6 +2492,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             if(el[0].FAVORITES[i].SEGM_COD !== this.usr.SEGM_COD){
               //console.log("diferente");
               html+="<string>"+el[0].FAVORITES[i].SEGM_COD+"</string>";
+              
               diff=!0;
             }
             else{
@@ -3483,14 +3496,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
     getPage:function(){
       return this.page;
     },
-    getInitialTime:function(a){
+    getInitialTime:function(a){ 
       if(a){
         return this.initialTimeAmos;
       }
       else{
         return this.initialTimeForn;
-      }
-      
+      }  
     },
     getEndTime:function(a){
       if(a){
@@ -4054,6 +4066,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           case "amostras":
             d = z.scrollTop();
             b = e.content.itens.length;
+            console.log(b);
             f=0;
             if(e.view === "images"){
               $(".overview-container").each(function() {
@@ -4075,7 +4088,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             }
 
             if (d >= f && b) {
+              console.log(b+" = "+e.data.length);
               if(b<e.data.length){
+                console.log("OK");
                 e.content.page++;
                 e.setloading(!0,!1);
                 e.reopenFilter(e.data, e.content.page, !0);
@@ -4171,12 +4186,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       //this.setloading(!0,!1);
       this.filterisdone=!1;
       if(this.page === "amostras"){
-        $("input[name='initial_date']").datepicker('setDate', this.initialTimeAmos.slice(0,4)+'-'+this.initialTimeAmos.slice(5, 7)+"-"+this.initialTimeAmos.slice(8, 10));
-        $("input[name='end_date']").datepicker('setDate', this.endTimeAmos.slice(0,4)+'-'+this.endTimeAmos.slice(5, 7)+"-"+this.endTimeAmos.slice(8, 10));
+
+        $("input[name='initial_date']").datepicker('setDate', (this.initialTimeAmos && this.initialTimeAmos.slice(0,4)+'-'+this.initialTimeAmos.slice(5, 7)+"-"+this.initialTimeAmos.slice(8, 10)));
+        $("input[name='end_date']").datepicker('setDate', (this.endTimeAmos && this.endTimeAmos.slice(0,4)+'-'+this.endTimeAmos.slice(5, 7)+"-"+this.endTimeAmos.slice(8, 10)));
       }
       else{
-        $("input[name='initial_date']").datepicker('setDate', this.initialTimeForn.slice(0,4)+'-'+this.initialTimeForn.slice(5, 7)+"-"+this.initialTimeForn.slice(8, 10));
-        $("input[name='end_date']").datepicker('setDate', this.endTimeForn.slice(0,4)+'-'+this.endTimeForn.slice(5, 7)+"-"+this.endTimeForn.slice(8, 10));
+        $("input[name='initial_date']").datepicker('setDate', (this.initialTimeForn && this.initialTimeForn.slice(0,4)+'-'+this.initialTimeForn.slice(5, 7)+"-"+this.initialTimeForn.slice(8, 10)));
+        $("input[name='end_date']").datepicker('setDate', (this.endTimeForn && this.endTimeForn.slice(0,4)+'-'+this.endTimeForn.slice(5, 7)+"-"+this.endTimeForn.slice(8, 10)));
       }
       if(this.prices.length){
         //Fazer o trigger no filtro
@@ -4204,13 +4220,23 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         this.filter.list=this.refine;
         this.filter.data=this.data;
       }
-
-      if(this.page === "amostras" && (this.initialTime !== "2000-01-01" || this.endTime !== "2020-10-10")){
-        $(".date-filter").parent().addClass('has');
+      if(this.page === "amostras"){
+        if(this.initialTimeAmos !== null || this.endTimeAmos !== null){
+          $(".date-filter").parent().addClass('has');
+        }
+        else{
+          $(".date-filter").parent().removeClass('has');
+        }
       }
       else{
-        $(".date-filter").parent().removeClass('has');
+        if(this.initialTimeForn !== null || this.endTimeForn !== null){
+          $(".date-filter").parent().addClass('has');
+        }
+        else{
+          $(".date-filter").parent().removeClass('has');
+        }
       }
+      
 
       //REOPEN      
       this.Componentfilter(data,page,d,view,haslength);
@@ -4253,8 +4279,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.fornclick="";
       //this.nsort="AMOS_DESC";
       this.nsort="";
-      /*this.initialTime='2000-01-01';
-      this.endTime='2020-10-10';*/
+      /*this.initialTime=null;
+      this.endTime=null;*/
       $.removeCookie('posscroll'+this.page, { path: '/' });
       this.combofilter={
         "FLAG_FISICA":{"clicked":0,"code":0},
@@ -4271,8 +4297,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       //DATE
       /*$("input[name='initial_date']").val("");
       $("input[name='end_date']").val("");
-      this.initialTime='2000-01-01';
-      this.endTime='2020-10-10';*/
+      this.initialTime=null;
+      this.endTime=null;*/
 
       //PRICE
       $("input[name='initial_price']").val("");
