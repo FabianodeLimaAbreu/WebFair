@@ -458,12 +458,11 @@ window.Box = Spine.Controller.sub({init:function() {
 
     result+="<li><button type='button' class='caption-icons-icon justit setitem bfisica "+fisica+"' name='"+a.AMOS_ID+"' title='Fisica'></button></li><li><button type='button' class='caption-icons-icon justit setitem bfav "+fav+"' name='"+a.AMOS_ID+"' title='Favoritar'></button></li></ul>";
     result+="<div class='caption-desc'><p><span>Código da Amostra: </span><span>"+a.AMOS_DESC+"</span></p><p><span>Fornecedor: </span><span>"+a.FORN_DESC+"</span></p><p><span>Data: </span><span>"+a.CREATE_DATE+"</span></p>";
-    /*
-    To attend 806 demand
+    
+    //To attend demand 806
     if(this.usr.SEGM_COD === "TD"){
       result+="<p><span>Segmento: </span><span>"+a.SEGM_COD+"</span></p>";
-    }*/
-
+    }
       
     if(annex){
       result+="<button type='button' class='icon bannex'></button>";
@@ -608,7 +607,7 @@ window.Box = Spine.Controller.sub({init:function() {
           }
           /*To attend Demand: 0 Alerta para mais de dois contatos principais cadastrado
           <td><span class='doubled-contact'></span></td>*/
-          result+="<td><button type='button' class='caption-icons-icon justit bstatus "+status+"' title='"+status.capitalize()+"'>"+status+"</button></td>";
+          result+="<td><button type='button' class='caption-icons-icon justit bstatus "+status+"' title='"+status.capitalize()+"'>"+status+"</button></td><td><span class='doubled-contact'></span></td>";
           return result;
         }
         break;
@@ -624,7 +623,11 @@ window.Box = Spine.Controller.sub({init:function() {
         email= a.AMOS_ENV_EMAIL? "sent":"disabled";
 
         //Creating result
-        result+="<td><button type='button' name='"+a.AMOS_ID+"' class='icon bselection'></button></td><td><a href='#detail/"+parseInt(a.FEIR_COD)+"/"+a.AMOS_ID+"'>"+a.FORN_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.AMOS_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.CREATE_DATE+"</a></td><td><button type='button' class='caption-icons-icon justit setitem bfisica "+fisica+"' name='"+a.AMOS_ID+"' title='Fisica'>"+(fisica === "has" ? "Sim" : "Nao")+"</button></td><td>"+a.AMOS_PRECO+"</td><td>"+a.AMOS_COTACAO_KG+"</td><td><button type='button' class='caption-icons-icon justit setitem bfav "+fav+"' name='"+a.AMOS_ID+"' title='Favoritar'>"+(fav === "has" ? "Sim" : "Nao")+"</button></td><td><button type='button' class='caption-icons-icon justit setitem bhomologado "+homologado+"' name='"+a.AMOS_ID+"' title='Homologar'>"+(homologado === "has" ? "Sim" : "Nao")+"</button></td>";
+        result+="<td><button type='button' name='"+a.AMOS_ID+"' class='icon bselection'></button></td><td><a href='#detail/"+parseInt(a.FEIR_COD)+"/"+a.AMOS_ID+"'>"+a.FORN_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.AMOS_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.CREATE_DATE+"</a></td>";
+        if(this.usr.SEGM_COD === "TD"){
+          result+="<td><a href='#detail/"+a.AMOS_ID+"'>"+a.SEGM_COD+"</a></td>";
+        }
+        result+="<td><button type='button' class='caption-icons-icon justit setitem bfisica "+fisica+"' name='"+a.AMOS_ID+"' title='Fisica'>"+(fisica === "has" ? "Sim" : "Nao")+"</button></td><td>"+a.AMOS_PRECO+"</td><td>"+a.AMOS_COTACAO_KG+"</td><td><button type='button' class='caption-icons-icon justit setitem bfav "+fav+"' name='"+a.AMOS_ID+"' title='Favoritar'>"+(fav === "has" ? "Sim" : "Nao")+"</button></td><td><button type='button' class='caption-icons-icon justit setitem bhomologado "+homologado+"' name='"+a.AMOS_ID+"' title='Homologar'>"+(homologado === "has" ? "Sim" : "Nao")+"</button></td>";
         if(note){
           var segnote=[];
           for(i=0;i<a.NOTES.length;i++){
@@ -657,9 +660,6 @@ window.Box = Spine.Controller.sub({init:function() {
         //annex ? result+="<td><button type='button' class='icon bannex'>Sim/button></td>" : result+="<td></td>";
         result+="<td><button type='button' class='caption-icons-icon justit bemail "+email+"' name='"+a.AMOS_ID+"'>"+(email === "sent" ? "Sim" : "Nao")+"</button></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.TECI_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.BASE_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.GRUP_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.SUBG_DESC+"</a></td>";
         if(a.COMPOSITIONS.length){
-
-
-          
           var concat=[];
           result+="<td>";
           for(i=0;i<a.COMPOSITIONS.length;i++){
@@ -697,5 +697,3 @@ window.Box = Spine.Controller.sub({init:function() {
     }
   }
 });
-
-

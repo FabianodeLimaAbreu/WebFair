@@ -125,9 +125,9 @@ var App={
 	submitTemp:function(a){
         var EMAIL_TO,EMAIL_FROM,EMAIL_SUBJECT,EMAIL_BODY,EMAIL_CC,status,last,last_request,EMAIL_CC_list=[];
 
-        /*EMAIL_TO=this.tempcookie.opt[1].CONT_EMAIL;
+        EMAIL_TO=this.tempcookie.opt[1].CONT_EMAIL;
         EMAIL_FROM=this.tempcookie.opt[2].USU_EMAIL;
-        EMAIL_CC=this.tempcookie.opt[2].SEGM_COD;*/
+        EMAIL_CC=this.tempcookie.opt[2].SEGM_COD;
         EMAIL_SUBJECT=$("textarea[name='TEMP_SUBJECT']").val();
         EMAIL_BODY=$("textarea[name='TEMP_BODY']").val();
 
@@ -151,8 +151,8 @@ var App={
                     emails_list=jQuery.parseJSON($(req.responseXML).text()).unique();
                     emails_list.forEach(function(el, index) {
                         if(el.USU_RECEIVE_EMAIL){
-                            EMAIL_CC_list.push("fabianoabreu@focustextil.com.br");
-                            //EMAIL_CC_list.push(el.USU_EMAIL);
+                            //EMAIL_CC_list.push("fabianoabreu@focustextil.com.br");
+                            EMAIL_CC_list.push(el.USU_EMAIL);
                         }
                     });
                     last_request=!1; 
