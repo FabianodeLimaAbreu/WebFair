@@ -27,7 +27,7 @@ elements:{
 /**
 * `OK Set thed loading state`
 * @memberOf Detail#
-* @param {Bothoolean} a. If true show mask, else hide mask.
+* @param {Boolean} a. If true show mask, else hide mask.
 */
 callerEvents:function(){
   var context=this;

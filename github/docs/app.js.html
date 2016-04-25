@@ -247,10 +247,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.fornval="";
       this.amosval="";
       this.fornclick="";
-      this.initialTimeAmos='2000-01-01';
-      this.endTimeAmos='2020-10-10';
-      this.initialTimeForn='2000-01-01';
-      this.endTimeForn='2020-10-10';
+      this.initialTimeAmos=null;
+      this.endTimeAmos=null;
+      this.initialTimeForn=null;
+      this.endTimeForn=null;
 
       this.unable_select=!1;
       this.is_selected=!1;
@@ -442,9 +442,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           }
           a="&lt;FEIR_COD>"+a+"&lt;/FEIR_COD>";
           $("html").attr("class","").addClass(this.page);
-          this.writePage(this.page);
-          this.setloading(!0,!1);
-          this.submit(a,b,c,!1);
+          this.writePage(this.page,[a,b,c]);
         },
         "fornecedores":function(){
           var context=this;
@@ -729,7 +727,36 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.container.load("pages/"+hash+".html",function( response, status, xhr){
         switch(context.page){
           case "amostras":
-            var status;
+          console.dir(val);
+            /*if(context.usr.SEGM_COD === "TD"){
+                status=setInterval(function(){
+                  if(context.fair.length){
+                    context.callService("listarSegmentos");
+                    context.ajaxrequest=!1;
+                    clearInterval(status);
+                  }
+                },100);
+
+                second=setInterval(function(){
+                  if(context.segm.length){
+                    context.ajaxrequest=!1;
+                    context.createComponent(context.segm,$(".SEGM_COD"),'segm');
+                    context.callService("template_email",'','&lt;TEMP_DESC>&lt;/TEMP_DESC>&lt;SEGM_COD>&lt;/SEGM_COD>');
+                    clearInterval(second);
+                  }
+                },100);
+              }
+              else{
+                $(".SEGM_COD").addClass('hide');
+                second=setInterval(function(){
+                  if(context.fair.length){
+                    context.ajaxrequest=!1;
+                    context.callService("template_email",'','&lt;TEMP_DESC>&lt;/TEMP_DESC>&lt;SEGM_COD>&lt;/SEGM_COD>');
+                    clearInterval(second);
+                  }
+                },100);
+              }*/
+            var status,second;
             context.viewBtn=$(".changeview button");
             context.order_box=$(".tooltip.borderby");
             context.bfair=$(".fair");
@@ -741,22 +768,53 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             if(!context.fair.length){
               status=setInterval(function(){
                 if(context.fair.length){
+                    context.ajaxrequest=!1;
+                    context.createComponent(context.fair,context.bfair,'fair');
+                    clearInterval(status);
+                  }
+                },100);
+
+              second=setInterval(function(){
+                if(context.segm.length){
                   context.ajaxrequest=!1;
-                  context.createComponent(context.fair,context.bfair,'fair');
-                  clearInterval(status);
+                  context.createComponent(context.segm,$(".SEGM_COD"),'segm');
+                  clearInterval(second);
                 }
               },100);
-            }
-            else{
-              context.createComponent(context.fair,context.bfair,'fair');
-            }
-            if(context.fairval){
               $(".fair option").each(function(a,b){
                 if(parseInt($(b).attr("value")) ==  parseInt(context.fairval)){
                   $(b).attr("selected","selected");
                 }
               });
             }
+            else{
+              status=setInterval(function(){
+                  context.callService("listarSegmentos");
+                  context.ajaxrequest=!1;
+                  clearInterval(status);
+              },100);
+
+              second=setInterval(function(){
+                if(context.segm.length){
+                  context.ajaxrequest=!1;
+                  context.createComponent(context.segm,$(".SEGM_COD"),'segm');
+                  context.createComponent(context.fair,context.bfair,'fair');
+                  if(context.fairval){
+                    $(".fair option").each(function(a,b){
+                      if(parseInt($(b).attr("value")) ==  parseInt(context.fairval)){
+                        $(b).attr("selected","selected");
+                      }
+                    });
+                  }
+                  if(val &amp;&amp; val.length){
+                    context.setloading(!0,!1);
+                    context.submit(val[0],val[1],val[2],!1);
+                  }
+                  clearInterval(second);
+                }
+              },100);
+            }
+            
             if(context.fornval){
               if(context.fornval.slice(0,3) ===  "alt"){
                 context.bforn.val(context.fornval.slice(3,(context.fornval.length)));
@@ -1137,8 +1195,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.resetFilters();
       switch (this.page){
         case "fornecedores":
-          this.initialTimeForn=$("input[name='initial_date']").val() || ("2000"+"-"+"01"+"-"+"01");
-          this.endTimeForn=$("input[name='end_date']").val() || ("2020-"+"10"+"-"+"10");
+          this.initialTimeForn=$("input[name='initial_date']").val() || null;
+          this.endTimeForn=$("input[name='end_date']").val() || null;
           if(this.cookiefornecedores.length){
             //debugger;
             this.cookiefornecedores[0].posscroll=0;
@@ -1150,7 +1208,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             }
             this.mode="fornecedores/"+"padrao"+"/"+"padrao"+"/"+"padrao";
             this.navigate(this.mode, !1);
-            this.callService("fornecedores",'&lt;FEIR_COD>'+this.fairval+'&lt;/FEIR_COD>','&lt;LINHA_I>1&lt;/LINHA_I>','&lt;LINHA_F>20000&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+this.initialTimeForn+'&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>'+this.endTimeForn+'&lt;/CREATE_DATE_F>',vprincipal);
+            this.callService("fornecedores",'&lt;FEIR_COD>'+this.fairval+'&lt;/FEIR_COD>','&lt;LINHA_I>1&lt;/LINHA_I>','&lt;LINHA_F>20000&lt;/LINHA_F>',(this.initialTimeForn ? '&lt;CREATE_DATE_I>'+this.initialTimeForn+'&lt;/CREATE_DATE_I>' : ""),(this.endTimeForn ? '&lt;CREATE_DATE_F>'+this.endTimeForn+'&lt;/CREATE_DATE_F>' : ""),vprincipal);
             //this.modal.open("message","Selecione ao menos uma feira para filtrar!!!",!1,!0);
             return !0;
           }
@@ -1159,11 +1217,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 
           this.mode="fornecedores/"+(this.fairval || "padrao")+"/"+(this.fornval || "padrao")+"/"+(this.amosval || "padrao");
           this.navigate(this.mode, !1);
-          this.callService("fornecedores",'&lt;FORN_DESC>'+this.fornval+'&lt;/FORN_DESC>','&lt;FEIR_COD>'+this.fairval+'&lt;/FEIR_COD>','&lt;LINHA_I>'+(this.content.page*20+1)+'&lt;/LINHA_I>','&lt;LINHA_F>20000&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+this.initialTimeForn+'&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>'+this.endTimeForn+'&lt;/CREATE_DATE_F>',vprincipal);
+          this.callService("fornecedores",'&lt;FORN_DESC>'+this.fornval+'&lt;/FORN_DESC>','&lt;FEIR_COD>'+this.fairval+'&lt;/FEIR_COD>','&lt;LINHA_I>'+(this.content.page*20+1)+'&lt;/LINHA_I>','&lt;LINHA_F>20000&lt;/LINHA_F>',(this.initialTimeForn ? '&lt;CREATE_DATE_I>'+this.initialTimeForn+'&lt;/CREATE_DATE_I>' : ""),(this.endTimeForn ? '&lt;CREATE_DATE_F>'+this.endTimeForn+'&lt;/CREATE_DATE_F>' : ""),vprincipal);
           break;
         case "amostras":
-          this.initialTimeAmos=$("input[name='initial_date']").val() || ("2000"+"-"+"01"+"-"+"01");
-          this.endTimeAmos=$("input[name='end_date']").val() || ("2020-"+"10"+"-"+"10");
+          this.initialTimeAmos=$("input[name='initial_date']").val() || null;
+          this.endTimeAmos=$("input[name='end_date']").val() || null;
           if(this.cookieamostras.length){
             //debugger;
             this.cookieamostras[0].posscroll=0;
@@ -1171,7 +1229,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           if(!this.fairval &amp;&amp; !this.fornval &amp;&amp; !this.amosval){
             //this.mode="amostras/"+"padrao"+"/"+"padrao"+"/"+"padrao";
             //this.navigate(this.mode, !1);
-            this.callService("amostras",'&lt;FEIR_COD>'+this.fairval+'&lt;/FEIR_COD>','&lt;LINHA_I>1&lt;/LINHA_I>','&lt;LINHA_F>20000&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+this.initialTimeAmos+'&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>'+this.endTimeAmos+'&lt;/CREATE_DATE_F>');
+            this.callService("amostras",'&lt;FEIR_COD>'+this.fairval+'&lt;/FEIR_COD>','&lt;LINHA_I>1&lt;/LINHA_I>','&lt;LINHA_F>20000&lt;/LINHA_F>',(this.initialTimeAmos ? '&lt;CREATE_DATE_I>'+this.initialTimeAmos+'&lt;/CREATE_DATE_I>' : ""),(this.endTimeAmos ? '&lt;CREATE_DATE_F>'+this.endTimeAmos+'&lt;/CREATE_DATE_F>' : ""));
             //this.modal.open("message","Selecione ao menos uma feira para filtrar!!!",!1,!0);
             return !0;
           }
@@ -1190,7 +1248,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 
           this.mode="amostras/"+(this.fairval || "padrao")+"/"+(this.fornval || "padrao")+"/"+(this.amosval || "padrao");
           this.navigate(this.mode, !1);
-          this.callService("amostras",'&lt;AMOS_DESC>'+this.amosval+'&lt;/AMOS_DESC>','&lt;FEIR_COD>'+this.fairval+'&lt;/FEIR_COD>',FORN_DESC,'&lt;LINHA_I>'+(this.content.page*20+1)+'&lt;/LINHA_I>','&lt;LINHA_F>20000&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+this.initialTimeAmos+'&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>'+this.endTimeAmos+'&lt;/CREATE_DATE_F>');
+          this.callService("amostras",'&lt;AMOS_DESC>'+this.amosval+'&lt;/AMOS_DESC>','&lt;FEIR_COD>'+this.fairval+'&lt;/FEIR_COD>',FORN_DESC,'&lt;LINHA_I>'+(this.content.page*20+1)+'&lt;/LINHA_I>','&lt;LINHA_F>20000&lt;/LINHA_F>',(this.initialTimeAmos ? '&lt;CREATE_DATE_I>'+this.initialTimeAmos+'&lt;/CREATE_DATE_I>' : ""),(this.endTimeAmos ? '&lt;CREATE_DATE_F>'+this.endTimeAmos+'&lt;/CREATE_DATE_F>' : ""));
           break;
       }
       $(".date-filter").removeClass("sel");
@@ -1571,6 +1629,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         });
     },
     submit:function(a,b,c,d,fstatus,fprincipal){
+      //debugger;
       var status,vprincipal,core=this;
       var b=b || "";
       var c=c || "";
@@ -1585,7 +1644,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           }
           if(core.page ===  "amostras"){
             //core.callService(core.page,a,b,c,'&lt;LINHA_I>'+(core.content.page*core.itens_by_page+1)+'&lt;/LINHA_I>','&lt;LINHA_F>'+((core.content.page+1)*core.itens_by_page)+'&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+core.initialTime+'&lt;/CREATE_DATE_I>',"&lt;CREATE_DATE_F>"+core.endTime+"&lt;/CREATE_DATE_F>");
-            core.callService(core.page,a,b,c,'&lt;LINHA_I>'+(core.content.page*core.itens_by_page+1)+'&lt;/LINHA_I>','&lt;LINHA_F>20000&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+core.initialTimeAmos+'&lt;/CREATE_DATE_I>',"&lt;CREATE_DATE_F>"+core.endTimeAmos+"&lt;/CREATE_DATE_F>");
+            core.callService(core.page,a,b,c,'&lt;LINHA_I>'+(core.content.page*core.itens_by_page+1)+'&lt;/LINHA_I>','&lt;LINHA_F>20000&lt;/LINHA_F>',(core.initialTimeAmos ? '&lt;CREATE_DATE_I>'+core.initialTimeAmos+'&lt;/CREATE_DATE_I>' : ""),(core.endTimeAmos ? '&lt;CREATE_DATE_F>'+core.endTimeAmos+'&lt;/CREATE_DATE_F>' : ""));
           }
           else{
             if(typeof fstatus !== "undefined"){
@@ -1601,8 +1660,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               vprincipal="";
             }
 
-            $("input[name='initial_date']").datepicker('setDate', core.initialTimeForn.slice(0,4)+'-'+core.initialTimeForn.slice(5, 7)+"-"+core.initialTimeForn.slice(8, 10));
-            $("input[name='end_date']").datepicker('setDate', core.endTimeForn.slice(0,4)+'-'+core.endTimeForn.slice(5, 7)+"-"+core.endTimeForn.slice(8, 10));
+            $("input[name='initial_date']").datepicker('setDate', (core.initialTimeForn &amp;&amp; core.initialTimeForn.slice(0,4)+'-'+core.initialTimeForn.slice(5, 7)+"-"+core.initialTimeForn.slice(8, 10)));
+            $("input[name='end_date']").datepicker('setDate', (core.endTimeForn &amp;&amp; core.endTimeForn.slice(0,4)+'-'+core.endTimeForn.slice(5, 7)+"-"+core.endTimeForn.slice(8, 10)));
             
             $("select[name='FORN_STATUS']").find("option").each(function(index, el) {
               if($(el).attr("value").bool() === core.cadstatus){
@@ -1615,7 +1674,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 $(el).attr('selected', 'selected');
               }
             });
-            core.callService(core.page,a,b,fstatus,'&lt;LINHA_I>'+(core.content.page*core.itens_by_page+1)+'&lt;/LINHA_I>','&lt;LINHA_F>'+((core.content.page+1)*core.itens_by_page)+'&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+core.initialTimeForn+'&lt;/CREATE_DATE_I>'+"&lt;CREATE_DATE_F>"+core.endTimeForn+"&lt;/CREATE_DATE_F>",vprincipal);
+            core.callService(core.page,a,b,fstatus,'&lt;LINHA_I>'+(core.content.page*core.itens_by_page+1)+'&lt;/LINHA_I>','&lt;LINHA_F>'+((core.content.page+1)*core.itens_by_page)+'&lt;/LINHA_F>',(core.initialTimeForn ? '&lt;CREATE_DATE_I>'+core.initialTimeForn+'&lt;/CREATE_DATE_I>' : "")+(core.endTimeForn ? '&lt;CREATE_DATE_F>'+core.endTimeForn+'&lt;/CREATE_DATE_F>' : ""),vprincipal);
             //core.callService(core.page,a,b,'&lt;LINHA_I>'+(core.content.page*core.itens_by_page+1)+'&lt;/LINHA_I>','&lt;LINHA_F>20000&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+core.initialTime+'&lt;/CREATE_DATE_I>',"&lt;CREATE_DATE_F>"+core.endTime+"&lt;/CREATE_DATE_F>");
           }
         }
@@ -1666,7 +1725,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         }
         else{
           search="&lt;AMOS_ID>"+$(a.target).val()+"&lt;/AMOS_ID>";
-        }
+        } 
         this.amosval=$(a.target).val();
         this.setloading(!0,!1);
         this.mode="amostras/"+((""+this.fairval).replace(" ","_") || "padrao")+"/"+(this.fornval.replace(" ","_") || "padrao")+"/"+($(a.target).val().replace(" ","_") || "padrao");
@@ -1675,9 +1734,20 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       }
     },
     processError:function(data, status, req){
-      //console.log("DEU ERRO");
+      //console.log("DEU ERRO: ");
       this.ajaxrequest=!1;
       this.fornecedores.ajaxrequest=!1;
+      if(this.page === "fornecedor_cadastro"){
+        //This condicional code is used now because I need that the web service be fixed to receive special caracteres like in supplier's name.
+        //Then in order to avoid be showing erros to user in gravarFornecedor Web Service, I don't show any error message in supplier's cad page.
+        return !0;
+      }
+      if(data.status === 500){
+        return this.modal.open("message","Servidor instável, tente novamente ou aguarde alguns instantes!!!",!1,!0), this.setloading(!1);
+      }
+      else{
+        return this.modal.open("message","Um erro ocorreu!!!",!1,!0), this.setloading(!1);
+      }      
     },
     setdata:function(a,b){  
       var i,length;
@@ -1688,7 +1758,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       
 
       if (!this.data.length &amp;&amp; b !="local") {    
-        return this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0), $(".overview-container").remove(),$('&lt;div class="brea">&lt;/div>d-search').find(".spec").text("0 Resultados"),this.page === "amostras" ? $("input[name='initial_date']").datepicker('setDate', this.initialTimeAmos.slice(0,4)+'-'+this.initialTimeAmos.slice(5, 7)+"-"+this.initialTimeAmos.slice(8, 10)) &amp;&amp; $("input[name='end_date']").datepicker('setDate', this.endTimeAmos.slice(0,4)+'-'+this.endTimeAmos.slice(5, 7)+"-"+this.endTimeAmos.slice(8, 10)) :($("input[name='initial_date']").datepicker('setDate', this.initialTimeAmos.slice(0,4)+'-'+this.initialTimeAmos.slice(5, 7)+"-"+this.initialTimeAmos.slice(8, 10)) &amp;&amp; $("input[name='end_date']").datepicker('setDate', this.endTimeAmos.slice(0,4)+'-'+this.endTimeAmos.slice(5, 7)+"-"+this.endTimeAmos.slice(8, 10))), this.setloading(!1);
+        return this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0), $(".overview-container").remove(),$('&lt;div class="brea">&lt;/div>d-search').find(".spec").text("0 Resultados"),this.page === "amostras" ? $("input[name='initial_date']").datepicker('setDate', (this.initialTimeAmos &amp;&amp; this.initialTimeAmos.slice(0,4)+'-'+this.initialTimeAmos.slice(5, 7)+"-"+this.initialTimeAmos.slice(8, 10))) &amp;&amp; $("input[name='end_date']").datepicker('setDate', (this.endTimeAmos &amp;&amp; this.endTimeAmos.slice(0,4)+'-'+this.endTimeAmos.slice(5, 7)+"-"+this.endTimeAmos.slice(8, 10))) :$("input[name='initial_date']").datepicker('setDate', (this.initialTimeAmos &amp;&amp; this.initialTimeAmos.slice(0,4)+'-'+this.initialTimeAmos.slice(5, 7)+"-"+this.initialTimeAmos.slice(8, 10))) &amp;&amp; $("input[name='end_date']").datepicker('setDate', (this.endTimeAmos &amp;&amp; this.endTimeAmos.slice(0,4)+'-'+this.endTimeAmos.slice(5, 7)+"-"+this.endTimeAmos.slice(8, 10))), this.setloading(!1);
         //return this.modal.open(),this.breadEl.find('.bread-colec a').text("").removeClass('active'),this.setloading(!1), this.searchEl.find('input').blur();
       }  
       switch(b){
@@ -1711,7 +1781,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           //REOPEN
           //this.createbox(this.data, this.content.page, !0);
           this.reopenFilter(this.data, this.content.page, !0);
-
           break;
         case 'template':
           this.data = a.sortBy("TEMP_ID");
@@ -1719,11 +1788,17 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           this.filterTemplate();
           break;
         case 'fornecedores':
-          //console.dir(a);
-          $("input[name='initial_date']").datepicker('setDate', this.initialTimeForn.slice(0,4)+'-'+this.initialTimeForn.slice(5, 7)+"-"+this.initialTimeForn.slice(8, 10));
-          $("input[name='end_date']").datepicker('setDate', this.endTimeForn.slice(0,4)+'-'+this.endTimeForn.slice(5, 7)+"-"+this.endTimeForn.slice(8, 10));
+          if(this.initialTimeForn !== null || this.endTimeForn !== null){
+            $(".date-filter").parent().addClass('has');
+          }
+          else{
+            $(".date-filter").parent().removeClass('has');
+          }
+          $("input[name='initial_date']").datepicker('setDate', (this.initialTimeForn &amp;&amp; this.initialTimeForn.slice(0,4)+'-'+this.initialTimeForn.slice(5, 7)+"-"+this.initialTimeForn.slice(8, 10)));
+          $("input[name='end_date']").datepicker('setDate', (this.endTimeForn &amp;&amp; this.endTimeForn.slice(0,4)+'-'+this.endTimeForn.slice(5, 7)+"-"+this.endTimeForn.slice(8, 10)));
 
           this.data = a.sortBy("FORN_ID");
+          console.dir(this.data);
           this.content.changeview("list");
           if(!this.cookiefornecedores.length){
             var scroll={
@@ -1833,12 +1908,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               this.setdata(this.data,"fornecedores");
             }
             else{
-              var temp=jQuery.parseJSON($(req.responseXML).text()).sortBy('FORN_ID');
-              /*console.dir(temp);
-              console.dir(this.data);*/
+              var temp=jQuery.parseJSON($(req.responseXML).text()).unique().sortBy('FORN_ID');
+              /*console.dir(this.data);*/
               this.setDate(temp);
+              console.dir(temp);
               this.data=this.data.concat(temp);
-              //console.dir(this.data);
+              console.dir(this.data);
               this.createbox(this.data, this.content.page, !0,"list");
             }
             break;
@@ -2071,13 +2146,23 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                     if (l > 0) {
                       if(e.page === "amostras"){
                         if(k === 0){
-                          $(".floatThead").append('&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;button type="button" class="bdefault select_all hide" name="'+h.FORN_ID+'">Selecionar Todos&lt;/button>&lt;/div>&lt;table id="table" class="table-striped table-large">&lt;thead>&lt;tr>&lt;th>&lt;/th>&lt;th>Fornecedor&lt;/th>&lt;th>Código&lt;/th>&lt;th>Data&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfisica nothas unable">Fisica&lt;/button>&lt;/th>&lt;th>Preco Inicial&lt;/th>&lt;th>M/kg&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfav nothas unable">Favorita&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bhomologado nothas unable">Homologada&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bnote">Anotacoes&lt;/button>&lt;/th>'+/*&lt;th>&lt;button type="button" class="icon bannex">Anexo&lt;/button>&lt;/th>*/'&lt;th>&lt;button type="button" class="caption-icons-icon justit bemail">Email&lt;/button>&lt;/th>&lt;th>Tecimento&lt;/th>&lt;th>Base&lt;/th>&lt;th>Grupo&lt;/th>&lt;th>Sub-Grupo&lt;/th>&lt;th>Composicao&lt;/th>&lt;th class="tlast">Status&lt;/th>&lt;/tr>&lt;/thead>&lt;tbody>&lt;/tbody>&lt;/div>');
+                          var html='&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;button type="button" class="bdefault select_all hide" name="'+h.FORN_ID+'">Selecionar Todos&lt;/button>&lt;/div>&lt;table id="table" class="table-striped table-large">&lt;thead>&lt;tr>&lt;th>&lt;/th>&lt;th>Fornecedor&lt;/th>&lt;th>Código&lt;/th>&lt;th>Data&lt;/th>';
+                          if(e.usr.SEGM_COD === "TD"){
+                            html+='&lt;th>Segmento&lt;/th>';
+                          }
+                          html+='&lt;th>&lt;button type="button" class="caption-icons-icon justit bfisica nothas unable">Fisica&lt;/button>&lt;/th>&lt;th>Preco Inicial&lt;/th>&lt;th>M/kg&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfav nothas unable">Favorita&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bhomologado nothas unable">Homologada&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bnote">Anotacoes&lt;/button>&lt;/th>'+/*&lt;th>&lt;button type="button" class="icon bannex">Anexo&lt;/button>&lt;/th>*/'&lt;th>&lt;button type="button" class="caption-icons-icon justit bemail">Email&lt;/button>&lt;/th>&lt;th>Tecimento&lt;/th>&lt;th>Base&lt;/th>&lt;th>Grupo&lt;/th>&lt;th>Sub-Grupo&lt;/th>&lt;th>Composicao&lt;/th>&lt;th class="tlast">Status&lt;/th>&lt;/tr>&lt;/thead>&lt;tbody>&lt;/tbody>&lt;/div>';
+                          $(".floatThead").append(html);
                         }
                         else if(h.FORN_ID !== a[k-1].FORN_ID){
+                          var html='&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;button type="button" class="bdefault select_all hide" name="'+h.FORN_ID+'">Selecionar Todos&lt;/button>&lt;/div>&lt;table id="table" class="table-striped table-large">&lt;thead>&lt;tr>&lt;th>&lt;/th>&lt;th>Fornecedor&lt;/th>&lt;th>Código&lt;/th>&lt;th>Data&lt;/th>';
+                          if(e.usr.SEGM_COD === "TD"){
+                            html+='&lt;th>Segmento&lt;/th>';
+                          }
+                          html+='&lt;th>&lt;button type="button" class="caption-icons-icon justit bfisica nothas unable">Fisica&lt;/button>&lt;/th>&lt;th>Preco Inicial&lt;/th>&lt;th>M/kg&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfav nothas unable">Favorita&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bhomologado nothas unable">Homologada&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bnote">Anotacoes&lt;/button>&lt;/th>'+/*&lt;th>&lt;button type="button" class="icon bannex">Anexo&lt;/button>&lt;/th>*/'&lt;th>&lt;button type="button" class="caption-icons-icon justit bemail">Email&lt;/button>&lt;/th>&lt;th>Tecimento&lt;/th>&lt;th>Base&lt;/th>&lt;th>Grupo&lt;/th>&lt;th>Sub-Grupo&lt;/th>&lt;th>Composicao&lt;/th>&lt;th class="tlast">Status&lt;/th>&lt;/tr>&lt;/thead>&lt;tbody>&lt;/tbody>&lt;/div>';
                           var view_container=$(".overview-container");
                           view_container=$(view_container).eq(view_container.length-1);
                           view_container.find(".bread-search .spec").text(view_container.find("tbody tr").length);
-                          $(".floatThead").append('&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;button type="button" class="bdefault select_all hide" name="'+h.FORN_ID+'">Selecionar Todos&lt;/button>&lt;/div>&lt;table id="table" class="table-striped table-large">&lt;thead>&lt;tr>&lt;th>&lt;/th>&lt;th>Fornecedor&lt;/th>&lt;th>Código&lt;/th>&lt;th>Data&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfisica nothas unable">Fisica&lt;/button>&lt;/th>&lt;th>Preco Inicial&lt;/th>&lt;th>M/kg&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfav nothas unable">Favorita&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bhomologado nothas unable">Homologada&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bnote">Anotacoes&lt;/button>&lt;/th>'+/*&lt;th>&lt;button type="button" class="icon bannex">Anexo&lt;/button>&lt;/th>*/'&lt;th>&lt;button type="button" class="caption-icons-icon justit bemail">Email&lt;/button>&lt;/th>&lt;th>Tecimento&lt;/th>&lt;th>Base&lt;/th>&lt;th>Grupo&lt;/th>&lt;th>Sub-Grupo&lt;/th>&lt;th>Composicao&lt;/th>&lt;th class="tlast">Status&lt;/th>&lt;/tr>&lt;/thead>&lt;tbody>&lt;/tbody>&lt;/div>');
+                          $(".floatThead").append(html);
                           countf++;
                         }
                         var view_container=$(".overview-container");
@@ -2115,7 +2200,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                             $(".container-fullsize.scroller").scrollTop(e.cookiefornecedores[0].posscroll);
                           }
                         }
-                        
                         clearInterval(f), e.setloading(!1);
                     }
                 }
@@ -2155,8 +2239,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                       view_container.find(".bread-search .spec").text(k+1);
                     }
                     else if(e.page === "fornecedores"){
-                      console.dir(e.cookiefornecedores);
-                      console.dir(e.cookieamostras);
                       if(e.cookiefornecedores.length){
                         //debugger;
                         //console.log(e.cookiefornecedores[0].posscroll);
@@ -2228,6 +2310,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                       $(".overview").append('&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;a href="#" class="fornlink">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/a>&lt;/p>&lt;button type="button" class="bdefault select_all hide" name="'+h.FORN_ID+'">Selecionar Todos&lt;/button>&lt;/div>&lt;ul class="viewport">&lt;/ul>&lt;/div>');
                     }
                     else if(h.FORN_ID !== a[k-1].FORN_ID){
+                      var html=''
                       var view_container=$(".overview-container");
                       view_container=$(view_container).eq(view_container.length-1);
                       //view_container.find(".fornlink").attr("href","#fornecedores/edit/"+h.FORN_ID);
@@ -2258,17 +2341,32 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                         }
                       }
                     }
+                    var html='&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;button type="button" class="bdefault select_all hide" name="'+h.FORN_ID+'">Selecionar Todos&lt;/button>&lt;/div>&lt;table id="table" class="table-striped table-large">&lt;thead>&lt;tr>&lt;th>&lt;/th>&lt;th>Fornecedor&lt;/th>&lt;th>Código&lt;/th>&lt;th>Data&lt;/th>';
+                          if(e.usr.SEGM_COD === "TD"){
+                            html+='&lt;th>Segmento&lt;/th>';
+                          }
+
                     if (l > 0) {
                         if(e.page === "amostras"){
                           if(k === 0){
-                            $(".floatThead").append('&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;a href="#" class="fornlink">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;/a>&lt;button type="button" class="bdefault select_all hide" name="'+h.FORN_ID+'">Selecionar Todos&lt;/button>&lt;/div>&lt;table id="table" class="table-striped table-large">&lt;thead>&lt;tr>&lt;th>&lt;/th>&lt;th>Fornecedor&lt;/th>&lt;th>Codigo&lt;/th>&lt;th>Data&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfisica nothas unable">Fisica&lt;/button>&lt;/th>&lt;th>Preco Inicial&lt;/th>&lt;th>M/kg&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfav nothas unable">Favorita&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bhomologado nothas unable">Homologada&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bnote">Anotacoes&lt;/button>&lt;/th>'+/*&lt;th>&lt;button type="button" class="icon bannex">Anexo&lt;/button>&lt;/th>*/'&lt;th>&lt;button type="button" class="caption-icons-icon justit bemail">Email&lt;/button>&lt;/th>&lt;th>Tecimento&lt;/th>&lt;th>Base&lt;/th>&lt;th>Grupo&lt;/th>&lt;th>Sub-Grupo&lt;/th>&lt;th>Composicao&lt;/th>&lt;th class="tlast">Status&lt;/th>&lt;/tr>&lt;/thead>&lt;tbody>&lt;/tbody>&lt;/div>');
+                            var html='&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;a href="#" class="fornlink">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;/a>&lt;button type="button" class="bdefault select_all hide" name="'+h.FORN_ID+'">Selecionar Todos&lt;/button>&lt;/div>&lt;table id="table" class="table-striped table-large">&lt;thead>&lt;tr>&lt;th>&lt;/th>&lt;th>Fornecedor&lt;/th>&lt;th>Codigo&lt;/th>&lt;th>Data&lt;/th>';
+                            if(e.usr.SEGM_COD === "TD"){
+                              html+='&lt;th>Segmento&lt;/th>';
+                            }
+                            html+='&lt;th>&lt;button type="button" class="caption-icons-icon justit bfisica nothas unable">Fisica&lt;/button>&lt;/th>&lt;th>Preco Inicial&lt;/th>&lt;th>M/kg&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfav nothas unable">Favorita&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bhomologado nothas unable">Homologada&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bnote">Anotacoes&lt;/button>&lt;/th>'+/*&lt;th>&lt;button type="button" class="icon bannex">Anexo&lt;/button>&lt;/th>*/'&lt;th>&lt;button type="button" class="caption-icons-icon justit bemail">Email&lt;/button>&lt;/th>&lt;th>Tecimento&lt;/th>&lt;th>Base&lt;/th>&lt;th>Grupo&lt;/th>&lt;th>Sub-Grupo&lt;/th>&lt;th>Composicao&lt;/th>&lt;th class="tlast">Status&lt;/th>&lt;/tr>&lt;/thead>&lt;tbody>&lt;/tbody>&lt;/div>';
+                            $(".floatThead").append(html);
                           }
                           else if(h.FORN_ID !== a[k-1].FORN_ID){
+                            var html='&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;a href="#" class="fornlink">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;/a>&lt;button type="button" class="bdefault select_all hide" name="'+h.FORN_ID+'">Selecionar Todos&lt;/button>&lt;/div>&lt;table id="table" class="table-striped table-large">&lt;thead>&lt;tr>&lt;th>&lt;/th>&lt;th>Fornecedor&lt;/th>&lt;th>Codigo&lt;/th>&lt;th>Data&lt;/th>';
+                            if(e.usr.SEGM_COD === "TD"){
+                              html+='&lt;th>Segmento&lt;/th>';
+                            }
+                            html+='&lt;th>&lt;button type="button" class="caption-icons-icon justit bfisica nothas unable">Fisica&lt;/button>&lt;/th>&lt;th>Preco Inicial&lt;/th>&lt;th>M/kg&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfav nothas unable">Favorita&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bhomologado nothas unable">Homologada&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bnote">Anotacoes&lt;/button>&lt;/th>'+/*&lt;th>&lt;button type="button" class="icon bannex">Anexo&lt;/button>&lt;/th>*/'&lt;th>&lt;button type="button" class="caption-icons-icon justit bemail">Email&lt;/button>&lt;/th>&lt;th>Tecimento&lt;/th>&lt;th>Base&lt;/th>&lt;th>Grupo&lt;/th>&lt;th>Sub-Grupo&lt;/th>&lt;th>Composicao&lt;/th>&lt;th class="tlast">Status&lt;/th>&lt;/tr>&lt;/thead>&lt;tbody>&lt;/tbody>&lt;/div>';
                             var view_container=$(".overview-container");
                             view_container=$(view_container).eq(view_container.length-1);
                             //view_container.find(".fornlink").attr("href","#fornecedores/edit/"+h.FORN_ID);
                             view_container.find(".bread-search .spec").text(view_container.find("tbody tr").length);
-                            $(".floatThead").append('&lt;div class="overview-container">&lt;div class="filter-crumb">&lt;a href="#" class="fornlink">&lt;p class="bread-search">Mostrando:&lt;span class="spec">0&lt;/span>&lt;span> de &lt;/span>&lt;span class="specall">0&lt;/span>&lt;span> Amostras &lt;/span>&lt;span class="specforn"> de 0 Fornecedores&lt;/span>&lt;/p>&lt;/a>&lt;button type="button" class="bdefault select_all hide" name="'+h.FORN_ID+'">Selecionar Todos&lt;/button>&lt;/div>&lt;table id="table" class="table-striped table-large">&lt;thead>&lt;tr>&lt;th>&lt;/th>&lt;th>Fornecedor&lt;/th>&lt;th>Codigo&lt;/th>&lt;th>Data&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfisica nothas unable">Fisica&lt;/button>&lt;/th>&lt;th>Preco Inicial&lt;/th>&lt;th>M/kg&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bfav nothas unable">Favorita&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bhomologado nothas unable">Homologada&lt;/button>&lt;/th>&lt;th>&lt;button type="button" class="caption-icons-icon justit bnote">Anotacoes&lt;/button>&lt;/th>'+/*&lt;th>&lt;button type="button" class="icon bannex">Anexo&lt;/button>&lt;/th>*/'&lt;th>&lt;button type="button" class="caption-icons-icon justit bemail">Email&lt;/button>&lt;/th>&lt;th>Tecimento&lt;/th>&lt;th>Base&lt;/th>&lt;th>Grupo&lt;/th>&lt;th>Sub-Grupo&lt;/th>&lt;th>Composicao&lt;/th>&lt;th class="tlast">Status&lt;/th>&lt;/tr>&lt;/thead>&lt;tbody>&lt;/tbody>&lt;/div>');
+                            $(".floatThead").append(html);
                             countf++;
                           }
                           var view_container=$(".overview-container");
@@ -2472,8 +2570,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
     },
     changeFair:function(a){
       //console.log("mudou feira, RESETOU COOKIE")
-      /*this.initialTime='2000-01-01';
-      this.endTime='2020-10-10';*/
+      /*this.initialTime=null;
+      this.endTime=null;*/
       //this.scroller=0;
       //debugger;
       if(this.page === "fornecedor_cadastro"){
@@ -2514,6 +2612,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         });
         this.createbox(this.fair, this.content.page, !0,"list");
       }
+
+
+
       this.callService("cities",'&lt;PAIS_COD>'+$(a.target).find("option:selected").val()+'&lt;/PAIS_COD>','&lt;PAIS_DESC>&lt;/PAIS_DESC>','&lt;REGI_COD>&lt;/REGI_COD>','&lt;REGI_DESC>&lt;/REGI_DESC>');
       //this.setdata(this.fair,"local");
     },
@@ -2592,6 +2693,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             if(el[0].FAVORITES[i].SEGM_COD !== this.usr.SEGM_COD){
               //console.log("diferente");
               html+="&lt;string>"+el[0].FAVORITES[i].SEGM_COD+"&lt;/string>";
+              
               diff=!0;
             }
             else{
@@ -3595,14 +3697,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
     getPage:function(){
       return this.page;
     },
-    getInitialTime:function(a){
+    getInitialTime:function(a){ 
       if(a){
         return this.initialTimeAmos;
       }
       else{
         return this.initialTimeForn;
-      }
-      
+      }  
     },
     getEndTime:function(a){
       if(a){
@@ -3618,8 +3719,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       var indice_forn=[
         {"code":"FORN_DESC","name":"Fornecedor"},
         {"code":"FEIR_DESC","name":"Local da Coleta"},
-        {"code":"CREATE_DATE","name":"Data"},
+        {"code":"CREATE_DATE","name":"Criacao do fornecedor"},
         {"code":"CONTACTS","name":"Contatos"},
+        {"code":"CONTACTS_CREATE_DATE","name":"Cadastro do Contato"},
         {"code":"SEGM_DESC","name":"Segmento"},
         {"code":"NOTES","name":"Anotacoes"},
         {"code":"FAVORITES","name":"Favoritos"},
@@ -3628,6 +3730,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       var indice_amos=[
         {"code":"FORN_DESC","name":"Fornecedor","pattern":false,"pvalue":""},
         {"code":"AMOS_DESC","name":"Codigo","pattern":false,"pvalue":""},
+        {"code":"SEGM_COD","name":"Segmento","pattern":false,"pvalue":""},
         {"code":"CREATE_DATE","name":"Data","pattern":false,"pvalue":""},
         {"code":"FLAG_FISICA","name":"Fisica","pattern":true,"pvalue":""},
         {"code":"AMOS_PRECO","name":"Preco Inicial","pattern":true,"pvalue":"0"},
@@ -3739,8 +3842,22 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 if(fdata[i].CONTACTS.length){
                   //console.log(fdata[i].FORN_DESC);
                   tab_text+="&lt;td>";
+                  this.setDate(fdata[i].CONTACTS);
                   for(var k=0;k&lt;fdata[i].CONTACTS.length;k++){
                     tab_text+="&lt;p>"+(fdata[i].CONTACTS[k].CONT_NOME || "SEM NOME")+"&lt;/p>";
+                  }
+                  tab_text+="&lt;/td>";
+                }
+                else{
+                  tab_text+="&lt;td>&lt;/td>";
+                }
+                break;
+              case "CONTACTS_CREATE_DATE":
+                if(fdata[i].CONTACTS.length){
+                  //console.log(fdata[i].FORN_DESC);
+                  tab_text+="&lt;td>";
+                  for(var k=0;k&lt;fdata[i].CONTACTS.length;k++){
+                    tab_text+="&lt;p>"+(fdata[i].CONTACTS[k].CREATE_DATE || "")+"&lt;/p>";
                   }
                   tab_text+="&lt;/td>";
                 }
@@ -3798,6 +3915,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                     segnote.push(fdata[i].NOTES[k]);
                   }
                 }
+
                 if(segnote.length){
                   this.setDate(segnote);
                   tab_text+="&lt;td>";
@@ -3810,6 +3928,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                   tab_text+="&lt;td>&lt;/td>";
                 }
                 break;
+                
               case "COMPOSITIONS":
                 var arr=[];
                 tab_text+="&lt;td>";
@@ -3824,6 +3943,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                   tab_text+=indice_amos[j].pvalue;
                 }
                 else{
+                  Teste
                   if(fdata[i][indice_amos[j].code]){
                     tab_text+=fdata[i][indice_amos[j].code].toString().removeAccents();
                   }
@@ -4166,6 +4286,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           case "amostras":
             d = z.scrollTop();
             b = e.content.itens.length;
+            console.log(b);
             f=0;
             if(e.view === "images"){
               $(".overview-container").each(function() {
@@ -4187,7 +4308,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             }
 
             if (d >= f &amp;&amp; b) {
+              console.log(b+" = "+e.data.length);
               if(b&lt;e.data.length){
+                console.log("OK");
                 e.content.page++;
                 e.setloading(!0,!1);
                 e.reopenFilter(e.data, e.content.page, !0);
@@ -4283,12 +4406,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       //this.setloading(!0,!1);
       this.filterisdone=!1;
       if(this.page === "amostras"){
-        $("input[name='initial_date']").datepicker('setDate', this.initialTimeAmos.slice(0,4)+'-'+this.initialTimeAmos.slice(5, 7)+"-"+this.initialTimeAmos.slice(8, 10));
-        $("input[name='end_date']").datepicker('setDate', this.endTimeAmos.slice(0,4)+'-'+this.endTimeAmos.slice(5, 7)+"-"+this.endTimeAmos.slice(8, 10));
+
+        $("input[name='initial_date']").datepicker('setDate', (this.initialTimeAmos &amp;&amp; this.initialTimeAmos.slice(0,4)+'-'+this.initialTimeAmos.slice(5, 7)+"-"+this.initialTimeAmos.slice(8, 10)));
+        $("input[name='end_date']").datepicker('setDate', (this.endTimeAmos &amp;&amp; this.endTimeAmos.slice(0,4)+'-'+this.endTimeAmos.slice(5, 7)+"-"+this.endTimeAmos.slice(8, 10)));
       }
       else{
-        $("input[name='initial_date']").datepicker('setDate', this.initialTimeForn.slice(0,4)+'-'+this.initialTimeForn.slice(5, 7)+"-"+this.initialTimeForn.slice(8, 10));
-        $("input[name='end_date']").datepicker('setDate', this.endTimeForn.slice(0,4)+'-'+this.endTimeForn.slice(5, 7)+"-"+this.endTimeForn.slice(8, 10));
+        $("input[name='initial_date']").datepicker('setDate', (this.initialTimeForn &amp;&amp; this.initialTimeForn.slice(0,4)+'-'+this.initialTimeForn.slice(5, 7)+"-"+this.initialTimeForn.slice(8, 10)));
+        $("input[name='end_date']").datepicker('setDate', (this.endTimeForn &amp;&amp; this.endTimeForn.slice(0,4)+'-'+this.endTimeForn.slice(5, 7)+"-"+this.endTimeForn.slice(8, 10)));
       }
       if(this.prices.length){
         //Fazer o trigger no filtro
@@ -4316,13 +4440,23 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         this.filter.list=this.refine;
         this.filter.data=this.data;
       }
-
-      if(this.page === "amostras" &amp;&amp; (this.initialTime !== "2000-01-01" || this.endTime !== "2020-10-10")){
-        $(".date-filter").parent().addClass('has');
+      if(this.page === "amostras"){
+        if(this.initialTimeAmos !== null || this.endTimeAmos !== null){
+          $(".date-filter").parent().addClass('has');
+        }
+        else{
+          $(".date-filter").parent().removeClass('has');
+        }
       }
       else{
-        $(".date-filter").parent().removeClass('has');
+        if(this.initialTimeForn !== null || this.endTimeForn !== null){
+          $(".date-filter").parent().addClass('has');
+        }
+        else{
+          $(".date-filter").parent().removeClass('has');
+        }
       }
+      
 
       //REOPEN      
       this.Componentfilter(data,page,d,view,haslength);
@@ -4365,8 +4499,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.fornclick="";
       //this.nsort="AMOS_DESC";
       this.nsort="";
-      /*this.initialTime='2000-01-01';
-      this.endTime='2020-10-10';*/
+      /*this.initialTime=null;
+      this.endTime=null;*/
       $.removeCookie('posscroll'+this.page, { path: '/' });
       this.combofilter={
         "FLAG_FISICA":{"clicked":0,"code":0},
@@ -4383,14 +4517,15 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       //DATE
       /*$("input[name='initial_date']").val("");
       $("input[name='end_date']").val("");
-      this.initialTime='2000-01-01';
-      this.endTime='2020-10-10';*/
+      this.initialTime=null;
+      this.endTime=null;*/
 
       //PRICE
       $("input[name='initial_price']").val("");
       $("input[name='end_price']").val("");
       this.prices=[];
       $(".main_opt_item.tooltip.tooltip-selectable").eq(0).removeClass('has');
+
 
       this.fstatus=null;
       this.cadstatus=undefined;
@@ -4420,7 +4555,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       $("select[name='CONT_PRINCIPAL']").find("option").removeAttr('selected');
       //Filter list
       //this.filterlist.length=0;
-
     }
   });
   new App;
@@ -4446,7 +4580,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Mon Apr 4th 2016 using the <a
+		on Fri Apr 22nd 2016 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>

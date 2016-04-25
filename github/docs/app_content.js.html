@@ -193,7 +193,7 @@ window.Spotlight = Spine.Controller.sub({
       this.mode="amostras/"+((""+this.getFairVal()).replace(" ","_") || "padrao")+"/"+((""+this.getFornVal()).replace(" ","_") || "padrao")+"/"+((""+this.getAmosVal()).replace(" ","_") || "padrao");
       this.navigate(this.mode, !1);
       //this.callService("amostras",fair,name,amos,'&lt;LINHA_I>'+'1'+'&lt;/LINHA_I>','&lt;LINHA_F>'+'20'+'&lt;/LINHA_F>','&lt;CREATE_DATE_I>2000-01-01&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>2020-01-01&lt;/CREATE_DATE_F>');
-      this.callService("amostras",fair,name,amos,'&lt;LINHA_I>'+'1'+'&lt;/LINHA_I>','&lt;LINHA_F>'+'20000'+'&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+this.getInitialTime(!0)+'&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>'+this.getEndTime(!0)+'&lt;/CREATE_DATE_F>');
+      this.callService("amostras",fair,name,amos,'&lt;LINHA_I>'+'1'+'&lt;/LINHA_I>','&lt;LINHA_F>'+'20000'+'&lt;/LINHA_F>',(this.getInitialTime(!0) ? '&lt;CREATE_DATE_I>'+this.getInitialTime(!0)+'&lt;/CREATE_DATE_I>' : ""),(this.getEndTime(!0) ? '&lt;CREATE_DATE_F>'+this.getEndTime(!0)+'&lt;/CREATE_DATE_F>' : ""));
       this.close();
     }
     else{
@@ -206,7 +206,7 @@ window.Spotlight = Spine.Controller.sub({
       this.mode="fornecedores/"+((""+this.getFairVal()).replace(" ","_") || "padrao")+"/"+((""+this.getFornVal()).replace(" ","_") || "padrao")+"/"+"padrao";
       //console.log(this.mode);
       this.navigate(this.mode, !1);
-      this.callService("fornecedores",fair,name,'&lt;LINHA_I>'+'1'+'&lt;/LINHA_I>','&lt;LINHA_F>'+'20'+'&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+this.getInitialTime(!1)+'&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>'+this.getEndTime(!1)+'&lt;/CREATE_DATE_F>',vprincipal);
+      this.callService("fornecedores",fair,name,'&lt;LINHA_I>'+'1'+'&lt;/LINHA_I>','&lt;LINHA_F>'+'20'+'&lt;/LINHA_F>',(this.getInitialTime(!0) ? '&lt;CREATE_DATE_I>'+this.getInitialTime(!0)+'&lt;/CREATE_DATE_I>' : ""),(this.getEndTime(!0) ? '&lt;CREATE_DATE_F>'+this.getEndTime(!0)+'&lt;/CREATE_DATE_F>' : ""),vprincipal);
       //this.callService("fornecedores",fair,name,'&lt;LINHA_I>'+'1'+'&lt;/LINHA_I>','&lt;LINHA_F>'+'20000'+'&lt;/LINHA_F>','&lt;CREATE_DATE_I>'+this.getInitialTime()+'&lt;/CREATE_DATE_I>','&lt;CREATE_DATE_F>'+this.getEndTime()+'&lt;/CREATE_DATE_F>');
       this.close();
     }
@@ -575,10 +575,11 @@ window.Box = Spine.Controller.sub({init:function() {
 
     result+="&lt;li>&lt;button type='button' class='caption-icons-icon justit setitem bfisica "+fisica+"' name='"+a.AMOS_ID+"' title='Fisica'>&lt;/button>&lt;/li>&lt;li>&lt;button type='button' class='caption-icons-icon justit setitem bfav "+fav+"' name='"+a.AMOS_ID+"' title='Favoritar'>&lt;/button>&lt;/li>&lt;/ul>";
     result+="&lt;div class='caption-desc'>&lt;p>&lt;span>Código da Amostra: &lt;/span>&lt;span>"+a.AMOS_DESC+"&lt;/span>&lt;/p>&lt;p>&lt;span>Fornecedor: &lt;/span>&lt;span>"+a.FORN_DESC+"&lt;/span>&lt;/p>&lt;p>&lt;span>Data: &lt;/span>&lt;span>"+a.CREATE_DATE+"&lt;/span>&lt;/p>";
+    
+    //To attend demand 806
     if(this.usr.SEGM_COD === "TD"){
       result+="&lt;p>&lt;span>Segmento: &lt;/span>&lt;span>"+a.SEGM_COD+"&lt;/span>&lt;/p>";
     }
-
       
     if(annex){
       result+="&lt;button type='button' class='icon bannex'>&lt;/button>";
@@ -617,7 +618,7 @@ window.Box = Spine.Controller.sub({init:function() {
     switch (this.page){
       case "fornecedores":
         if(a){
-          var result="",i,status,nome_contato,segmento=[],middlefav="";
+          var result="",i,status,nome_contato,segmento=[],contatos_date=[],middlefav="";
           status= a.FORN_STATUS ? "complet":"incomplet";
           result+="&lt;td>&lt;a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.FORN_DESC+"&lt;/a>&lt;/td>"+"&lt;td>&lt;a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.FEIR_DESC+"&lt;/a>&lt;/td>"+"&lt;td>&lt;a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.CREATE_DATE+"&lt;/a>&lt;/td>";
           
@@ -631,6 +632,7 @@ window.Box = Spine.Controller.sub({init:function() {
             }
             if(scont.length){
               result+="&lt;td>&lt;a href='#fornecedores/edit/"+a.FORN_ID+"'>";
+              this.setDate(scont);
               for(i=0;i&lt;scont.length;i++){
                 if(scont[i].CONT_NOME.length){
                   nome_contato=scont[i].CONT_NOME;
@@ -638,6 +640,8 @@ window.Box = Spine.Controller.sub({init:function() {
                 else{
                   nome_contato="SEM NOME";
                 }
+                
+                contatos_date.push(scont[i].CREATE_DATE);
                 segmento.push(scont[i].SEGM_DESC);
                 result+=""+nome_contato+"&lt;br/>";
               }
@@ -651,6 +655,12 @@ window.Box = Spine.Controller.sub({init:function() {
             result+="&lt;td>&lt;a href='#fornecedores/edit/"+a.FORN_ID+"'>&lt;/a>&lt;/td>";
           }
 
+          if(contatos_date.length){
+            result+="&lt;td>&lt;a href='#fornecedores/edit/"+a.FORN_ID+"'>"+contatos_date.join("&lt;br/>")+"&lt;/a>&lt;/td>";
+          }
+          else{
+            result+="&lt;td>&lt;a href='#fornecedores/edit/"+a.FORN_ID+"'>&lt;/td>";
+          }
           if(segmento.length){
             result+="&lt;td>&lt;a href='#fornecedores/edit/"+a.FORN_ID+"'>"+segmento.join("&lt;br/>")+"&lt;/a>&lt;/td>";
           }
@@ -714,7 +724,7 @@ window.Box = Spine.Controller.sub({init:function() {
           }
           /*To attend Demand: 0 Alerta para mais de dois contatos principais cadastrado
           &lt;td>&lt;span class='doubled-contact'>&lt;/span>&lt;/td>*/
-          result+="&lt;td>&lt;button type='button' class='caption-icons-icon justit bstatus "+status+"' title='"+status.capitalize()+"'>"+status+"&lt;/button>&lt;/td>";
+          result+="&lt;td>&lt;button type='button' class='caption-icons-icon justit bstatus "+status+"' title='"+status.capitalize()+"'>"+status+"&lt;/button>&lt;/td>&lt;td>&lt;span class='doubled-contact'>&lt;/span>&lt;/td>";
           return result;
         }
         break;
@@ -730,7 +740,11 @@ window.Box = Spine.Controller.sub({init:function() {
         email= a.AMOS_ENV_EMAIL? "sent":"disabled";
 
         //Creating result
-        result+="&lt;td>&lt;button type='button' name='"+a.AMOS_ID+"' class='icon bselection'>&lt;/button>&lt;/td>&lt;td>&lt;a href='#detail/"+parseInt(a.FEIR_COD)+"/"+a.AMOS_ID+"'>"+a.FORN_DESC+"&lt;/a>&lt;/td>&lt;td>&lt;a href='#detail/"+a.AMOS_ID+"'>"+a.AMOS_DESC+"&lt;/a>&lt;/td>&lt;td>&lt;a href='#detail/"+a.AMOS_ID+"'>"+a.CREATE_DATE+"&lt;/a>&lt;/td>&lt;td>&lt;button type='button' class='caption-icons-icon justit setitem bfisica "+fisica+"' name='"+a.AMOS_ID+"' title='Fisica'>"+(fisica === "has" ? "Sim" : "Nao")+"&lt;/button>&lt;/td>&lt;td>"+a.AMOS_PRECO+"&lt;/td>&lt;td>"+a.AMOS_COTACAO_KG+"&lt;/td>&lt;td>&lt;button type='button' class='caption-icons-icon justit setitem bfav "+fav+"' name='"+a.AMOS_ID+"' title='Favoritar'>"+(fav === "has" ? "Sim" : "Nao")+"&lt;/button>&lt;/td>&lt;td>&lt;button type='button' class='caption-icons-icon justit setitem bhomologado "+homologado+"' name='"+a.AMOS_ID+"' title='Homologar'>"+(homologado === "has" ? "Sim" : "Nao")+"&lt;/button>&lt;/td>";
+        result+="&lt;td>&lt;button type='button' name='"+a.AMOS_ID+"' class='icon bselection'>&lt;/button>&lt;/td>&lt;td>&lt;a href='#detail/"+parseInt(a.FEIR_COD)+"/"+a.AMOS_ID+"'>"+a.FORN_DESC+"&lt;/a>&lt;/td>&lt;td>&lt;a href='#detail/"+a.AMOS_ID+"'>"+a.AMOS_DESC+"&lt;/a>&lt;/td>&lt;td>&lt;a href='#detail/"+a.AMOS_ID+"'>"+a.CREATE_DATE+"&lt;/a>&lt;/td>";
+        if(this.usr.SEGM_COD === "TD"){
+          result+="&lt;td>&lt;a href='#detail/"+a.AMOS_ID+"'>"+a.SEGM_COD+"&lt;/a>&lt;/td>";
+        }
+        result+="&lt;td>&lt;button type='button' class='caption-icons-icon justit setitem bfisica "+fisica+"' name='"+a.AMOS_ID+"' title='Fisica'>"+(fisica === "has" ? "Sim" : "Nao")+"&lt;/button>&lt;/td>&lt;td>"+a.AMOS_PRECO+"&lt;/td>&lt;td>"+a.AMOS_COTACAO_KG+"&lt;/td>&lt;td>&lt;button type='button' class='caption-icons-icon justit setitem bfav "+fav+"' name='"+a.AMOS_ID+"' title='Favoritar'>"+(fav === "has" ? "Sim" : "Nao")+"&lt;/button>&lt;/td>&lt;td>&lt;button type='button' class='caption-icons-icon justit setitem bhomologado "+homologado+"' name='"+a.AMOS_ID+"' title='Homologar'>"+(homologado === "has" ? "Sim" : "Nao")+"&lt;/button>&lt;/td>";
         if(note){
           var segnote=[];
           for(i=0;i&lt;a.NOTES.length;i++){
@@ -820,7 +834,7 @@ window.Box = Spine.Controller.sub({init:function() {
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-		on Mon Apr 4th 2016 using the <a
+		on Fri Apr 22nd 2016 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>

@@ -17,7 +17,10 @@
             GLOBAL
 *******************************/
 .s-four {
-  width: 140px;
+  width: 140px !important;
+}
+.s-fourth {
+  width: 400px;
 }
 .s-two {
   max-width: 200px !important;
@@ -36,7 +39,7 @@
   width: 85px;
 }
 .s-threeh {
-  width: 300px;
+  width: 300px !important;
 }
 .top-ten {
   margin-top: 10px;
@@ -3854,7 +3857,7 @@ label {
   color: red;
 }
 .form-control.form-control-search {
-  padding: 5px 285px 0 2%;
+  padding: 5px 20px 0 4%;
 }
 .form-control.bselect {
   background: transparent;
