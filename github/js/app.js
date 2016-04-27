@@ -256,6 +256,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               this.fstatus=this.cookieamostras[0].fstatus;
               this.nsort=this.cookieamostras[0].nsort;
               this.fornclick=this.cookieamostras[0].fornclick;
+              this.segmval=this.cookieamostras[0].segmval;
                               //console.dir(this.cookieamostras[0]);
 
             }
@@ -282,6 +283,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 this.fstatus=this.cookieamostras[0].fstatus;
                 this.nsort=this.cookieamostras[0].nsort;
                 this.fornclick=this.cookieamostras[0].fornclick;
+                this.segmval=this.cookieamostras[0].segmval;
                                 //console.dir(this.cookieamostras[0]);
 
               }
@@ -356,6 +358,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             this.fornclick=this.cookiefornecedores[0].fornclick;
             this.nsort=this.cookiefornecedores[0].nsort;
             this.combofilter=this.cookiefornecedores[0].combofilter;
+            this.segmval=this.cookiefornecedores[0].segmval;
             //console.dir(this.cookiefornecedores[0]);
 
 
@@ -371,6 +374,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               this.fornclick=this.cookiefornecedores[0].fornclick;
               this.nsort=this.cookiefornecedores[0].nsort;
               this.fornclick=this.cookiefornecedores[0].fornclick;
+              this.segmval=this.cookiefornecedores[0].segmval;
               //console.dir(this.cookiefornecedores[0]);
 
             }
@@ -399,6 +403,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 this.cadprincipal=this.cookiefornecedores[0].cadprincipal;
                 this.nsort=this.cookiefornecedores[0].nsort;  
                 this.fornclick=this.cookiefornecedores[0].fornclick;
+                this.segmval=this.cookiefornecedores[0].segmval;
                 //console.dir(this.cookiefornecedores[0]);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
               }
               else{
@@ -612,35 +617,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.container.load("pages/"+hash+".html",function( response, status, xhr){
         switch(context.page){
           case "amostras":
-          console.dir(val);
-            /*if(context.usr.SEGM_COD === "TD"){
-                status=setInterval(function(){
-                  if(context.fair.length){
-                    context.callService("listarSegmentos");
-                    context.ajaxrequest=!1;
-                    clearInterval(status);
-                  }
-                },100);
-
-                second=setInterval(function(){
-                  if(context.segm.length){
-                    context.ajaxrequest=!1;
-                    context.createComponent(context.segm,$(".SEGM_COD"),'segm');
-                    context.callService("template_email",'','<TEMP_DESC></TEMP_DESC><SEGM_COD></SEGM_COD>');
-                    clearInterval(second);
-                  }
-                },100);
-              }
-              else{
-                $(".SEGM_COD").addClass('hide');
-                second=setInterval(function(){
-                  if(context.fair.length){
-                    context.ajaxrequest=!1;
-                    context.callService("template_email",'','<TEMP_DESC></TEMP_DESC><SEGM_COD></SEGM_COD>');
-                    clearInterval(second);
-                  }
-                },100);
-              }*/
             var status,second;
             context.viewBtn=$(".changeview button");
             context.order_box=$(".tooltip.borderby");
@@ -1538,6 +1514,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             core.reset();
           }
           if(core.page ===  "amostras"){
+            $("select.AMOS_SEGM_COD").find("option").each(function(index, el) {
+              if($(el).attr("value") === core.segmval){
+                console.log(core.segmval);
+                $(el).attr('selected', 'selected');
+              }
+            });
             //core.callService(core.page,a,b,c,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>'+((core.content.page+1)*core.itens_by_page)+'</LINHA_F>','<CREATE_DATE_I>'+core.initialTime+'</CREATE_DATE_I>',"<CREATE_DATE_F>"+core.endTime+"</CREATE_DATE_F>");
             core.callService(core.page,a,b,c,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>20000</LINHA_F>',(core.initialTimeAmos ? '<CREATE_DATE_I>'+core.initialTimeAmos+'</CREATE_DATE_I>' : ""),(core.endTimeAmos ? '<CREATE_DATE_F>'+core.endTimeAmos+'</CREATE_DATE_F>' : ""));
           }
@@ -1569,6 +1551,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 $(el).attr('selected', 'selected');
               }
             });
+
             core.callService(core.page,a,b,fstatus,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>'+((core.content.page+1)*core.itens_by_page)+'</LINHA_F>',(core.initialTimeForn ? '<CREATE_DATE_I>'+core.initialTimeForn+'</CREATE_DATE_I>' : "")+(core.endTimeForn ? '<CREATE_DATE_F>'+core.endTimeForn+'</CREATE_DATE_F>' : ""),vprincipal);
             //core.callService(core.page,a,b,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>20000</LINHA_F>','<CREATE_DATE_I>'+core.initialTime+'</CREATE_DATE_I>',"<CREATE_DATE_F>"+core.endTime+"</CREATE_DATE_F>");
           }
@@ -1709,6 +1692,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               "cadprincipal":this.cadprincipal,
               "nsort":this.nsort,
               "view":""+this.view,
+              "segmval":this.segmval,
               "posscroll":0,
               "total":(this.total || 20)
             };
@@ -2564,6 +2548,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         "nsort":this.nsort,
         "cadprincipal":this.cadprincipal,
         "view":""+this.view,
+        "segmval":this.segmval,
         "posscroll":(this.posscroll || 0),
         "total":(this.total || 20)
       }
@@ -2689,39 +2674,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       $(".main_opt_item.tooltip.tooltip-selectable").eq(0).addClass('has');
       this.Componentfilter(this.data, 0, !0);
     },
-    /*
-    if(this.page !== "template_email"){
-        return !1;
-      }
-      var aux,type,segm,context=this;
-      type=$(".type option:selected").attr("value");
-      segm=$(".SEGM_COD option:selected").attr("value");
-      aux=this.data;
-      this.reset();
-
-      this.fdata = aux.filter(function(a,b){
-        if(parseInt(a.TP_TEMP_ID) === parseInt(type) || !type.length){
-          if(context.usr.SEGM_COD === "TD"){
-            //console.log(segm+" , "+a.SEGM_COD);
-            if(segm === a.SEGM_COD || !segm.length){
-              return a;
-            }
-          }
-          else{
-            return a;
-          }
-        }
-      });
-
-      this.data=aux;
-
-      if(!this.fdata.length){
-        this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0); 
-        this.setloading(!1);
-        return !1;
-      }
-      this.createbox(this.fdata, this.content.page, !0,"list"); 
-      */
     amosBySegment:function(){
       this.segmval=$(".AMOS_SEGM_COD option:selected").attr("value");
       $(".container-fullsize.scroller").scrollTop(0);
@@ -3042,6 +2994,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         "fstatus":this.fstatus,
         "nsort":this.nsort,
         "view":""+this.view,
+        "segmval":this.segmval,
         "total": 20
       };
 
@@ -4106,6 +4059,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               "fstatus":this.cookiefornecedores[0].cadstatus,
               "nsort":this.cookiefornecedores[0].nsort,
               "view":""+this.cookiefornecedores[0].view,
+              "segmval":this.cookiefornecedores[0].segval,
               "cadprincipal":this.cookiefornecedores[0].cadprincipal,
               "posscroll":(this.cookiefornecedores[0].posscroll || 0),
               "total":(this.cookiefornecedores[0].total || 20)
@@ -4128,6 +4082,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               "nsort":this.nsort,
               "cadprincipal":this.cadprincipal,
               "view":""+this.view,
+              "segmval":this.segmval,
               "posscroll":(this.posscroll || 0),
               "total":(this.total || 20)
             }
@@ -4147,6 +4102,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             "nsort":this.nsort,
             "cadprincipal":this.cadprincipal,
             "view":""+this.view,
+            "segmval":this.segmval,
             "posscroll":(this.posscroll || 0),
             "total":(this.total || 20)
           }
@@ -4169,6 +4125,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             "fstatus":this.fstatus,
             "nsort":this.nsort,
             "view":""+this.view,
+            "segmval":this.segmval,
             "cadprincipal":this.cadprincipal,
             "posscroll":(this.posscroll || 0),
             "total":(this.total || 20)
@@ -4187,6 +4144,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             "fstatus":this.cadstatus,
             "nsort":this.nsort,
             "view":""+this.view,
+            "segmval":this.segmval,
             "cadprincipal":this.cadprincipal,
             "posscroll":(this.posscroll || 0),
             "total":(this.total || 20)
@@ -4497,6 +4455,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 
       $("select[name='FORN_STATUS']").find("option").removeAttr('selected');
       $("select[name='CONT_PRINCIPAL']").find("option").removeAttr('selected');
+      $("select.AMOS_SEGM_COD").find("option").removeAttr('selected');
       //Filter list
       //this.filterlist.length=0;
     }
