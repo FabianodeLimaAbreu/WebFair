@@ -403,7 +403,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 this.cadprincipal=this.cookiefornecedores[0].cadprincipal;
                 this.nsort=this.cookiefornecedores[0].nsort;  
                 this.fornclick=this.cookiefornecedores[0].fornclick;
-                this.segmval=this.cookiefornecedores[0].segmval;
                 //console.dir(this.cookiefornecedores[0]);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
               }
               else{
@@ -617,6 +616,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.container.load("pages/"+hash+".html",function( response, status, xhr){
         switch(context.page){
           case "amostras":
+          //debugger;
             var status,second;
             context.viewBtn=$(".changeview button");
             context.order_box=$(".tooltip.borderby");
@@ -626,15 +626,15 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             this.view = "images";
             $("body").removeAttr("class");
             $(".nav-menu a[href='#amostras']").addClass('sel');
+//            debugger;
             if(!context.fair.length){
               status=setInterval(function(){
                 if(context.fair.length){
-                    context.ajaxrequest=!1;
-                    context.createComponent(context.fair,context.bfair,'fair');
-                    clearInterval(status);
-                  }
-                },100);
-
+                  context.ajaxrequest=!1;
+                  context.createComponent(context.fair,context.bfair,'fair');
+                  clearInterval(status);
+                }
+              },100);
               second=setInterval(function(){
                 if(context.segm.length){
                   context.ajaxrequest=!1;
@@ -647,13 +647,32 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                   $(b).attr("selected","selected");
                 }
               });
+              $("select.AMOS_SEGM_COD").find("option").each(function(index, el) {
+                if($(el).attr("value") === context.segmval){
+                  $(el).attr('selected', 'selected');
+                }
+              });
             }
             else{
+              if(val && val.length){
+                context.setloading(!0,!1);
+                context.submit(val[0],val[1],val[2],!1);
+              }
               if(context.usr.SEGM_COD === "TD"){
                 status=setInterval(function(){
+                  if(val && val.length){
+                    if(context.data.length){
+                      context.callService("listarSegmentos");
+                      context.ajaxrequest=!1;
+                      clearInterval(status);
+                    }
+                    
+                  }
+                  else{
                     context.callService("listarSegmentos");
                     context.ajaxrequest=!1;
                     clearInterval(status);
+                  }
                 },100);
               }
               else{
@@ -666,26 +685,42 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                   context.ajaxrequest=!1;
                   if(context.segm.length){
                     context.createComponent(context.segm,$(".AMOS_SEGM_COD"),'segm');
+                    context.createComponent(context.fair,context.bfair,'fair');
+                    if(context.fairval){
+                      $(".fair option").each(function(a,b){
+                        if(parseInt($(b).attr("value")) ==  parseInt(context.fairval)){
+                          $(b).attr("selected","selected");
+                        }
+                      });
+                    }
+                    $("select.AMOS_SEGM_COD").find("option").each(function(index, el) {
+                      if($(el).attr("value") === context.segmval){
+                        $(el).attr('selected', 'selected');
+                      }
+                    });
                     clearInterval(second);
                   }
                 }
-                context.createComponent(context.fair,context.bfair,'fair');
-                if(context.fairval){
-                  $(".fair option").each(function(a,b){
-                    if(parseInt($(b).attr("value")) ==  parseInt(context.fairval)){
-                      $(b).attr("selected","selected");
-                    }
-                  });
+                else{
+                  context.createComponent(context.fair,context.bfair,'fair');
+                  if(context.fairval){
+                    $(".fair option").each(function(a,b){
+                      if(parseInt($(b).attr("value")) ==  parseInt(context.fairval)){
+                        $(b).attr("selected","selected");
+                      }
+                    });
+                  }
+                  clearInterval(second);
                 }
-                if(val && val.length){
-                  context.setloading(!0,!1);
-                  context.submit(val[0],val[1],val[2],!1);
-                }
-                
-                
-              },100);
+              },100);  
             }
-            
+            if(context.fairval){
+              $(".fair option").each(function(a,b){
+                if(parseInt($(b).attr("value")) ==  parseInt(context.fairval)){
+                  $(b).attr("selected","selected");
+                }
+              });
+            }
             if(context.fornval){
               if(context.fornval.slice(0,3) ===  "alt"){
                 context.bforn.val(context.fornval.slice(3,(context.fornval.length)));
@@ -1514,13 +1549,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             core.reset();
           }
           if(core.page ===  "amostras"){
+            //core.callService(core.page,a,b,c,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>'+((core.content.page+1)*core.itens_by_page)+'</LINHA_F>','<CREATE_DATE_I>'+core.initialTime+'</CREATE_DATE_I>',"<CREATE_DATE_F>"+core.endTime+"</CREATE_DATE_F>");
             $("select.AMOS_SEGM_COD").find("option").each(function(index, el) {
               if($(el).attr("value") === core.segmval){
-                console.log(core.segmval);
                 $(el).attr('selected', 'selected');
               }
             });
-            //core.callService(core.page,a,b,c,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>'+((core.content.page+1)*core.itens_by_page)+'</LINHA_F>','<CREATE_DATE_I>'+core.initialTime+'</CREATE_DATE_I>',"<CREATE_DATE_F>"+core.endTime+"</CREATE_DATE_F>");
             core.callService(core.page,a,b,c,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>20000</LINHA_F>',(core.initialTimeAmos ? '<CREATE_DATE_I>'+core.initialTimeAmos+'</CREATE_DATE_I>' : ""),(core.endTimeAmos ? '<CREATE_DATE_F>'+core.endTimeAmos+'</CREATE_DATE_F>' : ""));
           }
           else{
@@ -1551,7 +1585,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 $(el).attr('selected', 'selected');
               }
             });
-
             core.callService(core.page,a,b,fstatus,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>'+((core.content.page+1)*core.itens_by_page)+'</LINHA_F>',(core.initialTimeForn ? '<CREATE_DATE_I>'+core.initialTimeForn+'</CREATE_DATE_I>' : "")+(core.endTimeForn ? '<CREATE_DATE_F>'+core.endTimeForn+'</CREATE_DATE_F>' : ""),vprincipal);
             //core.callService(core.page,a,b,'<LINHA_I>'+(core.content.page*core.itens_by_page+1)+'</LINHA_I>','<LINHA_F>20000</LINHA_F>','<CREATE_DATE_I>'+core.initialTime+'</CREATE_DATE_I>',"<CREATE_DATE_F>"+core.endTime+"</CREATE_DATE_F>");
           }
@@ -2499,7 +2532,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
     },
     /*THis method was deprecated in 10/11/2015 09:56 by Fabiano de Lima
     Because Supplier's status filter are being using like a Search Param and no more a filter of a complet list.
-
     filterForn:function(ev){
       var aux;
       aux=this.data;
@@ -2936,7 +2968,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.prices=[];
       this.prices.push($("input[name='initial_price']").val() || 0);
       this.prices.push($("input[name='end_price']").val() || 100000);
-      console.log(this.segmval);
       this.fdata = aux.filter(function(a,b){
         if(!context.segmval.length || a['SEGM_COD'] === context.segmval){
           if(parseInt(a["AMOS_PRECO"]) >= parseInt(context.prices[0]) && parseInt(a["AMOS_PRECO"]) <= parseInt(context.prices[1])){
@@ -3565,14 +3596,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 else{
                   day=date.getDate();
                 }
-
                 if((parseInt(date.getMonth())+1)<10){
                   month="0"+parseInt(date.getMonth()+1);
                 }
                 else{
                   month=parseInt(date.getMonth()+1);
                 }
-
                 date=""+date.getFullYear()+"-"+month+"-"+day;*/
                 $(".bemail[name='"+elem.AMOS_ID+"']").removeClass('disabled');
                 /*pattern+="<AMOS_ID>"+parseInt(elem.AMOS_ID)+"</AMOS_ID><FORN_ID>"+parseInt(elem.FORN_ID)+"</FORN_ID><FEIR_COD>"+parseInt(elem.FEIR_COD)+"</FEIR_COD><USU_COD>"+parseInt(elem.USU_COD)+"</USU_COD><AMOS_DESC>"+elem.AMOS_DESC+"</AMOS_DESC><AMOS_STATUS>"+elem.AMOS_STATUS+"</AMOS_STATUS><AMOS_ENV_EMAIL>1</AMOS_ENV_EMAIL><TECI_COD>"+(elem.TECI_COD || "")+"</TECI_COD><BASE_COD>"+(elem.BASE_COD || "")+"</BASE_COD><GRUP_COD>"+(elem.GRUP_COD || "")+"</GRUP_COD><SUBG_COD>"+(elem.SUBG_COD || "")+"</SUBG_COD><SEGM_COD>"+(elem.SEGM_COD || "")+"</SEGM_COD><FLAG_PRIORIDADE>"+elem.FLAG_PRIORIDADE+"</FLAG_PRIORIDADE><AMOS_HOMOLOGAR>"+elem.AMOS_HOMOLOGAR+"</AMOS_HOMOLOGAR><FLAG_FISICA>"+elem.FLAG_FISICA+"</FLAG_FISICA><CREATE_DATE>"+date+"</CREATE_DATE>";
@@ -3812,7 +3841,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                     segnote.push(fdata[i].NOTES[k]);
                   }
                 }
-
                 if(segnote.length){
                   this.setDate(segnote);
                   tab_text+="<td>";
@@ -3825,7 +3853,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                   tab_text+="<td></td>";
                 }
                 break;
-                
               case "COMPOSITIONS":
                 var arr=[];
                 tab_text+="<td>";
@@ -3840,7 +3867,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                   tab_text+=indice_amos[j].pvalue;
                 }
                 else{
-                  Teste
                   if(fdata[i][indice_amos[j].code]){
                     tab_text+=fdata[i][indice_amos[j].code].toString().removeAccents();
                   }
