@@ -57,6 +57,9 @@ callerEvents:function(){
   $(".savenote").unbind("click").bind("click",function(a){
     context.saveNote(a);
   });
+  $(".brotate").unbind("click").bind("click",function(a){
+    $("#zoom , .zoomContainer").toggleClass("has-rotate");
+  });
 },
 open: function(a){
   "use strict";
@@ -241,7 +244,7 @@ open: function(a){
     $(".zoomContainer").remove();
     $(".sample-buttons button").removeClass('sel');
     $(a.target).addClass('sel');
-    html='<button class="icon bzoom"></button>';
+    html='<button class="icon bzoom"></button><button class="icon brotate"></button>';
     if(item[name]){
       //html+='<img id="zoom" src="//bdb/ifair_img/'+item[name].replace("thumb","large")+'" data-zoom-image="//bdb/ifair_img/'+item[name].replace("thumb","large")+'"/>';
       html+='<img id="zoom" src="'+imgPath+item[name].replace("thumb","large")+'" data-zoom-image="'+imgPath+item[name].replace("thumb","large")+'"/>';
@@ -257,6 +260,8 @@ open: function(a){
       zoomWindowFadeIn: 500,
       zoomWindowFadeOut: 750
     }); 
+
+    this.callerEvents();
   }
 },saveDetail:function(){
   var html="",item=this.item,complet=1;

@@ -243,7 +243,7 @@
 			content: "";
 		}
 	}
-	&.bannex,&.bselection-edit,&.bselection,&.bzoom{
+	&.bannex,&.bselection-edit,&.bselection,&.bzoom,&.brotate{
 		background: none;
 		margin: 0 auto;
 		width: 30px;
@@ -260,7 +260,7 @@
 			content: "";
 		}
 	}
-	&.bselection-edit,&.bselection,&.bzoom{
+	&.bselection-edit,&.bselection,&.bzoom,&.brotate{
 		background: #fff;
 		z-index: 9;
 		border:1px solid #e5ecef;
@@ -287,6 +287,24 @@
 		}
 		&:hover{
 			background: #fff;
+		}
+	}
+	&.brotate{
+		position: absolute;
+		top: 60px;
+		right: 10px;
+		cursor: crosshair;
+		cursor: pointer;
+		&:after{
+			.rotate;
+			display: block;
+			left: 0;
+  			top: 0;
+  			width: 20px;
+  			margin:0 0 0 5px;
+		}
+		&:hover{
+			background: #f3f5f8;
 		}
 	}
 	&.bselection{
