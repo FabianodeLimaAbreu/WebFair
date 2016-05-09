@@ -136,7 +136,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.endTimeAmos=null;
       this.initialTimeForn=null;
       this.endTimeForn=null;
-
       this.unable_select=!1;
       this.is_selected=!1;
       this.combofilter={
@@ -527,8 +526,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         }
       }); 
     },
+    /**
+    * `This method is responsible to pass the forn's search to samples search when the user click at Samples's menu link and vice-versa
+    * @memberOf App#
+    */
     PassCookie:function(){
-      //Pesquisar amostras de acordo com ultima pesquisa de fornecedores e vice versa
       var url="";
       if(this.page === "amostras"){
         if(this.cookiefornecedores.length){
@@ -616,7 +618,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.container.load("pages/"+hash+".html",function( response, status, xhr){
         switch(context.page){
           case "amostras":
-          //debugger;
             var status,second;
             context.viewBtn=$(".changeview button");
             context.order_box=$(".tooltip.borderby");
@@ -626,7 +627,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             this.view = "images";
             $("body").removeAttr("class");
             $(".nav-menu a[href='#amostras']").addClass('sel');
-//            debugger;
             if(!context.fair.length){
               status=setInterval(function(){
                 if(context.fair.length){
@@ -1089,7 +1089,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       }
     },
 
-
+    /**
+    * `This method is called when the user do a filter by date.
+    * `This method take the input's date values and apply to a new request in the web service
+    * @memberOf App#
+    * @param {event} a. The click event.
+    */
     submitDateFilter:function(a){
       this.setloading(!0,!1);
       this.fairval=$(".bselect.fair").find("option:selected").val();
@@ -1159,8 +1164,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       }
       $(".date-filter").removeClass("sel");
     },
+
+    /**
+    * `This method is called when the user click in one of the shortcut itens of a sample in result's page 
+    * `This method set: "Favorite", "approved", "physical". This method call "gravarAmostras", passing the updated values.
+    * @memberOf App#
+    * @param {event} a. The click event.
+    */
     SetItemAmos:function(ev){
-      //console.log("CLICOU EM UM JUSTIT");
       var el=$(ev.target);
       var item=[],result,pattern="",html="";
       if(this.page === "amostras"){
@@ -1198,13 +1209,19 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           html+="<FLAG_PRIORIDADE>"+result+"</FLAG_PRIORIDADE><AMOS_HOMOLOGAR>"+item.AMOS_HOMOLOGAR+"</AMOS_HOMOLOGAR><FLAG_FISICA>"+item.FLAG_FISICA+"</FLAG_FISICA>";
           break;
         default:
-          //console.log("ALGO DE ERRADO OCORREU!!!");
           return !1;
       }
       pattern="<AMOS_ID>"+item.AMOS_ID+"</AMOS_ID><FORN_ID>"+item.FORN_ID+"</FORN_ID><FEIR_COD>"+parseInt(item.FEIR_COD)+"</FEIR_COD><USU_COD>"+item.USU_COD+"</USU_COD><AMOS_DESC>"+item.AMOS_DESC+"</AMOS_DESC><AMOS_LARGURA_TOTAL>"+item.AMOS_LARGURA_TOTAL+"</AMOS_LARGURA_TOTAL><AMOS_LARGURA_UTIL>"+item.AMOS_LARGURA_UTIL+"</AMOS_LARGURA_UTIL><AMOS_GRAMATURA_M>"+item.AMOS_GRAMATURA_M+"</AMOS_GRAMATURA_M><AMOS_GRAMATURA_ML>"+item.AMOS_GRAMATURA_ML+"</AMOS_GRAMATURA_ML><AMOS_ONCAS>"+item.AMOS_ONCAS+"</AMOS_ONCAS><AMOS_COTACAO_M>"+item.AMOS_COTACAO_M+"</AMOS_COTACAO_M><AMOS_COTACAO_KG>"+item.AMOS_COTACAO_KG+"</AMOS_COTACAO_KG><AMOS_STATUS>"+item.AMOS_STATUS+"</AMOS_STATUS><AMOS_ENV_EMAIL>"+item.AMOS_ENV_EMAIL+"</AMOS_ENV_EMAIL><AMOS_PRECO_UM>"+item.AMOS_PRECO_UM+"</AMOS_PRECO_UM><AMOS_PRECO>"+item.AMOS_PRECO+"</AMOS_PRECO><TECI_COD>"+(item.TECI_COD || "")+"</TECI_COD><BASE_COD>"+(item.BASE_COD || "")+"</BASE_COD><GRUP_COD>"+(item.GRUP_COD || "")+"</GRUP_COD><SUBG_COD>"+(item.SUBG_COD || "")+"</SUBG_COD><SEGM_COD>"+item.SEGM_COD+"</SEGM_COD><CREATE_DATE>"+"2015-01-01"+"</CREATE_DATE>";
       this.setloading(!0,!1);
       this.callService("gravarAmostras",pattern,html,'U');
     },
+
+    /**
+    * `This method is called when the user select a sample to edit or send a email for example.
+    * `When has a select event, this method add that sample to select_items array to be used after.
+    * @memberOf App#
+    * @param {event} a. The click event.
+    */
     selectItem:function(a){
       var context=this;
       a.preventDefault();
@@ -1237,32 +1254,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       else{
         this.action_name="select";
       }
-    },
-    setBreadcrumb : function(a, val){
-      var loja, area, grupo, artigo, bread_text;
-        
-      // Error
-      if(!a[0]){
-        return this.modal.open(),this.breadEl.find('.bread-colec a').text("").removeClass('active'),this.setloading(!1), this.searchEl.find('input').blur();
-      }
-
-      loja        = a[0].DESC_STORE;
-      grupo       = a[0].GRUPO;
-      area        = a[0].TYPE_MAT;
-      artigo      = this.artigo;
-      bread_text  = loja+' - '+area+' - '+val;
-
-
-
-      // FILHO
-      if(!loja){
-        this.area=a[0].TYPE_MAT;
-        this.breadEl.find('.bread-colec a').text(area+' - '+grupo+' - '+artigo).addClass('active');
-        return false;
-      }
-      // PAI      
-      (this.area=="X") ? (bread_text=loja+' - '+val) : bread_text=(loja+' - '+area+' - '+val);
-      this.breadEl.find('.bread-colec a').text(bread_text).addClass('active');   
     },
     changeview : function(a) {
       if ("object" === typeof a) {
@@ -1663,9 +1654,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
     setdata:function(a,b){  
       var i,length;
       //this.content.page = 0;
-      /*this.setBreadcrumb(a,val);
-      this.breadEl.find(".bread-load").text(0);*/
-
       
 
       if (!this.data.length && b !="local") {    
