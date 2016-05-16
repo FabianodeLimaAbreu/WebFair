@@ -58,7 +58,16 @@ callerEvents:function(){
     context.saveNote(a);
   });
   $(".brotate").unbind("click").bind("click",function(a){
-    $("#zoom , .zoomContainer").toggleClass("has-rotate");
+    var angle=parseInt($(this).attr("name").slice(5));
+    if(angle >= 360){
+      angle = 0;
+    }
+    else{
+      angle += 90;
+    }
+    $(this).attr("name","angle"+angle);
+    $("#zoom").attr("class","angle"+angle);
+    $(".zoomContainer").attr("class","zoomContainer angle"+angle);
   });
 },
 open: function(a){
@@ -176,6 +185,7 @@ open: function(a){
   //ANOTAÇÕES
   if(note){
     var segnote=[],result="";
+    this.setDate(item.NOTES);
     for(i=0;i<item.NOTES.length;i++){
       if(item.NOTES[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
         segnote.push(item.NOTES[i]);
@@ -244,7 +254,7 @@ open: function(a){
     $(".zoomContainer").remove();
     $(".sample-buttons button").removeClass('sel');
     $(a.target).addClass('sel');
-    html='<button class="icon bzoom"></button><button class="icon brotate"></button>';
+    html='<button class="icon bzoom"></button><button class="icon brotate" name="angle0"></button>';
     if(item[name]){
       //html+='<img id="zoom" src="//bdb/ifair_img/'+item[name].replace("thumb","large")+'" data-zoom-image="//bdb/ifair_img/'+item[name].replace("thumb","large")+'"/>';
       html+='<img id="zoom" src="'+imgPath+item[name].replace("thumb","large")+'" data-zoom-image="'+imgPath+item[name].replace("thumb","large")+'"/>';
@@ -967,6 +977,7 @@ setFav:function(a){
     }
     //ANOTAÇÕES
     if(this.item.NOTES.length){
+      this.setDate(this.item.NOTES);
       var segnote=[];
       var result="";
       for(i=0;i<this.item.NOTES.length;i++){

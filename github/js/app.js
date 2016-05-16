@@ -193,6 +193,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         SetItemAmos:this.proxy(this.SetItemAmos),
         callService:this.proxy(this.callService),
         deleteNote:this.proxy(this.deleteNote),
+        setDate:this.proxy(this.setDate),
         usr:this.usr,
         modal:this.modal,
         cookieamostras:this.cookieamostras
@@ -252,7 +253,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               this.prices=this.cookieamostras[0].prices;
               this.refine=this.cookieamostras[0].refine;
               this.combofilter=this.cookieamostras[0].combofilter;
-              this.fstatus=this.cookieamostras[0].fstatus;
+              this.fstatus=this.cookieamostras[0].fstatus; 
               this.nsort=this.cookieamostras[0].nsort;
               this.fornclick=this.cookieamostras[0].fornclick;
               this.segmval=this.cookieamostras[0].segmval;
@@ -1255,6 +1256,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         this.action_name="select";
       }
     },
+    /**
+    * `This method is called when the user change the view image or list
+    * `The method add and remove the sel class and call setdata method
+    * @memberOf App#
+    * @param {event} a. The click event.
+    */
     changeview : function(a) {
       if ("object" === typeof a) {
           a.preventDefault(), a = $(a.target);
@@ -1274,16 +1281,18 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       }
       a.hasClass("sel") || (this.viewBtn.removeClass("sel"), a.addClass("sel"), this.view = a.attr('alt'), this.setdata(this.data, "amostras"));
     },
-    setMenu:function(loja){
-        if(this.menuopt.hasClass("sel")){
-          this.menuopt.removeClass("sel");
-        }
-        this.menuopt.each(function(a,b){
-          if(b.hash === "#"+loja){
-            $(b).addClass("sel");
-          }        
-        });
-    },
+    /**
+    * `This method has a list of all useful webservices in a soap structure, execute a request to a webservice and call a callback method
+    * @memberOf App#
+    * @param {String} name. The name of the web service to be requested.
+    * @param {String} a. One of the parameters to a web service being requested.
+    * @param {String} b. One of the parameters to a web service being requested.
+    * @param {String} c. One of the parameters to a web service being requested.
+    * @param {String} d. One of the parameters to a web service being requested.
+    * @param {String} e. One of the parameters to a web service being requested.
+    * @param {String} f. One of the parameters to a web service being requested.
+    * @param {String} g. One of the parameters to a web service being requested.
+    */
     callService:function(name,a,b,c,d,e,f,g){
         var core=this;
         var soapRequest=[
@@ -1525,8 +1534,18 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           }
         });
     },
+    /**
+    * `This method is a first way to call the requester of web services
+    * `Its called and changeFair, filterForn and others
+    * @memberOf App#
+    * @param {String} a. To say if need a reset of content or not and is a param to WebService in soap format
+    * @param {String} b. A param to WebService in soap format
+    * @param {String} c. A param to WebService in soap format
+    * @param {String} d. A param to WebService in soap format
+    * @param {String} fstatus. A param to WebService in soap format
+    * @param {String} fprincipal. A param to WebService in soap format
+    */
     submit:function(a,b,c,d,fstatus,fprincipal){
-      //debugger;
       var status,vprincipal,core=this;
       var b=b || "";
       var c=c || "";
@@ -1582,24 +1601,15 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         }
       },100);
     },
+    /**
+    * `This method is called on blue and press into input-search
+    * @memberOf App#
+    * @param {event} a. The blur or keypress event.
+    */
     search:function(a){
-      /*this.initialTime='2015-01-08';
-      this.endTime='2015-10-10';*/
       var search;
       var forn_desc=this.fornval || "";
       this.itens_by_page=this.itens_page_default;
-      //this.scroller=0;
-      /*if(isNaN(forn_desc)){
-        forn_desc="<FORN_DESC>"+forn_desc+"</FORN_DESC>";
-      }
-      else{
-        if(forn_desc.length){
-          forn_desc="<FORN_ID>"+forn_desc+"</FORN_ID>";
-        }
-        else{
-          forn_desc="";
-        }
-      }*/
 
       if(isNaN(forn_desc)){
         if(forn_desc.slice(0, 3) === "alt"){
@@ -1635,8 +1645,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         this.submit(fair_id,forn_desc,search);
       }
     },
+    /**
+    * `This method is called when the request in CallService return an error
+    * @memberOf App#
+    * @param {Object} data. The object return]
+    * @param {Int} status. Status of the return, like 500 to error
+    * @param {String} req. The name of the error
+    */
     processError:function(data, status, req){
-      //console.log("DEU ERRO: ");
       this.ajaxrequest=!1;
       this.fornecedores.ajaxrequest=!1;
       if(this.page === "fornecedor_cadastro"){
@@ -1651,6 +1667,12 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         return this.modal.open("message","Um erro ocorreu!!!",!1,!0), this.setloading(!1);
       }      
     },
+    /**
+    * `This method is called after the return of callService to set the data and call a method to write the itens on the page.
+    * @memberOf App#
+    * @param {Array} data. The list of object to write on page
+    * @param {String} b. The page name to switch
+    */
     setdata:function(a,b){  
       var i,length;
       //this.content.page = 0;
@@ -1658,7 +1680,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 
       if (!this.data.length && b !="local") {    
         return this.modal.open("message","Nenhum Item Encontrado!!!",!1,!0), $(".overview-container").remove(),$('<div class="brea"></div>d-search').find(".spec").text("0 Resultados"),this.page === "amostras" ? $("input[name='initial_date']").datepicker('setDate', (this.initialTimeAmos && this.initialTimeAmos.slice(0,4)+'-'+this.initialTimeAmos.slice(5, 7)+"-"+this.initialTimeAmos.slice(8, 10))) && $("input[name='end_date']").datepicker('setDate', (this.endTimeAmos && this.endTimeAmos.slice(0,4)+'-'+this.endTimeAmos.slice(5, 7)+"-"+this.endTimeAmos.slice(8, 10))) :$("input[name='initial_date']").datepicker('setDate', (this.initialTimeAmos && this.initialTimeAmos.slice(0,4)+'-'+this.initialTimeAmos.slice(5, 7)+"-"+this.initialTimeAmos.slice(8, 10))) && $("input[name='end_date']").datepicker('setDate', (this.endTimeAmos && this.endTimeAmos.slice(0,4)+'-'+this.endTimeAmos.slice(5, 7)+"-"+this.endTimeAmos.slice(8, 10))), this.setloading(!1);
-        //return this.modal.open(),this.breadEl.find('.bread-colec a').text("").removeClass('active'),this.setloading(!1), this.searchEl.find('input').blur();
       }  
       switch(b){
         case 'amostras':
@@ -1730,8 +1751,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         default:
           //console.log("ALGO ERRADO");
       }
-      ("images" !== this.view) ? this.scroll($(".container-fullsize.scroller")) : this.scroll();
-            
+      ("images" !== this.view) ? this.scroll($(".container-fullsize.scroller")) : this.scroll();      
     },
     callRequest:function(data, status, req){
         var query;
