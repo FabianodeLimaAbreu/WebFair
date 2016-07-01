@@ -444,6 +444,11 @@ callerEvents:function(){
   $(".gotop").bind("click",function(a){context.goTop();});
   $(".goback").bind("click",function(a){context.close(a);});
 
+  $(".brotate").unbind("click").bind("click",function(a){
+    a.preventDefault();
+    $(this).next("img").toggleClass("downAngle");
+  });
+
   /*if(!$("html").hasClass('view_forn')){
     $("input").removeAttr('disabled');
     $("select").removeAttr('disabled');
@@ -897,10 +902,10 @@ setFav:function(a){
       if(parseInt(el.CONT_ID) === parseInt($(a.target).attr("name"))){
         $(".card-side img").each(function(i, elem) {
           if(el[''+$(elem).attr("name")].length){
-            $(elem).attr("src",imgPath+el[''+$(elem).attr("name")]).attr("alt",parseInt(el.CONT_ID));
+            $(elem).attr("src",imgPath+el[''+$(elem).attr("name")]).attr("alt",parseInt(el.CONT_ID)).removeClass("downAngle");
           }
           else{
-            $(elem).attr("src",'images/camera.png').attr("alt",parseInt(el.CONT_ID));
+            $(elem).attr("src",'images/camera.png').attr("alt",parseInt(el.CONT_ID)).removeClass("downAngle");
           }
         });
       }
@@ -1267,7 +1272,7 @@ setFav:function(a){
       $(".supplier-img-containter img").each(function(i, elem) {
         if(el[''+$(elem).attr("name")].length){
           hasimg=!0;
-          $(elem).attr("src",imgPath+el[''+$(elem).attr("name")]);
+          $(elem).attr("src",imgPath+el[''+$(elem).attr("name")]).removeClass("downAngle");
         }
       });
     }

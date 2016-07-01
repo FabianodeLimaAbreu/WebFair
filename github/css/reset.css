@@ -50,12 +50,14 @@ table {
 	border-spacing: 0
 }
 .floatLeft {
+	position: relative;
 	float: left;
 }
 img.floatLeft {
 	margin: 0 10px 10px 10px
 }
 .floatRight {
+	position: relative;
 	float: right;
 }
 img.floatRight {
