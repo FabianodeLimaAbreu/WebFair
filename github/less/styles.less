@@ -2534,7 +2534,8 @@ form.search{
 	    overflow-x: hidden;
 	    width: 500px;
 	}
-	button{cursor:pointer;
+	button{
+		cursor:pointer;
 		float: left;
 		width: 100px;
 		height: 30px;
@@ -2545,6 +2546,13 @@ form.search{
 		margin: 10px 10px;
 		&:hover{
 			background-color: @dark-text;
+		}
+		&.disabled{
+			cursor: default;	
+			background-color: #e1e1e1;
+			&:hover{
+				background-color: #e1e1e1;
+			}
 		}
 	}
 	.alertclose{
@@ -2624,9 +2632,9 @@ form.search{
 			float:right;
 		}
 		p{
-			width: 100%;
+			width: 90%;
 			text-align: center;
-			margin: 15px 0 0 20px;
+			margin: 15px 0 0 5%;
 		}
 	}
 	.dialog{

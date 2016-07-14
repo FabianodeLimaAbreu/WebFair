@@ -174,6 +174,7 @@ window.Modal = Spine.Controller.sub({
     "click .dialog-save":"save",
     "click .link":"goEmail",
     "click .question button":"actions",
+    "click .save-merge":"actions",
     "click .setFav":"setFav"
   },
 
@@ -201,6 +202,7 @@ window.Modal = Spine.Controller.sub({
       }*/
     }
     this.el.fadeOut('fast');
+    this.main.removeClass("bad");
     this.content.addClass('hide');
     this.buttons_container.addClass('hide');
     this.clean();
@@ -222,7 +224,6 @@ window.Modal = Spine.Controller.sub({
   },
   setFav:function(a){
     a.preventDefault();
-    alert("CLICOU");
   },
   open:function(who,msg,call,isbad,isquest) {
     var a;
@@ -254,6 +255,25 @@ window.Modal = Spine.Controller.sub({
           for(i=0;i<msg.CONTACTS.length;i++){
             if(msg.CONTACTS[i].CONT_EMAIL.length){
               html+="<tr><td><a href='#"+msg.CONTACTS[i].CONT_ID+"' class='setFav' name='"+msg.CONTACTS[i].CONT_ID+"'>"+msg.CONTACTS[i].CONT_NOME+"</a></td><td><a href='#"+msg.CONTACTS[i].CONT_ID+"' class='setFav' name='"+msg.CONTACTS[i].CONT_ID+"'>"+msg.CONTACTS[i].CONT_EMAIL+"</a></td></tr>";
+            }
+          }
+          this.main.find("tbody").append(html);
+          break;
+        case 'merge':
+          var i,html="";
+          this.main.find("tbody").empty();
+          this.main.addClass('foremail');
+          for(i=0;i < msg[0].length;i++){
+            html+="<tr><td><button type='button' name='"+msg[0][i].FORN_ID+"' class='icon bselection sel";
+            if(msg[0][i].FORN_PRINCIPAL){
+              html+=" merge-fixed";
+            }
+            html+="' data-type='merge'></button></td><td>"+msg[0][i].FORN_DESC+"</td><td><button type='button' name='"+msg[0][i].FORN_ID+"' class='icon ";
+            if(msg[0][i].FORN_PRINCIPAL){
+              html+="bmerge sel fixed-merge'></button></td></tr>";
+            }
+            else{
+              html+="bmerge'></button></td></tr>";
             }
           }
           this.main.find("tbody").append(html);
@@ -501,8 +521,9 @@ window.Box = Spine.Controller.sub({init:function() {
     switch (this.page){
       case "fornecedores":
         if(a){
-          var result="",i,status,nome_contato,segmento=[],contatos_date=[],middlefav="";
+          var result="",i,status,principal,nome_contato,segmento=[],contatos_date=[],middlefav="";
           status= a.FORN_STATUS ? "complet":"incomplet";
+          principal= a.FORN_PRINCIPAL ? "SIM":"";
           result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.FORN_DESC+"</a></td>"+"<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.FEIR_DESC+"</a></td>"+"<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.CREATE_DATE+"</a></td>";
           
 
@@ -607,7 +628,13 @@ window.Box = Spine.Controller.sub({init:function() {
           }
           /*To attend Demand: 0 Alerta para mais de dois contatos principais cadastrado
           <td><span class='doubled-contact'></span></td>*/
-          result+="<td><button type='button' class='caption-icons-icon justit bstatus "+status+"' title='"+status.capitalize()+"'>"+status+"</button></td><td><span class='doubled-contact'></span></td>";
+          result+="<td><button type='button' class='caption-icons-icon justit bstatus "+status+"' title='"+status.capitalize()+"'>"+status+"</button></td><td><span class='doubled-contact'></span></td><td><button type='button' name='"+a.FORN_ID+"' class='icon bselection'></button></td>";
+          if(a.FORN_PRINCIPAL){
+            result+="<td><button type='button' class='caption-icons-icon justit merge-principal' title='"+principal+"'>"+a.FORN_PRINCIPAL+"</button></td>";
+          }
+          else{
+            result+="<td></td>";
+          }
           return result;
         }
         break;

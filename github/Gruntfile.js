@@ -47,7 +47,7 @@ module.exports = function(grunt) {
         expand:true
       },
       github:{
-        src:['**','!node_modules/**','!images/psds/**','!WebFair/**','!dist/**',"!**/*.xlsx"],
+        src:['**','!node_modules/**','!images/psds/**','!WebFair/**','!dist/**',"!**/*.xlsx",'!LEVANTAMENTO DE DADOS/**'],
         dest:'WebFair/github',
         expand:true
       }

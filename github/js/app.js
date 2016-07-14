@@ -57,6 +57,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       "keyup .forn": "getSpot",
       "change .fair":"changeFair",
       "click .export":"exportExcel",
+      "click button.merge":"buttonMergeFornecedores",
       "blur .form-control-search":"search",
       "keyup .form-control-search":"search",
       "change .filter-data":"filterForn",
@@ -93,7 +94,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       "click .filterlist a":"setComboFilter",
       "click .combofilter":"makeComboFilter",
       "click .remain_text":"TakeAllSamples",
-      "click .select_all":"SelectAllSamples"
+      "click .select_all":"SelectAllSamples",
+      "click .bmerge": "selectPrincipalMerge"
     },
     init:function(){
       this.view = "images";
@@ -1228,27 +1230,67 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       a.preventDefault();
       if($(a.target).hasClass("sel")){
         this.select_items = this.select_items.filter(function(element,i){
-          if(element.AMOS_ID !== parseInt($(a.target).attr("name"))){
-            return {
-              'AMOS_DESC':element.AMOS_DESC,
-              'AMOS_ID':element.AMOS_ID,
-              'FORN_ID':element.FORN_ID,
-            };
+          if(context.page === "amostras"){
+            if(element.AMOS_ID !== parseInt($(a.target).attr("name"))){
+              return {
+                'AMOS_DESC':element.AMOS_DESC,
+                'AMOS_ID':element.AMOS_ID,
+                'FORN_ID':element.FORN_ID
+              };
+            }
+          }
+          else{
+            if(element.FORN_ID !== parseInt($(a.target).attr("name"))){
+              return {
+                'FORN_ID':element.FORN_ID,
+                'FORN_DESC':element.FORN_DESC,
+                "FORN_PRINCIPAL":element.FORN_PRINCIPAL
+              };
+            }
           }
         });
       }
       else{
         this.data.filter(function(element,i){
-          if(element.AMOS_ID === parseInt($(a.target).attr("name"))){
-            context.select_items.push({
-              'AMOS_DESC':element.AMOS_DESC,
-              'AMOS_ID':element.AMOS_ID,
-              'FORN_ID':element.FORN_ID,
-            });
+          if(context.page === "amostras"){
+            if(element.AMOS_ID === parseInt($(a.target).attr("name"))){
+              context.select_items.push({
+                'AMOS_DESC':element.AMOS_DESC,
+                'AMOS_ID':element.AMOS_ID,
+                'FORN_ID':element.FORN_ID
+              });
+            }
+          }
+          else{
+            if(element.FORN_ID === parseInt($(a.target).attr("name"))){
+              context.select_items.push({
+                'FORN_ID':element.FORN_ID,
+                'FORN_DESC':element.FORN_DESC,
+                "FORN_PRINCIPAL":element.FORN_PRINCIPAL
+              });
+            }
           }
         });
       }
-      $(a.target).toggleClass("sel");
+
+      if($(a.target).attr("data-type") === "merge"){
+        debugger;
+        $(".bselection[name='"+$(a.target).attr("name")+"']").toggleClass("sel");
+
+        if($(".bmerge[name='"+$(a.target).attr("name")+"']").hasClass("sel")){
+          console.log("1");
+          $(".bmerge[name='"+$(a.target).attr("name")+"']").toggleClass("sel").toggleClass("fixed-merge");
+        }
+        else{
+          if($(a.target).hasClass("merge-fixed")){
+            $(".bmerge[name='"+$(a.target).attr("name")+"']").toggleClass("sel");
+          }
+        }
+        
+      }
+      else{
+        $(a.target).toggleClass("sel");
+      }
       if($(a.target).attr("bselection-edit")){
         this.action_name="edit";
       }
@@ -1512,6 +1554,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               }
             }
           },
+          {
+            'name':'GravarFornecedorMestre',
+            'serviceName':'GravarFornecedorMestre',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFornecedorMestre xmlns="http://tempuri.org/"><MSTR_ID>'+a+'</MSTR_ID><USU_COD>'+core.usr.USU_COD+'</USU_COD><forns>'+b+'</forns></GravarFornecedorMestre></soap:Body></soap:Envelope>',
+            'callback':function(data,req){
+              core.setloading(!1);
+            }
+          }
         ];
 
         $.support.cors=true;
@@ -1675,6 +1725,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
     */
     setdata:function(a,b){  
       var i,length;
+      console.dir(a);
       //this.content.page = 0;
       
 
@@ -1686,7 +1737,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           //this.data = a.sortBy(this.nsort);
           //debugger;
           this.data = a;
-          console.dir(a);
           this.content.changeview(this.view);
           //this.filter.checklist(a);
           //$(".changeview button.b"+this.view);
@@ -3226,6 +3276,37 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         }
       }
     },
+    buttonMergeFornecedores:function(){
+      if(this.select_items.length < 2){
+        this.modal.open("message","Por favor, Selecione ao menos 2 fornecedores para o merge!!!",!1,!0);
+        return !1;
+      }
+      this.modal.open("merge",[this.select_items],this.proxy(this.confirmMerge),!1,!1); //listtemplates,amos_sel,contemail,item[0]
+
+    },
+    confirmMerge:function(){
+      var i,arr=[];
+
+      for(i=0;i<this.select_items.length;i++){
+        if(this.select_items[i].FORN_ID !== parseInt($(".bmerge.sel").attr("name"))){
+          arr.push("<int>"+this.select_items[i].FORN_ID+"</int>");
+        }
+      }
+      this.callService("GravarFornecedorMestre",$(".bmerge.sel").attr("name"),arr.join(""));
+    },
+    selectPrincipalMerge:function(a){
+
+      var bsel=$(a.target).closest("tr").find(".bselection[name='"+$(a.target).attr("name")+"']");
+      if($(".bmerge.fixed-merge").length){
+        return !1;
+      }
+      $(".bmerge").removeClass("sel");
+      $(a.target).addClass("sel");
+      if(!bsel.hasClass("sel")){
+        bsel.trigger("click");
+      }
+      //$(a.target).closest("tr").find(".bselection[name='"+$(a.target).attr("name")+"']").trigger("click");
+    },
     CleanFilter:function(){
       var scroll;
       this.resetFilters();
@@ -3255,7 +3336,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         $(".info-template.item"+id).find("textarea").attr('disabled','disabled');
         $(".info-template textarea").removeClass('focused');
         $(".info-template.item"+id).find(".custombuttons").addClass('hide');
-
       }
       else{
         $(".info-template.item"+id).find("textarea").removeAttr('disabled');
@@ -3659,7 +3739,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         {"code":"SEGM_DESC","name":"Segmento"},
         {"code":"NOTES","name":"Anotacoes"},
         {"code":"FAVORITES","name":"Favoritos"},
-        {"code":"FORN_STATUS","name":"Status"}
+        {"code":"FORN_STATUS","name":"Status"},
+        {"code":"FORN_PRINCIPAL","name":"Fornecedor Principal"}
       ]
       var indice_amos=[
         {"code":"FORN_DESC","name":"Fornecedor","pattern":false,"pvalue":""},
@@ -3822,6 +3903,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 else{
                   tab_text+="<td>Nao</td>";
                 }
+                break;
+              case "FORN_PRINCIPAL":
+                  tab_text+="<td>";
+                  tab_text+=fdata[i][indice_forn[j].code] ? "SIM" : "";
+                  tab_text+="</td>";
                 break;
               default:
                 tab_text+="<td>";

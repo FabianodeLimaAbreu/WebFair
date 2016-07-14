@@ -1,4 +1,4 @@
-.sprite{ background:url("../images/sprite.png") top left no-repeat; }
+.sprite{ background:url("sprite.png") top left no-repeat; }
 .principal_big{ width:25px; height:35px; background-position:-10px -10px; }
 .menu-legend{ width:30px; height:30px; background-position:-10px -55px; }
 .menu-logoff{ width:25px; height:30px; background-position:-10px -95px; }
@@ -76,3 +76,4 @@
 .opt_search{ width:12px; height:12px; background-position:-36px -1890px; }
 .other-arrow_right{ width:10px; height:10px; background-position:-40px -904px; }
 .other-arrow_down{ width:10px; height:10px; background-position:-40px -934px; }
+

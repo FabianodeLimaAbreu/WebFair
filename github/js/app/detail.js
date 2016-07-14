@@ -1724,16 +1724,18 @@ setFav:function(a){
   this.setloading(!0,!1);
   this.item = {};
   this.reset();
-  this.callService("singleForn",'<FEIR_COD></FEIR_COD><FORN_ID>'+code+'</FORN_ID><LINHA_I>1</LINHA_I><LINHA_F>20</LINHA_F>');
-  /*if(!isNaN(code)){
-    result=this.getdata(code);
-  }
-  if(result.length){
-    this.open(result[0]);
+  if(!isNaN(code)){
+    this.callService("singleForn",'<FEIR_COD></FEIR_COD><FORN_ID>'+code+'</FORN_ID><LINHA_I>1</LINHA_I><LINHA_F>20</LINHA_F>');
+    
   }
   else{
-    this.open(this.item);
-  }*/
+    result=this.getdata(code);
+    if(result.length){
+      this.open(result[0]);
+    }else{
+      this.open(this.item);
+    }
+  }
 },reset:function(){
   this.item = {};
   this.isviewforn=!1;
