@@ -3280,9 +3280,21 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         this.modal.open("message","Por favor, Selecione ao menos 2 fornecedores para o merge!!!",!1,!0);
         return !1;
       }
+      var count=0;
+      this.select_items.map(function (a) {
+        if(a.FORN_PRINCIPAL){
+          count++;
+        }
+      });
+      if(count>1){
+        this.modal.open("message","Você pode selecionar no máximo 1 Fornecedor principal!",!1,!0);
+        return !1;
+      }
       this.modal.open("merge",[this.select_items],this.proxy(this.confirmMerge),!1,!1);
     },
     confirmMerge:function(){
+      console.dir($("button.bmerge.sel"));
+      return !1;
       this.modal.open("message","Esta operação não poderá ser cancelada posteriormente. Deseja fazer as alterações e unir os dados dos fornecedores?", this.proxy(this.MergePromisse),!0, !0);
     },
     MergePromisse:function(){
