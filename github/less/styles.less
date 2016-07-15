@@ -25,6 +25,7 @@
 
 
 //SIZES
+.complet{width: 100%;}
 .s-four{width: 140px !important;}
 .s-fourth{width: 400px}
 .s-two{max-width: 200px !important;}
@@ -2544,6 +2545,13 @@ form.search{
 		border: none;
 		background-color: @buttons;
 		margin: 10px 10px;
+		&.save-merge{
+			float: none;
+		    margin: 10px auto;
+		    position: relative;
+		    display: block;
+		    width: auto;
+		}
 		&:hover{
 			background-color: @dark-text;
 		}
@@ -2630,6 +2638,9 @@ form.search{
 		}
 		button{
 			float:right;
+			&.save-merge{
+				float: none;
+			}
 		}
 		p{
 			width: 90%;

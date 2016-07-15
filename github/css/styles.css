@@ -16,6 +16,9 @@
 /*******************************
             GLOBAL
 *******************************/
+.complet {
+  width: 100%;
+}
 .s-four {
   width: 140px !important;
 }
@@ -2471,6 +2474,13 @@ form.search {
   background-color: #71abcc;
   margin: 10px 10px;
 }
+.modal button.save-merge {
+  float: none;
+  margin: 10px auto;
+  position: relative;
+  display: block;
+  width: auto;
+}
 .modal button:hover {
   background-color: #414141;
 }
@@ -2554,6 +2564,9 @@ form.search {
 }
 .modal .note button {
   float: right;
+}
+.modal .note button.save-merge {
+  float: none;
 }
 .modal .note p {
   width: 90%;
