@@ -174,7 +174,7 @@ window.Modal = Spine.Controller.sub({
     "click .dialog-save":"save",
     "click .link":"goEmail",
     "click .question button":"actions",
-    "click .save-merge":"actions",
+    "click .save-merge":"teste",
     "click .setFav":"setFav"
   },
 
@@ -210,6 +210,11 @@ window.Modal = Spine.Controller.sub({
   },
   actions:function(a){
     $(a.target).attr("name") === "yes" ? this.callback() : this.callback=null,this.close();
+  },
+  teste:function(){
+    this.main.removeClass("bad");
+    this.clean();
+    this.callback();
   },
   goEmail:function(a){
     a.preventDefault();

@@ -1274,7 +1274,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       }
 
       if($(a.target).attr("data-type") === "merge"){
-        debugger;
         $(".bselection[name='"+$(a.target).attr("name")+"']").toggleClass("sel");
 
         if($(".bmerge[name='"+$(a.target).attr("name")+"']").hasClass("sel")){
@@ -1559,7 +1558,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             'serviceName':'GravarFornecedorMestre',
             'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFornecedorMestre xmlns="http://tempuri.org/"><MSTR_ID>'+a+'</MSTR_ID><USU_COD>'+core.usr.USU_COD+'</USU_COD><forns>'+b+'</forns></GravarFornecedorMestre></soap:Body></soap:Envelope>',
             'callback':function(data,req){
-              core.setloading(!1);
+              window.location.reload();
             }
           }
         ];
@@ -3281,12 +3280,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         this.modal.open("message","Por favor, Selecione ao menos 2 fornecedores para o merge!!!",!1,!0);
         return !1;
       }
-      this.modal.open("merge",[this.select_items],this.proxy(this.confirmMerge),!1,!1); //listtemplates,amos_sel,contemail,item[0]
-
+      this.modal.open("merge",[this.select_items],this.proxy(this.confirmMerge),!1,!1);
     },
     confirmMerge:function(){
+      this.modal.open("message","Esta operação não poderá ser cancelada posteriormente. Deseja fazer as alterações e unir os dados dos fornecedores?", this.proxy(this.MergePromisse),!0, !0);
+    },
+    MergePromisse:function(){
+      this.setloading(!0,!1);
       var i,arr=[];
-
       for(i=0;i<this.select_items.length;i++){
         if(this.select_items[i].FORN_ID !== parseInt($(".bmerge.sel").attr("name"))){
           arr.push("<int>"+this.select_items[i].FORN_ID+"</int>");
@@ -3295,7 +3296,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       this.callService("GravarFornecedorMestre",$(".bmerge.sel").attr("name"),arr.join(""));
     },
     selectPrincipalMerge:function(a){
-
       var bsel=$(a.target).closest("tr").find(".bselection[name='"+$(a.target).attr("name")+"']");
       if($(".bmerge.fixed-merge").length){
         return !1;
