@@ -331,7 +331,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           }
           a="<FEIR_COD>"+a+"</FEIR_COD>";
           $("html").attr("class","").addClass(this.page);
-          this.writePage(this.page,[a,b,c]);
+          this.writePage(this.page,[a,b.replace("&","##E"),c.replace("&","##E")]);
         },
         "fornecedores":function(){
           var context=this;
@@ -467,7 +467,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           $("html").attr("class","").addClass(this.page);
           this.writePage(this.page);
           this.setloading(!0,!1);
-          this.submit(a,b,c,!1,this.cadstatus,this.cadprincipal);
+          this.submit(a,b.replace("&","##E"),c.replace("&","##E"),!1,this.cadstatus,this.cadprincipal);
         },
         "fornecedores/*func/*code":function(a){
           var context=this;
@@ -1131,7 +1131,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 
           this.mode="fornecedores/"+(this.fairval || "padrao")+"/"+(this.fornval || "padrao")+"/"+(this.amosval || "padrao");
           this.navigate(this.mode, !1);
-          this.callService("fornecedores",'<FORN_DESC>'+this.fornval+'</FORN_DESC>','<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>'+(this.content.page*20+1)+'</LINHA_I>','<LINHA_F>20000</LINHA_F>',(this.initialTimeForn ? '<CREATE_DATE_I>'+this.initialTimeForn+'</CREATE_DATE_I>' : ""),(this.endTimeForn ? '<CREATE_DATE_F>'+this.endTimeForn+'</CREATE_DATE_F>' : ""),vprincipal);
+          this.callService("fornecedores",'<FORN_DESC>'+this.fornval.replace("&","##E")+'</FORN_DESC>','<FEIR_COD>'+this.fairval+'</FEIR_COD>','<LINHA_I>'+(this.content.page*20+1)+'</LINHA_I>','<LINHA_F>20000</LINHA_F>',(this.initialTimeForn ? '<CREATE_DATE_I>'+this.initialTimeForn+'</CREATE_DATE_I>' : ""),(this.endTimeForn ? '<CREATE_DATE_F>'+this.endTimeForn+'</CREATE_DATE_F>' : ""),vprincipal);
           break;
         case "amostras":
           this.initialTimeAmos=$("input[name='initial_date']").val() || null;
@@ -1162,7 +1162,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 
           this.mode="amostras/"+(this.fairval || "padrao")+"/"+(this.fornval || "padrao")+"/"+(this.amosval || "padrao");
           this.navigate(this.mode, !1);
-          this.callService("amostras",'<AMOS_DESC>'+this.amosval+'</AMOS_DESC>','<FEIR_COD>'+this.fairval+'</FEIR_COD>',FORN_DESC,'<LINHA_I>'+(this.content.page*20+1)+'</LINHA_I>','<LINHA_F>20000</LINHA_F>',(this.initialTimeAmos ? '<CREATE_DATE_I>'+this.initialTimeAmos+'</CREATE_DATE_I>' : ""),(this.endTimeAmos ? '<CREATE_DATE_F>'+this.endTimeAmos+'</CREATE_DATE_F>' : ""));
+          this.callService("amostras",'<AMOS_DESC>'+this.amosval.replace("&","##E")+'</AMOS_DESC>','<FEIR_COD>'+this.fairval+'</FEIR_COD>',FORN_DESC,'<LINHA_I>'+(this.content.page*20+1)+'</LINHA_I>','<LINHA_F>20000</LINHA_F>',(this.initialTimeAmos ? '<CREATE_DATE_I>'+this.initialTimeAmos+'</CREATE_DATE_I>' : ""),(this.endTimeAmos ? '<CREATE_DATE_F>'+this.endTimeAmos+'</CREATE_DATE_F>' : ""));
           break;
       }
       $(".date-filter").removeClass("sel");
@@ -4051,7 +4051,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           }
           else{
             $(".spotlight").html("<li>Carregando...</li>").show();
-            this.callService("combosearch",'<FORN_DESC>'+a.target.value+'</FORN_DESC>','<FEIR_COD></FEIR_COD>','<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'60'+'</LINHA_F>','<CREATE_DATE_I>1900-10-17</CREATE_DATE_I>','');
+            this.callService("combosearch",'<FORN_DESC>'+a.target.value.replace("&","##E")+'</FORN_DESC>','<FEIR_COD></FEIR_COD>','<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'60'+'</LINHA_F>','<CREATE_DATE_I>1900-10-17</CREATE_DATE_I>','');
           }
         }
         else{

@@ -76,7 +76,7 @@ window.Spotlight = Spine.Controller.sub({
       this.mode="amostras/"+((""+this.getFairVal()).replace(" ","_") || "padrao")+"/"+((""+this.getFornVal()).replace(" ","_") || "padrao")+"/"+((""+this.getAmosVal()).replace(" ","_") || "padrao");
       this.navigate(this.mode, !1);
       //this.callService("amostras",fair,name,amos,'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20'+'</LINHA_F>','<CREATE_DATE_I>2000-01-01</CREATE_DATE_I>','<CREATE_DATE_F>2020-01-01</CREATE_DATE_F>');
-      this.callService("amostras",fair,name,amos,'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20000'+'</LINHA_F>',(this.getInitialTime(!0) ? '<CREATE_DATE_I>'+this.getInitialTime(!0)+'</CREATE_DATE_I>' : ""),(this.getEndTime(!0) ? '<CREATE_DATE_F>'+this.getEndTime(!0)+'</CREATE_DATE_F>' : ""));
+      this.callService("amostras",fair,name.replace("&","##E"),amos.replace("&","##E"),'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20000'+'</LINHA_F>',(this.getInitialTime(!0) ? '<CREATE_DATE_I>'+this.getInitialTime(!0)+'</CREATE_DATE_I>' : ""),(this.getEndTime(!0) ? '<CREATE_DATE_F>'+this.getEndTime(!0)+'</CREATE_DATE_F>' : ""));
       this.close();
     }
     else{
@@ -89,7 +89,7 @@ window.Spotlight = Spine.Controller.sub({
       this.mode="fornecedores/"+((""+this.getFairVal()).replace(" ","_") || "padrao")+"/"+((""+this.getFornVal()).replace(" ","_") || "padrao")+"/"+"padrao";
       //console.log(this.mode);
       this.navigate(this.mode, !1);
-      this.callService("fornecedores",fair,name,'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20'+'</LINHA_F>',(this.getInitialTime(!0) ? '<CREATE_DATE_I>'+this.getInitialTime(!0)+'</CREATE_DATE_I>' : ""),(this.getEndTime(!0) ? '<CREATE_DATE_F>'+this.getEndTime(!0)+'</CREATE_DATE_F>' : ""),vprincipal);
+      this.callService("fornecedores",fair,name.replace("&","##E"),'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20'+'</LINHA_F>',(this.getInitialTime(!0) ? '<CREATE_DATE_I>'+this.getInitialTime(!0)+'</CREATE_DATE_I>' : ""),(this.getEndTime(!0) ? '<CREATE_DATE_F>'+this.getEndTime(!0)+'</CREATE_DATE_F>' : ""),vprincipal);
       //this.callService("fornecedores",fair,name,'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20000'+'</LINHA_F>','<CREATE_DATE_I>'+this.getInitialTime()+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.getEndTime()+'</CREATE_DATE_F>');
       this.close();
     }
