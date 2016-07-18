@@ -245,7 +245,7 @@ open: function(a){
     "NOTA_ID":this.noteid
   };
   this.item.NOTES.push(item);
-  result+="<li><article><div class='notepad-note blockquote'><p><b>"+date+" | "+this.item.FORN_ID+" - "+this.item.FORN_DESC+" | "+this.noteid+" - "+this.item.AMOS_DESC.replace("&","##E")+"</b></p><p>"+this.usr.USU_NOME+" - "+this.usr.SEGM_DESC+"</p><p>"+$(".samplenote").val()+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+this.noteid+"' name='"+this.usr.USU_COD+"'></button></div></article></li>";
+  result+="<li><article><div class='notepad-note blockquote'><p><b>"+date+" | "+this.item.FORN_ID+" - "+this.item.FORN_DESC+" | "+this.noteid+" - "+this.item.AMOS_DESC.replaceSpecial()+"</b></p><p>"+this.usr.USU_NOME+" - "+this.usr.SEGM_DESC+"</p><p>"+$(".samplenote").val()+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+this.noteid+"' name='"+this.usr.USU_COD+"'></button></div></article></li>";
   $(".samplenote").val("");
   $(".description-noteside .note ul").prepend(result);
 },showImage:function(a){
@@ -339,7 +339,7 @@ open: function(a){
       month=parseInt(date.getMonth()+1);
     }
     date=""+date.getFullYear()+"-"+month+"-"+day;
-    this.callService("gravarNotes","<OBJ_ID>"+this.item.AMOS_ID+"</OBJ_ID><TP_NOTA_ID>1</TP_NOTA_ID><USU_COD>"+this.usr.USU_COD+"</USU_COD>","<NOTA_DESC>"+$(".samplenote").val().replace("&","##E")+"</NOTA_DESC><SEGM_COD>"+this.usr.SEGM_COD+"</SEGM_COD><CREATE_DATE>"+date+"</CREATE_DATE>");
+    this.callService("gravarNotes","<OBJ_ID>"+this.item.AMOS_ID+"</OBJ_ID><TP_NOTA_ID>1</TP_NOTA_ID><USU_COD>"+this.usr.USU_COD+"</USU_COD>","<NOTA_DESC>"+$(".samplenote").val().replaceSpecial()+"</NOTA_DESC><SEGM_COD>"+this.usr.SEGM_COD+"</SEGM_COD><CREATE_DATE>"+date+"</CREATE_DATE>");
   }
   else{
     this.modal.open("message","Digite o texto da anotação!!!",!1,!0);
@@ -794,7 +794,7 @@ setFav:function(a){
 
     context.setloading(!0,!1);
     context.ajaxrequest=!0;
-    context.callService("GravarFornecedor",'<FORN_ID>0</FORN_ID>','<FEIR_COD>'+context.setfair+'</FEIR_COD>',"<FORN_DESC>"+$("input[name='FORN_DESC']").val().replace("&","##E")+"</FORN_DESC><CREATE_DATE>"+date+"</CREATE_DATE><FORN_STATUS>0</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>","<USU_COD>"+context.usr.USU_COD+"</USU_COD>",'<action>I</action>');
+    context.callService("GravarFornecedor",'<FORN_ID>0</FORN_ID>','<FEIR_COD>'+context.setfair+'</FEIR_COD>',"<FORN_DESC>"+$("input[name='FORN_DESC']").val().replaceSpecial()+"</FORN_DESC><CREATE_DATE>"+date+"</CREATE_DATE><FORN_STATUS>0</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>","<USU_COD>"+context.usr.USU_COD+"</USU_COD>",'<action>I</action>');
     var status;
     status=setInterval(function(){
       if(!context.ajaxrequest){
@@ -837,15 +837,15 @@ setFav:function(a){
 
   if($(".addnote").val().length){
     if(this.item.FORN_ID){
-      this.callService("gravarNotes","<OBJ_ID>"+this.item.FORN_ID+"</OBJ_ID><TP_NOTA_ID>2</TP_NOTA_ID><USU_COD>"+this.usr.USU_COD+"</USU_COD>","<NOTA_DESC>"+$(".addnote").val().replace("&","##E")+"</NOTA_DESC><SEGM_COD>"+this.usr.SEGM_COD+"</SEGM_COD><CREATE_DATE>"+date+"</CREATE_DATE>");
+      this.callService("gravarNotes","<OBJ_ID>"+this.item.FORN_ID+"</OBJ_ID><TP_NOTA_ID>2</TP_NOTA_ID><USU_COD>"+this.usr.USU_COD+"</USU_COD>","<NOTA_DESC>"+$(".addnote").val().replaceSpecial()+"</NOTA_DESC><SEGM_COD>"+this.usr.SEGM_COD+"</SEGM_COD><CREATE_DATE>"+date+"</CREATE_DATE>");
     }
     else{
       context.setloading(!0,!1);
       context.ajaxrequest=!0;
-      context.callService("GravarFornecedor",'<FORN_ID>0</FORN_ID>','<FEIR_COD>'+context.setfair+'</FEIR_COD>',"<FORN_DESC>"+$("input[name='FORN_DESC']").val().replace("&","##E")+"</FORN_DESC><CREATE_DATE>"+date+"</CREATE_DATE><FORN_STATUS>0</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>","<USU_COD>"+context.usr.USU_COD+"</USU_COD>",'<action>I</action>');
+      context.callService("GravarFornecedor",'<FORN_ID>0</FORN_ID>','<FEIR_COD>'+context.setfair+'</FEIR_COD>',"<FORN_DESC>"+$("input[name='FORN_DESC']").val().replaceSpecial()+"</FORN_DESC><CREATE_DATE>"+date+"</CREATE_DATE><FORN_STATUS>0</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>","<USU_COD>"+context.usr.USU_COD+"</USU_COD>",'<action>I</action>');
       status=setInterval(function(){
         if(!context.ajaxrequest){
-          context.callService("gravarNotes","<OBJ_ID>"+context.item.FORN_ID+"</OBJ_ID><TP_NOTA_ID>2</TP_NOTA_ID><USU_COD>"+context.usr.USU_COD+"</USU_COD>","<NOTA_DESC>"+$(".addnote").val().replace("&","##E")+"</NOTA_DESC><CREATE_DATE>"+date+"</CREATE_DATE>");
+          context.callService("gravarNotes","<OBJ_ID>"+context.item.FORN_ID+"</OBJ_ID><TP_NOTA_ID>2</TP_NOTA_ID><USU_COD>"+context.usr.USU_COD+"</USU_COD>","<NOTA_DESC>"+$(".addnote").val().replaceSpecial()+"</NOTA_DESC><CREATE_DATE>"+date+"</CREATE_DATE>");
           clearInterval(status);
         }
       },100);
@@ -1335,7 +1335,7 @@ setFav:function(a){
           isFinished=1
         }
         context.ajaxrequest=!0;
-        this.callService("GravarFornecedor",'<FORN_ID>'+(context.item.FORN_ID || 0)+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+$("input[name='FORN_DESC']").val().replace("&","##E")+"</FORN_DESC>",'<FORN_STATUS>'+isFinished+'</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>'+addforn+'</action>');
+        this.callService("GravarFornecedor",'<FORN_ID>'+(context.item.FORN_ID || 0)+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+$("input[name='FORN_DESC']").val().replaceSpecial()+"</FORN_DESC>",'<FORN_STATUS>'+isFinished+'</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>'+addforn+'</action>');
         $(".fair").attr('disabled', 'disabled');
         status=setInterval(function(){
           if(!context.ajaxrequest){
@@ -1479,12 +1479,12 @@ setFav:function(a){
         if($(".ScrollSpy .nav-item button.complet").length === 5){
           //console.log("cadastro completo");
           context.ajaxrequest=!0;
-          this.callService("GravarFornecedor",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+$("input[name='FORN_DESC']").val().replace("&","##E")+"</FORN_DESC>",'<FORN_STATUS>1</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>U</action>');
+          this.callService("GravarFornecedor",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+$("input[name='FORN_DESC']").val().replaceSpecial()+"</FORN_DESC>",'<FORN_STATUS>1</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>U</action>');
         }
         else{
           //console.log("cadastro incompleto");
           context.ajaxrequest=!0;
-          this.callService("GravarFornecedor",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+$("input[name='FORN_DESC']").val().replace("&","##E")+"</FORN_DESC>",'<FORN_STATUS>0</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>U</action>');
+          this.callService("GravarFornecedor",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+$("input[name='FORN_DESC']").val().replaceSpecial()+"</FORN_DESC>",'<FORN_STATUS>0</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>U</action>');
         }
 
         var status,last;
@@ -1547,12 +1547,12 @@ setFav:function(a){
         if($(".ScrollSpy .nav-item button.complet").length === 5){
           //console.log("cadastro completo");
           context.ajaxrequest=!0;
-          this.callService("GravarFornecedor",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+$("input[name='FORN_DESC']").val().replace("&","##E")+"</FORN_DESC>",'<FORN_STATUS>1</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>U</action>');
+          this.callService("GravarFornecedor",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+$("input[name='FORN_DESC']").val().replaceSpecial()+"</FORN_DESC>",'<FORN_STATUS>1</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>U</action>');
         }
         else{
           //console.log("cadastro incompleto");
           context.ajaxrequest=!0;
-          this.callService("GravarFornecedor",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+$("input[name='FORN_DESC']").val().replace("&","##E")+"</FORN_DESC>",'<FORN_STATUS>0</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>U</action>');
+          this.callService("GravarFornecedor",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+$("input[name='FORN_DESC']").val().replaceSpecial()+"</FORN_DESC>",'<FORN_STATUS>0</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>U</action>');
         }
         var status,last;
         status=setInterval(function(){
@@ -1614,12 +1614,12 @@ setFav:function(a){
         if($(".ScrollSpy .nav-item button.complet").length === 5){
           //console.log("cadastro completo");
           context.ajaxrequest=!0;
-          this.callService("GravarFornecedor",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+$("input[name='FORN_DESC']").val().replace("&","##E")+"</FORN_DESC>",'<FORN_STATUS>1</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>U</action>');
+          this.callService("GravarFornecedor",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+$("input[name='FORN_DESC']").val().replaceSpecial()+"</FORN_DESC>",'<FORN_STATUS>1</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>U</action>');
         }
         else{
           //console.log("cadastro incompleto");
           context.ajaxrequest=!0;
-          this.callService("GravarFornecedor",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+$("input[name='FORN_DESC']").val().replace("&","##E")+"</FORN_DESC>",'<FORN_STATUS>0</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>U</action>');
+          this.callService("GravarFornecedor",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+$("input[name='FORN_DESC']").val().replaceSpecial()+"</FORN_DESC>",'<FORN_STATUS>0</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>U</action>');
         }
         var status,last;
         status=setInterval(function(){
@@ -1678,12 +1678,12 @@ setFav:function(a){
         if($(".ScrollSpy .nav-item button.complet").length === 5){
           //console.log("cadastro completo");
           context.ajaxrequest=!0;
-          this.callService("GravarFornecedor",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+$("input[name='FORN_DESC']").val().replace("&","##E")+"</FORN_DESC>",'<FORN_STATUS>1</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>U</action>');
+          this.callService("GravarFornecedor",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+$("input[name='FORN_DESC']").val().replaceSpecial()+"</FORN_DESC>",'<FORN_STATUS>1</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>U</action>');
         }
         else{
           //console.log("cadastro incompleto");
           context.ajaxrequest=!0;
-          this.callService("GravarFornecedor",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+$("input[name='FORN_DESC']").val().replace("&","##E")+"</FORN_DESC>",'<FORN_STATUS>0</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>U</action>');
+          this.callService("GravarFornecedor",'<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>',html+""+pattern,"<FORN_DESC>"+$("input[name='FORN_DESC']").val().replaceSpecial()+"</FORN_DESC>",'<FORN_STATUS>0</FORN_STATUS><FORN_INATIVO>0</FORN_INATIVO>','<action>U</action>');
         }
         var status,last;
         status=setInterval(function(){

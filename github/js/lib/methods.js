@@ -85,6 +85,31 @@ String.prototype.initialCaps = function() {
     return 0 > d.charAt(a - 1).search(/[^\s-]/) ? c.charAt(0).toUpperCase() + c.substr(1).toLowerCase() : " " + c.charAt(1).toUpperCase() + c.substr(2).toLowerCase();
   });
 };
+String.prototype.replaceSpecial = function(){
+  var i,string=this;
+
+  var dictionary=[
+    {
+      "special":"&", // special caracter
+      "to":"##E" //dictionary caracter webfair
+    }
+  ]
+  
+  for(i=0;i<dictionary.length;i++){
+    string= string.replaceAll(dictionary[i].special,dictionary[i].to);
+  }
+  return string;
+};
+
+if (!String.prototype.replaceAll) {
+    String.prototype.replaceAll = function(search, replace) {
+        'use strict';
+        if (replace === undefined) {
+            return this.toString();
+        }
+        return this.split(search).join(replace);
+    }
+}
 String.prototype.capitalize = function() {
   var c = /^(a|e|o|da|de|do|br|n\u00e3o|das|dos|ao|ou|em|oz|um|uma|seu|com|a|an|and|as|os|at|but|by|en|for|if|in|of|on|or|the|to|vs?\.?|via)$/i;
   return this.toLowerCase().replace(/([^\W_]+[^\s-]*) */g, function(a, d, e, f) {
