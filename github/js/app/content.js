@@ -273,13 +273,7 @@ window.Modal = Spine.Controller.sub({
             if(msg[0][i].FORN_PRINCIPAL){
               html+=" merge-fixed";
             }
-            html+="' data-type='merge'></button></td><td>"+msg[0][i].FORN_DESC+"</td><td><button type='button' name='"+msg[0][i].FORN_ID+"' class='icon ";
-            if(msg[0][i].FORN_PRINCIPAL){
-              html+="bmerge sel fixed-merge'></button></td></tr>";
-            }
-            else{
-              html+="bmerge'></button></td></tr>";
-            }
+            html+="' data-type='merge'></button></td><td>"+msg[0][i].FORN_DESC+"</td><td><button type='button' name='"+msg[0][i].FORN_ID+"' class='icon bmerge'></button></td></tr>";
           }
           this.main.find("tbody").append(html);
           break;
@@ -634,12 +628,6 @@ window.Box = Spine.Controller.sub({init:function() {
           /*To attend Demand: 0 Alerta para mais de dois contatos principais cadastrado
           <td><span class='doubled-contact'></span></td>*/
           result+="<td><button type='button' class='caption-icons-icon justit bstatus "+status+"' title='"+status.capitalize()+"'>"+status+"</button></td><td><span class='doubled-contact'></span></td><td><button type='button' name='"+a.FORN_ID+"' class='icon bselection'></button></td>";
-          if(a.FORN_PRINCIPAL){
-            result+="<td><button type='button' class='caption-icons-icon justit merge-principal' title='"+principal+"'>"+a.FORN_PRINCIPAL+"</button></td>";
-          }
-          else{
-            result+="<td></td>";
-          }
           return result;
         }
         break;

@@ -1277,15 +1277,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         $(".bselection[name='"+$(a.target).attr("name")+"']").toggleClass("sel");
 
         if($(".bmerge[name='"+$(a.target).attr("name")+"']").hasClass("sel")){
-          console.log("1");
-          $(".bmerge[name='"+$(a.target).attr("name")+"']").toggleClass("sel").toggleClass("fixed-merge");
+          $(".bmerge[name='"+$(a.target).attr("name")+"']").toggleClass("sel");
         }
-        else{
-          if($(a.target).hasClass("merge-fixed")){
-            $(".bmerge[name='"+$(a.target).attr("name")+"']").toggleClass("sel");
-          }
-        }
-        
       }
       else{
         $(a.target).toggleClass("sel");
@@ -3280,20 +3273,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         this.modal.open("message","Por favor, Selecione ao menos 2 fornecedores para o merge!!!",!1,!0);
         return !1;
       }
-      var count=0;
-      this.select_items.map(function (a) {
-        if(a.FORN_PRINCIPAL){
-          count++;
-        }
-      });
-      if(count>1){
-        this.modal.open("message","Você pode selecionar no máximo 1 Fornecedor principal!",!1,!0);
-        return !1;
-      }
       this.modal.open("merge",[this.select_items],this.proxy(this.confirmMerge),!1,!1);
     },
     confirmMerge:function(){
-      if(!$(".bmerge.sel").length){
+      if(!$(".bmerge.sel").length || this.select_items.length <2){
         return !1;
       }
       this.modal.open("message","Esta operação não poderá ser cancelada posteriormente. Deseja fazer as alterações e unir os dados dos fornecedores?", this.proxy(this.MergePromisse),!0, !0);
@@ -3310,13 +3293,10 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
     },
     selectPrincipalMerge:function(a){
       var bsel=$(a.target).closest("tr").find(".bselection[name='"+$(a.target).attr("name")+"']");
-      if($(".bmerge.fixed-merge").length){
-        return !1;
-      }
       $(".bmerge").removeClass("sel");
       $(a.target).addClass("sel");
       if(!bsel.hasClass("sel")){
-        bsel.trigger("click");
+        bsel.addClass("sel");
       }
       //$(a.target).closest("tr").find(".bselection[name='"+$(a.target).attr("name")+"']").trigger("click");
     },
@@ -3371,7 +3351,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         $(".info-template.item"+el.attr('name')).removeClass('hide');
         el.addClass('hide');
         $(".info-template.item"+el.attr('name')+" .delete-temp").addClass('active');
-      }
+      } 
       else{
         if($(".info-template.item"+el.attr('name')+" .edit-temp").hasClass('sel')){
           this.modal.open("message","Deseja cancelar a edição?", this.proxy(this.requestCancelTemplate),!0, !0);
