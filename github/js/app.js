@@ -95,7 +95,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       "click .combofilter":"makeComboFilter",
       "click .remain_text":"TakeAllSamples",
       "click .select_all":"SelectAllSamples",
-      "click .bmerge": "selectPrincipalMerge"
+      "click .bmerge": "selectPrincipalMerge",
+      "hover .igecex_flag":"showIgecexName"
     },
     init:function(){
       this.view = "images";
@@ -305,25 +306,26 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           }
 
           if(parseInt(b)){
-            b="<FORN_ID>"+b+"</FORN_ID>";
+            b="<FORN_ID>"+b.replaceSpecial()+"</FORN_ID>";
           }
           else{
             if(b){
               if(b.slice(0, 3) === "alt"){
                 b=b.slice(3,(b.length));
+                b=b.replaceSpecial();
               }
-              b="<FORN_DESC>"+b+"</FORN_DESC>";
+              b="<FORN_DESC>"+b.replaceSpecial()+"</FORN_DESC>";
             }
             else{
               b="";
             }
           }
           if(parseInt(c)){
-            c="<AMOS_ID>"+c+"</AMOS_ID>";
+            c="<AMOS_ID>"+c.replaceSpecial()+"</AMOS_ID>";
           }
           else{
             if(c){
-              c="<AMOS_DESC>"+c+"</AMOS_DESC>";
+              c="<AMOS_DESC>"+c.replaceSpecial()+"</AMOS_DESC>";
             }
             else{
               c="";
@@ -331,7 +333,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           }
           a="<FEIR_COD>"+a+"</FEIR_COD>";
           $("html").attr("class","").addClass(this.page);
-          this.writePage(this.page,[a,b.replaceSpecial(),c.replaceSpecial()]);
+          this.writePage(this.page,[a,b,c]);
         },
         "fornecedores":function(){
           var context=this;
@@ -433,8 +435,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             if(b){
               if(b.slice(0, 3) === "alt"){
                 b=b.slice(3,(b.length));
+                b=b.replaceSpecial();
               }
-              b="<FORN_DESC>"+b+"</FORN_DESC>";
+              b="<FORN_DESC>"+b.replaceSpecial()+"</FORN_DESC>";
             }
             else{
               b="";
@@ -442,7 +445,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           }
           else{
             if(b){
-              b="<FORN_ID>"+b+"</FORN_ID>";
+              b="<FORN_ID>"+b.replaceSpecial()+"</FORN_ID>";
             }
             else{
               b="";
@@ -450,11 +453,11 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           }
 
           if(parseInt(c)){
-            c="<AMOS_ID>"+c+"</AMOS_ID>";
+            c="<AMOS_ID>"+c.replaceSpecial()+"</AMOS_ID>";
           }
           else{
             if(c){
-              c="<AMOS_DESC>"+c+"</AMOS_DESC>";
+              c="<AMOS_DESC>"+c.replaceSpecial()+"</AMOS_DESC>";
             }
             else{
               c="";
@@ -467,7 +470,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           $("html").attr("class","").addClass(this.page);
           this.writePage(this.page);
           this.setloading(!0,!1);
-          this.submit(a,b.replaceSpecial(),c.replaceSpecial(),!1,this.cadstatus,this.cadprincipal);
+          this.submit(a,b,c,!1,this.cadstatus,this.cadprincipal);
         },
         "fornecedores/*func/*code":function(a){
           var context=this;
@@ -1045,7 +1048,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           }
           else{
             html+="<FEIR_DESC>"+$(b).val()+"</FEIR_DESC>";
-          }9
+          }
         });
         html+="<CREATE_DATE>"+date+"</CREATE_DATE>";
         html+="<FEIR_INATIVO>"+$(".ai-holder .sel").attr("name")+"</FEIR_INATIVO>";
@@ -1244,7 +1247,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               return {
                 'FORN_ID':element.FORN_ID,
                 'FORN_DESC':element.FORN_DESC,
-                "FORN_PRINCIPAL":element.FORN_PRINCIPAL
+                "FORN_PRINCIPAL":element.FORN_PRINCIPAL,
+                "FORN_COD":element.FORN_COD
               };
             }
           }
@@ -1266,7 +1270,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               context.select_items.push({
                 'FORN_ID':element.FORN_ID,
                 'FORN_DESC':element.FORN_DESC,
-                "FORN_PRINCIPAL":element.FORN_PRINCIPAL
+                "FORN_PRINCIPAL":element.FORN_PRINCIPAL,
+                "FORN_COD":element.FORN_COD
               });
             }
           }
@@ -1374,6 +1379,14 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             }
           },
           {
+            'name':'contatos',
+            'serviceName':'ListarContatos',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarContatos xmlns="http://tempuri.org/">'+a+''+b+''+c+''+'<SEGM_COD>'+core.usr.SEGM_COD+'</SEGM_COD>'+''+d+""+e+''+f+g+'</ListarContatos></soap:Body></soap:Envelope>',
+            callback:function(data,req){
+              core.convertData(data,req,name,!0);
+            }
+          },
+          {
             'name':'fornecedores',
             'serviceName':'ListarFornecedores',
             'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedores xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+''+e+''+f+g+'<SEGM_COD>'+core.usr.SEGM_COD+'</SEGM_COD></ListarFornecedores></soap:Body></soap:Envelope>',
@@ -1400,7 +1413,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           {
             'name':'email_fornecedor',
             'serviceName':'ListarFornecedores',
-            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedores xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+''+e+''+f+'</ListarFornecedores></soap:Body></soap:Envelope>',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedores xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+''+e+'<SEGM_COD>'+core.usr.SEGM_COD+'</SEGM_COD></ListarFornecedores></soap:Body></soap:Envelope>',
             callback:function(data,req){
               core.convertData(data,req,name);
             }
@@ -1427,12 +1440,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             'name':'gravarNotes',
             'serviceName':'GravarAnotacao',
             'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarAnotacao xmlns="http://tempuri.org/"><note><NOTA_ID>0</NOTA_ID>'+a+'<PLAT_ID>2</PLAT_ID>'+b+'</note><action>I</action></GravarAnotacao></soap:Body></soap:Envelope>',
-            'callback':function(){
+            'callback':function(data,req){
               switch (core.page){
                 case "detail":
                   core.detail.writeNote();
                   break;
                 case "fornecedor_cadastro":
+                  console.log(jQuery.parseJSON($(req.responseXML).text()));
                   core.fornecedores.writeNote();
                   break;
               }    
@@ -1553,7 +1567,24 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             'callback':function(data,req){
               window.location.reload();
             }
-          }
+          },
+          {
+            'name':'ListarFornecedoresGecex',
+            'serviceName':'ListarFornecedoresGecex',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedoresGecex xmlns="http://tempuri.org/"><FORN_COD>'+a+'</FORN_COD></ListarFornecedoresGecex></soap:Body></soap:Envelope>',
+            'callback':function(data,req){
+              var init,end;
+              var string=$(req.responseXML).text();
+              init=string.indexOf("<nom_pessoa>")+12;
+              end=string.indexOf("nom_pessoa><nom_pessoa_")-3;
+              string=string.substring(init,end);
+              //.<nom_pessoa>SHAOXING COUNTY FUXING TEXTILEAND GARMENTS CO LTD<\/nom_pessoa>;
+              console.dir(string);
+              console.dir($("#"+a));
+              $("#"+a).attr("title",string);
+            }
+          },
+          
         ];
 
         $.support.cors=true;
@@ -1828,7 +1859,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         switch(what){
           case "amostras":
             if(!this.data.length){
+              console.log($(req.responseXML).text());
               this.data=jQuery.parseJSON($(req.responseXML).text()).unique();
+              console.dir(this.data);
               this.data=this.data.filter(function(a,b){
                 if(a.SEGM_COD === context.usr.SEGM_COD || context.usr.SEGM_COD === "TD"){
                   return a;
@@ -1863,15 +1896,19 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             this.fair=this.fair[0];
             //context.setdata(this.fair,"local");
             break;
+          case "contatos":
+              this.CONTACTS=jQuery.parseJSON($(req.responseXML).text());
+              debugger;
+            break;
           case "fornecedores":
             if(!this.data.length){
               this.data=jQuery.parseJSON($(req.responseXML).text());
               this.setDate(this.data);
               this.setdata(this.data,"fornecedores");
+              this.callService('contatos','','','','','','<LINHA_I>1</LINHA_I>','<LINHA_F>20</LINHA_F>');
             }
             else{
               var temp=jQuery.parseJSON($(req.responseXML).text()).unique().sortBy('FORN_ID');
-              /*console.dir(this.data);*/
               this.setDate(temp);
               console.dir(temp);
               this.data=this.data.concat(temp);
@@ -2304,9 +2341,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                       }
                     }
                     var html='<div class="overview-container"><div class="filter-crumb"><p class="bread-search">Mostrando:<span class="spec">0</span><span> de </span><span class="specall">0</span><span> Amostras </span><span class="specforn"> de 0 Fornecedores</span></p><button type="button" class="bdefault select_all hide" name="'+h.FORN_ID+'">Selecionar Todos</button></div><table id="table" class="table-striped table-large"><thead><tr><th></th><th>Fornecedor</th><th>Código</th><th>Data</th>';
-                          if(e.usr.SEGM_COD === "TD"){
-                            html+='<th>Segmento</th>';
-                          }
+                    if(e.usr.SEGM_COD === "TD"){
+                      html+='<th>Segmento</th>';
+                    }
 
                     if (l > 0) {
                         if(e.page === "amostras"){
@@ -3143,7 +3180,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           },100);
           last=setInterval(function(){
             if(!context.ajaxrequest && !last_request){
-              context.callService("email_fornecedor","<FEIR_COD></FEIR_COD>","<FORN_ID>"+context.data[0].FORN_ID+"</FORN_ID>",'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20'+'</LINHA_F>','<CREATE_DATE_I>2000-04-10</CREATE_DATE_I>','<CREATE_DATE_F>2050-04-10</CREATE_DATE_F>');
+              context.callService("email_fornecedor","<FEIR_COD></FEIR_COD>","<FORN_ID>"+context.data[0].FORN_ID+"</FORN_ID>",'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20'+'</LINHA_F>');
               clearInterval(last);
             }
           },100);
@@ -3163,7 +3200,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
               return !1;
             }
             else{
-              this.callService("email_fornecedor","<FEIR_COD></FEIR_COD>","<FORN_ID>"+this.select_items[0].FORN_ID+"</FORN_ID>",'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20'+'</LINHA_F>','<CREATE_DATE_I>2000-04-10</CREATE_DATE_I>','<CREATE_DATE_F>2050-04-10</CREATE_DATE_F>');
+              this.callService("email_fornecedor","<FEIR_COD></FEIR_COD>","<FORN_ID>"+this.select_items[0].FORN_ID+"</FORN_ID>",'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20'+'</LINHA_F>');
             }
           } 
         }
@@ -3171,7 +3208,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       }
     },
     sendEmailGo:function(item){
-      //debugger;
       var i,j,length,amos_sel=[],counter,any_principal=!0,contemail="",context=this,listtemplates;
       if(!item.length){
         this.modal.open("message","Fornecedor Inativo!!!",!1,!0);
@@ -3186,16 +3222,13 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         for(i=0;i<=length;i++){
           if(item[0].CONTACTS[i]){
             if(item[0].CONTACTS[i].CONT_PRINCIPAL){
-              if(item[0].CONTACTS[i].CONT_EMAIL.length){
+              if(item[0].CONTACTS[i].CONT_EMAIL.length && isEmail(item[0].CONTACTS[i].CONT_EMAIL)){
                 contemail=item[0].CONTACTS[i];
                 any_principal=!1;
               }   
             }
           }
           else{
-            /*for(j=0;j<this.select_items.length;j++){
-              amos_sel.push(this.select_items[j]);
-            }*/
             for(j=0;j<this.select_items.length;j++){  
               amos_sel.push({"AMOS_ID":this.select_items[j].AMOS_ID,"AMOS_DESC":this.select_items[j].AMOS_DESC});
             }
@@ -3214,15 +3247,15 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
 
                 //debugger;
                 item[0].CONTACTS.forEach(function(element,index){
-                  if((element.CONT_EMAIL.length && !contemail.length) && !isEmail(element.CONT_EMAIL)){
+                  if(element.CONT_PRINCIPAL && !contemail.length){
                     contemail=element.CONT_EMAIL;
                     context.modal.open("message","O contato principal deste fornecedor não possui email cadastrado!!!",!1,!0);
                     //context.modal.open("contacts",item[0],!1,!1);
                     return !1;
                   }
                   else{
-                    if(!contemail.length){
-                      context.modal.open("message","Os Contatos deste fornecedor não possuem email cadastrado",!1,!0);
+                    if((element.CONT_EMAIL.length || !isEmail(element.CONT_EMAIL)) && !contemail.length){
+                      context.modal.open("message","O contato principal deste fornecedor não possui email cadastrado!!!",!1,!0);
                     }
                   }
 
@@ -3269,8 +3302,19 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
       }
     },
     buttonMergeFornecedores:function(){
+      //Conter of igecex`s forns
+      var igecex=0;
       if(this.select_items.length < 2){
         this.modal.open("message","Por favor, Selecione ao menos 2 fornecedores para o merge!!!",!1,!0);
+        return !1;
+      }
+      this.select_items.forEach(function(elem,index){
+        if(elem.FORN_COD.length){
+          igecex++;
+        }
+      });
+      if(igecex>1){
+        this.modal.open("message","Esta ação não pode ser realizada entre dois Fornecedores com cadastro no Igecex!!!",!1,!0);
         return !1;
       }
       this.modal.open("merge",[this.select_items],this.proxy(this.confirmMerge),!1,!1);
@@ -3299,6 +3343,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
         bsel.addClass("sel");
       }
       //$(a.target).closest("tr").find(".bselection[name='"+$(a.target).attr("name")+"']").trigger("click");
+    },
+    showIgecexName:function(a){
+      this.callService("ListarFornecedoresGecex",$(a.target).attr("id"));
     },
     CleanFilter:function(){
       var scroll;
@@ -4341,7 +4388,6 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
                 return $table.closest('.scroller');
               }
             });*/
-
             d = z.scrollTop();
             b = e.content.itens.length;
             f= $("#table").height()-$(".scroller").outerHeight();

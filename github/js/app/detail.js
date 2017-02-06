@@ -245,7 +245,7 @@ open: function(a){
     "NOTA_ID":this.noteid
   };
   this.item.NOTES.push(item);
-  result+="<li><article><div class='notepad-note blockquote'><p><b>"+date+" | "+this.item.FORN_ID+" - "+this.item.FORN_DESC+" | "+this.noteid+" - "+this.item.AMOS_DESC.replaceSpecial()+"</b></p><p>"+this.usr.USU_NOME+" - "+this.usr.SEGM_DESC+"</p><p>"+$(".samplenote").val()+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+this.noteid+"' name='"+this.usr.USU_COD+"'></button></div></article></li>";
+  result+="<li><article><div class='notepad-note blockquote'><p><b>"+date+" | "+this.item.FORN_ID+" - "+this.item.FORN_DESC+" | "+this.noteid+" - "+this.item.AMOS_DESC.replaceSpecial()+"</b></p><p>"+this.usr.USU_NOME+" - "+this.usr.SEGM_DESC+"</p><p>"+$(".samplenote").val()+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big' title='"+this.noteid+"' name='"+this.usr.USU_COD+"'></button></div></article></li>";
   $(".samplenote").val("");
   $(".description-noteside .note ul").prepend(result);
 },showImage:function(a){
@@ -545,7 +545,7 @@ open: function(a){
   var href = e.attr("href");
   //this.lasttab=href.replace("#","");
   offsetTop = href === "#" ? 0 : $(href).position().top;
-  //console.dir($(href));
+  console.dir($(href).position().top);
   $('.supplier-scroller').stop().animate({
       scrollTop: offsetTop,
   }, 300,function(){
@@ -652,7 +652,7 @@ open: function(a){
   }
 },addElem:function(a,b){
   if($("html").hasClass('view_forn')){
-    return !1;
+    return !1;'3'
   }
   var el=$(a.target),html="",context=this;
   name=el.attr("name");
@@ -856,7 +856,7 @@ setFav:function(a){
   else{
     this.modal.open("message","Digite o texto da anotação!!!",!1,!0);
   }
-},writeNote:function(){
+},writeNote:function(code){
   var result="";
   var day,date,month;
   date=new Date();
@@ -874,7 +874,7 @@ setFav:function(a){
     month=parseInt(date.getMonth()+1);
   }
   date=day+"/"+month+"/"+date.getFullYear();
-  result+="<li><article><div class='notepad-note blockquote'><p><b>"+date+" | "+(this.item.FORN_DESC || $("input[name='FORN_DESC']").val()) +" | "+this.noteid+"</b></p><p>"+this.usr.USU_NOME+" - "+this.usr.SEGM_DESC+"</p><p>"+$(".addnote").val()+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big' id='"+this.noteid+"' name='"+this.usr.USU_COD+"'></button></div></article></li>";
+  result+="<li><article><div class='notepad-note blockquote'><p><b>"+date+" | "+(this.item.FORN_DESC || $("input[name='FORN_DESC']").val()) +" | "+this.noteid+"</b></p><p>"+this.usr.USU_NOME+" - "+this.usr.SEGM_DESC+"</p><p>"+$(".addnote").val()+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big' title='"+this.noteid+"' name='"+this.usr.USU_COD+"'></button></div></article></li>";
   $(".addnote").val("");
   $(".note ul").prepend(result);
 },finishForn:function(){
@@ -973,6 +973,7 @@ setFav:function(a){
 
     $("input[name='FORN_DESC']").val(context.item["FORN_DESC"]);
 
+debugger;
     if(this.item.FAVORITES.length){
       for(var i=0;i<this.item.FAVORITES.length;i++){
         if(this.usr.SEGM_COD === this.item.FAVORITES[i].SEGM_COD){

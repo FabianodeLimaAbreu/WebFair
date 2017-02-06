@@ -20,14 +20,14 @@ window.Spotlight = Spine.Controller.sub({
     //"click .spotlight button":"select"
   }, 
   select:function(a) {
-    var fair="<FEIR_COD>",name="<FORN_ID>",amos="<AMOS_DESC>",vprincipal="";
+    var fair="<FEIR_COD>",name,amos,vprincipal="";
     if("object" === typeof a) {
      a = $(a.target);
     }else {
       return!1;
     }
     if(a.attr("type") === "button"){
-      name+=a.attr("name")+"</FORN_ID>";
+      name="<FORN_ID>"+a.attr("name").replaceSpecial()+"</FORN_ID>";
       this.setFornVal(a.text());
       $(".forn").val(a.text());
     }
@@ -36,7 +36,7 @@ window.Spotlight = Spine.Controller.sub({
 
       }
       else{
-        name="<FORN_DESC>"+a.val()+"</FORN_DESC>";
+        name="<FORN_DESC>"+a.val().replaceSpecial()+"</FORN_DESC>";
       }
       
       if(isNaN(a.val())){
@@ -56,14 +56,14 @@ window.Spotlight = Spine.Controller.sub({
 
     if(this.getAmosVal()){
       if(isNaN(this.getAmosVal())){
-        amos+=this.getAmosVal()+"</AMOS_DESC>";
+        amos="<AMOS_DESC>"+this.getAmosVal().replaceSpecial()+"</AMOS_DESC>";
       }
       else{
-        amos="<AMOS_ID>"+this.getAmosVal()+"</AMOS_ID>";
+        amos="<AMOS_ID>"+this.getAmosVal().replaceSpecial()+"</AMOS_ID>";
       }
     }
     else{
-      amos+="</AMOS_DESC>";
+      amos+="<AMOS_DESC></AMOS_DESC>";
     }
     $(window).scrollTop(0);
     if(this.getPage() === "amostras"){
@@ -76,7 +76,7 @@ window.Spotlight = Spine.Controller.sub({
       this.mode="amostras/"+((""+this.getFairVal()).replace(" ","_") || "padrao")+"/"+((""+this.getFornVal()).replace(" ","_") || "padrao")+"/"+((""+this.getAmosVal()).replace(" ","_") || "padrao");
       this.navigate(this.mode, !1);
       //this.callService("amostras",fair,name,amos,'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20'+'</LINHA_F>','<CREATE_DATE_I>2000-01-01</CREATE_DATE_I>','<CREATE_DATE_F>2020-01-01</CREATE_DATE_F>');
-      this.callService("amostras",fair,name.replaceSpecial(),amos.replaceSpecial(),'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20000'+'</LINHA_F>',(this.getInitialTime(!0) ? '<CREATE_DATE_I>'+this.getInitialTime(!0)+'</CREATE_DATE_I>' : ""),(this.getEndTime(!0) ? '<CREATE_DATE_F>'+this.getEndTime(!0)+'</CREATE_DATE_F>' : ""));
+      this.callService("amostras",fair,name,amos,'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20000'+'</LINHA_F>',(this.getInitialTime(!0) ? '<CREATE_DATE_I>'+this.getInitialTime(!0)+'</CREATE_DATE_I>' : ""),(this.getEndTime(!0) ? '<CREATE_DATE_F>'+this.getEndTime(!0)+'</CREATE_DATE_F>' : ""));
       this.close();
     }
     else{
@@ -89,7 +89,7 @@ window.Spotlight = Spine.Controller.sub({
       this.mode="fornecedores/"+((""+this.getFairVal()).replace(" ","_") || "padrao")+"/"+((""+this.getFornVal()).replace(" ","_") || "padrao")+"/"+"padrao";
       //console.log(this.mode);
       this.navigate(this.mode, !1);
-      this.callService("fornecedores",fair,name.replaceSpecial(),'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20'+'</LINHA_F>',(this.getInitialTime(!0) ? '<CREATE_DATE_I>'+this.getInitialTime(!0)+'</CREATE_DATE_I>' : ""),(this.getEndTime(!0) ? '<CREATE_DATE_F>'+this.getEndTime(!0)+'</CREATE_DATE_F>' : ""),vprincipal);
+      this.callService("fornecedores",fair,name,'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20'+'</LINHA_F>',(this.getInitialTime(!0) ? '<CREATE_DATE_I>'+this.getInitialTime(!0)+'</CREATE_DATE_I>' : ""),(this.getEndTime(!0) ? '<CREATE_DATE_F>'+this.getEndTime(!0)+'</CREATE_DATE_F>' : ""),vprincipal);
       //this.callService("fornecedores",fair,name,'<LINHA_I>'+'1'+'</LINHA_I>','<LINHA_F>'+'20000'+'</LINHA_F>','<CREATE_DATE_I>'+this.getInitialTime()+'</CREATE_DATE_I>','<CREATE_DATE_F>'+this.getEndTime()+'</CREATE_DATE_F>');
       this.close();
     }
@@ -415,7 +415,7 @@ window.Box = Spine.Controller.sub({init:function() {
     var homologado,note,fisica,fav,email,annex,status,result="",samesegm=!1;
     this.el.addClass('col col-small col-large');
     $(".bselect").removeClass("sel");
-    homologado= a.AMOS_HOMOLOGAR ? "has":"nothas";  
+    homologado= a.AMOS_HOMOLOGAR ? "has":"nothas";
     note= a.NOTES.length   ? true:false;
     fisica= a.FLAG_FISICA ? "has":"nothas";
     fav= a.FLAG_PRIORIDADE ? "has":"nothas";
@@ -523,10 +523,23 @@ window.Box = Spine.Controller.sub({init:function() {
           var result="",i,status,principal,nome_contato,segmento=[],contatos_date=[],middlefav="";
           status= a.FORN_STATUS ? "complet":"incomplet";
           principal= a.FORN_PRINCIPAL ? "SIM":"";
-          result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.FORN_DESC+"</a></td>"+"<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.FEIR_DESC+"</a></td>"+"<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.CREATE_DATE+"</a></td>";
-          
 
-          if(a.CONTACTS.length){
+          // Fornecedor
+          result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.FORN_DESC+"</a></td>";
+
+          // Parceiro
+          if(a.FORN_COD){
+            result+='<td><span class="igecex_flag" title="Aguarde..." id="'+a.FORN_COD.replace(/ /g,'')+'"></span></td>';
+          }
+          else{
+            result+="<td></td>";
+          }
+
+          // Local de coleta + Criação do fornecedor
+          result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.FEIR_DESC+"</a></td>"+"<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.CREATE_DATE+"</a></td>";
+          
+          // Contato
+          if(!a){
             var scont=[];
             for(i=0;i<a.CONTACTS.length;i++){
               if(a.CONTACTS[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
@@ -558,12 +571,15 @@ window.Box = Spine.Controller.sub({init:function() {
             result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'></a></td>";
           }
 
+          // Cadastro do contato
           if(contatos_date.length){
             result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+contatos_date.join("<br/>")+"</a></td>";
           }
           else{
             result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'></td>";
           }
+
+          // Segmento
           if(segmento.length){
             result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+segmento.join("<br/>")+"</a></td>";
           }
@@ -571,16 +587,16 @@ window.Box = Spine.Controller.sub({init:function() {
             result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'></td>";
           }
 
-          if(a.NOTES.length ){
+          // Anotacoes
+          if(!a){
             var segnote=[];
-
-            for(i=0;i<a.NOTES.length;i++){
-              if(a.NOTES[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
-                segnote.push(a.NOTES[i]);
+            for(i=0;i<a.NOTA_DESC.length;i++){
+              if(a.NOTA_DESC[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
+                segnote.push(a.NOTA_DESC[i]);
               }
             }
             if(segnote.length){
-              this.setDate(a.NOTES);
+              this.setDate(a.NOTA_DESC);
               result+="<td class='tooltip tooltip-selectable'><button type='button' class='caption-icons-icon justit bnote'></button><ul class='tooltip-content notepad notepadmess col-large'><li class='tooltip-title'><p class='tooltip-item'>Anotações</p></li>";
               for(i=0;i<segnote.length;i++){
                 if(i<5){
@@ -600,7 +616,9 @@ window.Box = Spine.Controller.sub({init:function() {
           else{
             result+="<td></td>";
           }
-          if(a.FAVORITES.length){
+
+          // Favoritos
+          if(a.FAVORITES !== null){
             for(i=0;i<a.FAVORITES.length;i++){
               if(middlefav === ""){
                 if(a.FAVORITES[i].SEGM_COD === this.usr.SEGM_COD){
@@ -627,6 +645,8 @@ window.Box = Spine.Controller.sub({init:function() {
           }
           /*To attend Demand: 0 Alerta para mais de dois contatos principais cadastrado
           <td><span class='doubled-contact'></span></td>*/
+
+          // Status, Principal e Merge
           result+="<td><button type='button' class='caption-icons-icon justit bstatus "+status+"' title='"+status.capitalize()+"'>"+status+"</button></td><td><span class='doubled-contact'></span></td><td><button type='button' name='"+a.FORN_ID+"' class='icon bselection'></button></td>";
           return result;
         }
@@ -635,7 +655,7 @@ window.Box = Spine.Controller.sub({init:function() {
         var homologado,note,fisica,fav,email,annex,status,result="",i;
         this.el.addClass('col col-small col-large');
         homologado= a.AMOS_HOMOLOGAR ? "has":"nothas";
-        note= a.NOTES.length   ? true:false;
+        note= a.NOTA_DESC.length   ? true:false;
         fisica= a.FLAG_FISICA ? "has":"nothas";
         fav= a.FLAG_PRIORIDADE ? "has":"nothas";
         annex= a.AMOS_HOMOLOGAR ? true:false;
@@ -650,9 +670,9 @@ window.Box = Spine.Controller.sub({init:function() {
         result+="<td><button type='button' class='caption-icons-icon justit setitem bfisica "+fisica+"' name='"+a.AMOS_ID+"' title='Fisica'>"+(fisica === "has" ? "Sim" : "Nao")+"</button></td><td>"+a.AMOS_PRECO+"</td><td>"+a.AMOS_COTACAO_KG+"</td><td><button type='button' class='caption-icons-icon justit setitem bfav "+fav+"' name='"+a.AMOS_ID+"' title='Favoritar'>"+(fav === "has" ? "Sim" : "Nao")+"</button></td><td><button type='button' class='caption-icons-icon justit setitem bhomologado "+homologado+"' name='"+a.AMOS_ID+"' title='Homologar'>"+(homologado === "has" ? "Sim" : "Nao")+"</button></td>";
         if(note){
           var segnote=[];
-          for(i=0;i<a.NOTES.length;i++){
-            if(a.NOTES[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
-              segnote.push(a.NOTES[i]);
+          for(i=0;i<a.NOTA_DESC.length;i++){
+            if(a.NOTA_DESC[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
+              segnote.push(a.NOTA_DESC[i]);
             }
           }
           if(segnote){

@@ -1,9 +1,9 @@
 var imgPath= "img/";
 
-var stringServer ="http://ifair.focustextil.com.br:82/webservice.asmx?op=";
+var stringServer ="http://ifair.focustextil.com.br:81/webservice.asmx?op=";
 //var stringServer ="http://ifair.focustextil.com.br:81/WebService.asmx?op";
 
- var link = "http://ifair.focustextil.com.br:82/webfair/index.html";
+ var link = "http://ifair.focustextil.com.br:81/webfair/index.html";
 //var link = "http://ifair.focustextil.com.br:81/webfair/index.html";
 var nodePath = "../WebService.asmx?op=", scrollTop = document.documentElement ? document.documentElement.scrollTop : document.body.scrollTop;
 window.console = window.console || {log:function() {
@@ -86,13 +86,33 @@ String.prototype.initialCaps = function() {
   });
 };
 String.prototype.replaceSpecial = function(){
+  //Test caracter by http://www.the-art-of-web.com/javascript/escape/
   var i,string=this;
-
   var dictionary=[
     {
       "special":"&", // special caracter
-      "to":"##E" //dictionary caracter webfair
-    }
+      "to":"&amp;" //dictionary caracter webfair
+    },
+    {
+      "special":"<", // special caracter
+      "to":"&lt;" //dictionary caracter webfair
+    },
+    {
+      "special":">", // special caracter
+      "to":"&gt;" //dictionary caracter webfair
+    },
+    {
+      "special":"‘", // special caracter
+      "to":"&#39;" //dictionary caracter webfair
+    },
+    {
+      "special":"“", // special caracter
+      "to":"&quot;" //dictionary caracter webfair
+    },
+    {
+      "special":"ç", // special caracter
+      "to":"&ccedil;" //dictionary caracter webfair
+    },
   ]
   
   for(i=0;i<dictionary.length;i++){
