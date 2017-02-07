@@ -527,19 +527,12 @@ window.Box = Spine.Controller.sub({init:function() {
           // Fornecedor
           result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.FORN_DESC+"</a></td>";
 
-          // Parceiro
-          if(a.FORN_COD){
-            result+='<td><span class="igecex_flag" title="Aguarde..." id="'+a.FORN_COD.replace(/ /g,'')+'"></span></td>';
-          }
-          else{
-            result+="<td></td>";
-          }
-
           // Local de coleta + Criação do fornecedor
           result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.FEIR_DESC+"</a></td>"+"<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.CREATE_DATE+"</a></td>";
           
           // Contato
-          if(!a){
+
+          if(a.CONTACTS.length){
             var scont=[];
             for(i=0;i<a.CONTACTS.length;i++){
               if(a.CONTACTS[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
@@ -547,7 +540,7 @@ window.Box = Spine.Controller.sub({init:function() {
               }
             }
             if(scont.length){
-              result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>";
+              result+="<<td></td>><a href='#fornecedores/edit/"+a.FORN_ID+"'>";
               this.setDate(scont);
               for(i=0;i<scont.length;i++){
                 if(scont[i].CONT_NOME.length){
@@ -574,14 +567,6 @@ window.Box = Spine.Controller.sub({init:function() {
           // Cadastro do contato
           if(contatos_date.length){
             result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+contatos_date.join("<br/>")+"</a></td>";
-          }
-          else{
-            result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'></td>";
-          }
-
-          // Segmento
-          if(segmento.length){
-            result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+segmento.join("<br/>")+"</a></td>";
           }
           else{
             result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'></td>";
@@ -618,7 +603,7 @@ window.Box = Spine.Controller.sub({init:function() {
           }
 
           // Favoritos
-          if(a.FAVORITES !== null){
+          /*if(a.FAVORITES !== null){
             for(i=0;i<a.FAVORITES.length;i++){
               if(middlefav === ""){
                 if(a.FAVORITES[i].SEGM_COD === this.usr.SEGM_COD){
@@ -642,7 +627,7 @@ window.Box = Spine.Controller.sub({init:function() {
           }
           else{
             result+="<td><button type='button' class='caption-icons-icon justit bstar nothas' name='"+a.FORN_ID+"'></button></td>";
-          }
+          }*/
           /*To attend Demand: 0 Alerta para mais de dois contatos principais cadastrado
           <td><span class='doubled-contact'></span></td>*/
 

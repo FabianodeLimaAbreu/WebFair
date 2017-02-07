@@ -18,7 +18,7 @@ require.config({
     sp: "spine"
   }
 });
-require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","app/filter"], function() {
+require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content", "app/detail","app/filter"], function() {
   /**
   * Main application class, responsible for all main funcionalities and call anothers classes constructors
   * @exports App
@@ -1748,7 +1748,7 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
     */
     setdata:function(a,b){  
       var i,length;
-      console.dir(a);
+      //console.dir(a);
       //this.content.page = 0;
       
 
@@ -1791,8 +1791,9 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
           $("input[name='end_date']").datepicker('setDate', (this.endTimeForn && this.endTimeForn.slice(0,4)+'-'+this.endTimeForn.slice(5, 7)+"-"+this.endTimeForn.slice(8, 10)));
 
           this.data = a.sortBy("FORN_ID");
-          console.dir(this.data);
+          //console.dir(this.data);
           this.content.changeview("list");
+          
           if(!this.cookiefornecedores.length){
             var scroll={
               "fornval":''+this.fornval,
@@ -1815,7 +1816,8 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             this.cookiefornecedores=[];
             this.cookiefornecedores.push(scroll);
           }
-          this.createbox(this.data, this.content.page, !0,"list");
+          this.callService('contatos','','','','','','<LINHA_I>1</LINHA_I>','<LINHA_F>20</LINHA_F>');
+          //this.createbox(this.data, this.content.page, !0,"list");
           break;
         case 'local':
           this.content.changeview("list");
@@ -1853,6 +1855,29 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             this.callback(data,req);
           }
         }
+    },
+    linkFornAndContacts:function(index,arr){
+      var self=this;
+      var i=index*20;
+      var length=i+20;
+      for(i;i<length;i++){
+        //console.dir(arr[i]);
+        var even = _.filter(arr, function(obj){
+          /*if((obj.FORN_ID === self.data[i].FORN_ID) && self.data[i].FORN_ID > 10){
+            return obj;
+          }*/
+          return ((obj.FORN_ID === self.data[i].FORN_ID) && obj.CONT_ID);
+        //
+        });
+        self.data[i].CONTACTS=even;
+        console.log("1");
+      }
+      console.log("2");
+      //var even = _.find([1, 2, 3, 4, 5, 6], function(num){ return num % 2 == 0; });
+      //console.(even);
+      //console.dir(arr);
+      console.dir(this.data);
+      this.createbox(this.data, this.content.page, !0,"list");
     },
     convertData:function(data,req,what){
         var context=this;
@@ -1897,23 +1922,21 @@ require(["methods","jquery.elevatezoom","sp/min", "app/content", "app/detail","a
             //context.setdata(this.fair,"local");
             break;
           case "contatos":
-              this.CONTACTS=jQuery.parseJSON($(req.responseXML).text());
-              debugger;
+              var contacts=jQuery.parseJSON($(req.responseXML).text());
+              this.linkFornAndContacts(this.content.page,contacts)
             break;
           case "fornecedores":
             if(!this.data.length){
               this.data=jQuery.parseJSON($(req.responseXML).text());
               this.setDate(this.data);
               this.setdata(this.data,"fornecedores");
-              this.callService('contatos','','','','','','<LINHA_I>1</LINHA_I>','<LINHA_F>20</LINHA_F>');
             }
             else{
               var temp=jQuery.parseJSON($(req.responseXML).text()).unique().sortBy('FORN_ID');
               this.setDate(temp);
-              console.dir(temp);
               this.data=this.data.concat(temp);
-              console.dir(this.data);
-              this.createbox(this.data, this.content.page, !0,"list");
+              this.callService('contatos','','','','','','<LINHA_I>1</LINHA_I>','<LINHA_F>20</LINHA_F>');
+              //this.createbox(this.data, this.content.page, !0,"list");
             }
             break;
           case 'combosearch':
