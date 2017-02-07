@@ -99,7 +99,7 @@ var App={
     		amos_code.push(this.tempcookie.opt[0][i].AMOS_DESC);
     	}
 
-    	val = val.replace("##SAMPLES"," "+amos_code.join(" ; ")+"").replace("##SUPPLIER",this.tempforn.opt[0].FORN_DESC).replace("##CONTACT",this.tempcookie.opt[1].CONT_NOME);
+        val = val.replace("##SAMPLES"," "+amos_code.join(" ; ")+"").replace("##SUPPLIER",this.tempcookie.opt[1].FORN_DESC).replace("##CONTACT",this.tempcookie.opt[1].CONT_NOME);
     	return val;
     },
 

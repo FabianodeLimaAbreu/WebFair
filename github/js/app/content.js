@@ -535,15 +535,18 @@ window.Box = Spine.Controller.sub({init:function() {
           if(a.CONTACTS.length){
             var scont=[];
             for(i=0;i<a.CONTACTS.length;i++){
-              if(a.CONTACTS[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
+              /*if(a.CONTACTS[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
                 scont.push(a.CONTACTS[i]);
-              }
+              }*/
+              scont.push(a.CONTACTS[i]);
             }
             if(scont.length){
-              result+="<<td></td>><a href='#fornecedores/edit/"+a.FORN_ID+"'>";
+              //debugger;
               this.setDate(scont);
+              result+="<td>"
               for(i=0;i<scont.length;i++){
-                if(scont[i].CONT_NOME.length){
+                if(scont[i].CONT_NOME && scont[i].CONT_NOME.length){
+                  debugger;
                   nome_contato=scont[i].CONT_NOME;
                 }
                 else{
@@ -551,10 +554,11 @@ window.Box = Spine.Controller.sub({init:function() {
                 }
                 
                 contatos_date.push(scont[i].CREATE_DATE);
-                segmento.push(scont[i].SEGM_DESC);
-                result+=""+nome_contato+"<br/>";
+                //segmento.push(scont[i].SEGM_DESC);
+                result+=nome_contato+" - "+contatos_date+"<br/>";
               }
-              result+="</a></td>";
+              result+="</td>";
+              //debugger;
             }
             else{
                result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'></a></td>";
@@ -564,13 +568,13 @@ window.Box = Spine.Controller.sub({init:function() {
             result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'></a></td>";
           }
 
-          // Cadastro do contato
-          if(contatos_date.length){
-            result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+contatos_date.join("<br/>")+"</a></td>";
-          }
-          else{
-            result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'></td>";
-          }
+          // // Cadastro do contato
+          // if(contatos_date.length){
+          //   result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+contatos_date.join("<br/>")+"</a></td>";
+          // }
+          // else{
+          //   result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'></td>";
+          // }
 
           // Anotacoes
           if(!a){

@@ -50,12 +50,12 @@ module.exports = function(grunt) {
                 expand: true
             },
             github: {
-                src: ['**', '!node_modules/**', '!images/psds/**', '!WebFair/**', '!dist/**', "!**/*.xlsx", '!LEVANTAMENTO DE DADOS/**',"!docs/**","!homologa/**"],
+                src: ['**', '!node_modules/**', '!images/psds/**', '!WebFair/**', '!dist/**', "!**/*.xlsx", '!LEVANTAMENTO DE DADOS/**',"!docs/**","!homologa/**","!_hugo/**"],
                 dest: 'WebFair/github',
                 expand: true
             },
             homologa: {
-                src: ['**', '!**/Gruntfile.js', '!**/package.json', '!images/psds/**', '!WebFair/**', '!dist/**', "!**/*.xlsx", '!testes/**', '!views/**', '!LEVANTAMENTO DE DADOS/**', '!docs/**'],
+                src: ['**', '!**/Gruntfile.js', '!**/package.json', '!images/psds/**', '!WebFair/**', '!dist/**', "!**/*.xlsx", '!testes/**', '!views/**', '!LEVANTAMENTO DE DADOS/**', '!docs/**',"!_hugo/**"],
                 dest: 'homologa',
                 expand: true
             }

@@ -1870,9 +1870,7 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
         //
         });
         self.data[i].CONTACTS=even;
-        console.log("1");
       }
-      console.log("2");
       //var even = _.find([1, 2, 3, 4, 5, 6], function(num){ return num % 2 == 0; });
       //console.(even);
       //console.dir(arr);
@@ -1915,6 +1913,7 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
               //this.createbox(this.data, this.content.page, !0);
               this.reopenFilter(this.data, this.content.page, !0);
             }
+            this.callService('contatos','','','','','','<LINHA_I>1</LINHA_I>','<LINHA_F>20</LINHA_F>');
             break;
           case "local":
             this.fair.push(jQuery.parseJSON($(req.responseXML).text()).sortBy('FEIR_DESC').unique());
@@ -1922,8 +1921,8 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
             //context.setdata(this.fair,"local");
             break;
           case "contatos":
-              var contacts=jQuery.parseJSON($(req.responseXML).text());
-              this.linkFornAndContacts(this.content.page,contacts)
+              this.CONTACTS=jQuery.parseJSON($(req.responseXML).text());
+              this.linkFornAndContacts(this.content.page,this.CONTACTS);
             break;
           case "fornecedores":
             if(!this.data.length){
@@ -3236,17 +3235,17 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
         this.modal.open("message","Fornecedor Inativo!!!",!1,!0);
         return !1;
       }
-      length=item[0].CONTACTS.length;
+      length=this.CONTACTS.length;
       if(!length){
         this.modal.open("message","O Fornecedor não possui contatos cadastrados",!1,!0);
         return !1;
       }
       else{
         for(i=0;i<=length;i++){
-          if(item[0].CONTACTS[i]){
-            if(item[0].CONTACTS[i].CONT_PRINCIPAL){
-              if(item[0].CONTACTS[i].CONT_EMAIL.length && isEmail(item[0].CONTACTS[i].CONT_EMAIL)){
-                contemail=item[0].CONTACTS[i];
+          if(this.CONTACTS[i]){
+            if(this.CONTACTS[i].CONT_PRINCIPAL){
+              if(this.CONTACTS[i].CONT_EMAIL !== null && isEmail(this.CONTACTS[i].CONT_EMAIL)){
+                contemail=this.CONTACTS[i];
                 any_principal=!1;
               }   
             }
@@ -3269,7 +3268,7 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
                 });
 
                 //debugger;
-                item[0].CONTACTS.forEach(function(element,index){
+                this.CONTACTS.forEach(function(element,index){
                   if(element.CONT_PRINCIPAL && !contemail.length){
                     contemail=element.CONT_EMAIL;
                     context.modal.open("message","O contato principal deste fornecedor não possui email cadastrado!!!",!1,!0);
@@ -3310,7 +3309,7 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
                 "opt":[amos_sel,contemail,this.usr]
               }
               var tempforn={
-                "opt":[item[0]]
+                "opt":[this]
               }
               // console.dir(temp);
               // console.dir(tempforn);
@@ -3318,7 +3317,7 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
               $.cookie("tempforn", tempforn, {expires:7, path:"/"});*/
               localStorage.setItem('sendemail', JSON.stringify(temp));
               localStorage.setItem('tempforn', JSON.stringify(tempforn));
-              context.modal.open("template",[listtemplates,amos_sel,contemail,item[0]],!1,!1);
+              context.modal.open("template",[listtemplates,amos_sel,contemail,this],!1,!1);
             }
           }
         }
