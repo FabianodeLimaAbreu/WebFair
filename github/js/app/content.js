@@ -416,7 +416,7 @@ window.Box = Spine.Controller.sub({init:function() {
     this.el.addClass('col col-small col-large');
     $(".bselect").removeClass("sel");
     homologado= a.AMOS_HOMOLOGAR ? "has":"nothas";
-    note= a.NOTES.length   ? true:false;
+    // note= a.NOTA_DESC.length   ? true:false;
     fisica= a.FLAG_FISICA ? "has":"nothas";
     fav= a.FLAG_PRIORIDADE ? "has":"nothas";
     annex= a.AMOS_HOMOLOGAR ? true:false;
@@ -520,7 +520,7 @@ window.Box = Spine.Controller.sub({init:function() {
     switch (this.page){
       case "fornecedores":
         if(a){
-          var result="",i,status,principal,nome_contato,segmento=[],contatos_date=[],middlefav="";
+          var result="",i,status,principal,nome_contato,segmento=[],middlefav="";
           status= a.FORN_STATUS ? "complet":"incomplet";
           principal= a.FORN_PRINCIPAL ? "SIM":"";
 
@@ -531,7 +531,6 @@ window.Box = Spine.Controller.sub({init:function() {
           result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.FEIR_DESC+"</a></td>"+"<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.CREATE_DATE+"</a></td>";
           
           // Contato
-
           if(a.CONTACTS.length){
             var scont=[];
             for(i=0;i<a.CONTACTS.length;i++){
@@ -546,13 +545,12 @@ window.Box = Spine.Controller.sub({init:function() {
               result+="<td>"
               for(i=0;i<scont.length;i++){
                 if(scont[i].CONT_NOME && scont[i].CONT_NOME.length){
-                  debugger;
                   nome_contato=scont[i].CONT_NOME;
                 }
                 else{
                   nome_contato="SEM NOME";
                 }
-                
+                var contatos_date=[];
                 contatos_date.push(scont[i].CREATE_DATE);
                 //segmento.push(scont[i].SEGM_DESC);
                 result+=nome_contato+" - "+contatos_date+"<br/>";
@@ -577,15 +575,14 @@ window.Box = Spine.Controller.sub({init:function() {
           // }
 
           // Anotacoes
-          if(!a){
+          if(a){
             var segnote=[];
             for(i=0;i<a.NOTA_DESC.length;i++){
-              if(a.NOTA_DESC[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
+              if(a.NOTA_DESC === "1"){
                 segnote.push(a.NOTA_DESC[i]);
               }
             }
             if(segnote.length){
-              this.setDate(a.NOTA_DESC);
               result+="<td class='tooltip tooltip-selectable'><button type='button' class='caption-icons-icon justit bnote'></button><ul class='tooltip-content notepad notepadmess col-large'><li class='tooltip-title'><p class='tooltip-item'>Anotações</p></li>";
               for(i=0;i<segnote.length;i++){
                 if(i<5){
@@ -644,7 +641,7 @@ window.Box = Spine.Controller.sub({init:function() {
         var homologado,note,fisica,fav,email,annex,status,result="",i;
         this.el.addClass('col col-small col-large');
         homologado= a.AMOS_HOMOLOGAR ? "has":"nothas";
-        note= a.NOTA_DESC.length   ? true:false;
+        // note= a.NOTA_DESC.length   ? true:false;
         fisica= a.FLAG_FISICA ? "has":"nothas";
         fav= a.FLAG_PRIORIDADE ? "has":"nothas";
         annex= a.AMOS_HOMOLOGAR ? true:false;

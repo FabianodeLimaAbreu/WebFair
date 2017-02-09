@@ -1395,6 +1395,14 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
             }
           },
           {
+            'name':'anotacoes',
+            'serviceName':'ListarAnotacoes',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarAnotacoes xmlns="http://tempuri.org/">'+a+b+c+'</ListarAnotacoes></soap:Body></soap:Envelope>',
+            callback:function(data,req){
+              core.convertData(data,req,name,!0);
+            }
+          },
+          {
             'name':'singleForn',
             'serviceName':'ListarFornecedores',
             'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedores xmlns="http://tempuri.org/">'+a+'</ListarFornecedores></soap:Body></soap:Envelope>',
@@ -3796,11 +3804,11 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
         {"code":"FORN_DESC","name":"Fornecedor"},
         {"code":"FEIR_DESC","name":"Local da Coleta"},
         {"code":"CREATE_DATE","name":"Criacao do fornecedor"},
-        {"code":"CONTACTS","name":"Contatos"},
-        {"code":"CONTACTS_CREATE_DATE","name":"Cadastro do Contato"},
-        {"code":"SEGM_DESC","name":"Segmento"},
+        {"code":"CONTACTS","name":"Contatos / Criação do Contato / E-Mail"},
+        // {"code":"CONTACTS_CREATE_DATE","name":"Cadastro do Contato"},
+        // {"code":"SEGM_DESC","name":"Segmento"},
         {"code":"NOTES","name":"Anotacoes"},
-        {"code":"FAVORITES","name":"Favoritos"},
+        // {"code":"FAVORITES","name":"Favoritos"},
         {"code":"FORN_STATUS","name":"Status"},
         {"code":"FORN_PRINCIPAL","name":"Fornecedor Principal"}
       ]
@@ -3890,7 +3898,7 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
           }
         }
         else{
-          fav= fdata[i].FAVORITES.length ? true:false;
+          // fav= fdata[i].FAVORITES.length ? true:false;
           length=indice_forn.length;
         }
         for(j=0;j<length;j++){
@@ -3898,9 +3906,9 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
             switch (indice_forn[j].code){
               case "NOTES":
                 var segnote=[];
-                for(var k=0;k<fdata[i].NOTES.length;k++){
-                  if(fdata[i].NOTES[k].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
-                    segnote.push(fdata[i].NOTES[k]);
+                for(var k=0;k<fdata[i].NOTA_DESC.length;k++){
+                  if(fdata[i].NOTA_DESC[k].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
+                    segnote.push(fdata[i].NOTA_DESC[k]);
                   }
                 }
                 if(segnote.length){
@@ -3916,12 +3924,12 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
                 }
                 break;
               case "CONTACTS":
-                if(fdata[i].CONTACTS.length){
+                if(this.CONTACTS.length){
                   //console.log(fdata[i].FORN_DESC);
                   tab_text+="<td>";
-                  this.setDate(fdata[i].CONTACTS);
-                  for(var k=0;k<fdata[i].CONTACTS.length;k++){
-                    tab_text+="<p>"+(fdata[i].CONTACTS[k].CONT_NOME || "SEM NOME")+"</p>";
+                  this.setDate(this.CONTACTS[i]);
+                  for(var k=0;k<this.CONTACTS[i].length;k++){
+                    tab_text+="<p>"+(this.CONTACTS[i].CONT_NOME || "SEM NOME")+"</p>";
                   }
                   tab_text+="</td>";
                 }
@@ -3930,11 +3938,11 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
                 }
                 break;
               case "CONTACTS_CREATE_DATE":
-                if(fdata[i].CONTACTS.length){
+                if(this.CONTACTS[i].length){
                   //console.log(fdata[i].FORN_DESC);
                   tab_text+="<td>";
-                  for(var k=0;k<fdata[i].CONTACTS.length;k++){
-                    tab_text+="<p>"+(fdata[i].CONTACTS[k].CREATE_DATE || "")+"</p>";
+                  for(var k=0;k<this.CONTACTS[i].length;k++){
+                    tab_text+="<p>"+(this.CONTACTS[i].CREATE_DATE || "")+"</p>";
                   }
                   tab_text+="</td>";
                 }
@@ -3943,10 +3951,10 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
                 }
                 break;
               case "SEGM_DESC":
-                if(fdata[i].CONTACTS.length){
+                if(this.CONTACTS[i].length){
                   tab_text+="<td>";
-                  for(var k=0;k<fdata[i].CONTACTS.length;k++){
-                    tab_text+="<p>"+fdata[i].CONTACTS[k].SEGM_DESC+"</p>";
+                  for(var k=0;k<this.CONTACTS[i].length;k++){
+                    tab_text+="<p>"+this.CONTACTS[i].SEGM_DESC+"</p>";
                   }
                   tab_text+="</td>";
                 }
@@ -3954,18 +3962,18 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
                   tab_text+="<td></td>";
                 }
                 break;
-              case "FAVORITES":
-                if(fav){
-                  tab_text+="<td>";
-                  for(var k=0;k<fdata[i].FAVORITES.length;k++){
-                    tab_text+="<p>"+fdata[i].FAVORITES[k].SEGM_DESC+"</p>";
-                  }
-                  tab_text+="</td>";
-                }
-                else{
-                  tab_text+="<td>Nao</td>";
-                }
-                break;
+              // case "FAVORITES":
+              //   if(fav){
+              //     tab_text+="<td>";
+              //     for(var k=0;k<fdata[i].FAVORITES.length;k++){
+              //       tab_text+="<p>"+fdata[i].FAVORITES[k].SEGM_DESC+"</p>";
+              //     }
+              //     tab_text+="</td>";
+              //   }
+              //   else{
+              //     tab_text+="<td>Nao</td>";
+              //   }
+              //   break;
               case "FORN_PRINCIPAL":
                   tab_text+="<td>";
                   tab_text+=fdata[i][indice_forn[j].code] ? "SIM" : "";
@@ -3992,9 +4000,9 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
             switch (indice_amos[j].code){
               case "NOTES":
                 var segnote=[];
-                for(var k=0;k<fdata[i].NOTES.length;k++){
-                  if(fdata[i].NOTES[k].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
-                    segnote.push(fdata[i].NOTES[k]);
+                for(var k=0;k<fdata[i].NOTA_DESC.length;k++){
+                  if(fdata[i].NOTA_DESC[k].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
+                    segnote.push(fdata[i].NOTA_DESC[k]);
                   }
                 }
                 if(segnote.length){
