@@ -1774,6 +1774,7 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
           //this.data = a.sortBy(this.nsort);
           //debugger;
           this.data = a;
+          console.dir(this.data);
           this.content.changeview(this.view);
           //this.filter.checklist(a);
           //$(".changeview button.b"+this.view);

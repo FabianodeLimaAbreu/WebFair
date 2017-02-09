@@ -85,6 +85,7 @@ open: function(a){
   var i,context=this,item=this.item,name;
 
   var homologado,note,fisica,fav,email,annex,status,context=this,result="";
+  item.NOTES=[]; // To avoid error in NOTES problems
   homologado= item.AMOS_HOMOLOGAR ? "has":"nothas";
   note= item.NOTES.length   ? true:false;
   fisica= item.FLAG_FISICA ? "has":"nothas";
