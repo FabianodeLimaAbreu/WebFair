@@ -40,6 +40,7 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
 
     events: {      
       "click .justit.bnote":"preventAction",
+      "mouseover .justit.bnote":"createNote",
       "click .justit.bemail":"preventAction",
       "click .fornecedor_cadastro .nav-menu a":"preventAction",
       "hover .tooltip-selectable":"positionNote",
@@ -585,6 +586,10 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
       }
     },
 
+    createNote:function(a){
+      console.dir($("button[idref='"+$(a.target).attr('idref')+"']")); // component of notes
+    },
+
     /**
     * `This method is called by preventAction when the user click in yes in the Modal.`
     * `The method take the redirect_val set in preventAction method and change the hash of the page using it.`
@@ -601,6 +606,7 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
     * @param {event} a. The click event.
     */
     positionNote:function(a){
+      this.createNote(a);
       var tablesize=$(".scroller").outerHeight();
       if(($(a.target).position().top+$(a.target).height()+50 )> tablesize){
         var el=$(a.target).find(".notepadmess");
@@ -1925,7 +1931,6 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
               //this.createbox(this.data, this.content.page, !0);
               this.reopenFilter(this.data, this.content.page, !0);
             }
-            this.callService('contatos','','','','','','<LINHA_I>1</LINHA_I>','<LINHA_F>20</LINHA_F>');
             break;
           case "local":
             this.fair.push(jQuery.parseJSON($(req.responseXML).text()).sortBy('FEIR_DESC').unique());

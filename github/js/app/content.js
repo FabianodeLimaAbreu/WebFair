@@ -457,7 +457,7 @@ window.Box = Spine.Controller.sub({init:function() {
       }
       if(segnote.length){
         this.setDate(segnote);
-        result+="<li class='tooltip tooltip-selectable'><button type='button' class='caption-icons-icon justit bnote'></button><ul class='tooltip-content notepad notepadmess rightless'><li class='tooltip-title'><p class='tooltip-item'>Anotações</p></li>";
+        result+="<li class='tooltip tooltip-selectable' idref='"+a.FORN_ID+"'><button type='button' class='caption-icons-icon justit bnote' idref='"+a.FORN_ID+"'></button><ul class='tooltip-content notepad notepadmess rightless'><li class='tooltip-title'><p class='tooltip-item'>Anotações</p></li>";
         for(i=0;i<segnote.length;i++){
           result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+a.FORN_ID+" - "+ a.FORN_DESC+" | "+segnote[i].OBJ_ID+" - "+a.AMOS_DESC+"</b></p><p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
           if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
@@ -583,7 +583,7 @@ window.Box = Spine.Controller.sub({init:function() {
               }
             }
             if(segnote.length){
-              result+="<td class='tooltip tooltip-selectable'><button type='button' class='caption-icons-icon justit bnote'></button><ul class='tooltip-content notepad notepadmess col-large'><li class='tooltip-title'><p class='tooltip-item'>Anotações</p></li>";
+              result+="<td class='tooltip tooltip-selectable' idref='"+a.FORN_ID+"'><button type='button' class='caption-icons-icon justit bnote' idref='"+a.FORN_ID+"'></button><ul class='tooltip-content notepad notepadmess col-large'><li class='tooltip-title'><p class='tooltip-item'>Anotações</p></li>";
               for(i=0;i<segnote.length;i++){
                 if(i<5){
                   result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+a.FORN_ID+" - "+a.FORN_DESC+" | "+segnote[i].NOTA_ID+"</b></p><p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
@@ -663,7 +663,7 @@ window.Box = Spine.Controller.sub({init:function() {
           }
           if(segnote){
             this.setDate(segnote);
-            result+="<td class='tooltip tooltip-selectable'><button type='button' class='caption-icons-icon justit bnote'></button><ul class='tooltip-content notepad notepadmess col-large'><li class='tooltip-title'><p class='tooltip-item'>Anotações</p></li>";
+            result+="<td class='tooltip tooltip-selectable' idref='"+a.AMOS_ID+"'><button type='button' class='caption-icons-icon justit bnote' idref='"+a.AMOS_ID+"'></button><ul class='tooltip-content notepad notepadmess col-large'><li class='tooltip-title'><p class='tooltip-item'>Anotações</p></li>";
             for(i=0;i<segnote.length;i++){
               if(i<5){
                 result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+ segnote[i].USU_NOME+" | "+segnote[i].NOTA_ID+"</b></p><p>"+segnote[i].SEGM_DESC+" - Assunto:</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
