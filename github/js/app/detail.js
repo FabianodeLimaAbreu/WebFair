@@ -973,7 +973,6 @@ setFav:function(a){
 
     $("input[name='FORN_DESC']").val(context.item["FORN_DESC"]);
 
-debugger;
     if(this.item.FAVORITES.length){
       for(var i=0;i<this.item.FAVORITES.length;i++){
         if(this.usr.SEGM_COD === this.item.FAVORITES[i].SEGM_COD){

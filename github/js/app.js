@@ -1868,16 +1868,20 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
       var self=this;
       var i=index*20;
       var length=i+20;
+      //console.dir(self.data);
       for(i;i<length;i++){
         //console.dir(arr[i]);
-        var even = _.filter(arr, function(obj){
-          /*if((obj.FORN_ID === self.data[i].FORN_ID) && self.data[i].FORN_ID > 10){
-            return obj;
-          }*/
-          return ((obj.FORN_ID === self.data[i].FORN_ID) && obj.CONT_ID);
-        //
-        });
-        self.data[i].CONTACTS=even;
+        if(self.data[i]){
+          var even = _.filter(arr, function(obj){
+            /*if((obj.FORN_ID === self.data[i].FORN_ID) && self.data[i].FORN_ID > 10){
+              return obj;
+            }*/
+            return ((obj.FORN_ID === self.data[i].FORN_ID) && obj.CONT_ID);
+          //
+          });
+          self.data[i].CONTACTS=even;
+        }
+        
       }
       //var even = _.find([1, 2, 3, 4, 5, 6], function(num){ return num % 2 == 0; });
       //console.(even);
