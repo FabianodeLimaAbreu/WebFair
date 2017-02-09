@@ -468,10 +468,13 @@ callerEvents:function(){
     }
   });*/
 },
-open: function(a){
+open: function(a,need_contact){
   "use strict";
   var context=this;
   this.item = a;
+  this.item.NOTES=[];
+  this.item.FAVORITES=[];
+  this.item.CONTACTS=[];
 
   if(!this.item){
     return !1;
@@ -492,6 +495,23 @@ open: function(a){
     this.callService("local",'<FEIR_COD></FEIR_COD>','<PAIS_COD></PAIS_COD>','<REGI_COD></REGI_COD>');
   }
   //this.fav=elemento.FLAG_PRIORIDADE;
+
+  if(need_contact){
+    setTimeout(
+      function(){ 
+        context.callService('contatos','<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>','','','','','<LINHA_I>1</LINHA_I>','<LINHA_F>20</LINHA_F>');
+      }, 
+    500)
+  }
+  else{
+    this.SetContactsList();
+  }
+
+},SetContactsList:function(arr,needset){
+  debugger;
+  if(needset){
+    this.item.CONTACTS=arr;
+  }
   if(this.item.CONTACTS){
     if(this.item.CONTACTS.length){
       //Filtrando contatos do segmento correto
@@ -517,8 +537,6 @@ open: function(a){
   else{
     this.populateForn();
   }
-  
-
 },requestCancel:function(){
   this.on = !1;
   this.setFornClick="";
@@ -1011,7 +1029,7 @@ setFav:function(a){
     }
     $(".note ul").append(result);
 
-    this.setDate(context.item.CONTACTS);
+    //this.setDate(context.item.CONTACTS);
     if(context.item.CONTACTS.length>1){
       //Mais de um contato/
       //console.log("tem Mais de um contato");
@@ -1156,67 +1174,71 @@ setFav:function(a){
       }
     });
 
-    if(context.item.PROFILES.length){
-      $("a[href='#profile'] button").removeClass('incomplet').addClass('complet');
-      for(var i=0;i<context.item.PROFILES.length;i++){
-        //console.log("profiles: "+context.item.PROFILES[i].PERF_COD);
-        if(context.item.PROFILES[i].PERF_COD == 3){
-          if(!$("#profile button.sel-factory").hasClass('sel')){
-            $("#profile button.sel-factory").trigger('click');
-          }
-          if(context.item.PROFILES[i].TP_FAB_COD === 1){
-            $(".ownfab-add").find("button[name='ownfab/"+context.item.PROFILES[i].FAB_COD+"']").trigger('click');
-          }
-          else{
-            $(".colfab-add").find("button[name='colfab/"+context.item.PROFILES[i].FAB_COD+"']").trigger('click');
-          }
-        }
-        else{
-          $(".form-control-other").attr('disabled', 'disabled');
-          $("#profile button[name='"+context.item.PROFILES[i].PERF_COD+"']").addClass('sel');
-          if(context.item.PROFILES[i].PERF_COD === 9999){
-            $(".form-control-other").removeAttr('disabled').val(context.item.PROFILES[i].PERF_OTHERS);
-          }
-        }
-      }
-    }
-    if(context.item.COMPOSITIONS.length){
-      $("a[href='#composition'] button").removeClass('incomplet').addClass('complet');
-      for(var i=0;i<context.item.COMPOSITIONS.length;i++){
-        var n;
-        if(isNaN(context.item.COMPOSITIONS[i].COMP_COD.replace(" ",""))){
-          n=context.item.COMPOSITIONS[i].COMP_COD.replace(" ","");
-          while(n.indexOf(" ") != -1)
-            n = n.replace(" ", "");
-        }
-        else{
-          n=parseInt(context.item.COMPOSITIONS[i].COMP_COD.replace(" ",""));
-        }
-        if($(".comp-add button[name='comp/"+n+"']").attr("name") === "comp/9999"){
-          $(".comp-add button[name='comp/"+n+"']").find("input").val(context.item.COMPOSITIONS[i].COMP_OTHERS);
-        }
-        $(".comp-add button[name='comp/"+n+"']").trigger('click');
-      }
-    }
-    if(context.item.PRODUCTS.length){
-      $("a[href='#products'] button").removeClass('incomplet').addClass('complet');
-      for(var i=0;i<context.item.PRODUCTS.length;i++){
-        //console.log($(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").attr("name"));
-        if($(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").attr("name") === "prod/9999"){
-          $(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").find("input").val(context.item.PRODUCTS[i].PROD_OTHERS);
-        }
-        $(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").trigger('click');
-      }
-    }
-    if(context.item.MARKETS.length){
-      $("a[href='#markets'] button").removeClass('incomplet').addClass('complet');
-      for(var i=0;i<context.item.MARKETS.length;i++){
-        if($(".mark-add button[name='mark/"+parseInt(context.item.MARKETS[i].MERC_COD)+"']").attr("name") === "mark/9999"){
-          $(".mark-add button[name='mark/"+parseInt(context.item.MARKETS[i].MERC_COD)+"']").find("input").val(context.item.MARKETS[i].MERC_OTHERS);
-        }
-        $(".mark-add button[name='mark/"+parseInt(context.item.MARKETS[i].MERC_COD)+"']").trigger('click');
-      }
-    }
+    // if(context.item.PROFILES.length){
+    //   $("a[href='#profile'] button").removeClass('incomplet').addClass('complet');
+    //   for(var i=0;i<context.item.PROFILES.length;i++){
+    //     //console.log("profiles: "+context.item.PROFILES[i].PERF_COD);
+    //     if(context.item.PROFILES[i].PERF_COD == 3){
+    //       if(!$("#profile button.sel-factory").hasClass('sel')){
+    //         $("#profile button.sel-factory").trigger('click');
+    //       }
+    //       if(context.item.PROFILES[i].TP_FAB_COD === 1){
+    //         $(".ownfab-add").find("button[name='ownfab/"+context.item.PROFILES[i].FAB_COD+"']").trigger('click');
+    //       }
+    //       else{
+    //         $(".colfab-add").find("button[name='colfab/"+context.item.PROFILES[i].FAB_COD+"']").trigger('click');
+    //       }
+    //     }
+    //     else{
+    //       $(".form-control-other").attr('disabled', 'disabled');
+    //       $("#profile button[name='"+context.item.PROFILES[i].PERF_COD+"']").addClass('sel');
+    //       if(context.item.PROFILES[i].PERF_COD === 9999){
+    //         $(".form-control-other").removeAttr('disabled').val(context.item.PROFILES[i].PERF_OTHERS);
+    //       }
+    //     }
+    //   }
+    // }
+
+    // if(context.item.COMPOSITIONS.length){
+    //   $("a[href='#composition'] button").removeClass('incomplet').addClass('complet');
+    //   for(var i=0;i<context.item.COMPOSITIONS.length;i++){
+    //     var n;
+    //     if(isNaN(context.item.COMPOSITIONS[i].COMP_COD.replace(" ",""))){
+    //       n=context.item.COMPOSITIONS[i].COMP_COD.replace(" ","");
+    //       while(n.indexOf(" ") != -1)
+    //         n = n.replace(" ", "");
+    //     }
+    //     else{
+    //       n=parseInt(context.item.COMPOSITIONS[i].COMP_COD.replace(" ",""));
+    //     }
+    //     if($(".comp-add button[name='comp/"+n+"']").attr("name") === "comp/9999"){
+    //       $(".comp-add button[name='comp/"+n+"']").find("input").val(context.item.COMPOSITIONS[i].COMP_OTHERS);
+    //     }
+    //     $(".comp-add button[name='comp/"+n+"']").trigger('click');
+    //   }
+    // }
+
+    // if(context.item.PRODUCTS.length){
+    //   $("a[href='#products'] button").removeClass('incomplet').addClass('complet');
+    //   for(var i=0;i<context.item.PRODUCTS.length;i++){
+    //     //console.log($(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").attr("name"));
+    //     if($(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").attr("name") === "prod/9999"){
+    //       $(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").find("input").val(context.item.PRODUCTS[i].PROD_OTHERS);
+    //     }
+    //     $(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").trigger('click');
+    //   }
+    // }
+
+    // if(context.item.MARKETS.length){
+    //   $("a[href='#markets'] button").removeClass('incomplet').addClass('complet');
+    //   for(var i=0;i<context.item.MARKETS.length;i++){
+    //     if($(".mark-add button[name='mark/"+parseInt(context.item.MARKETS[i].MERC_COD)+"']").attr("name") === "mark/9999"){
+    //       $(".mark-add button[name='mark/"+parseInt(context.item.MARKETS[i].MERC_COD)+"']").find("input").val(context.item.MARKETS[i].MERC_OTHERS);
+    //     }
+    //     $(".mark-add button[name='mark/"+parseInt(context.item.MARKETS[i].MERC_COD)+"']").trigger('click');
+    //   }
+    // }
+
   }
   else{
     //console.log("ELSE ELSE");

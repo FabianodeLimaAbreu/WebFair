@@ -1413,7 +1413,7 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
             'serviceName':'ListarFornecedores',
             'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedores xmlns="http://tempuri.org/">'+a+'</ListarFornecedores></soap:Body></soap:Envelope>',
             callback:function(data,req){
-              return core.fornecedores.open(jQuery.parseJSON($(req.responseXML).text()).unique()[0]);
+              return core.fornecedores.open(jQuery.parseJSON($(req.responseXML).text()).unique()[0],!0);
             }
           },
           {
@@ -1890,9 +1890,6 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
         }
         
       }
-      //var even = _.find([1, 2, 3, 4, 5, 6], function(num){ return num % 2 == 0; });
-      //console.(even);
-      //console.dir(arr);
       console.dir(this.data);
       this.createbox(this.data, this.content.page, !0,"list");
     },
@@ -1940,7 +1937,12 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
             break;
           case "contatos":
               this.CONTACTS=jQuery.parseJSON($(req.responseXML).text());
-              this.linkFornAndContacts(this.content.page,this.CONTACTS);
+              if(this.page !== "fornecedor_cadastro"){
+                this.linkFornAndContacts(this.content.page,this.CONTACTS);
+              }
+              else{
+                this.fornecedores.SetContactsList(this.CONTACTS,!0);
+              }
             break;
           case "fornecedores":
             if(!this.data.length){
