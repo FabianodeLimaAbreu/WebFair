@@ -1403,7 +1403,7 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
           {
             'name':'anotacoes',
             'serviceName':'ListarAnotacoes',
-            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarAnotacoes xmlns="http://tempuri.org/">'+a+b+c+'</ListarAnotacoes></soap:Body></soap:Envelope>',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarAnotacoes xmlns="http://tempuri.org/">'+a+''+b+''+c+''+'</ListarAnotacoes></soap:Body></soap:Envelope>',
             callback:function(data,req){
               core.convertData(data,req,name,!0);
             }
@@ -1893,6 +1893,20 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
       console.dir(this.data);
       this.createbox(this.data, this.content.page, !0,"list");
     },
+    linkNotes:function(index,arr){
+      var self=this;
+      var length=this.NOTES.length;
+      for(i=0;i<length;i++){
+        if(self.data[i]){
+          var even = _.filter(arr, function(obj){
+            return ((obj.OBJ_ID === self.data[i].FORN_ID));
+          });
+          self.data[i].NOTES=even;
+        }
+        
+      }
+      this.createbox(this.data, this.content.page, !0,"list");
+    },
     convertData:function(data,req,what){
         var context=this;
         switch(what){
@@ -1935,7 +1949,13 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
             this.fair=this.fair[0];
             //context.setdata(this.fair,"local");
             break;
+          case "anotacoes":
+              this.NOTES=jQuery.parseJSON($(req.responseXML).text());
+              this.setDate(this.NOTES);
+              this.linkNotes(this.content.page,this.NOTES);
+            break;
           case "contatos":
+              this.callService('anotacoes','','','');
               this.CONTACTS=jQuery.parseJSON($(req.responseXML).text());
               if(this.page !== "fornecedor_cadastro"){
                 this.linkFornAndContacts(this.content.page,this.CONTACTS);

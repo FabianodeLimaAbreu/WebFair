@@ -577,9 +577,9 @@ window.Box = Spine.Controller.sub({init:function() {
           // Anotacoes
           if(a){
             var segnote=[];
-            for(i=0;i<a.NOTA_DESC.length;i++){
-              if(a.NOTA_DESC === "1"){
-                segnote.push(a.NOTA_DESC[i]);
+            for(i=0;i<a.NOTES.length;i++){
+              if(a.NOTES){
+                segnote.push(a.NOTES[i]);
               }
             }
             if(segnote.length){
@@ -663,8 +663,7 @@ window.Box = Spine.Controller.sub({init:function() {
           }
           if(segnote){
             this.setDate(segnote);
-            result+="<td class='tooltip tooltip-selectable' idref='"+a.AMOS_ID+"'><button type='button' class='caption-icons-icon justit bnote' idref='"+a.AMOS_ID+"'></button><ul class='tooltip-content notepad notepadmess col-large'><li class='tooltip-title'><p class='tooltip-item'>Anotações</p></li>";
-            for(i=0;i<segnote.length;i++){
+              result+="<td class='tooltip tooltip-selectable' idref='"+a.AMOS_ID+"'><button type='button' class='caption-icons-icon justit bnote' idref='"+a.AMOS_ID+"'></button><ul class='tooltip-content notepad notepadmess col-large'><li class='tooltip-title'><p class='tooltip-item'>Anotações</p></li>";            for(i=0;i<segnote.length;i++){
               if(i<5){
                 result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+ segnote[i].USU_NOME+" | "+segnote[i].NOTA_ID+"</b></p><p>"+segnote[i].SEGM_DESC+" - Assunto:</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
                 if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
