@@ -1403,7 +1403,7 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
           {
             'name':'anotacoes',
             'serviceName':'ListarAnotacoes',
-            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarAnotacoes xmlns="http://tempuri.org/">'+a+''+b+''+c+''+'</ListarAnotacoes></soap:Body></soap:Envelope>',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarAnotacoes xmlns="http://tempuri.org/">'+a+''+b+''+'<SEGM_COD>'+core.usr.SEGM_COD+'</SEGM_COD></ListarAnotacoes></soap:Body></soap:Envelope>',
             callback:function(data,req){
               core.convertData(data,req,name,!0);
             }
@@ -1548,6 +1548,38 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
               if(core.page === "fornecedor_cadastro"){
                 core.setloading(!1);
               }
+            }
+          },
+          {
+            'name':'profileToSupplier',
+            'serviceName':'ListarFornecedorPerfis',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedorPerfis xmlns="http://tempuri.org/">'+a+'</ListarFornecedorPerfis></soap:Body></soap:Envelope>',
+            'callback':function(data,req){
+              core.convertData("PROFILES",req,"to_supplier");
+            }
+          },
+          {
+            'name':'compositionToSupplier',
+            'serviceName':'ListarFornecedorComposicoes',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedorComposicoes xmlns="http://tempuri.org/">'+a+'</ListarFornecedorComposicoes></soap:Body></soap:Envelope>',
+            'callback':function(data,req){
+              core.convertData("COMPOSITIONS",req,"to_supplier");
+            }
+          },
+          {
+            'name':'productsToSupplier',
+            'serviceName':'ListarFornecedorProdutos',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedorProdutos xmlns="http://tempuri.org/">'+a+'</ListarFornecedorProdutos></soap:Body></soap:Envelope>',
+            'callback':function(data,req){
+              core.convertData("PRODUCTS",req,"to_supplier");
+            }
+          },
+          {
+            'name':'marketsToSupplier',
+            'serviceName':'ListarFornecedorMercados',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedorMercados xmlns="http://tempuri.org/">'+a+'</ListarFornecedorMercados></soap:Body></soap:Envelope>',
+            'callback':function(data,req){
+              core.convertData("MARKETS",req,"to_supplier");
             }
           },
           {
@@ -1952,12 +1984,18 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
           case "anotacoes":
               this.NOTES=jQuery.parseJSON($(req.responseXML).text());
               this.setDate(this.NOTES);
-              this.linkNotes(this.content.page,this.NOTES);
+              if(this.page !== "fornecedor_cadastro"){
+                this.linkNotes(this.content.page,this.NOTES);
+              }
+              else{
+                this.fornecedores.item.NOTES=this.NOTES;
+                this.fornecedores.inputValuesSections("NOTES",this.NOTES);
+              }
             break;
           case "contatos":
-              this.callService('anotacoes','','','');
               this.CONTACTS=jQuery.parseJSON($(req.responseXML).text());
               if(this.page !== "fornecedor_cadastro"){
+                this.callService('anotacoes','','','');
                 this.linkFornAndContacts(this.content.page,this.CONTACTS);
               }
               else{
@@ -2014,6 +2052,10 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
                 }
               });
             }
+            break;
+          case "to_supplier":
+            var arr=jQuery.parseJSON($(req.responseXML).text());
+            this.fornecedores.inputValuesSections(data,arr);
             break;
           default:
         }

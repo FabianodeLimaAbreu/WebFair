@@ -11,319 +11,217 @@
 * @constructor
 */
 window.Detail = Spine.Controller.sub({
-elements:{
-}, events:{
-},close:function() {
-  //this.el.hide();
-  var cookie;
-  //window.history.go(-1);
-  //$(window).scrollTop(this.scrollp);
+  elements:{
+  }, events:{
+  },close:function() {
+    //this.el.hide();
+    var cookie;
+    //window.history.go(-1);
+    //$(window).scrollTop(this.scrollp);
 
-  cookie=$.cookie("posscroll"+"amostras");
-  this.on = !1;
-  this.mode="amostras/"+(cookie.fairval || "padrao")+"/"+(cookie.fornval || "padrao")+"/"+(cookie.amosval || "padrao");
-  this.navigate(this.mode, !0);
-}, 
-/**
-* `OK Set thed loading state`
-* @memberOf Detail#
-* @param {Boolean} a. If true show mask, else hide mask.
-*/
-callerEvents:function(){
-  var context=this;
-  $("button.bgoselect").bind("click",function(){context.close();});  //close
-  $(".sample-buttons button").bind("click",function(a){context.showImage(a);});
-  $(".submit-detail").bind("click",function(){context.saveDetail();});
-  $(".delete").unbind("click").bind("click",function(){
-    context.deleteSample();
-    return !1;
-  });
-  $(".bnext").unbind("click").bind("click",function(){
-    context.nextSample();
-    return !1;
-  });
-  $(".bprev-detail").unbind("click").bind("click",function(){
-    context.previousSample();
-    return !1;
-  });
-  $(".btrash-big").bind("click",function(){
-    context.deleteNote();
-    return !1;
-  });
-  $(".bplus-big").bind("click",function(a){
-    context.plusNote(a);
-    return !1;
-  });
-  $(".savenote").unbind("click").bind("click",function(a){
-    context.saveNote(a);
-  });
-  $(".brotate").unbind("click").bind("click",function(a){
-    var angle=parseInt($(this).attr("name").slice(5));
-    if(angle >= 360){
-      angle = 0;
-    }
-    else{
-      angle += 90;
-    }
-    $(this).attr("name","angle"+angle);
-    $("#zoom").attr("class","angle"+angle);
-    $(".zoomContainer").attr("class","zoomContainer angle"+angle);
-  });
-},
-open: function(a){
-  "use strict";
-  var context=this;
-  this.item = a;
-  if(!this.item){
-    return !1;
-  }
-  this.callerEvents();
-  $(".sample-buttons button").eq(0).trigger('click');
-  this.populateDetail();
-  this.setloading(!1);
-}, populateDetail:function(){
-  var i,context=this,item=this.item,name;
-
-  var homologado,note,fisica,fav,email,annex,status,context=this,result="";
-  item.NOTES=[]; // To avoid error in NOTES problems
-  homologado= item.AMOS_HOMOLOGAR ? "has":"nothas";
-  note= item.NOTES.length   ? true:false;
-  fisica= item.FLAG_FISICA ? "has":"nothas";
-  fav= item.FLAG_PRIORIDADE ? "has":"nothas";
-  annex= item.AMOS_HOMOLOGAR ? true:false;
-  status= item.AMOS_STATUS ? "complet":"incomplet";
-  email= item.AMOS_ENV_EMAIL? "sent":"disabled";
-
-  //STATUS
-  if(item.AMOS_STATUS){
-    $(".detail-status").html('<p class="caption-icons-icon bstatus complet">Cadastro Completo</p>');
-  }
-  else{
-    $(".detail-status").html('<p class="caption-icons-icon bstatus incomplet">Completar Cadastro</p>');
-  }
-
-  //TOP DO DETALHE, NOS BOTOES
-  result+='<li class="first"><a href="#'+item.AMOS_ID+'" class="caption-icons-icon setitem bfav '+fav+'" title="Favoritar">Favorita</a></li>';
-  result+='<li><a href="#'+item.AMOS_ID+'" class="caption-icons-icon setitem oneline bfisica '+fisica+'" title="Fisica">Amostra<br/>Fisica</a></li>';
-  result+='<li><a href="#'+item.AMOS_ID+'" class="caption-icons-icon setitem bhomologado '+homologado+'" title="Homologar">Homologar</a></li>';
-  //result+='<li><a href="#bannex_file" class="caption-icons-icon oneline bannex_file has">Anexar<br/> Arquivo</a><input type="file" name="pic" class="hide"></li>';
-  //result+='<li><a href="#bannex" class="caption-icons-icon oneline bannex has">Arquivos<br/> Anexos</a></li>';
-  $(".description-overview.description-top ul").html(result);
-  
-
-  //TOP DO DETALHE, LISTA DE VALORES
-  var list=[/*"AMOS_DESC",*/"FEIR_DESC","FORN_DESC","CREATE_DATE"/*,"AMOS_PRECO_UM","AMOS_PRECO"*/];
-  var list_item=$(".description-top").find("dd");
-  for(i=0;i<list.length;i++){
-    name=list[i];
-    if(item[name] !== ""){
-      list_item.eq(i).text(item[name]);
-    }
-  }
-
-  //TAB COMPOSICOES
-  var elm=$("table tbody");
-  result="<tr>";
-  if(item.TECI_DESC){
-    result+="<td>";
-    result+=""+item.TECI_DESC+"<br/>";
-    result+="</td>";
-  }
-  else{
-    result+="<td> - </td>";
-  }
-  
-  if(item.BASE_DESC){
-    result+="<td>";
-    result+=""+item.BASE_DESC+"<br/>";
-    result+="</td>";
-  }
-  else{
-    result+="<td> - </td>";
-  }
-  if(item.GRUP_DESC){
-    result+="<td>";
-    result+=""+item.GRUP_DESC+"<br/>";
-    result+="</td>";
-  }
-  else{
-    result+="<td> - </td>";
-  }
-  if(item.SUBG_DESC){
-    result+="<td>";
-    result+=""+item.SUBG_DESC+"<br/>";
-    result+="</td>";
-  }
-  else{
-    result+="<td> - </td>";
-  }
-
-  if(item.COMPOSITIONS.length){
-    result+="<td>";
-    for(i=0;i<item.COMPOSITIONS.length;i++){
-      result+=""+item.COMPOSITIONS[i].COMP_DESC+"<br/>";
-    }
-    result+="</td>";
-  }
-  else{
-    result+="<td> - </td>";
-  }
-  result+="<tr>fdsfdssfd</tr>";
-  elm.html(result);
-
-  //DESCRIÇÃO COMPLETA INPUTS
-  $(".detail-description").find("input").each(function(a,b){
-    $(b).val(item[$(b).attr("name").replace(".",",")]);
-  });
-  $(".AMOS_PRECO_UM option").each(function(a,b){
-    //console.dir(item["AMOS_PRECO_UM"]);
-    if($(b).attr("value") === item["AMOS_PRECO_UM"]){
-      $(b).attr("selected","selected");
-    }
-  });
-
-
-  //ANOTAÇÕES
-  if(note){
-    var segnote=[],result="";
-    this.setDate(item.NOTES);
-    for(i=0;i<item.NOTES.length;i++){
-      if(item.NOTES[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
-        segnote.push(item.NOTES[i]);
-      }
-    }
-    if(segnote.length){
-      for(i=0;i<segnote.length;i++){
-        result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+item.FORN_ID+" - "+item.FORN_DESC+" | "+segnote[i].NOTA_ID+" - "+item.AMOS_DESC+"</b></p><p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
-        if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
-          result+= "<button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' title='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'></button>";
-        }
-        result+="</div></article></li>";
-      }
-      result+="</ul></td>";
-    }
-    else{
-      result+="</ul></td>";
-    }
-  }
-  else{
-    result="";
-  }
-  $(".description-noteside .note ul").append(result);
-  $(".bplus-big").attr("name",item.AMOS_ID);
-  $(".bannex_file").bind("click",function(a){
-    a.preventDefault();
-    $(a.target).parent().find("input").trigger('click');
-  });
-  $(".bannex").bind("click",function(a){
-    a.preventDefault();
-    context.modal.open("message","Elemento de deletar amostra não ativo no momento!!!",!1,!0);
-  });
-
-},writeNote:function(){
-  var result="";
-  var day,date,month;
-  date=new Date();
-  if(parseInt(date.getDate())<10){
-    day="0"+parseInt(date.getDate());
-  }
-  else{
-    day=date.getDate();
-  }
-
-  if((parseInt(date.getMonth())+1)<10){
-    month="0"+parseInt(date.getMonth()+1);
-  }
-  else{
-    month=parseInt(date.getMonth()+1);
-  }
-
-  date=day+"/"+month+"/"+date.getFullYear();
-
-  var item={
-    "CREATE_DATE":date,
-    "NOTA_DESC":$(".samplenote").val(),
-    "NOTA_ID":this.noteid
-  };
-  this.item.NOTES.push(item);
-  result+="<li><article><div class='notepad-note blockquote'><p><b>"+date+" | "+this.item.FORN_ID+" - "+this.item.FORN_DESC+" | "+this.noteid+" - "+this.item.AMOS_DESC.replaceSpecial()+"</b></p><p>"+this.usr.USU_NOME+" - "+this.usr.SEGM_DESC+"</p><p>"+$(".samplenote").val()+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big' title='"+this.noteid+"' name='"+this.usr.USU_COD+"'></button></div></article></li>";
-  $(".samplenote").val("");
-  $(".description-noteside .note ul").prepend(result);
-},showImage:function(a){
-  var html="",item=this.item,name=$(a.target).attr("name");
-  if(!$(a.target).hasClass('sel')){
-    $(".zoomContainer").remove();
-    $(".sample-buttons button").removeClass('sel');
-    $(a.target).addClass('sel');
-    html='<button class="icon bzoom"></button><button class="icon brotate" name="angle0"></button>';
-    if(item[name]){
-      //html+='<img id="zoom" src="//bdb/ifair_img/'+item[name].replace("thumb","large")+'" data-zoom-image="//bdb/ifair_img/'+item[name].replace("thumb","large")+'"/>';
-      html+='<img id="zoom" src="'+imgPath+item[name].replace("thumb","large")+'" data-zoom-image="'+imgPath+item[name].replace("thumb","large")+'"/>';
-    }
-    else{
-      html+='<img id="zoom_01" src="http://189.126.197.169/img/large/large_NONE.jpg" data-zoom-image="http://189.126.197.169/img/large/large_NONE.jpg"/>';
-    }
-    $(".detail-sample-image").html(html);
-
-    $('#zoom').elevateZoom({
-      zoomType: "inner",
-      cursor: "crosshair",
-      zoomWindowFadeIn: 500,
-      zoomWindowFadeOut: 750
-    }); 
-
-    this.callerEvents();
-  }
-},saveDetail:function(){
-  var html="",item=this.item,complet=1;
-  $(".detail-description").find("input").each(function(a,b){
-    html+="<"+$(b).attr("name")+">"+$(b).val().replace(",",".")+"</"+$(b).attr("name")+">";
-    item[$(b).attr("name")]=$(b).val().replace(",",".");
-    if($(b).attr('required')){
-      if(item.COMPOSITIONS.length){  
-        if((parseInt($(b).val()) === 0) || !$(b).val().length){
-          complet=0; 
-        }
+    cookie=$.cookie("posscroll"+"amostras");
+    this.on = !1;
+    this.mode="amostras/"+(cookie.fairval || "padrao")+"/"+(cookie.fornval || "padrao")+"/"+(cookie.amosval || "padrao");
+    this.navigate(this.mode, !0);
+  }, 
+  /**
+  * `OK Set thed loading state`
+  * @memberOf Detail#
+  * @param {Boolean} a. If true show mask, else hide mask.
+  */
+  callerEvents:function(){
+    var context=this;
+    $("button.bgoselect").bind("click",function(){context.close();});  //close
+    $(".sample-buttons button").bind("click",function(a){context.showImage(a);});
+    $(".submit-detail").bind("click",function(){context.saveDetail();});
+    $(".delete").unbind("click").bind("click",function(){
+      context.deleteSample();
+      return !1;
+    });
+    $(".bnext").unbind("click").bind("click",function(){
+      context.nextSample();
+      return !1;
+    });
+    $(".bprev-detail").unbind("click").bind("click",function(){
+      context.previousSample();
+      return !1;
+    });
+    $(".btrash-big").bind("click",function(){
+      context.deleteNote();
+      return !1;
+    });
+    $(".bplus-big").bind("click",function(a){
+      context.plusNote(a);
+      return !1;
+    });
+    $(".savenote").unbind("click").bind("click",function(a){
+      context.saveNote(a);
+    });
+    $(".brotate").unbind("click").bind("click",function(a){
+      var angle=parseInt($(this).attr("name").slice(5));
+      if(angle >= 360){
+        angle = 0;
       }
       else{
-        complet=0;
+        angle += 90;
+      }
+      $(this).attr("name","angle"+angle);
+      $("#zoom").attr("class","angle"+angle);
+      $(".zoomContainer").attr("class","zoomContainer angle"+angle);
+    });
+  },
+  open: function(a){
+    "use strict";
+    var context=this;
+    this.item = a;
+    if(!this.item){
+      return !1;
+    }
+    this.callerEvents();
+    $(".sample-buttons button").eq(0).trigger('click');
+    this.populateDetail();
+    this.setloading(!1);
+  }, populateDetail:function(){
+    var i,context=this,item=this.item,name;
+
+    var homologado,note,fisica,fav,email,annex,status,context=this,result="";
+    item.NOTES=[]; // To avoid error in NOTES problems
+    homologado= item.AMOS_HOMOLOGAR ? "has":"nothas";
+    note= item.NOTES.length   ? true:false;
+    fisica= item.FLAG_FISICA ? "has":"nothas";
+    fav= item.FLAG_PRIORIDADE ? "has":"nothas";
+    annex= item.AMOS_HOMOLOGAR ? true:false;
+    status= item.AMOS_STATUS ? "complet":"incomplet";
+    email= item.AMOS_ENV_EMAIL? "sent":"disabled";
+
+    //STATUS
+    if(item.AMOS_STATUS){
+      $(".detail-status").html('<p class="caption-icons-icon bstatus complet">Cadastro Completo</p>');
+    }
+    else{
+      $(".detail-status").html('<p class="caption-icons-icon bstatus incomplet">Completar Cadastro</p>');
+    }
+
+    //TOP DO DETALHE, NOS BOTOES
+    result+='<li class="first"><a href="#'+item.AMOS_ID+'" class="caption-icons-icon setitem bfav '+fav+'" title="Favoritar">Favorita</a></li>';
+    result+='<li><a href="#'+item.AMOS_ID+'" class="caption-icons-icon setitem oneline bfisica '+fisica+'" title="Fisica">Amostra<br/>Fisica</a></li>';
+    result+='<li><a href="#'+item.AMOS_ID+'" class="caption-icons-icon setitem bhomologado '+homologado+'" title="Homologar">Homologar</a></li>';
+    //result+='<li><a href="#bannex_file" class="caption-icons-icon oneline bannex_file has">Anexar<br/> Arquivo</a><input type="file" name="pic" class="hide"></li>';
+    //result+='<li><a href="#bannex" class="caption-icons-icon oneline bannex has">Arquivos<br/> Anexos</a></li>';
+    $(".description-overview.description-top ul").html(result);
+    
+
+    //TOP DO DETALHE, LISTA DE VALORES
+    var list=[/*"AMOS_DESC",*/"FEIR_DESC","FORN_DESC","CREATE_DATE"/*,"AMOS_PRECO_UM","AMOS_PRECO"*/];
+    var list_item=$(".description-top").find("dd");
+    for(i=0;i<list.length;i++){
+      name=list[i];
+      if(item[name] !== ""){
+        list_item.eq(i).text(item[name]);
       }
     }
+
+    //TAB COMPOSICOES
+    var elm=$("table tbody");
+    result="<tr>";
+    if(item.TECI_DESC){
+      result+="<td>";
+      result+=""+item.TECI_DESC+"<br/>";
+      result+="</td>";
+    }
+    else{
+      result+="<td> - </td>";
+    }
     
-  });
-  item['AMOS_PRECO_UM']=$(".AMOS_PRECO_UM option:selected").attr("value");
-  html+="<AMOS_PRECO_UM>"+$(".AMOS_PRECO_UM option:selected").attr("value")+"</AMOS_PRECO_UM>";
-  pattern="<AMOS_ID>"+item.AMOS_ID+"</AMOS_ID><FORN_ID>"+item.FORN_ID+"</FORN_ID><FEIR_COD>"+parseInt(item.FEIR_COD)+"</FEIR_COD><USU_COD>"+item.USU_COD+"</USU_COD><AMOS_STATUS>"+complet+"</AMOS_STATUS><AMOS_ENV_EMAIL>"+item.AMOS_ENV_EMAIL+"</AMOS_ENV_EMAIL><TECI_COD>"+(item.TECI_COD || "")+"</TECI_COD><BASE_COD>"+(item.BASE_COD || "")+"</BASE_COD><GRUP_COD>"+(item.GRUP_COD || "")+"</GRUP_COD><SUBG_COD>"+(item.SUBG_COD || "")+"</SUBG_COD><SEGM_COD>"+item.SEGM_COD+"</SEGM_COD><FLAG_PRIORIDADE>"+item.FLAG_PRIORIDADE+"</FLAG_PRIORIDADE><AMOS_HOMOLOGAR>"+item.AMOS_HOMOLOGAR+"</AMOS_HOMOLOGAR><FLAG_FISICA>"+item.FLAG_FISICA+"</FLAG_FISICA><CREATE_DATE>"+"2015-01-01"+"</CREATE_DATE>";
-  if(complet){
-    $(".detail-status .bstatus").removeClass('incomplet').addClass('complet');
-  }
-  else{
-    $(".detail-status .bstatus").removeClass('complet').addClass('incomplet');
-  }
-  this.setloading(!0,!1);
-  this.callService("gravarAmostras",pattern,html,'U');
-},deleteSample:function(){
-  this.modal.open("message","Elemento de deletar amostra não ativo no momento!!!",!1,!0);
-},nextSample:function(){
-  if(!this.nextsample){
-    this.modal.open("message","Carregue mais itens na busca!!!",!1,!0);
-    return !1;
-  }
-  $(".sample-buttons button").eq(1).trigger('click');
-  this.reload(this.nextsample.FEIR_COD,this.nextsample.AMOS_ID);
-},previousSample:function(){
-  if(!this.previoussample){
-    this.modal.open("message","Este é o primeiro item na busca!!!",!1,!0);
-    return !1;
-  }
-  $(".sample-buttons button").eq(1).trigger('click');
-  this.reload(this.previoussample.FEIR_COD,this.previoussample.AMOS_ID);
-},plusNote:function(a){
-  $(a.target).addClass('hide');
-  $(".show-to-note").find("div").removeClass('hide');
-  //this.callService("gravarNotes");
-},saveNote:function(){
-  if($(".samplenote").val().length){
+    if(item.BASE_DESC){
+      result+="<td>";
+      result+=""+item.BASE_DESC+"<br/>";
+      result+="</td>";
+    }
+    else{
+      result+="<td> - </td>";
+    }
+    if(item.GRUP_DESC){
+      result+="<td>";
+      result+=""+item.GRUP_DESC+"<br/>";
+      result+="</td>";
+    }
+    else{
+      result+="<td> - </td>";
+    }
+    if(item.SUBG_DESC){
+      result+="<td>";
+      result+=""+item.SUBG_DESC+"<br/>";
+      result+="</td>";
+    }
+    else{
+      result+="<td> - </td>";
+    }
+
+    if(item.COMPOSITIONS.length){
+      result+="<td>";
+      for(i=0;i<item.COMPOSITIONS.length;i++){
+        result+=""+item.COMPOSITIONS[i].COMP_DESC+"<br/>";
+      }
+      result+="</td>";
+    }
+    else{
+      result+="<td> - </td>";
+    }
+    result+="<tr>fdsfdssfd</tr>";
+    elm.html(result);
+
+    //DESCRIÇÃO COMPLETA INPUTS
+    $(".detail-description").find("input").each(function(a,b){
+      $(b).val(item[$(b).attr("name").replace(".",",")]);
+    });
+    $(".AMOS_PRECO_UM option").each(function(a,b){
+      //console.dir(item["AMOS_PRECO_UM"]);
+      if($(b).attr("value") === item["AMOS_PRECO_UM"]){
+        $(b).attr("selected","selected");
+      }
+    });
+
+
+    //ANOTAÇÕES
+    if(note){
+      var segnote=[],result="";
+      this.setDate(item.NOTES);
+      for(i=0;i<item.NOTES.length;i++){
+        if(item.NOTES[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
+          segnote.push(item.NOTES[i]);
+        }
+      }
+      if(segnote.length){
+        for(i=0;i<segnote.length;i++){
+          result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+item.FORN_ID+" - "+item.FORN_DESC+" | "+segnote[i].NOTA_ID+" - "+item.AMOS_DESC+"</b></p><p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
+          if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
+            result+= "<button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' title='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'></button>";
+          }
+          result+="</div></article></li>";
+        }
+        result+="</ul></td>";
+      }
+      else{
+        result+="</ul></td>";
+      }
+    }
+    else{
+      result="";
+    }
+    $(".description-noteside .note ul").append(result);
+    $(".bplus-big").attr("name",item.AMOS_ID);
+    $(".bannex_file").bind("click",function(a){
+      a.preventDefault();
+      $(a.target).parent().find("input").trigger('click');
+    });
+    $(".bannex").bind("click",function(a){
+      a.preventDefault();
+      context.modal.open("message","Elemento de deletar amostra não ativo no momento!!!",!1,!0);
+    });
+
+  },writeNote:function(){
+    var result="";
     var day,date,month;
     date=new Date();
     if(parseInt(date.getDate())<10){
@@ -339,35 +237,137 @@ open: function(a){
     else{
       month=parseInt(date.getMonth()+1);
     }
-    date=""+date.getFullYear()+"-"+month+"-"+day;
-    this.callService("gravarNotes","<OBJ_ID>"+this.item.AMOS_ID+"</OBJ_ID><TP_NOTA_ID>1</TP_NOTA_ID><USU_COD>"+this.usr.USU_COD+"</USU_COD>","<NOTA_DESC>"+$(".samplenote").val().replaceSpecial()+"</NOTA_DESC><SEGM_COD>"+this.usr.SEGM_COD+"</SEGM_COD><CREATE_DATE>"+date+"</CREATE_DATE>");
-  }
-  else{
-    this.modal.open("message","Digite o texto da anotação!!!",!1,!0);
-  }
-},reload:function(fair,code) {
-  "use strict";
-  var result;
-  this.setloading(!0,!1);
-  result=this.getdata(code);
-  $(".description-noteside .note li").remove();
-  $(".bplus-big").removeClass('hide');
-  $(".show-to-note").find("div").addClass('hide');
-  if(result.length){
-    this.open(result[0]);
-    this.nextsample=result[2];
-    this.previoussample=result[1];
-  }
-  else{
-    $('.bprev-detail , .bnext').hide();
-    //this.open(jQuery.parseJSON('{"AMOS_COD":null,"AMOS_COTACAO_KG":0,"AMOS_COTACAO_M":0,"AMOS_DESC":"TESTE NACIONAL","AMOS_ENV_EMAIL":0,"AMOS_GRAMATURA_M":0,"AMOS_GRAMATURA_ML":0,"AMOS_HOMOLOGAR":0,"AMOS_ID":200000101,"AMOS_LARGURA_TOTAL":0,"AMOS_LARGURA_UTIL":0,"AMOS_ONCAS":0,"AMOS_PRECO":0,"AMOS_PRECO_UM":"","AMOS_STATUS":0,"BASE_COD":null,"BASE_DESC":"","COMPOSITIONS":[{"COMP_COD":"CA ","COMP_DESC":"ACETATE","TP_COMP_ID":0},{"COMP_COD":"CJ ","COMP_DESC":"JUTE","TP_COMP_ID":0}],"CREATE_DATE":"\/Date(1339642800000-0300)\/","FEIR_COD":"1 ","FEIR_DESC":"FOCUS TEXTIL - Sao Paulo\/Brazil","FLAG_FISICA":0,"FLAG_PRIORIDADE":0,"FORN_DESC":"TESTE FORNECEDOR IMPORTADORNECEDOR","FORN_ID":4200083,"GRUP_COD":null,"GRUP_DESC":"","IMG_PATH_SAMPLE":"","IMG_PATH_TICKET":"","NOTES":[{"CREATE_DATE":"\/Date(1436508000000-0300)\/","NOTA_DESC":"Teste de Anotação2","NOTA_ID":339,"OBJ_ID":200000101,"PLAT_ID":0,"SEGM_DESC":"Todos ","TP_NOTA_ID":2,"USU_COD":36,"USU_NOME":"JACQUES STERN"}],"SEGM_COD":"ML","SEGM_DESC":null,"SUBG_COD":null,"SUBG_DESC":"","TECI_COD":null,"TECI_DESC":"","USU_COD":36}'));
-    this.callService("singleSample",'<FEIR_COD>'+fair+'</FEIR_COD>','<AMOS_ID>'+code+'</AMOS_ID>','<LINHA_I>1</LINHA_I>','<LINHA_F>20000</LINHA_F>','<CREATE_DATE_I>2000-01-01</CREATE_DATE_I>','<CREATE_DATE_F>2020-10-10</CREATE_DATE_F>');
-  }
-},init:function() {
-  this.item = null;
-  this.nextsample=null;
-  this.previoussample=null;
-  this.on=!1;
+
+    date=day+"/"+month+"/"+date.getFullYear();
+
+    var item={
+      "CREATE_DATE":date,
+      "NOTA_DESC":$(".samplenote").val(),
+      "NOTA_ID":this.noteid
+    };
+    this.item.NOTES.push(item);
+    result+="<li><article><div class='notepad-note blockquote'><p><b>"+date+" | "+this.item.FORN_ID+" - "+this.item.FORN_DESC+" | "+this.noteid+" - "+this.item.AMOS_DESC.replaceSpecial()+"</b></p><p>"+this.usr.USU_NOME+" - "+this.usr.SEGM_DESC+"</p><p>"+$(".samplenote").val()+"</p></div><div class='blockquote'><button type='button' class='tooltip-item caption-icons-icon btrash-big' title='"+this.noteid+"' name='"+this.usr.USU_COD+"'></button></div></article></li>";
+    $(".samplenote").val("");
+    $(".description-noteside .note ul").prepend(result);
+  },showImage:function(a){
+    var html="",item=this.item,name=$(a.target).attr("name");
+    if(!$(a.target).hasClass('sel')){
+      $(".zoomContainer").remove();
+      $(".sample-buttons button").removeClass('sel');
+      $(a.target).addClass('sel');
+      html='<button class="icon bzoom"></button><button class="icon brotate" name="angle0"></button>';
+      if(item[name]){
+        //html+='<img id="zoom" src="//bdb/ifair_img/'+item[name].replace("thumb","large")+'" data-zoom-image="//bdb/ifair_img/'+item[name].replace("thumb","large")+'"/>';
+        html+='<img id="zoom" src="'+imgPath+item[name].replace("thumb","large")+'" data-zoom-image="'+imgPath+item[name].replace("thumb","large")+'"/>';
+      }
+      else{
+        html+='<img id="zoom_01" src="http://189.126.197.169/img/large/large_NONE.jpg" data-zoom-image="http://189.126.197.169/img/large/large_NONE.jpg"/>';
+      }
+      $(".detail-sample-image").html(html);
+
+      $('#zoom').elevateZoom({
+        zoomType: "inner",
+        cursor: "crosshair",
+        zoomWindowFadeIn: 500,
+        zoomWindowFadeOut: 750
+      }); 
+
+      this.callerEvents();
+    }
+  },saveDetail:function(){
+    var html="",item=this.item,complet=1;
+    $(".detail-description").find("input").each(function(a,b){
+      html+="<"+$(b).attr("name")+">"+$(b).val().replace(",",".")+"</"+$(b).attr("name")+">";
+      item[$(b).attr("name")]=$(b).val().replace(",",".");
+      if($(b).attr('required')){
+        if(item.COMPOSITIONS.length){  
+          if((parseInt($(b).val()) === 0) || !$(b).val().length){
+            complet=0; 
+          }
+        }
+        else{
+          complet=0;
+        }
+      }
+      
+    });
+    item['AMOS_PRECO_UM']=$(".AMOS_PRECO_UM option:selected").attr("value");
+    html+="<AMOS_PRECO_UM>"+$(".AMOS_PRECO_UM option:selected").attr("value")+"</AMOS_PRECO_UM>";
+    pattern="<AMOS_ID>"+item.AMOS_ID+"</AMOS_ID><FORN_ID>"+item.FORN_ID+"</FORN_ID><FEIR_COD>"+parseInt(item.FEIR_COD)+"</FEIR_COD><USU_COD>"+item.USU_COD+"</USU_COD><AMOS_STATUS>"+complet+"</AMOS_STATUS><AMOS_ENV_EMAIL>"+item.AMOS_ENV_EMAIL+"</AMOS_ENV_EMAIL><TECI_COD>"+(item.TECI_COD || "")+"</TECI_COD><BASE_COD>"+(item.BASE_COD || "")+"</BASE_COD><GRUP_COD>"+(item.GRUP_COD || "")+"</GRUP_COD><SUBG_COD>"+(item.SUBG_COD || "")+"</SUBG_COD><SEGM_COD>"+item.SEGM_COD+"</SEGM_COD><FLAG_PRIORIDADE>"+item.FLAG_PRIORIDADE+"</FLAG_PRIORIDADE><AMOS_HOMOLOGAR>"+item.AMOS_HOMOLOGAR+"</AMOS_HOMOLOGAR><FLAG_FISICA>"+item.FLAG_FISICA+"</FLAG_FISICA><CREATE_DATE>"+"2015-01-01"+"</CREATE_DATE>";
+    if(complet){
+      $(".detail-status .bstatus").removeClass('incomplet').addClass('complet');
+    }
+    else{
+      $(".detail-status .bstatus").removeClass('complet').addClass('incomplet');
+    }
+    this.setloading(!0,!1);
+    this.callService("gravarAmostras",pattern,html,'U');
+  },deleteSample:function(){
+    this.modal.open("message","Elemento de deletar amostra não ativo no momento!!!",!1,!0);
+  },nextSample:function(){
+    if(!this.nextsample){
+      this.modal.open("message","Carregue mais itens na busca!!!",!1,!0);
+      return !1;
+    }
+    $(".sample-buttons button").eq(1).trigger('click');
+    this.reload(this.nextsample.FEIR_COD,this.nextsample.AMOS_ID);
+  },previousSample:function(){
+    if(!this.previoussample){
+      this.modal.open("message","Este é o primeiro item na busca!!!",!1,!0);
+      return !1;
+    }
+    $(".sample-buttons button").eq(1).trigger('click');
+    this.reload(this.previoussample.FEIR_COD,this.previoussample.AMOS_ID);
+  },plusNote:function(a){
+    $(a.target).addClass('hide');
+    $(".show-to-note").find("div").removeClass('hide');
+    //this.callService("gravarNotes");
+  },saveNote:function(){
+    if($(".samplenote").val().length){
+      var day,date,month;
+      date=new Date();
+      if(parseInt(date.getDate())<10){
+        day="0"+parseInt(date.getDate());
+      }
+      else{
+        day=date.getDate();
+      }
+
+      if((parseInt(date.getMonth())+1)<10){
+        month="0"+parseInt(date.getMonth()+1);
+      }
+      else{
+        month=parseInt(date.getMonth()+1);
+      }
+      date=""+date.getFullYear()+"-"+month+"-"+day;
+      this.callService("gravarNotes","<OBJ_ID>"+this.item.AMOS_ID+"</OBJ_ID><TP_NOTA_ID>1</TP_NOTA_ID><USU_COD>"+this.usr.USU_COD+"</USU_COD>","<NOTA_DESC>"+$(".samplenote").val().replaceSpecial()+"</NOTA_DESC><SEGM_COD>"+this.usr.SEGM_COD+"</SEGM_COD><CREATE_DATE>"+date+"</CREATE_DATE>");
+    }
+    else{
+      this.modal.open("message","Digite o texto da anotação!!!",!1,!0);
+    }
+  },reload:function(fair,code) {
+    "use strict";
+    var result;
+    this.setloading(!0,!1);
+    result=this.getdata(code);
+    $(".description-noteside .note li").remove();
+    $(".bplus-big").removeClass('hide');
+    $(".show-to-note").find("div").addClass('hide');
+    if(result.length){
+      this.open(result[0]);
+      this.nextsample=result[2];
+      this.previoussample=result[1];
+    }
+    else{
+      $('.bprev-detail , .bnext').hide();
+      //this.open(jQuery.parseJSON('{"AMOS_COD":null,"AMOS_COTACAO_KG":0,"AMOS_COTACAO_M":0,"AMOS_DESC":"TESTE NACIONAL","AMOS_ENV_EMAIL":0,"AMOS_GRAMATURA_M":0,"AMOS_GRAMATURA_ML":0,"AMOS_HOMOLOGAR":0,"AMOS_ID":200000101,"AMOS_LARGURA_TOTAL":0,"AMOS_LARGURA_UTIL":0,"AMOS_ONCAS":0,"AMOS_PRECO":0,"AMOS_PRECO_UM":"","AMOS_STATUS":0,"BASE_COD":null,"BASE_DESC":"","COMPOSITIONS":[{"COMP_COD":"CA ","COMP_DESC":"ACETATE","TP_COMP_ID":0},{"COMP_COD":"CJ ","COMP_DESC":"JUTE","TP_COMP_ID":0}],"CREATE_DATE":"\/Date(1339642800000-0300)\/","FEIR_COD":"1 ","FEIR_DESC":"FOCUS TEXTIL - Sao Paulo\/Brazil","FLAG_FISICA":0,"FLAG_PRIORIDADE":0,"FORN_DESC":"TESTE FORNECEDOR IMPORTADORNECEDOR","FORN_ID":4200083,"GRUP_COD":null,"GRUP_DESC":"","IMG_PATH_SAMPLE":"","IMG_PATH_TICKET":"","NOTES":[{"CREATE_DATE":"\/Date(1436508000000-0300)\/","NOTA_DESC":"Teste de Anotação2","NOTA_ID":339,"OBJ_ID":200000101,"PLAT_ID":0,"SEGM_DESC":"Todos ","TP_NOTA_ID":2,"USU_COD":36,"USU_NOME":"JACQUES STERN"}],"SEGM_COD":"ML","SEGM_DESC":null,"SUBG_COD":null,"SUBG_DESC":"","TECI_COD":null,"TECI_DESC":"","USU_COD":36}'));
+      this.callService("singleSample",'<FEIR_COD>'+fair+'</FEIR_COD>','<AMOS_ID>'+code+'</AMOS_ID>','<LINHA_I>1</LINHA_I>','<LINHA_F>20000</LINHA_F>','<CREATE_DATE_I>2000-01-01</CREATE_DATE_I>','<CREATE_DATE_F>2020-10-10</CREATE_DATE_F>');
+    }
+  },init:function() {
+    this.item = null;
+    this.nextsample=null;
+    this.previoussample=null;
+    this.on=!1;
 }});
 
 /**
@@ -471,10 +471,10 @@ callerEvents:function(){
 open: function(a,need_contact){
   "use strict";
   var context=this;
+  var status,last_request=!1;
   this.item = a;
-  this.item.NOTES=[];
+  //this.item.NOTES=[];
   this.item.FAVORITES=[];
-  this.item.CONTACTS=[];
 
   if(!this.item){
     return !1;
@@ -496,7 +496,7 @@ open: function(a,need_contact){
   }
   //this.fav=elemento.FLAG_PRIORIDADE;
 
-  if(need_contact){
+  /*if(need_contact){
     setTimeout(
       function(){ 
         context.callService('contatos','<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>','','','','','<LINHA_I>1</LINHA_I>','<LINHA_F>20</LINHA_F>');
@@ -505,10 +505,27 @@ open: function(a,need_contact){
   }
   else{
     this.SetContactsList();
-  }
+  }*/
+
+  var status,last;
+  status=setInterval(function(){
+    last_request=!0;
+    if(!context.ajaxrequest){
+      context.callService('anotacoes','<OBJ_ID>'+context.item.FORN_ID+'</OBJ_ID>','<TP_NOTA_ID>2</TP_NOTA_ID>');
+      clearInterval(status);
+      last_request=!1;
+    }
+  },100);
+
+  last=setInterval(function(){
+    //console.log(!context.ajaxrequest && goout && !last_request);
+    if(!context.ajaxrequest && !last_request){
+      context.callService('contatos','<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>','','','','','<LINHA_I>1</LINHA_I>','<LINHA_F>20</LINHA_F>');
+      clearInterval(last);
+    }
+  },100);
 
 },SetContactsList:function(arr,needset){
-  debugger;
   if(needset){
     this.item.CONTACTS=arr;
   }
@@ -519,9 +536,15 @@ open: function(a,need_contact){
       aux=this.item.CONTACTS;
       this.item.CONTACTS=[];
       for(i=0;i<aux.length;i++){
-        if(aux[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
+        // if(aux[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
+        //   this.item.CONTACTS.push(aux[i]);
+        // }
+        if(aux[i].CONT_ID){
           this.item.CONTACTS.push(aux[i]);
+          aux[i].IMG_PATH_CONTATO="";
+          aux[i].CONT_TEL2="";
         }
+        
       }
       if(this.item.CONTACTS.length){
         this.populateForn();
@@ -999,37 +1022,8 @@ setFav:function(a){
         }
       }
     }
-    //ANOTAÇÕES
-    if(this.item.NOTES.length){
-      this.setDate(this.item.NOTES);
-      var segnote=[];
-      var result="";
-      for(i=0;i<this.item.NOTES.length;i++){
-        if(this.item.NOTES[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
-          segnote.push(this.item.NOTES[i]);
-        }
-      }
-      if(segnote){
-        //this.setDate(segnote);
-        for(i=0;i<segnote.length;i++){
-          result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+this.item.FORN_ID+" - "+this.item.FORN_DESC+" | "+segnote[i].NOTA_ID+"</b></p><p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
 
-          if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
-            result+= "<button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' title='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'></button>";
-          }
-          result+="</div></article></li>";
-        }
-      }
-      else{
-        result="";
-      }
-    }
-    else{
-      result="";
-    }
-    $(".note ul").append(result);
-
-    //this.setDate(context.item.CONTACTS);
+    this.setDate(context.item.CONTACTS);
     if(context.item.CONTACTS.length>1){
       //Mais de um contato/
       //console.log("tem Mais de um contato");
@@ -1174,71 +1168,6 @@ setFav:function(a){
       }
     });
 
-    // if(context.item.PROFILES.length){
-    //   $("a[href='#profile'] button").removeClass('incomplet').addClass('complet');
-    //   for(var i=0;i<context.item.PROFILES.length;i++){
-    //     //console.log("profiles: "+context.item.PROFILES[i].PERF_COD);
-    //     if(context.item.PROFILES[i].PERF_COD == 3){
-    //       if(!$("#profile button.sel-factory").hasClass('sel')){
-    //         $("#profile button.sel-factory").trigger('click');
-    //       }
-    //       if(context.item.PROFILES[i].TP_FAB_COD === 1){
-    //         $(".ownfab-add").find("button[name='ownfab/"+context.item.PROFILES[i].FAB_COD+"']").trigger('click');
-    //       }
-    //       else{
-    //         $(".colfab-add").find("button[name='colfab/"+context.item.PROFILES[i].FAB_COD+"']").trigger('click');
-    //       }
-    //     }
-    //     else{
-    //       $(".form-control-other").attr('disabled', 'disabled');
-    //       $("#profile button[name='"+context.item.PROFILES[i].PERF_COD+"']").addClass('sel');
-    //       if(context.item.PROFILES[i].PERF_COD === 9999){
-    //         $(".form-control-other").removeAttr('disabled').val(context.item.PROFILES[i].PERF_OTHERS);
-    //       }
-    //     }
-    //   }
-    // }
-
-    // if(context.item.COMPOSITIONS.length){
-    //   $("a[href='#composition'] button").removeClass('incomplet').addClass('complet');
-    //   for(var i=0;i<context.item.COMPOSITIONS.length;i++){
-    //     var n;
-    //     if(isNaN(context.item.COMPOSITIONS[i].COMP_COD.replace(" ",""))){
-    //       n=context.item.COMPOSITIONS[i].COMP_COD.replace(" ","");
-    //       while(n.indexOf(" ") != -1)
-    //         n = n.replace(" ", "");
-    //     }
-    //     else{
-    //       n=parseInt(context.item.COMPOSITIONS[i].COMP_COD.replace(" ",""));
-    //     }
-    //     if($(".comp-add button[name='comp/"+n+"']").attr("name") === "comp/9999"){
-    //       $(".comp-add button[name='comp/"+n+"']").find("input").val(context.item.COMPOSITIONS[i].COMP_OTHERS);
-    //     }
-    //     $(".comp-add button[name='comp/"+n+"']").trigger('click');
-    //   }
-    // }
-
-    // if(context.item.PRODUCTS.length){
-    //   $("a[href='#products'] button").removeClass('incomplet').addClass('complet');
-    //   for(var i=0;i<context.item.PRODUCTS.length;i++){
-    //     //console.log($(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").attr("name"));
-    //     if($(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").attr("name") === "prod/9999"){
-    //       $(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").find("input").val(context.item.PRODUCTS[i].PROD_OTHERS);
-    //     }
-    //     $(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").trigger('click');
-    //   }
-    // }
-
-    // if(context.item.MARKETS.length){
-    //   $("a[href='#markets'] button").removeClass('incomplet').addClass('complet');
-    //   for(var i=0;i<context.item.MARKETS.length;i++){
-    //     if($(".mark-add button[name='mark/"+parseInt(context.item.MARKETS[i].MERC_COD)+"']").attr("name") === "mark/9999"){
-    //       $(".mark-add button[name='mark/"+parseInt(context.item.MARKETS[i].MERC_COD)+"']").find("input").val(context.item.MARKETS[i].MERC_OTHERS);
-    //     }
-    //     $(".mark-add button[name='mark/"+parseInt(context.item.MARKETS[i].MERC_COD)+"']").trigger('click');
-    //   }
-    // }
-
   }
   else{
     //console.log("ELSE ELSE");
@@ -1280,6 +1209,120 @@ setFav:function(a){
   $(".photo-container img").bind("click",function(a){context.showCard(a);});
   $(".cardboard").bind("click",function(a){context.slideCard(a);});
   $(".closebt").bind("click",function(a){context.closeSlide(a);});
+},inputValuesSections:function(tab,arr){
+  var context=this;
+  if(this.item[""+tab] && this.item[""+tab].length){
+    return !1;
+  }
+  this.item[""+tab]=arr;
+  switch(tab){
+    case "PROFILES":
+      if(this.item.PROFILES){
+        if(this.item.PROFILES.length){
+          $("a[href='#profile'] button").removeClass('incomplet').addClass('complet');
+          for(var i=0;i<context.item.PROFILES.length;i++){
+            //console.log("profiles: "+context.item.PROFILES[i].PERF_COD);
+            if(context.item.PROFILES[i].PERF_COD == 3){
+              if(!$("#profile button.sel-factory").hasClass('sel')){
+                $("#profile button.sel-factory").trigger('click');
+              }
+              if(context.item.PROFILES[i].TP_FAB_COD === 1){
+                $(".ownfab-add").find("button[name='ownfab/"+context.item.PROFILES[i].FAB_COD+"']").trigger('click');
+              }
+              else{
+                $(".colfab-add").find("button[name='colfab/"+context.item.PROFILES[i].FAB_COD+"']").trigger('click');
+              }
+            }
+            else{
+              $(".form-control-other").attr('disabled', 'disabled');
+              $("#profile button[name='"+context.item.PROFILES[i].PERF_COD+"']").addClass('sel');
+              if(context.item.PROFILES[i].PERF_COD === 9999){
+                $(".form-control-other").removeAttr('disabled').val(context.item.PROFILES[i].PERF_OTHERS);
+              }
+            }
+          }
+        }
+      }
+      break;
+      case "COMPOSITIONS": 
+        if(context.item.COMPOSITIONS.length){
+          $("a[href='#composition'] button").removeClass('incomplet').addClass('complet');
+          for(var i=0;i<context.item.COMPOSITIONS.length;i++){
+            var n;
+            if(isNaN(context.item.COMPOSITIONS[i].COMP_COD.replace(" ",""))){
+              n=context.item.COMPOSITIONS[i].COMP_COD.replace(" ","");
+              while(n.indexOf(" ") != -1)
+                n = n.replace(" ", "");
+            }
+            else{
+              n=parseInt(context.item.COMPOSITIONS[i].COMP_COD.replace(" ",""));
+            }
+            if($(".comp-add button[name='comp/"+n+"']").attr("name") === "comp/9999"){
+              $(".comp-add button[name='comp/"+n+"']").find("input").val(context.item.COMPOSITIONS[i].COMP_OTHERS);
+            }
+            $(".comp-add button[name='comp/"+n+"']").trigger('click');
+          }
+        }
+      break;
+      case "PRODUCTS":
+        if(context.item.PRODUCTS.length){
+          $("a[href='#products'] button").removeClass('incomplet').addClass('complet');
+          for(var i=0;i<context.item.PRODUCTS.length;i++){
+            //console.log($(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").attr("name"));
+            if($(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").attr("name") === "prod/9999"){
+              $(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").find("input").val(context.item.PRODUCTS[i].PROD_OTHERS);
+            }
+            $(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").trigger('click');
+          }
+        }
+      break;
+      case "MARKETS":
+        if(context.item.MARKETS.length){
+          $("a[href='#markets'] button").removeClass('incomplet').addClass('complet');
+          for(var i=0;i<context.item.MARKETS.length;i++){
+            if($(".mark-add button[name='mark/"+parseInt(context.item.MARKETS[i].MERC_COD)+"']").attr("name") === "mark/9999"){
+              $(".mark-add button[name='mark/"+parseInt(context.item.MARKETS[i].MERC_COD)+"']").find("input").val(context.item.MARKETS[i].MERC_OTHERS);
+            }
+            $(".mark-add button[name='mark/"+parseInt(context.item.MARKETS[i].MERC_COD)+"']").trigger('click');
+          }
+        }
+      break;
+      case "NOTES":
+        //ANOTAÇÕES
+        if(this.item.NOTES.length){
+          this.setDate(this.item.NOTES);
+          var segnote=[];
+          var result="";
+          for(i=0;i<this.item.NOTES.length;i++){
+            if(this.item.NOTES[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
+              segnote.push(this.item.NOTES[i]);
+            }
+          }
+          if(segnote){
+            //this.setDate(segnote);
+            for(i=0;i<segnote.length;i++){
+              result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+this.item.FORN_ID+" - "+this.item.FORN_DESC+" | "+segnote[i].NOTA_ID+"</b></p><p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
+
+              if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
+                result+= "<button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' title='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'></button>";
+              }
+              result+="</div></article></li>";
+            }
+          }
+          else{
+            result="";
+          }
+        }
+        else{
+          result="";
+        }
+        $(".note ul").append(result);
+      break;
+      default:
+        console.log("erro aconteceu");
+      break;
+  }
+  
 },slideCard:function(a){
   var hasimg=!1;
   if(!this.item.FORN_ID){
@@ -1349,7 +1392,7 @@ setFav:function(a){
     this.setloading(!0,!1);
     switch (this.lasttab){
       case 'dados':
-        var isFinished=0;
+        var isFinished=0,last_request=!1;
         //console.log(this.tab);
         //console.log(this.lasttab);
 
@@ -1448,6 +1491,17 @@ setFav:function(a){
               context.item.FORN_STATUS=0;
             }
             clearInterval(status);
+            last_request=!1;
+          }
+        },100);
+
+
+        last=setInterval(function(){
+          //console.log(!context.ajaxrequest && goout && !last_request);
+          if(!context.ajaxrequest && !last_request){
+            context.on = !1;
+            context.callService(context.tab+'ToSupplier','<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>');
+            clearInterval(last);
           }
         },100);
         
@@ -1522,21 +1576,28 @@ setFav:function(a){
             }
             else{
               clearInterval(status);
+              last_request=!1;
             }
           }
         },100);
 
         last=setInterval(function(){
           //console.log(!context.ajaxrequest && goout && !last_request);
-          if(!context.ajaxrequest && goout && !last_request){
-            context.on = !1;
-            context.setFornClick="";
-            context.savingCookie("fornecedores",!0,"");
-            window.history.go(-1);
-            clearInterval(last);
+          if(!context.ajaxrequest && !last_request){
+            if(goout){
+              context.on = !1;
+              context.setFornClick="";
+              context.savingCookie("fornecedores",!0,"");
+              window.history.go(-1);
+              clearInterval(last);
+            }
+            else{
+              context.callService(context.tab+'ToSupplier','<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>');
+              clearInterval(last);
+            } 
+            
           }
         },100);
-
         break;
       case 'composition':
         if(!this.item.FORN_ID){
@@ -1590,18 +1651,26 @@ setFav:function(a){
             }
             else{
               clearInterval(status);
+              last_request=!1;
             }
           }
         },100);
 
         last=setInterval(function(){
           //console.log(!context.ajaxrequest && goout && !last_request);
-          if(!context.ajaxrequest && goout && !last_request){
-            context.setFornClick="";
-            context.savingCookie("fornecedores",!0,"");
-            context.on = !1;
-            window.history.go(-1);
-            clearInterval(last);
+          if(!context.ajaxrequest && !last_request){
+            if(goout){
+              context.on = !1;
+              context.setFornClick="";
+              context.savingCookie("fornecedores",!0,"");
+              window.history.go(-1);
+              clearInterval(last);
+            }
+            else{
+              context.callService(context.tab+'ToSupplier','<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>');
+              clearInterval(last);
+            } 
+            
           }
         },100);
 
@@ -1656,18 +1725,26 @@ setFav:function(a){
             }
             else{
               clearInterval(status);
+              clearInterval(last);
             }
           }
         },100);
 
         last=setInterval(function(){
           //console.log(!context.ajaxrequest && goout && !last_request);
-          if(!context.ajaxrequest && goout && !last_request){
-            context.on = !1;
-            context.setFornClick="";
-            context.savingCookie("fornecedores",!0,"");
-            window.history.go(-1);
-            clearInterval(last);
+          if(!context.ajaxrequest && !last_request){
+            if(goout){
+              context.on = !1;
+              context.setFornClick="";
+              context.savingCookie("fornecedores",!0,"");
+              window.history.go(-1);
+              clearInterval(last);
+            }
+            else{
+              context.callService(context.tab+'ToSupplier','<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>');
+              clearInterval(last);
+            } 
+            
           }
         },100);
 
@@ -1720,10 +1797,19 @@ setFav:function(a){
 
         last=setInterval(function(){
           //console.log(!context.ajaxrequest && goout && !last_request);
-          if(!context.ajaxrequest && goout && !last_request){
-            context.setloading(!1);
-            context.close();
-            clearInterval(last);
+          if(!context.ajaxrequest && !last_request){
+            if(goout){
+              context.on = !1;
+              context.setFornClick="";
+              context.savingCookie("fornecedores",!0,"");
+              window.history.go(-1);
+              clearInterval(last);
+            }
+            else{
+              context.callService(context.tab+'ToSupplier','<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>');
+              clearInterval(last);
+            } 
+            
           }
         },100);
         break;
