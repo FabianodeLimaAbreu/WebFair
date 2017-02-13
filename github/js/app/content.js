@@ -522,7 +522,7 @@ window.Box = Spine.Controller.sub({init:function() {
         if(a){
           var result="",i,status,principal,nome_contato,segmento=[],middlefav="";
           status= a.FORN_STATUS ? "complet":"incomplet";
-          principal= a.FORN_PRINCIPAL ? "SIM":"";
+          principal= a.FORN_PRINCIPAL ? true:false;
 
           // Fornecedor
           result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.FORN_DESC+"</a></td>";
@@ -604,7 +604,7 @@ window.Box = Spine.Controller.sub({init:function() {
           }
 
           // Favoritos
-          /*if(a.FAVORITES !== null){
+          if(a.FAVORITES !== null){
             for(i=0;i<a.FAVORITES.length;i++){
               if(middlefav === ""){
                 if(a.FAVORITES[i].SEGM_COD === this.usr.SEGM_COD){
@@ -628,12 +628,20 @@ window.Box = Spine.Controller.sub({init:function() {
           }
           else{
             result+="<td><button type='button' class='caption-icons-icon justit bstar nothas' name='"+a.FORN_ID+"'></button></td>";
-          }*/
+          }
           /*To attend Demand: 0 Alerta para mais de dois contatos principais cadastrado
           <td><span class='doubled-contact'></span></td>*/
 
-          // Status, Principal e Merge
-          result+="<td><button type='button' class='caption-icons-icon justit bstatus "+status+"' title='"+status.capitalize()+"'>"+status+"</button></td><td><span class='doubled-contact'></span></td><td><button type='button' name='"+a.FORN_ID+"' class='icon bselection'></button></td>";
+          // Status
+          result+="<td><button type='button' class='caption-icons-icon justit bstatus "+status+"' title='"+status.capitalize()+"'>"+status+"</button></td>";
+          
+          // Principal e Merge
+          if(principal){
+            result+="<td><span class='doubled-contact'></span></td><td><button type='button' name='"+a.FORN_ID+"' class='icon bselection'></button></td>";
+          }
+          else{
+            result+="<td><span class=''></span></td><td><button type='button' name='"+a.FORN_ID+"' class='icon bselection'></button></td>";
+          }
           return result;
         }
         break;

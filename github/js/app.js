@@ -1917,8 +1917,11 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
             return ((obj.FORN_ID === self.data[i].FORN_ID) && obj.CONT_ID);
           //
           });
-          console.dir(self.data[i]);
           self.data[i].CONTACTS=even;
+          if(even.length){
+            self.data[i].FAVORITES=even[0].FAVORITES;
+          }
+          
         }
         
       }
@@ -1993,7 +1996,6 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
               }
             break;
           case "contatos":
-          //debugger;
               this.CONTACTS=jQuery.parseJSON($(req.responseXML).text());
               if(this.page !== "fornecedor_cadastro"){
                 this.callService('anotacoes','','','');

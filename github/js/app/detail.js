@@ -471,7 +471,8 @@ open: function(a,need_contact){
   var context=this;
   var status,last_request=!1;
   this.item = a;
-  this.item.FAVORITES=[];
+
+  //this.item.FAVORITES=[];
 
   if(!this.item){
     return !1;
@@ -526,6 +527,7 @@ open: function(a,need_contact){
 },SetContactsList:function(arr,needset){
   if(needset){
     this.item.CONTACTS=arr;
+    this.item.FAVORITES=arr[0].FAVORITES;
   }
   if(this.item.CONTACTS){
     if(this.item.CONTACTS.length){
@@ -784,9 +786,10 @@ setFav:function(a){
     if(this.item.FAVORITES.length){
       if(!el.hasClass('sel')){
         for(i=0;i<this.item.FAVORITES.length;i++){
-          if(this.item.FAVORITES[i].SEGM_COD !== this.usr.SEGM_COD){
+          /*if(this.item.FAVORITES[i].SEGM_COD !== this.usr.SEGM_COD){
             html+="<string>"+this.item.FAVORITES[i].SEGM_COD+"</string>";
-          }
+          }*/
+          html+="<string>"+this.item.FAVORITES[i].SEGM_COD+"</string>";
         }
       }
       else{
@@ -1014,9 +1017,10 @@ setFav:function(a){
 
     if(this.item.FAVORITES.length){
       for(var i=0;i<this.item.FAVORITES.length;i++){
-        if(this.usr.SEGM_COD === this.item.FAVORITES[i].SEGM_COD){
+        /*if(this.usr.SEGM_COD === this.item.FAVORITES[i].SEGM_COD){
           $(".fav-big").addClass('sel');
-        }
+        }*/
+        $(".fav-big").addClass('sel');
       }
     }
 
