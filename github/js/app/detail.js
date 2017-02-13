@@ -83,9 +83,7 @@ window.Detail = Spine.Controller.sub({
     this.setloading(!1);
   }, populateDetail:function(){
     var i,context=this,item=this.item,name;
-
     var homologado,note,fisica,fav,email,annex,status,context=this,result="";
-    item.NOTES=[]; // To avoid error in NOTES problems
     homologado= item.AMOS_HOMOLOGAR ? "has":"nothas";
     note= item.NOTES.length   ? true:false;
     fisica= item.FLAG_FISICA ? "has":"nothas";
@@ -473,7 +471,6 @@ open: function(a,need_contact){
   var context=this;
   var status,last_request=!1;
   this.item = a;
-  //this.item.NOTES=[];
   this.item.FAVORITES=[];
 
   if(!this.item){
@@ -524,7 +521,7 @@ open: function(a,need_contact){
       //context.callService('contatos','<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>','','','','','<LINHA_I>1</LINHA_I>','<LINHA_F>20</LINHA_F>');
       clearInterval(last);
     }
-  },300);
+  },2000);
 
 },SetContactsList:function(arr,needset){
   if(needset){
@@ -542,8 +539,7 @@ open: function(a,need_contact){
         // }
         if(aux[i].CONT_ID){
           this.item.CONTACTS.push(aux[i]);
-          aux[i].IMG_PATH_CONTATO="";
-          aux[i].CONT_TEL2="";
+          //aux[i].CONT_TEL2="";
         }
         
       }
@@ -1032,7 +1028,7 @@ setFav:function(a){
         var template="",temp="";
         temp='<div class="supplier-form-container contact contact'+(i+1)+' actived cont"><h2><span>Contato '+(i+1)+' - '+context.item.CONTACTS[i].CREATE_DATE+'</span></h2>';
         template+='<div class="supplier-photo-side"><div class="photo-container">';
-        if(context.item.CONTACTS[i].IMG_PATH_CONTATO.length){
+        if(context.item.CONTACTS[i].IMG_PATH_CONTATO && context.item.CONTACTS[i].IMG_PATH_CONTATO.length){
           //template+='<img src="http://bdb/ifair_img/'+context.item.CONTACTS[i].IMG_PATH_CONTATO+'" width="100%">';
           template+='<img src="'+imgPath+context.item.CONTACTS[i].IMG_PATH_CONTATO+'" width="100%" name="'+context.item.CONTACTS[i].CONT_ID+'">';
         } 
@@ -1066,7 +1062,7 @@ setFav:function(a){
         }
         template+='</div><div class="fake-form fake-form-supplier-equal right"><div class="form-group"><input type="text" class="form-control" name="SEGM_COD" placeholder="Segmento" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[i].SEGM_DESC+'" title="'+context.item.CONTACTS[i].SEGM_COD+'" disabled="disabled"></div></div></div><div class="row"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="tel" class="form-control" name="CONT_TEL" placeholder="Tel 1" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[i].CONT_TEL+'"></div></div>';
 
-        if(context.item.CONTACTS[i].CONT_TEL2.length){
+        if(context.item.CONTACTS[i].CONT_TEL2 && context.item.CONTACTS[i].CONT_TEL2.length){
           template+='</div><div class="row CONT_TEL2 top-ten"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="tel" class="form-control" name="CONT_TEL2" placeholder="Tel 2" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[i].CONT_TEL2+'"></div></div></div></div></div>';
         }
         else{
@@ -1092,7 +1088,7 @@ setFav:function(a){
         //console.log("Tem apenas 1 contato");
         var template="",temp="",cont="",template2="";
         temp+='<div class="supplier-form-container contact contact1 actived cont"><h2><span>Contato 1 - '+context.item.CONTACTS[0].CREATE_DATE+'</span></h2><div class="supplier-photo-side"><div class="photo-container">';
-        if(context.item.CONTACTS[0].IMG_PATH_CONTATO.length){
+        if(context.item.CONTACTS[0].IMG_PATH_CONTATO && context.item.CONTACTS[0].IMG_PATH_CONTATO.length){
           //template+='<img src="http://bdb/ifair_img/'+context.item.CONTACTS[i].IMG_PATH_CONTATO+'" width="100%">';
           template+='<img src="'+imgPath+context.item.CONTACTS[0].IMG_PATH_CONTATO+'" width="100%"  name="'+context.item.CONTACTS[0].CONT_ID+'">';        } 
         else{
@@ -1102,7 +1098,7 @@ setFav:function(a){
         cont+='<button type="button" class="tooltip-item tooltip-item-supplier caption-icons-icon bcircle favcontact sel" name="1">Contato Principal </button>';
         template2+='</div><div class="fake-form fake-form-supplier-equal right"><div class="form-group"><input type="text" class="form-control" name="SEGM_COD" placeholder="Segmento" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].SEGM_DESC+'" title="'+context.item.CONTACTS[0].SEGM_COD+'" disabled="disabled"></div></div></div><div class="row"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="tel" class="form-control" name="CONT_TEL" placeholder="Tel 1" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_TEL+'"></div></div>';
 
-        if(context.item.CONTACTS[0].CONT_TEL2.length){
+        if(context.item.CONTACTS[0].CONT_TEL2 && context.item.CONTACTS[0].CONT_TEL2.length){
           template2+='</div><div class="row CONT_TEL2 top-ten"><div class="fake-form fake-form-supplier-middle"><div class="form-group"><input type="tel" class="form-control" name="CONT_TEL2" placeholder="Tel 2" autofocus="" autocomplete="off" value="'+context.item.CONTACTS[0].CONT_TEL2+'"></div></div></div></div></div>';
         }
         else{
@@ -1289,17 +1285,15 @@ setFav:function(a){
       }
     break;
     case "NOTES":
-      console.dir(this.item.NOTES);
       //ANOTAÇÕES
       if(this.item.NOTES.length){
         this.setDate(this.item.NOTES);
         var segnote=[];
         var result="";
         for(i=0;i<this.item.NOTES.length;i++){
-          /*if(this.item.NOTES[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
+          if(this.item.NOTES[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
             segnote.push(this.item.NOTES[i]);
-          }*/
-          segnote.push(this.item.NOTES[i]);
+          }
         }
         if(segnote){
           //this.setDate(segnote);

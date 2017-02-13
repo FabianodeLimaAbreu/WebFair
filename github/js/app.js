@@ -1907,7 +1907,6 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
       var self=this;
       var i=index*20;
       var length=i+20;
-      //console.dir(self.data);
       for(i;i<length;i++){
         //console.dir(arr[i]);
         if(self.data[i]){
@@ -1918,12 +1917,12 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
             return ((obj.FORN_ID === self.data[i].FORN_ID) && obj.CONT_ID);
           //
           });
+          console.dir(self.data[i]);
           self.data[i].CONTACTS=even;
         }
         
       }
-      console.dir(this.data);
-      this.createbox(this.data, this.content.page, !0,"list");
+      //this.createbox(this.data, this.content.page, !0,"list");
     },
     linkNotes:function(index,arr){
       var self=this;
@@ -1940,6 +1939,7 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
       this.createbox(this.data, this.content.page, !0,"list");
     },
     convertData:function(data,req,what){
+      //debugger;
         var context=this;
         switch(what){
           case "amostras":
@@ -1993,6 +1993,7 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
               }
             break;
           case "contatos":
+          //debugger;
               this.CONTACTS=jQuery.parseJSON($(req.responseXML).text());
               if(this.page !== "fornecedor_cadastro"){
                 this.callService('anotacoes','','','');
@@ -2110,6 +2111,7 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
       comp.html(html);
     },
     createbox : function(a, b, d, c,length) {  
+      console.log("1");
         var f, g, n, m,v;     
         var context=this; 
         c = c || this.view;

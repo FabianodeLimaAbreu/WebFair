@@ -416,7 +416,7 @@ window.Box = Spine.Controller.sub({init:function() {
     this.el.addClass('col col-small col-large');
     $(".bselect").removeClass("sel");
     homologado= a.AMOS_HOMOLOGAR ? "has":"nothas";
-    // note= a.NOTA_DESC.length   ? true:false;
+    note= a.NOTES.length   ? true:false;
     fisica= a.FLAG_FISICA ? "has":"nothas";
     fav= a.FLAG_PRIORIDADE ? "has":"nothas";
     annex= a.AMOS_HOMOLOGAR ? true:false;
@@ -641,7 +641,7 @@ window.Box = Spine.Controller.sub({init:function() {
         var homologado,note,fisica,fav,email,annex,status,result="",i;
         this.el.addClass('col col-small col-large');
         homologado= a.AMOS_HOMOLOGAR ? "has":"nothas";
-        // note= a.NOTA_DESC.length   ? true:false;
+        note= a.NOTES.length   ? true:false;
         fisica= a.FLAG_FISICA ? "has":"nothas";
         fav= a.FLAG_PRIORIDADE ? "has":"nothas";
         annex= a.AMOS_HOMOLOGAR ? true:false;
@@ -656,9 +656,9 @@ window.Box = Spine.Controller.sub({init:function() {
         result+="<td><button type='button' class='caption-icons-icon justit setitem bfisica "+fisica+"' name='"+a.AMOS_ID+"' title='Fisica'>"+(fisica === "has" ? "Sim" : "Nao")+"</button></td><td>"+a.AMOS_PRECO+"</td><td>"+a.AMOS_COTACAO_KG+"</td><td><button type='button' class='caption-icons-icon justit setitem bfav "+fav+"' name='"+a.AMOS_ID+"' title='Favoritar'>"+(fav === "has" ? "Sim" : "Nao")+"</button></td><td><button type='button' class='caption-icons-icon justit setitem bhomologado "+homologado+"' name='"+a.AMOS_ID+"' title='Homologar'>"+(homologado === "has" ? "Sim" : "Nao")+"</button></td>";
         if(note){
           var segnote=[];
-          for(i=0;i<a.NOTA_DESC.length;i++){
-            if(a.NOTA_DESC[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
-              segnote.push(a.NOTA_DESC[i]);
+          for(i=0;i<a.NOTES.length;i++){
+            if(a.NOTES[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
+              segnote.push(a.NOTES[i]);
             }
           }
           if(segnote){
