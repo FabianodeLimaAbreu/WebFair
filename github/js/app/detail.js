@@ -511,19 +511,20 @@ open: function(a,need_contact){
   status=setInterval(function(){
     last_request=!0;
     if(!context.ajaxrequest){
-      context.callService('anotacoes','<OBJ_ID>'+context.item.FORN_ID+'</OBJ_ID>','<TP_NOTA_ID>2</TP_NOTA_ID>');
+      context.callService('contatos','<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>','','','','','<LINHA_I>1</LINHA_I>','<LINHA_F>20</LINHA_F>');
+      //context.callService('anotacoes','<OBJ_ID>'+context.item.FORN_ID+'</OBJ_ID>','<TP_NOTA_ID>2</TP_NOTA_ID>');
       clearInterval(status);
       last_request=!1;
     }
   },100);
 
   last=setInterval(function(){
-    //console.log(!context.ajaxrequest && goout && !last_request);
     if(!context.ajaxrequest && !last_request){
-      context.callService('contatos','<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>','','','','','<LINHA_I>1</LINHA_I>','<LINHA_F>20</LINHA_F>');
+      context.callService('anotacoes','<OBJ_ID>'+context.item.FORN_ID+'</OBJ_ID>','<TP_NOTA_ID>2</TP_NOTA_ID>');
+      //context.callService('contatos','<FORN_ID>'+context.item.FORN_ID+'</FORN_ID>','','','','','<LINHA_I>1</LINHA_I>','<LINHA_F>20</LINHA_F>');
       clearInterval(last);
     }
-  },100);
+  },300);
 
 },SetContactsList:function(arr,needset){
   if(needset){
@@ -1211,7 +1212,7 @@ setFav:function(a){
   $(".closebt").bind("click",function(a){context.closeSlide(a);});
 },inputValuesSections:function(tab,arr){
   var context=this;
-  if(this.item[""+tab] && this.item[""+tab].length){
+  if(this.item[""+tab] && this.item[""+tab].length && tab !== "NOTES"){
     return !1;
   }
   this.item[""+tab]=arr;
@@ -1243,86 +1244,88 @@ setFav:function(a){
           }
         }
       }
-      break;
-      case "COMPOSITIONS": 
-        if(context.item.COMPOSITIONS.length){
-          $("a[href='#composition'] button").removeClass('incomplet').addClass('complet');
-          for(var i=0;i<context.item.COMPOSITIONS.length;i++){
-            var n;
-            if(isNaN(context.item.COMPOSITIONS[i].COMP_COD.replace(" ",""))){
-              n=context.item.COMPOSITIONS[i].COMP_COD.replace(" ","");
-              while(n.indexOf(" ") != -1)
-                n = n.replace(" ", "");
-            }
-            else{
-              n=parseInt(context.item.COMPOSITIONS[i].COMP_COD.replace(" ",""));
-            }
-            if($(".comp-add button[name='comp/"+n+"']").attr("name") === "comp/9999"){
-              $(".comp-add button[name='comp/"+n+"']").find("input").val(context.item.COMPOSITIONS[i].COMP_OTHERS);
-            }
-            $(".comp-add button[name='comp/"+n+"']").trigger('click');
-          }
-        }
-      break;
-      case "PRODUCTS":
-        if(context.item.PRODUCTS.length){
-          $("a[href='#products'] button").removeClass('incomplet').addClass('complet');
-          for(var i=0;i<context.item.PRODUCTS.length;i++){
-            //console.log($(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").attr("name"));
-            if($(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").attr("name") === "prod/9999"){
-              $(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").find("input").val(context.item.PRODUCTS[i].PROD_OTHERS);
-            }
-            $(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").trigger('click');
-          }
-        }
-      break;
-      case "MARKETS":
-        if(context.item.MARKETS.length){
-          $("a[href='#markets'] button").removeClass('incomplet').addClass('complet');
-          for(var i=0;i<context.item.MARKETS.length;i++){
-            if($(".mark-add button[name='mark/"+parseInt(context.item.MARKETS[i].MERC_COD)+"']").attr("name") === "mark/9999"){
-              $(".mark-add button[name='mark/"+parseInt(context.item.MARKETS[i].MERC_COD)+"']").find("input").val(context.item.MARKETS[i].MERC_OTHERS);
-            }
-            $(".mark-add button[name='mark/"+parseInt(context.item.MARKETS[i].MERC_COD)+"']").trigger('click');
-          }
-        }
-      break;
-      case "NOTES":
-        //ANOTAÇÕES
-        if(this.item.NOTES.length){
-          this.setDate(this.item.NOTES);
-          var segnote=[];
-          var result="";
-          for(i=0;i<this.item.NOTES.length;i++){
-            if(this.item.NOTES[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
-              segnote.push(this.item.NOTES[i]);
-            }
-          }
-          if(segnote){
-            //this.setDate(segnote);
-            for(i=0;i<segnote.length;i++){
-              result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+this.item.FORN_ID+" - "+this.item.FORN_DESC+" | "+segnote[i].NOTA_ID+"</b></p><p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
-
-              if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
-                result+= "<button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' title='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'></button>";
-              }
-              result+="</div></article></li>";
-            }
+    break;
+    case "COMPOSITIONS": 
+      if(context.item.COMPOSITIONS.length){
+        $("a[href='#composition'] button").removeClass('incomplet').addClass('complet');
+        for(var i=0;i<context.item.COMPOSITIONS.length;i++){
+          var n;
+          if(isNaN(context.item.COMPOSITIONS[i].COMP_COD.replace(" ",""))){
+            n=context.item.COMPOSITIONS[i].COMP_COD.replace(" ","");
+            while(n.indexOf(" ") != -1)
+              n = n.replace(" ", "");
           }
           else{
-            result="";
+            n=parseInt(context.item.COMPOSITIONS[i].COMP_COD.replace(" ",""));
+          }
+          if($(".comp-add button[name='comp/"+n+"']").attr("name") === "comp/9999"){
+            $(".comp-add button[name='comp/"+n+"']").find("input").val(context.item.COMPOSITIONS[i].COMP_OTHERS);
+          }
+          $(".comp-add button[name='comp/"+n+"']").trigger('click');
+        }
+      }
+    break;
+    case "PRODUCTS":
+      if(context.item.PRODUCTS.length){
+        $("a[href='#products'] button").removeClass('incomplet').addClass('complet');
+        for(var i=0;i<context.item.PRODUCTS.length;i++){
+          //console.log($(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").attr("name"));
+          if($(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").attr("name") === "prod/9999"){
+            $(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").find("input").val(context.item.PRODUCTS[i].PROD_OTHERS);
+          }
+          $(".prod-add button[name='prod/"+parseInt(context.item.PRODUCTS[i].PROD_COD)+"']").trigger('click');
+        }
+      }
+    break;
+    case "MARKETS":
+      if(context.item.MARKETS.length){
+        $("a[href='#markets'] button").removeClass('incomplet').addClass('complet');
+        for(var i=0;i<context.item.MARKETS.length;i++){
+          if($(".mark-add button[name='mark/"+parseInt(context.item.MARKETS[i].MERC_COD)+"']").attr("name") === "mark/9999"){
+            $(".mark-add button[name='mark/"+parseInt(context.item.MARKETS[i].MERC_COD)+"']").find("input").val(context.item.MARKETS[i].MERC_OTHERS);
+          }
+          $(".mark-add button[name='mark/"+parseInt(context.item.MARKETS[i].MERC_COD)+"']").trigger('click');
+        }
+      }
+    break;
+    case "NOTES":
+      console.dir(this.item.NOTES);
+      //ANOTAÇÕES
+      if(this.item.NOTES.length){
+        this.setDate(this.item.NOTES);
+        var segnote=[];
+        var result="";
+        for(i=0;i<this.item.NOTES.length;i++){
+          /*if(this.item.NOTES[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
+            segnote.push(this.item.NOTES[i]);
+          }*/
+          segnote.push(this.item.NOTES[i]);
+        }
+        if(segnote){
+          //this.setDate(segnote);
+          for(i=0;i<segnote.length;i++){
+            result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+this.item.FORN_ID+" - "+this.item.FORN_DESC+" | "+segnote[i].NOTA_ID+"</b></p><p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
+
+            if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
+              result+= "<button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' title='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"'></button>";
+            }
+            result+="</div></article></li>";
           }
         }
         else{
           result="";
         }
-        $(".note ul").append(result);
-      break;
-      default:
-        console.log("erro aconteceu");
-      break;
+      }
+      else{
+        result="";
+      }
+      $(".note ul").append(result);
+    break;
+    default:
+      console.log("erro aconteceu");
+    break;
   }
-  
+  context.setloading(!1);
 },slideCard:function(a){
   var hasimg=!1;
   if(!this.item.FORN_ID){
