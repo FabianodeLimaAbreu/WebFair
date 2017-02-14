@@ -587,7 +587,7 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
     },
 
     createNote:function(a){
-      console.dir($("button[idref='"+$(a.target).attr('idref')+"']")); // component of notes
+      //console.dir($("button[idref='"+$(a.target).attr('idref')+"']")); // component of notes
     },
 
     /**
@@ -1409,6 +1409,14 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
             }
           },
           {
+            'name':'favorito',
+            'serviceName':'ListarFornecedorFavoritos',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedorFavoritos xmlns="http://tempuri.org/">'+a+''+'</ListarFornecedorFavoritos></soap:Body></soap:Envelope>',
+            'callback':function(data,req){
+              core.convertData(data,req,name,!0);
+            }
+          },
+          {
             'name':'singleForn',
             'serviceName':'ListarFornecedores',
             'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedores xmlns="http://tempuri.org/">'+a+'</ListarFornecedores></soap:Body></soap:Envelope>',
@@ -1625,8 +1633,6 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
               end=string.indexOf("nom_pessoa><nom_pessoa_")-3;
               string=string.substring(init,end);
               //.<nom_pessoa>SHAOXING COUNTY FUXING TEXTILEAND GARMENTS CO LTD<\/nom_pessoa>;
-              console.dir(string);
-              console.dir($("#"+a));
               $("#"+a).attr("title",string);
             }
           },
@@ -1806,7 +1812,6 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
           //this.data = a.sortBy(this.nsort);
           //debugger;
           this.data = a;
-          console.dir(this.data);
           this.content.changeview(this.view);
           //this.filter.checklist(a);
           //$(".changeview button.b"+this.view);
@@ -1920,6 +1925,7 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
           self.data[i].CONTACTS=even;
           if(even.length){
             self.data[i].FAVORITES=even[0].FAVORITES;
+            console.dir(self.data[i]);
           }
           
         }
@@ -1947,7 +1953,6 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
         switch(what){
           case "amostras":
             if(!this.data.length){
-              console.log($(req.responseXML).text());
               this.data=jQuery.parseJSON($(req.responseXML).text()).unique();
               console.dir(this.data);
               this.data=this.data.filter(function(a,b){
@@ -1997,6 +2002,7 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
             break;
           case "contatos":
               this.CONTACTS=jQuery.parseJSON($(req.responseXML).text());
+              console.dir(this.CONTACTS);
               if(this.page !== "fornecedor_cadastro"){
                 this.callService('anotacoes','','','');
                 this.linkFornAndContacts(this.content.page,this.CONTACTS);
@@ -2008,6 +2014,7 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
           case "fornecedores":
             if(!this.data.length){
               this.data=jQuery.parseJSON($(req.responseXML).text());
+              console.dir(this.data);
               this.setDate(this.data);
               this.setdata(this.data,"fornecedores");
             }
@@ -2018,6 +2025,10 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
               this.callService('contatos','','','','','','<LINHA_I>1</LINHA_I>','<LINHA_F>20</LINHA_F>');
               //this.createbox(this.data, this.content.page, !0,"list");
             }
+            break;
+          case "favorito":
+            this.FAVS=jQuery.parseJSON($(req.responseXML).text());
+            debugger;
             break;
           case 'combosearch':
             this.spotlight.forn=[];
@@ -2786,78 +2797,31 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
     },
     starForn:function(ev){
       var el,i,html="",diff=!1,item,context=this;
-      el=this.data.filter(function(a,b) {
-        if(parseInt(a.FORN_ID) == parseInt($(ev.target).attr('name'))){
-          item=a.FAVORITES;
-          //a.FAVORITES.push({"S'EGM_COD":context.usr.SEGM_COD,"SEGM_DESC":context.usr.SEGM_DESC});
-          return a;
-        }
-      });
-      if(el.length){
-        if($(ev.target).hasClass('has')){
-          //console.log("entrou has");
-          for(i=0;i<el[0].FAVORITES.length;i++){
-            if(el[0].FAVORITES[i].SEGM_COD !== this.usr.SEGM_COD){
-              //console.log("diferente");
-              html+="<string>"+el[0].FAVORITES[i].SEGM_COD+"</string>";
-              
-              diff=!0;
-            }
-            else{
-              //console.dir(item[i]);
-              
-              //console.dir(item[i]);
-              //item.push({"SEGM_COD":this.usr.SEGM_COD,"SEGM_DESC":this.usr.SEGM_DESC});
-              if(el[0].FAVORITES.length >1){
-                //console.log("mais que 1");
-                diff=!0;
-                item.splice(i, 1);
-              }
-              else{
-                //console.log("apenas 1");
-                $(ev.target).parent().removeClass('tooltip').find("ul").remove();
-                diff=!1;
-                item.splice(i, 1);
-              }
-            }
-          }
-          if(diff){
-            var parent=$(ev.target).parent();
-            //console.log("middle o favorito");
-            $(ev.target).removeClass('nothas').removeClass('has').addClass('middle');
-            parent.find("ul li").each(function(index, el) {
-              //console.dir($(el));
-              if($(el).find("button").attr('name') === context.usr.SEGM_COD){
-                $(el).remove();
-              }
-            });
-            //parent.find("ul").prepend('<li><button type="button" class="tooltip-item caption-icons-icon bstar has">'+this.usr.SEGM_DESC+'</button></li>');
-          }
-          else{
-            //console.log("limpou o favorito");
-            $(ev.target).removeClass('middle').removeClass('has').addClass('nothas');
-            item.length=0;
-          }
-        }
-
-        else if($(ev.target).hasClass('middle')){
-          //console.log("middle");
-          for(i=0;i<el[0].FAVORITES.length;i++){
-            html+="<string>"+el[0].FAVORITES[i].SEGM_COD+"</string>";
-          }
-          html+="<string>"+this.usr.SEGM_COD+"</string>";
-          item.push({"SEGM_COD":this.usr.SEGM_COD,"SEGM_DESC":this.usr.SEGM_DESC});
-          $(ev.target).removeClass('nothas').removeClass('middle').addClass('has');
+      if($(ev.target).hasClass('has')){
+        //console.log("entrou has");
+        html+="<string></string>";
+        if(diff){
+          var parent=$(ev.target).parent();
+          //console.log("middle o favorito");
+          $(ev.target).removeClass('nothas').removeClass('has').addClass('middle');
         }
         else{
-          //console.log("nova");
-          html+="<string>"+this.usr.SEGM_COD+"</string>";
-          item.push({"SEGM_COD":this.usr.SEGM_COD,"SEGM_DESC":this.usr.SEGM_DESC});
-          $(ev.target).removeClass('nothas').removeClass('middle').addClass('has');
-          $(ev.target).parent().addClass('tooltip').append('<ul class="tooltip-content col-large"><li><button type="button" class="tooltip-item caption-icons-icon bstar has">'+this.usr.SEGM_DESC+'</button></li></ul>')
+          //console.log("limpou o favorito");
+          $(ev.target).removeClass('middle').removeClass('has').addClass('nothas');
         }
       }
-      this.callService("GravarFornecedorFavorito","<Forn_ID>"+parseInt($(ev.target).attr("name"))+"</Forn_ID>",html);
+
+      else if($(ev.target).hasClass('middle')){
+        //console.log("middle");
+        html+="<string>"+this.usr.SEGM_COD+"</string>";
+        $(ev.target).removeClass('nothas').removeClass('middle').addClass('has');
+      }
+      else{
+        //console.log("nova");
+        html+="<string>"+this.usr.SEGM_COD+"</string>";
+        $(ev.target).removeClass('nothas').removeClass('middle').addClass('has');
+      }
+      this.callService("GravarFornecedorFavorito","<FORN_ID>"+parseInt($(ev.target).attr("name"))+"</FORN_ID>",html);
 
     },
     AmosByStatus:function(ev){
@@ -3417,7 +3381,7 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
         return !1;
       }
       this.select_items.forEach(function(elem,index){
-        if(elem.FORN_COD.length){
+        if(elem.FORN_COD){
           igecex++;
         }
       });
