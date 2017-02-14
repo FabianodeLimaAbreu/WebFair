@@ -527,6 +527,14 @@ window.Box = Spine.Controller.sub({init:function() {
           // Fornecedor
           result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.FORN_DESC+"</a></td>";
 
+          // Parceiro
+          if(a.FORN_COD){
+            result+='<td><span class="igecex_flag" title="Aguarde..." id="'+a.FORN_COD.replace(/ /g,'')+'"></span></td>';
+          }
+          else{
+            result+="<td></td>";
+          }
+          
           // Local de coleta + Criação do fornecedor
           result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.FEIR_DESC+"</a></td>"+"<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.CREATE_DATE+"</a></td>";
           
@@ -540,7 +548,6 @@ window.Box = Spine.Controller.sub({init:function() {
               scont.push(a.CONTACTS[i]);
             }
             if(scont.length){
-              //debugger;
               this.setDate(scont);
               result+="<td>"
               for(i=0;i<scont.length;i++){
@@ -553,7 +560,13 @@ window.Box = Spine.Controller.sub({init:function() {
                 var contatos_date=[];
                 contatos_date.push(scont[i].CREATE_DATE);
                 //segmento.push(scont[i].SEGM_DESC);
-                result+=nome_contato+" - "+contatos_date+"<br/>";
+                
+                if(scont[i].CONT_PRINCIPAL){
+                  result+="<b>"+nome_contato+" - "+contatos_date+"</b><br/>";
+                }
+                else{
+                  result+=nome_contato+" - "+contatos_date+"<br/>";
+                }
               }
               result+="</td>";
               //debugger;
@@ -576,24 +589,32 @@ window.Box = Spine.Controller.sub({init:function() {
 
           // Anotacoes
           if(a){
+            //debugger;
             var segnote=[];
-            for(i=0;i<a.NOTES.length;i++){
-              if(a.NOTES){
-                segnote.push(a.NOTES[i]);
-              }
-            }
-            if(segnote.length){
-              result+="<td class='tooltip tooltip-selectable' idref='"+a.FORN_ID+"'><button type='button' class='caption-icons-icon justit bnote' idref='"+a.FORN_ID+"'></button><ul class='tooltip-content notepad notepadmess col-large'><li class='tooltip-title'><p class='tooltip-item'>Anotações</p></li>";
-              for(i=0;i<segnote.length;i++){
-                if(i<5){
-                  result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+a.FORN_ID+" - "+a.FORN_DESC+" | "+segnote[i].NOTA_ID+"</b></p><p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
-                  if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
-                    result+= "<button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' title='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"' alt='"+segnote[i].OBJ_ID+"'></button>";
+            if(a.NOTES){
+              for(i=0;i<a.NOTES.length;i++){
+                if(a.NOTES){
+                  if(a.NOTES[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
+                    segnote.push(a.NOTES[i]);
                   }
-                  result+="</div></article></li>"
                 }
               }
-              result+="</ul></td>"
+              if(segnote.length){
+                result+="<td class='tooltip tooltip-selectable' idref='"+a.FORN_ID+"'><button type='button' class='caption-icons-icon justit bnote' idref='"+a.FORN_ID+"'></button><ul class='tooltip-content notepad notepadmess col-large'><li class='tooltip-title'><p class='tooltip-item'>Anotações</p></li>";
+                for(i=0;i<segnote.length;i++){
+                  if(i<5){
+                    result+="<li><article><div class='notepad-note blockquote'><p><b>"+segnote[i].CREATE_DATE+" | "+a.FORN_ID+" - "+a.FORN_DESC+" | "+segnote[i].NOTA_ID+"</b></p><p>"+segnote[i].USU_NOME+" - "+segnote[i].SEGM_DESC+"</p><p>"+segnote[i].NOTA_DESC+"</p></div><div class='blockquote'>";
+                    if(segnote[i].USU_COD === this.usr.USU_COD || this.usr.SEGM_COD === "TD"){
+                      result+= "<button type='button' class='tooltip-item caption-icons-icon btrash-big viewer' title='"+segnote[i].NOTA_ID+"' name='"+segnote[i].USU_COD+"' alt='"+segnote[i].OBJ_ID+"'></button>";
+                    }
+                    result+="</div></article></li>"
+                  }
+                }
+                result+="</ul></td>"
+              }
+              else{
+                result+="<td></td>";
+              }
             }
             else{
               result+="<td></td>";
@@ -607,7 +628,7 @@ window.Box = Spine.Controller.sub({init:function() {
           if(a.FAVORITES !== null){
             for(i=0;i<a.FAVORITES.length;i++){
               if(middlefav === ""){
-                if(a.FAVORITES[i].SEGM_COD === this.usr.SEGM_COD){
+                if(a.FAVORITES === this.usr.SEGM_COD){
                   middlefav="has";
                 }
                 else{

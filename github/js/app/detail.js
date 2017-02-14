@@ -525,6 +525,7 @@ open: function(a,need_contact){
   },2000);
 
 },SetContactsList:function(arr,needset){
+  console.dir(arr);
   if(needset){
     this.item.CONTACTS=arr;
     this.item.FAVORITES=arr[0].FAVORITES;
@@ -783,31 +784,18 @@ setFav:function(a){
   }
   if(this.item.FORN_ID){
     this.ajaxrequest=!0;
-    if(this.item.FAVORITES.length){
+    if(this.item.FAVORITES){
       if(!el.hasClass('sel')){
-        for(i=0;i<this.item.FAVORITES.length;i++){
-          /*if(this.item.FAVORITES[i].SEGM_COD !== this.usr.SEGM_COD){
-            html+="<string>"+this.item.FAVORITES[i].SEGM_COD+"</string>";
-          }*/
-          html+="<string>"+this.item.FAVORITES[i].SEGM_COD+"</string>";
-        }
+        html+="<string></string>";
       }
       else{
-        for(i=0;i<this.item.FAVORITES.length;i++){
-          html+="<string>"+this.item.FAVORITES[i].SEGM_COD+"</string>";
-        }
-        html+="<string>"+this.usr.SEGM_COD+"</string>";
+        html+="<string>"+this.item.FAVORITES+"</string>";
       }
     }
     else{
-      if(el.hasClass('sel')){
-        html+="<string>"+this.usr.SEGM_COD+"</string>";
-      }
-      else{
-        html+="<string></string>";
-      }
+      html+="<string></string>";
     }
-    this.callService("GravarFornecedorFavorito",'<Forn_ID>'+this.item.FORN_ID+'</Forn_ID>',html);
+    this.callService("GravarFornecedorFavorito",'<FORN_ID>'+this.item.FORN_ID+'</FORN_ID>',html);
   }
   else{ 
     if(!this.setfair || !$("input[name='FORN_DESC']").val()){
@@ -1015,16 +1003,18 @@ setFav:function(a){
 
     $("input[name='FORN_DESC']").val(context.item["FORN_DESC"]);
 
-    if(this.item.FAVORITES.length){
-      for(var i=0;i<this.item.FAVORITES.length;i++){
-        /*if(this.usr.SEGM_COD === this.item.FAVORITES[i].SEGM_COD){
+    if(this.item.FAVORITES){
+      $(".fav-big").addClass('sel');
+      /*for(var i=0;i<this.item.FAVORITES.length;i++){
+        if(this.usr.SEGM_COD === this.item.FAVORITES[i].SEGM_COD){
           $(".fav-big").addClass('sel');
-        }*/
+        }
         $(".fav-big").addClass('sel');
-      }
+      }*/
     }
 
     this.setDate(context.item.CONTACTS);
+    console.dir(context.item);
     if(context.item.CONTACTS.length>1){
       //Mais de um contato/
       //console.log("tem Mais de um contato");
