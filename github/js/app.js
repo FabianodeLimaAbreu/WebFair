@@ -2004,7 +2004,7 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
               this.CONTACTS=jQuery.parseJSON($(req.responseXML).text());
               console.dir(this.CONTACTS);
               if(this.page !== "fornecedor_cadastro"){
-                this.callService('anotacoes','','','');
+                this.callService('anotacoes','<TP_NOTA_ID>2</TP_NOTA_ID>','','');
                 this.linkFornAndContacts(this.content.page,this.CONTACTS);
               }
               else{
@@ -2022,8 +2022,8 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
               var temp=jQuery.parseJSON($(req.responseXML).text()).unique().sortBy('FORN_ID');
               this.setDate(temp);
               this.data=this.data.concat(temp);
-              this.callService('contatos','','','','','','<LINHA_I>1</LINHA_I>','<LINHA_F>20</LINHA_F>');
-              //this.createbox(this.data, this.content.page, !0,"list");
+              //this.callService('contatos','','','','','','<LINHA_I>1</LINHA_I>','<LINHA_F>20</LINHA_F>');
+              this.createbox(this.data, this.content.page, !0,"list");
             }
             break;
           case "favorito":

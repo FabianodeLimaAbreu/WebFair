@@ -539,7 +539,7 @@ window.Box = Spine.Controller.sub({init:function() {
           result+="<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.FEIR_DESC+"</a></td>"+"<td><a href='#fornecedores/edit/"+a.FORN_ID+"'>"+a.CREATE_DATE+"</a></td>";
           
           // Contato
-          if(a.CONTACTS.length){
+          if(a.CONTACTS){
             var scont=[];
             for(i=0;i<a.CONTACTS.length;i++){
               /*if(a.CONTACTS[i].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
