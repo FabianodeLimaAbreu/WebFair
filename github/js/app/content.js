@@ -676,7 +676,6 @@ window.Box = Spine.Controller.sub({init:function() {
         annex= a.AMOS_HOMOLOGAR ? true:false;
         status= a.AMOS_STATUS ? "complet":"incomplet";
         email= a.AMOS_ENV_EMAIL? "sent":"disabled";
-
         //Creating result
         result+="<td><button type='button' name='"+a.AMOS_ID+"' class='icon bselection'></button></td><td><a href='#detail/"+parseInt(a.FEIR_COD)+"/"+a.AMOS_ID+"'>"+a.FORN_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.AMOS_DESC+"</a></td><td><a href='#detail/"+a.AMOS_ID+"'>"+a.CREATE_DATE+"</a></td>";
         if(this.usr.SEGM_COD === "TD"){

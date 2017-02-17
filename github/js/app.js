@@ -1809,10 +1809,12 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
       }  
       switch(b){
         case 'amostras':
+          this.callService('contatos','','','','','','<LINHA_I>1</LINHA_I>','<LINHA_F>20</LINHA_F>');
           //this.data = a.sortBy(this.nsort);
           //debugger;
           this.data = a;
           this.content.changeview(this.view);
+          console.dir(this.data);
           //this.filter.checklist(a);
           //$(".changeview button.b"+this.view);
           if(!$(".changeview button.sel").hasClass('b'+this.view)){
@@ -1925,27 +1927,29 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
           self.data[i].CONTACTS=even;
           if(even.length){
             self.data[i].FAVORITES=even[0].FAVORITES;
-            console.dir(self.data[i]);
+            //console.dir(self.data[i]);
           }
           
         }
-        
+        //console.dir(self.data);
       }
       //this.createbox(this.data, this.content.page, !0,"list");
     },
     linkNotes:function(index,arr){
       var self=this;
-      var length=this.NOTES.length;
       for(i=0;i<length;i++){
         if(self.data[i]){
           var even = _.filter(arr, function(obj){
+            console.log(obj.OBJ_ID === self.data[i].FORN_ID);
             return ((obj.OBJ_ID === self.data[i].FORN_ID));
           });
           self.data[i].NOTES=even;
         }
         
       }
-      this.createbox(this.data, this.content.page, !0,"list");
+      if(this.page !== "amostras"){
+        this.createbox(this.data, this.content.page, !0,"list");
+      }
     },
     convertData:function(data,req,what){
       //debugger;
@@ -1954,7 +1958,6 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
           case "amostras":
             if(!this.data.length){
               this.data=jQuery.parseJSON($(req.responseXML).text()).unique();
-              console.dir(this.data);
               this.data=this.data.filter(function(a,b){
                 if(a.SEGM_COD === context.usr.SEGM_COD || context.usr.SEGM_COD === "TD"){
                   return a;
@@ -2002,8 +2005,7 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
             break;
           case "contatos":
               this.CONTACTS=jQuery.parseJSON($(req.responseXML).text());
-              console.dir(this.CONTACTS);
-              if(this.page !== "fornecedor_cadastro"){
+              if(this.page === "fornecedores"){
                 this.callService('anotacoes','<TP_NOTA_ID>2</TP_NOTA_ID>','','');
                 this.linkFornAndContacts(this.content.page,this.CONTACTS);
               }
@@ -2014,7 +2016,6 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
           case "fornecedores":
             if(!this.data.length){
               this.data=jQuery.parseJSON($(req.responseXML).text());
-              console.dir(this.data);
               this.setDate(this.data);
               this.setdata(this.data,"fornecedores");
             }
@@ -2028,7 +2029,6 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
             break;
           case "favorito":
             this.FAVS=jQuery.parseJSON($(req.responseXML).text());
-            debugger;
             break;
           case 'combosearch':
             this.spotlight.forn=[];
@@ -3285,17 +3285,28 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
         this.modal.open("message","Fornecedor Inativo!!!",!1,!0);
         return !1;
       }
-      length=this.CONTACTS.length;
+      //debugger;
+      var even = _.filter(context.CONTACTS, function(obj){
+        /*if((obj.FORN_ID === self.data[i].FORN_ID) && self.data[i].FORN_ID > 10){
+          return obj;
+        }*/
+        return ((obj.FORN_ID === item[0].FORN_ID) && obj.CONT_ID);
+      //
+      });
+      item[0].CONTACTS=even;
+
+
+      length=item[0].CONTACTS.length;
       if(!length){
         this.modal.open("message","O Fornecedor não possui contatos cadastrados",!1,!0);
         return !1;
       }
       else{
         for(i=0;i<=length;i++){
-          if(this.CONTACTS[i]){
-            if(this.CONTACTS[i].CONT_PRINCIPAL){
-              if(this.CONTACTS[i].CONT_EMAIL !== null && isEmail(this.CONTACTS[i].CONT_EMAIL)){
-                contemail=this.CONTACTS[i];
+          if(item[0].CONTACTS[i]){
+            if(item[0].CONTACTS[i].CONT_PRINCIPAL){
+              if(item[0].CONTACTS[i].CONT_EMAIL !== null && isEmail(item[0].CONTACTS[i].CONT_EMAIL)){
+                contemail=item[0].CONTACTS[i];
                 any_principal=!1;
               }   
             }
@@ -3318,7 +3329,7 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
                 });
 
                 //debugger;
-                this.CONTACTS.forEach(function(element,index){
+                item[0].CONTACTS.forEach(function(element,index){
                   if(element.CONT_PRINCIPAL && !contemail.length){
                     contemail=element.CONT_EMAIL;
                     context.modal.open("message","O contato principal deste fornecedor não possui email cadastrado!!!",!1,!0);
@@ -3846,11 +3857,11 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
         {"code":"FORN_DESC","name":"Fornecedor"},
         {"code":"FEIR_DESC","name":"Local da Coleta"},
         {"code":"CREATE_DATE","name":"Criacao do fornecedor"},
-        {"code":"CONTACTS","name":"Contatos / Criação do Contato / E-Mail"},
+        {"code":"CONTACTS","name":"Contatos / Criacao do Contato / E-Mail"},
         // {"code":"CONTACTS_CREATE_DATE","name":"Cadastro do Contato"},
         // {"code":"SEGM_DESC","name":"Segmento"},
         {"code":"NOTES","name":"Anotacoes"},
-        // {"code":"FAVORITES","name":"Favoritos"},
+        {"code":"FAVORITES","name":"Favoritos"},
         {"code":"FORN_STATUS","name":"Status"},
         {"code":"FORN_PRINCIPAL","name":"Fornecedor Principal"}
       ]
@@ -3940,7 +3951,7 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
           }
         }
         else{
-          // fav= fdata[i].FAVORITES.length ? true:false;
+          fav= fdata[i].FAVORITES.length ? true:false;
           length=indice_forn.length;
         }
         for(j=0;j<length;j++){
@@ -3948,9 +3959,9 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
             switch (indice_forn[j].code){
               case "NOTES":
                 var segnote=[];
-                for(var k=0;k<fdata[i].NOTA_DESC.length;k++){
-                  if(fdata[i].NOTA_DESC[k].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
-                    segnote.push(fdata[i].NOTA_DESC[k]);
+                for(var k=0;k<fdata[i].NOTES.length;k++){
+                  if(fdata[i].NOTES[k].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
+                    segnote.push(fdata[i].NOTES[k]);
                   }
                 }
                 if(segnote.length){
@@ -3966,12 +3977,13 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
                 }
                 break;
               case "CONTACTS":
-                if(this.CONTACTS.length){
+                if(fdata[i].CONTACTS.length){
                   //console.log(fdata[i].FORN_DESC);
                   tab_text+="<td>";
-                  this.setDate(this.CONTACTS[i]);
-                  for(var k=0;k<this.CONTACTS[i].length;k++){
-                    tab_text+="<p>"+(this.CONTACTS[i].CONT_NOME || "SEM NOME")+"</p>";
+                  this.setDate(fdata[i].CONTACTS);
+                  for(var k=0;k<fdata[i].CONTACTS.length;k++){
+                    tab_text+="<p>"+(fdata[i].CONTACTS[k].CONT_NOME || "SEM NOME")+" - ";
+                    tab_text+=fdata[i].CONTACTS[k].CREATE_DATE+"</p>";
                   }
                   tab_text+="</td>";
                 }
@@ -4004,18 +4016,19 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
                   tab_text+="<td></td>";
                 }
                 break;
-              // case "FAVORITES":
-              //   if(fav){
-              //     tab_text+="<td>";
-              //     for(var k=0;k<fdata[i].FAVORITES.length;k++){
-              //       tab_text+="<p>"+fdata[i].FAVORITES[k].SEGM_DESC+"</p>";
-              //     }
-              //     tab_text+="</td>";
-              //   }
-              //   else{
-              //     tab_text+="<td>Nao</td>";
-              //   }
-              //   break;
+              case "FAVORITES":
+                if(fav){
+                  tab_text+="<td>";
+                  /*for(var k=0;k<fdata[i].FAVORITES.length;k++){
+                    tab_text+="<p>"+fdata[i].FAVORITES[k].SEGM_DESC+"</p>";
+                  }*/
+                  tab_text+="<p>"+fdata[i].FAVORITES+"</p>";
+                  tab_text+="</td>";
+                }
+                else{
+                  tab_text+="<td>Nao</td>";
+                }
+                break;
               case "FORN_PRINCIPAL":
                   tab_text+="<td>";
                   tab_text+=fdata[i][indice_forn[j].code] ? "SIM" : "";
@@ -4042,9 +4055,9 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
             switch (indice_amos[j].code){
               case "NOTES":
                 var segnote=[];
-                for(var k=0;k<fdata[i].NOTA_DESC.length;k++){
-                  if(fdata[i].NOTA_DESC[k].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
-                    segnote.push(fdata[i].NOTA_DESC[k]);
+                for(var k=0;k<fdata[i].NOTES.length;k++){
+                  if(fdata[i].NOTES[k].SEGM_COD === this.usr.SEGM_COD || this.usr.SEGM_COD === "TD"){
+                    segnote.push(fdata[i].NOTES[k]);
                   }
                 }
                 if(segnote.length){

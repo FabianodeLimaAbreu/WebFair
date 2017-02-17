@@ -1,9 +1,9 @@
 var imgPath= "img/";
 
-var stringServer ="http://ifair.focustextil.com.br:81/webservice.asmx?op=";
+var stringServer ="http://ifair.focustextil.com.br:82/webservice.asmx?op=";
 //var stringServer ="http://ifair.focustextil.com.br:81/WebService.asmx?op";
 
- var link = "http://ifair.focustextil.com.br:81/webfair/index.html";
+ var link = "http://ifair.focustextil.com.br:82/webfair/index.html";
 //var link = "http://ifair.focustextil.com.br:81/webfair/index.html";
 var nodePath = "../WebService.asmx?op=", scrollTop = document.documentElement ? document.documentElement.scrollTop : document.body.scrollTop;
 window.console = window.console || {log:function() {

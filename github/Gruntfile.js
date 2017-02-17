@@ -39,7 +39,7 @@ module.exports = function(grunt) {
             //Copy all the files, except that
             build: {
                 //The line bellow can be changed accordding to the project
-                src: ['**', '!node_modules/**', '!**/Gruntfile.js', '!**/package.json', '!less/**', '!images/psds/**', '!WebFair/**', "!**/*.xlsx", '!testes/**', '!views/**', '!LEVANTAMENTO DE DADOS/**', '!docs/**',"!_hugo/**"],
+                src: ['**', '!node_modules/**', '!**/Gruntfile.js', '!**/package.json', '!less/**', '!images/psds/**', '!WebFair/**', "!**/*.xlsx", '!testes/**', '!views/**', '!LEVANTAMENTO DE DADOS/**', '!docs/**',"!homologa/**"],
                 dest: 'dist',
                 expand: true
             },
