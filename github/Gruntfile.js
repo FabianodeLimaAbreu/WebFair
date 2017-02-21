@@ -89,7 +89,7 @@ module.exports = function(grunt) {
         },
         jsdoc: {
             dist: {
-                src: ['js/app.js', 'js/app/*.js', 'js/login.js'],
+                src: ['js/app.js', 'js/app/*.js', 'js/login.js', 'js/envioemail.js'],
                 options: {
                     destination: 'docs',
                     //It's use a template configuration in it's folder
@@ -103,7 +103,7 @@ module.exports = function(grunt) {
                 }
             },
             homologa: {
-                src: ['js/app.js', 'js/app/*.js', 'js/login.js'],
+                src: ['js/app.js', 'js/app/*.js', 'js/login.js','js/envioemail.js'],
                 options: {
                     destination: 'docs',
                     //It's use a template configuration in it's folder

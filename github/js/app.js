@@ -1880,6 +1880,15 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
       }
       ("images" !== this.view) ? this.scroll($(".container-fullsize.scroller")) : this.scroll();      
     },
+
+    /**
+    * `This method is a callback to ajax request.`
+    * `It just redirect to a callback method set previously, just in some cases the app needs to save a value in some atributes. `
+    * @memberOf App#
+    * @param {Object} data. The data itself.
+    * @param {String} status. A String with status of the request
+    * @param {Object} req. Response of ajax request
+    */
     callRequest:function(data, status, req){
         var query;
         this.ajaxrequest=!1;
@@ -2630,6 +2639,13 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
       a.preventDefault();
       var obj=$(a.target);
     },
+
+    /**
+    * `Enable or disable a selection in samples.`
+    * `If there isn't template_email array, request it's service, in case user decide to send an email.`
+    * @memberOf App#
+    * @param {event} a. Event click iteself.
+    */
     enableSelect : function(a){
       var status;
       var context=this;
@@ -2681,6 +2697,13 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
         }
       }
     },
+
+    /**
+    * `This method is called when user select a city to filter in "Local de Coleta" page.`
+    * `The method do a filter in "this.fair" list according to filter's param and call "setdata" to populate its component.`
+    * @memberOf App#
+    * @param {event} val. Event click iteself.
+    */
     changeCity:function(val){
       var country,city,context=this,arr=[];
       country=$(".countries").find("option:selected").val();
@@ -2750,6 +2773,13 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
         this.navigate(this.mode, !0);
       }      
     },
+
+    /**
+    * `This method is called when user select a country to filter in "Local de Coleta" page.`
+    * `This method call a cities Services to populate city's component.`
+    * @memberOf App#
+    * @param {event} a. Event click iteself.
+    */
     changeCountries: function(a){
       if(!$(a.target).find("option:selected").val().length){
         $(".inative option").each(function(a,b){

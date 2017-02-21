@@ -1,16 +1,15 @@
 /**
 *@fileOverview Send Email's Page
-* @module App
+* @module SendEmail
 *
 */
 
 /**
-*@classDesc This class deal with all action of users' `send email`
-*@exports App
+*This class deal with all action of users' `send email`
+*@exports SendEmail
 *@constructor
 */
-
-var App={
+var SendEmail={
 	elements:{
 		'el':$("body"),
 		"loginName" : $(".login-name"),
@@ -19,9 +18,8 @@ var App={
 	},
 
 	/**
-	*This method is responsible for call all listeners, in our case, call submit listener
-	* @memberOf Login#
-	* @name events
+	* `This method is responsible for call all listeners.`
+	* @memberOf SendEmail#
 	*/
 	events:function(){
 		var core=this;
@@ -32,9 +30,9 @@ var App={
 	},
 
 	/**
-	*Initial method, responsible for call events method and verify if user is logged or not.
-	* @memberOf Login#
-	* @name init
+	* `Initial method, is responsible to take the localStorage with the necessary inf and set it in an attribute  and verify if user is logged or not.`
+    * `About localStorage: tempcookie - Info from AMOS to send email, supplier and its main contact, user logged `
+	* @memberOf SendEmail#
 	*/
 	init:function(){
 		this.usr = null;
@@ -57,6 +55,11 @@ var App={
         this.requestService(getQueryStringValue("template"));
 	},
 
+    /**
+    * `This method is responsible to call ListarTemplates's WebService.`
+    * @memberOf SendEmail#
+    * @param {int} id. Template id, receive as param by localstorage.
+    */
 	requestService:function(id){
 		var core=this;
 		$.support.cors=true;
@@ -74,6 +77,14 @@ var App={
         });
 	},
 
+    /**
+    * `This method is a callback to ajax request.`
+    * ` This method convert the response to JSON and write it's data in the page.`
+    * @memberOf SendEmail#
+    * @param {Object} data. The data itself. 
+    * @param {String} status. A String with status of the request
+    * @param {Object} req. Response of ajax request
+    */
 	callRequest:function(data, status, req){
 		var a=jQuery.parseJSON($(req.responseXML).text())[0];
 		var result="";
@@ -83,11 +94,24 @@ var App={
         this.replaceTags();
 	},
 
+    /**
+    * `This method is a callback to ajax request.`
+    * `This method is called in error case and open a Modal.`
+    * @memberOf SendEmail#
+    * @param {Object} data. The data itself. 
+    * @param {String} status. A String with status of the request
+    * @param {Object} req. Response of ajax request
+    */
 	processError:function(data, status, req){
         var modal=new Modal(!0,"Um erro ocorreu!!!");
         modal.open();
     },
 
+    /**
+    * `This method receive a Tag and replace it to a respective value.`
+    * @memberOf SendEmail#
+    * @param {String} val. The Tag itself. 
+    */
     replaceTags:function(val){
     	if(!val){
     		return "";
@@ -103,6 +127,11 @@ var App={
     	return val;
     },
 
+    /**
+    * `Add a hash to a template when button is clicked.`
+    * @memberOf SendEmail#
+    * @param {event} a. the event click itself. 
+    */
     addHash:function(a){
       var el=$(a.target),area,core=this;
       area=$(".info-template textarea.focused");
@@ -112,16 +141,21 @@ var App={
       area.val(textAreaTxt.substring(0, caretPos) + txtToAdd + textAreaTxt.substring(caretPos) );
     },
 
+    /**
+    * `This method just toggle a "focused" class in textarea.`
+    * @memberOf SendEmail#
+    * @param {event} a. the event click itself. 
+    */
     focusArea:function(a){
       $(".info-template textarea").removeClass('focused');
       $(a.target).addClass('focused');
     },
 
 	/**
-	*Submit method
-	* @param {event} a - Submit event itself
-	* @memberOf Login#
-	*/
+    * `This method request a list of email's receive and send an email, calling "emailSent" method as callback`
+    * @memberOf SendEmail#
+    * @param {event} a. the event click itself. 
+    */
 	submitTemp:function(a){
         var EMAIL_TO,EMAIL_FROM,EMAIL_SUBJECT,EMAIL_BODY,EMAIL_CC,status,last,last_request,EMAIL_CC_list=[];
 
@@ -183,11 +217,26 @@ var App={
           }
         },100);
 	},
+
+    /**
+    * `This method is a callback to ajax request in submitTemp Method.`
+    * ` This method just redirect to setEmailSent passing a param .`
+    * @memberOf SendEmail#
+    * @param {Object} data. The data itself. 
+    * @param {String} status. A String with status of the request
+    * @param {Object} req. Response of ajax request
+    */
     emailSent:function(data, status, req){
         this.setEmailSent(this.tempcookie.opt[0]);
     },
+
+    /**
+    * `This method request a list of samples byID, according to a list of samples sent in email, then, update these Samples.`
+    * @memberOf SendEmail#
+    * @param {event} a. the event click itself. 
+    */
     setEmailSent:function(a){
-        console.dir(a);
+        //console.dir(a);
         var length,core=this,l=0,obj,status;
         length=a.length;
         var day,date,month;
@@ -278,7 +327,7 @@ function Modal(isbad,msg){
         window.close();
     }
 }
-App.init();
+SendEmail.init();
 
 $(window).bind('beforeunload', function(event) {
     localStorage.clear();
