@@ -17,18 +17,16 @@ var App={
 		"warn" : $(".warn")
 	},
 	/**
-	*This method is responsible for call all listeners, in our case, call submit listener
+	* `This method is responsible for call all listeners, in our case, call submit listener.`
 	* @memberOf Login#
-	* @name events
 	*/
 	events:function(){
 		this.elements.loginEl.find("form").bind("submit",this.submit);
 	},
 
 	/**
-	*Initial method, responsible for call events method and verify if user is logged or not.
+	* `Initial method, responsible for call events method and verify if user is logged or not.`
 	* @memberOf Login#
-	* @name init
 	*/
 	init:function(){
 		this.usr = null;
@@ -40,7 +38,7 @@ var App={
 	},
 
 	/**
-	*Submit method
+	* `Submit method.`
 	* @param {event} a - Submit event itself
 	* @memberOf Login#
 	*/

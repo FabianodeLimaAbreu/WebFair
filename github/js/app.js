@@ -40,7 +40,6 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
 
     events: {      
       "click .justit.bnote":"preventAction",
-      "mouseover .justit.bnote":"createNote",
       "click .justit.bemail":"preventAction",
       "click .fornecedor_cadastro .nav-menu a":"preventAction",
       "hover .tooltip-selectable":"positionNote",
@@ -534,7 +533,7 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
       }); 
     },
     /**
-    * `This method is responsible to pass the forn's search to samples search when the user click at Samples's menu link and vice-versa
+    * `This method is responsible to pass the forn's search to samples search when the user click at Samples's menu link and vice-versa.`
     * @memberOf App#
     */
     PassCookie:function(){
@@ -569,6 +568,7 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
     * @param {event} a. The click event.
     */
     goBack : function(){
+
       window.history.go(-1);
     },
 
@@ -586,16 +586,13 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
       }
     },
 
-    createNote:function(a){
-      //console.dir($("button[idref='"+$(a.target).attr('idref')+"']")); // component of notes
-    },
-
     /**
     * `This method is called by preventAction when the user click in yes in the Modal.`
     * `The method take the redirect_val set in preventAction method and change the hash of the page using it.`
     * @memberOf App#
     */
     redirect:function(a){
+
       window.location.hash=this.redirect_val;
     },
 
@@ -606,7 +603,6 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
     * @param {event} a. The click event.
     */
     positionNote:function(a){
-      this.createNote(a);
       var tablesize=$(".scroller").outerHeight();
       if(($(a.target).position().top+$(a.target).height()+50 )> tablesize){
         var el=$(a.target).find(".notepadmess");
@@ -1102,8 +1098,8 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
     },
 
     /**
-    * `This method is called when the user do a filter by date.
-    * `This method take the input's date values and apply to a new request in the web service
+    * `This method is called when the user do a filter by date.`
+    * `This method take the input's date values and apply to a new request in the web service.`
     * @memberOf App#
     * @param {event} a. The click event.
     */
@@ -1178,8 +1174,8 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
     },
 
     /**
-    * `This method is called when the user click in one of the shortcut itens of a sample in result's page 
-    * `This method set: "Favorite", "approved", "physical". This method call "gravarAmostras", passing the updated values.
+    * `This method is called when the user click in one of the shortcut itens of a sample in result's page .`
+    * `This method set: "Favorite", "approved", "physical". This method call "gravarAmostras", passing the updated values.`
     * @memberOf App#
     * @param {event} a. The click event.
     */
@@ -1229,8 +1225,8 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
     },
 
     /**
-    * `This method is called when the user select a sample to edit or send a email for example.
-    * `When has a select event, this method add that sample to select_items array to be used after.
+    * `This method is called when the user select a sample to edit or send a email for example.`
+    * `When has a select event, this method add that sample to select_items array to be used after.`
     * @memberOf App#
     * @param {event} a. The click event.
     */
@@ -1302,8 +1298,8 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
       }
     },
     /**
-    * `This method is called when the user change the view image or list
-    * `The method add and remove the sel class and call setdata method
+    * `This method is called when the user change the view image or list.`
+    * `The method add and remove the sel class and call setdata method.`
     * @memberOf App#
     * @param {event} a. The click event.
     */
@@ -1327,7 +1323,7 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
       a.hasClass("sel") || (this.viewBtn.removeClass("sel"), a.addClass("sel"), this.view = a.attr('alt'), this.setdata(this.data, "amostras"));
     },
     /**
-    * `This method has a list of all useful webservices in a soap structure, execute a request to a webservice and call a callback method
+    * `This method has a list of all useful webservices in a soap structure, execute a request to a webservice and call a callback method.`
     * @memberOf App#
     * @param {String} name. The name of the web service to be requested.
     * @param {String} a. One of the parameters to a web service being requested.
@@ -1351,56 +1347,6 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
             }
           },
           {
-            //FEIR_COD e FORN_ID are optional fields
-            'name':'singleSample',
-            'serviceName':'ListarAmostras',
-            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarAmostras xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+''+e+''+f+'<SEGM_COD>'+(core.usr.SEGM_COD === "TD" ? "" : core.usr.SEGM_COD)+'</SEGM_COD></ListarAmostras></soap:Body></soap:Envelope>',
-            callback:function(data,req){
-              var item=jQuery.parseJSON($(req.responseXML).text()).unique();
-              this.setDate(item);
-              return core.detail.open(item[0]);
-            }
-          },
-          {
-            'name':'delete',
-            'serviceName':'GravarAnotacao',
-            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarAnotacao xmlns="http://tempuri.org/"><note><NOTA_ID>'+a+'</NOTA_ID><USU_COD>'+b+'</USU_COD><PLAT_ID>2</PLAT_ID><CREATE_DATE>2016-07-08</CREATE_DATE></note><action>D</action></GravarAnotacao></soap:Body></soap:Envelope>',
-            'callback':null
-          },
-          {
-            'name':'local',
-            'serviceName':'ListarFeiras',
-            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFeiras xmlns="http://tempuri.org/">'+a+''+b+''+c+'</ListarFeiras></soap:Body></soap:Envelope>',
-            callback:function(data,req){
-              core.convertData(data,req,name);
-            }
-          },
-          {
-            'name':'gravarLocal',
-            'serviceName':'GravarFeira',
-            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFeira xmlns="http://tempuri.org/"><fair>'+a+'</fair><action>'+b+'</action></GravarFeira></soap:Body></soap:Envelope>',
-            callback:function(data,req){
-              this.modal.open("message","Local Salvo com Sucesso!!!",!1,!0);
-              window.location.reload();
-            }
-          },
-          {
-            'name':'contatos',
-            'serviceName':'ListarContatos',
-            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarContatos xmlns="http://tempuri.org/">'+a+''+b+''+c+''+'<SEGM_COD>'+core.usr.SEGM_COD+'</SEGM_COD>'+''+d+""+e+''+f+g+'</ListarContatos></soap:Body></soap:Envelope>',
-            callback:function(data,req){
-              core.convertData(data,req,name,!0);
-            }
-          },
-          {
-            'name':'fornecedores',
-            'serviceName':'ListarFornecedores',
-            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedores xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+''+e+''+f+g+'<SEGM_COD>'+core.usr.SEGM_COD+'</SEGM_COD></ListarFornecedores></soap:Body></soap:Envelope>',
-            callback:function(data,req){
-              core.convertData(data,req,name,!0);
-            }
-          },
-          {
             'name':'anotacoes',
             'serviceName':'ListarAnotacoes',
             'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarAnotacoes xmlns="http://tempuri.org/">'+a+''+b+''+'<SEGM_COD>'+core.usr.SEGM_COD+'</SEGM_COD></ListarAnotacoes></soap:Body></soap:Envelope>',
@@ -1409,19 +1355,11 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
             }
           },
           {
-            'name':'favorito',
-            'serviceName':'ListarFornecedorFavoritos',
-            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedorFavoritos xmlns="http://tempuri.org/">'+a+''+'</ListarFornecedorFavoritos></soap:Body></soap:Envelope>',
-            'callback':function(data,req){
-              core.convertData(data,req,name,!0);
-            }
-          },
-          {
-            'name':'singleForn',
-            'serviceName':'ListarFornecedores',
-            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedores xmlns="http://tempuri.org/">'+a+'</ListarFornecedores></soap:Body></soap:Envelope>',
+            'name':'cities',
+            'serviceName':'ListarRegioes',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarRegioes xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+'</ListarRegioes></soap:Body></soap:Envelope>',
             callback:function(data,req){
-              return core.fornecedores.open(jQuery.parseJSON($(req.responseXML).text()).unique()[0],!0);
+              core.convertData(data,req,name);
             }
           },
           {
@@ -1433,6 +1371,28 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
             }
           },
           {
+            'name':'compositionToSupplier',
+            'serviceName':'ListarFornecedorComposicoes',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedorComposicoes xmlns="http://tempuri.org/">'+a+'</ListarFornecedorComposicoes></soap:Body></soap:Envelope>',
+            'callback':function(data,req){
+              core.convertData("COMPOSITIONS",req,"to_supplier");
+            }
+          },
+          {
+            'name':'contatos',
+            'serviceName':'ListarContatos',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarContatos xmlns="http://tempuri.org/">'+a+''+b+''+c+''+'<SEGM_COD>'+core.usr.SEGM_COD+'</SEGM_COD>'+''+d+""+e+''+f+g+'</ListarContatos></soap:Body></soap:Envelope>',
+            callback:function(data,req){
+              core.convertData(data,req,name,!0);
+            }
+          },
+          {
+            'name':'delete',
+            'serviceName':'GravarAnotacao',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarAnotacao xmlns="http://tempuri.org/"><note><NOTA_ID>'+a+'</NOTA_ID><USU_COD>'+b+'</USU_COD><PLAT_ID>2</PLAT_ID><CREATE_DATE>2016-07-08</CREATE_DATE></note><action>D</action></GravarAnotacao></soap:Body></soap:Envelope>',
+            'callback':null
+          },
+          {
             'name':'email_fornecedor',
             'serviceName':'ListarFornecedores',
             'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedores xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+''+e+'<SEGM_COD>'+core.usr.SEGM_COD+'</SEGM_COD></ListarFornecedores></soap:Body></soap:Envelope>',
@@ -1441,11 +1401,20 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
             }
           },
           {
-            'name':'cities',
-            'serviceName':'ListarRegioes',
-            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarRegioes xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+'</ListarRegioes></soap:Body></soap:Envelope>',
+            'name':'fornecedores',
+            'serviceName':'ListarFornecedores',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedores xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+''+e+''+f+g+'<SEGM_COD>'+core.usr.SEGM_COD+'</SEGM_COD></ListarFornecedores></soap:Body></soap:Envelope>',
             callback:function(data,req){
-              core.convertData(data,req,name);
+              core.convertData(data,req,name,!0);
+            }
+          },
+
+          {
+            'name':'favorito',
+            'serviceName':'ListarFornecedorFavoritos',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedorFavoritos xmlns="http://tempuri.org/">'+a+''+'</ListarFornecedorFavoritos></soap:Body></soap:Envelope>',
+            'callback':function(data,req){
+              core.convertData(data,req,name,!0);
             }
           },
           {
@@ -1459,22 +1428,6 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
             }
           },
           {
-            'name':'gravarNotes',
-            'serviceName':'GravarAnotacao',
-            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarAnotacao xmlns="http://tempuri.org/"><note><NOTA_ID>0</NOTA_ID>'+a+'<PLAT_ID>2</PLAT_ID>'+b+'</note><action>I</action></GravarAnotacao></soap:Body></soap:Envelope>',
-            'callback':function(data,req){
-              switch (core.page){
-                case "detail":
-                  core.detail.writeNote();
-                  break;
-                case "fornecedor_cadastro":
-                  console.log(jQuery.parseJSON($(req.responseXML).text()));
-                  core.fornecedores.writeNote();
-                  break;
-              }    
-            }
-          },
-          {
             'name':'gravarAmostraComposicao',
             'serviceName':'GravarAmostraComposicao',
             'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarAmostraComposicao xmlns="http://tempuri.org/"><AMOS_ID>'+a+'</AMOS_ID><compositions>'+b+'</compositions></GravarAmostraComposicao></soap:Body></soap:Envelope>',
@@ -1482,14 +1435,6 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
               if(c !== "PROMISSE"){
                 core.setloading(!1);
               }
-            }
-          },
-          {
-            'name':'listarSegmentos',
-            'serviceName':'ListarSegmentos',
-            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarSegmentos xmlns="http://tempuri.org/"><SEGM_COD></SEGM_COD></ListarSegmentos></soap:Body></soap:Envelope>',
-            'callback':function(data,req){
-              core.convertData(data,req,name);
             }
           },
           {
@@ -1559,45 +1504,30 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
             }
           },
           {
-            'name':'profileToSupplier',
-            'serviceName':'ListarFornecedorPerfis',
-            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedorPerfis xmlns="http://tempuri.org/">'+a+'</ListarFornecedorPerfis></soap:Body></soap:Envelope>',
+            'name':'GravarFornecedorMestre',
+            'serviceName':'GravarFornecedorMestre',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFornecedorMestre xmlns="http://tempuri.org/"><MSTR_ID>'+a+'</MSTR_ID><USU_COD>'+core.usr.USU_COD+'</USU_COD><forns>'+b+'</forns></GravarFornecedorMestre></soap:Body></soap:Envelope>',
             'callback':function(data,req){
-              core.convertData("PROFILES",req,"to_supplier");
+              window.location.reload();
             }
           },
           {
-            'name':'compositionToSupplier',
-            'serviceName':'ListarFornecedorComposicoes',
-            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedorComposicoes xmlns="http://tempuri.org/">'+a+'</ListarFornecedorComposicoes></soap:Body></soap:Envelope>',
+            'name':'gravarNotes',
+            'serviceName':'GravarAnotacao',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarAnotacao xmlns="http://tempuri.org/"><note><NOTA_ID>0</NOTA_ID>'+a+'<PLAT_ID>2</PLAT_ID>'+b+'</note><action>I</action></GravarAnotacao></soap:Body></soap:Envelope>',
             'callback':function(data,req){
-              core.convertData("COMPOSITIONS",req,"to_supplier");
+              switch (core.page){
+                case "detail":
+                  core.detail.writeNote();
+                  break;
+                case "fornecedor_cadastro":
+                  console.log(jQuery.parseJSON($(req.responseXML).text()));
+                  core.fornecedores.writeNote();
+                  break;
+              }    
             }
           },
-          {
-            'name':'productsToSupplier',
-            'serviceName':'ListarFornecedorProdutos',
-            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedorProdutos xmlns="http://tempuri.org/">'+a+'</ListarFornecedorProdutos></soap:Body></soap:Envelope>',
-            'callback':function(data,req){
-              core.convertData("PRODUCTS",req,"to_supplier");
-            }
-          },
-          {
-            'name':'marketsToSupplier',
-            'serviceName':'ListarFornecedorMercados',
-            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedorMercados xmlns="http://tempuri.org/">'+a+'</ListarFornecedorMercados></soap:Body></soap:Envelope>',
-            'callback':function(data,req){
-              core.convertData("MARKETS",req,"to_supplier");
-            }
-          },
-          {
-            'name':'template_email',
-            'serviceName':'listarTemplates',
-            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarEmailTemplates xmlns="http://tempuri.org/">'+a+''+b+'</ListarEmailTemplates></soap:Body></soap:Envelope>',
-            callback:function(data,req){
-              core.convertData(data,req,name);
-            }
-          },
+
           {
             'name':'gravarTemplate',
             'serviceName':'gravarTemplate',
@@ -1615,11 +1545,20 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
             }
           },
           {
-            'name':'GravarFornecedorMestre',
-            'serviceName':'GravarFornecedorMestre',
-            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFornecedorMestre xmlns="http://tempuri.org/"><MSTR_ID>'+a+'</MSTR_ID><USU_COD>'+core.usr.USU_COD+'</USU_COD><forns>'+b+'</forns></GravarFornecedorMestre></soap:Body></soap:Envelope>',
-            'callback':function(data,req){
+            'name':'gravarLocal',
+            'serviceName':'GravarFeira',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><GravarFeira xmlns="http://tempuri.org/"><fair>'+a+'</fair><action>'+b+'</action></GravarFeira></soap:Body></soap:Envelope>',
+            callback:function(data,req){
+              this.modal.open("message","Local Salvo com Sucesso!!!",!1,!0);
               window.location.reload();
+            }
+          },
+          {
+            'name':'local',
+            'serviceName':'ListarFeiras',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFeiras xmlns="http://tempuri.org/">'+a+''+b+''+c+'</ListarFeiras></soap:Body></soap:Envelope>',
+            callback:function(data,req){
+              core.convertData(data,req,name);
             }
           },
           {
@@ -1636,7 +1575,65 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
               $("#"+a).attr("title",string);
             }
           },
-          
+          {
+            'name':'listarSegmentos',
+            'serviceName':'ListarSegmentos',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarSegmentos xmlns="http://tempuri.org/"><SEGM_COD></SEGM_COD></ListarSegmentos></soap:Body></soap:Envelope>',
+            'callback':function(data,req){
+              core.convertData(data,req,name);
+            }
+          },
+          {
+            'name':'marketsToSupplier',
+            'serviceName':'ListarFornecedorMercados',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedorMercados xmlns="http://tempuri.org/">'+a+'</ListarFornecedorMercados></soap:Body></soap:Envelope>',
+            'callback':function(data,req){
+              core.convertData("MARKETS",req,"to_supplier");
+            }
+          },
+          {
+            'name':'productsToSupplier',
+            'serviceName':'ListarFornecedorProdutos',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedorProdutos xmlns="http://tempuri.org/">'+a+'</ListarFornecedorProdutos></soap:Body></soap:Envelope>',
+            'callback':function(data,req){
+              core.convertData("PRODUCTS",req,"to_supplier");
+            }
+          },
+          {
+            'name':'profileToSupplier',
+            'serviceName':'ListarFornecedorPerfis',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedorPerfis xmlns="http://tempuri.org/">'+a+'</ListarFornecedorPerfis></soap:Body></soap:Envelope>',
+            'callback':function(data,req){
+              core.convertData("PROFILES",req,"to_supplier");
+            }
+          },
+          {
+            //FEIR_COD e FORN_ID are optional fields
+            'name':'singleSample',
+            'serviceName':'ListarAmostras',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarAmostras xmlns="http://tempuri.org/">'+a+''+b+''+c+''+d+''+e+''+f+'<SEGM_COD>'+(core.usr.SEGM_COD === "TD" ? "" : core.usr.SEGM_COD)+'</SEGM_COD></ListarAmostras></soap:Body></soap:Envelope>',
+            callback:function(data,req){
+              var item=jQuery.parseJSON($(req.responseXML).text()).unique();
+              this.setDate(item);
+              return core.detail.open(item[0]);
+            }
+          },
+          {
+            'name':'singleForn',
+            'serviceName':'ListarFornecedores',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarFornecedores xmlns="http://tempuri.org/">'+a+'</ListarFornecedores></soap:Body></soap:Envelope>',
+            callback:function(data,req){
+              return core.fornecedores.open(jQuery.parseJSON($(req.responseXML).text()).unique()[0],!0);
+            }
+          },
+          {
+            'name':'template_email',
+            'serviceName':'listarTemplates',
+            'code':'<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ListarEmailTemplates xmlns="http://tempuri.org/">'+a+''+b+'</ListarEmailTemplates></soap:Body></soap:Envelope>',
+            callback:function(data,req){
+              core.convertData(data,req,name);
+            }
+          }
         ];
 
         $.support.cors=true;
@@ -1660,8 +1657,8 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
         });
     },
     /**
-    * `This method is a first way to call the requester of web services
-    * `Its called and changeFair, filterForn and others
+    * `This method is a first way to call the requester of web service.`
+    * `Its called and changeFair, filterForn and others.`
     * @memberOf App#
     * @param {String} a. To say if need a reset of content or not and is a param to WebService in soap format
     * @param {String} b. A param to WebService in soap format
@@ -1727,7 +1724,7 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
       },100);
     },
     /**
-    * `This method is called on blue and press into input-search
+    * `This method is called on blue and press into input-search.`
     * @memberOf App#
     * @param {event} a. The blur or keypress event.
     */
@@ -1771,7 +1768,7 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
       }
     },
     /**
-    * `This method is called when the request in CallService return an error
+    * `This method is called when the request in CallService return an error.`
     * @memberOf App#
     * @param {Object} data. The object return]
     * @param {Int} status. Status of the return, like 500 to error
@@ -1792,8 +1789,10 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
         return this.modal.open("message","Um erro ocorreu!!!",!1,!0), this.setloading(!1);
       }      
     },
+    
     /**
-    * `This method is called after the return of callService to set the data and call a method to write the itens on the page.
+    * `This method is called after the return of callService to set the data and call a method to write the itens on the page.`
+    * `In amostras and fornecedores a contatos service is called.`
     * @memberOf App#
     * @param {Array} data. The list of object to write on page
     * @param {String} b. The page name to switch
@@ -1814,7 +1813,7 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
           //debugger;
           this.data = a;
           this.content.changeview(this.view);
-          console.dir(this.data);
+          //console.dir(this.data);
           //this.filter.checklist(a);
           //$(".changeview button.b"+this.view);
           if(!$(".changeview button.sel").hasClass('b'+this.view)){
@@ -1826,7 +1825,6 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
           }
 
           //REOPEN
-          //this.createbox(this.data, this.content.page, !0);
           this.reopenFilter(this.data, this.content.page, !0);
           break;
         case 'template':
@@ -1910,31 +1908,37 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
           }
         }
     },
+
+    /**
+    * `This method take an data array (this.data) and with a contact's list, compare FORN_ID and related them.`
+    * @memberOf App#
+    * @param {int} index. The page position to take exactly position in "this.data" array and compare with contact's list.
+    * @param {Array} arr. The contact's list.
+    */
     linkFornAndContacts:function(index,arr){
       var self=this;
       var i=index*20;
       var length=i+20;
       for(i;i<length;i++){
-        //console.dir(arr[i]);
         if(self.data[i]){
           var even = _.filter(arr, function(obj){
-            /*if((obj.FORN_ID === self.data[i].FORN_ID) && self.data[i].FORN_ID > 10){
-              return obj;
-            }*/
             return ((obj.FORN_ID === self.data[i].FORN_ID) && obj.CONT_ID);
-          //
           });
           self.data[i].CONTACTS=even;
           if(even.length){
             self.data[i].FAVORITES=even[0].FAVORITES;
-            //console.dir(self.data[i]);
           }
           
         }
-        //console.dir(self.data);
       }
-      //this.createbox(this.data, this.content.page, !0,"list");
     },
+    /**
+    * `This method take an data array (this.data) and with a note's list, compare FORN_ID and related them.`
+    * `In samples' case after all, a createbox method is called.`
+    * @memberOf App#
+    * @param {int} index. The page position to take exactly position in "this.data" array and compare with contact's list.
+    * @param {Array} arr. The note's list.
+    */
     linkNotes:function(index,arr){
       var self=this;
       for(i=0;i<length;i++){
@@ -1951,6 +1955,14 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
         this.createbox(this.data, this.content.page, !0,"list");
       }
     },
+
+    /**
+    * `This method receive a data list in xml and and convert that to json type.`
+    * @memberOf App#
+    * @param {int} data. A response from CallService method.
+    * @param {Object} req. response from CallService method with data list.
+    * @param {String} what. Item or page name.
+    */
     convertData:function(data,req,what){
       //debugger;
         var context=this;
@@ -2074,9 +2086,12 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
           default:
         }
     },
-    showComboTemplateEmail:function(){
-      //console.log("show");
-    },
+
+    /**
+    * `This method receive a data list and convert its CREATE_DATE to a dd/mm/yyyy format.`
+    * @memberOf App#
+    * @param {array} list. A data list passed as param.
+    */
     setDate:function(list){
       var i,length;
       length=list.length;
@@ -2084,11 +2099,19 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
       //console.dir(list);
       for(i=0;i<length;i++){
         if(!dateReg.test(list[i].CREATE_DATE)){
-          //Verifica se a data já está no formato dd/mm/yyyy, caso contrario converte-a
+          //Verify date format, and if is necessary, convert to dd/mm/yyyy,.
           list[i].CREATE_DATE=parseJsonDate(list[i].CREATE_DATE).toLocaleDateString();
         }
       }
     },
+
+    /**
+    * `This method is called when is necessary to create a list (combobox) of itens.`
+    * @memberOf App#
+    * @param {array} list. A data list passed as param.
+    * @param {component} comp. The component itself.
+    * @param {String} what. What's the name of it, to a switch case.
+    */
     createComponent:function(data,comp,what){
       var i,html="";
       switch (what){
@@ -2123,6 +2146,8 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
       }
       comp.html(html);
     },
+
+
     createbox : function(a, b, d, c,length) {  
       console.log("1");
         var f, g, n, m,v;     
@@ -2546,20 +2571,13 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
             return this.setloading(!1), !1;
           } 
         }
-    },  
-    stage:function() {
-      var a, c;
-      "number" === typeof window.innerWidth ? (a = window.innerWidth, c = window.innerHeight) : (a = document.documentElement.clientWidth, c = document.documentElement.clientHeight);
-      return{w:a, h:c};
-    },  
-    endloading : function(a) {
-        a && clearInterval(a);
-        var b = this;
-        b.getloading(!1);
-        /*b.content.itens.fadeIn(function() { 
-            b.getloading(!1);
-        });  */          
     },
+
+    /**
+    * `Delete a note, updte this.data array being used and change DOM.`
+    * @memberOf App#
+    * @param {event} a. Event click iteself.
+    */
     deleteNote:function(a){
       a.preventDefault();
       var i,obj=$(a.target),how;
@@ -2581,22 +2599,33 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
           }
         }
       });
-
-      /*for(i=0;i<this.detail.item.NOTES.length;i++){
-        console.log(this.detail.item.NOTES[i].NOTA_ID+" , "+parseInt(obj.attr("title")));
-        if(this.detail.item.NOTES[i].NOTA_ID === parseInt(obj.attr("title"))){
-          this.detail.item.NOTES.splice(i, 1);
-        }
-      }*/
     },
+
+    /**
+    * `Take the event click itself and set a var.`
+    * @memberOf App#
+    * @param {event} a. Event click iteself.
+    */
     actionHeart:function(a){
       a.preventDefault();
       var obj=$(a.target);
     },
+
+    /**
+    * `Take the event click itself and set a var.`
+    * @memberOf App#
+    * @param {event} a. Event click iteself.
+    */
     actionFlag:function(a){
       a.preventDefault();
       var obj=$(a.target);
     },
+
+    /**
+    * `Take the event click itself and set a var.`
+    * @memberOf App#
+    * @param {event} a. Event click iteself.
+    */
     actionHomolog:function(a){
       a.preventDefault();
       var obj=$(a.target);
@@ -2736,6 +2765,8 @@ require(["methods","jquery.elevatezoom","underscore-min","sp/min", "app/content"
       this.callService("cities",'<PAIS_COD>'+$(a.target).find("option:selected").val()+'</PAIS_COD>','<PAIS_DESC></PAIS_DESC>','<REGI_COD></REGI_COD>','<REGI_DESC></REGI_DESC>');
       //this.setdata(this.fair,"local");
     },
+
+
     /*THis method was deprecated in 10/11/2015 09:56 by Fabiano de Lima
     Because Supplier's status filter are being using like a Search Param and no more a filter of a complet list.
     filterForn:function(ev){

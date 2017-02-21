@@ -1,11 +1,11 @@
 /**
-*@fileOverview Filter's component
+* @fileOverview Filter's component
 * @module Filter
 *
 */
 
 /**
-* Filter's class and actions
+* Filter's class and actions.
 * @exports Filter
 * @constructor
 */
@@ -14,9 +14,8 @@ elements:{
 }, events:{
 },
   /**
-  *Caller bind events' methods
+  * `Caller bind events' methods.`
   * @memberOf Filter#
-  * @name callerEvents
   */
   callerEvents:function(){
     var context=this;
@@ -25,10 +24,9 @@ elements:{
     $(".filter-confirm").unbind("click").bind("click",function(a){context.confirm(a);});
 },
   /**
-  * When add an subfilter's list opt, this method is called.
+  * `When add an subfilter's list opt, this method is called.`
   * @param {event} a - click event itself
   * @memberOf Filter#
-  * @name add
   */
   add:function(a){
     if("object" === typeof a) {
@@ -45,10 +43,9 @@ elements:{
     }), this.list = this.list.diff(b), a.removeClass("sel")) : (this.list.push({id:d, bt:b, ft:c.toLowerCase()}), a.addClass("sel"));
 },
   /**
-  * When select (unable and disable) a filter's opt to show subfilter's list.
+  * `When select (unable and disable) a filter's opt to show subfilter's list.`
   * @param {event} a - click event itself
   * @memberOf Filter#
-  * @name select
   */
   select:function(a){
     var context=this;
@@ -70,11 +67,10 @@ elements:{
     $(".sub-refine a").unbind("click").bind("click",function(a){context.add(a);});
 },
   /**
-  * Create all subfilter's options items in html.
+  * `Create all subfilter's options items in html.`
   * @param {Array} a - All opt to be write by html
   * @param {String} b - Subfilter's name
   * @memberOf Filter#
-  * @name setfilters
   */
   setfilters:function(a,b){
     var c, d, e = [], f;
@@ -90,11 +86,10 @@ elements:{
     $(".sub-refine ul").html(e.join(""));
 },
   /**
-  * This method both verify if filter's opt is off or not and when click in some filter's opt verify all subfilter's list.
+  * `This method both verify if filter's opt is off or not and when click in some filter's opt verify all subfilter's list.`
   * @param {event} a - click event itself
   * @return Array
   * @memberOf Filter#
-  * @name getfilter
   */
   getfilter:function(a){
     var b, c,d=[];
@@ -117,11 +112,11 @@ elements:{
     }
     return d.unique();
 },
+
   /**
-  * This method is called when filter is opened, with it, call getfilter and add class off or not according to result of getfilter's return
+  * `This method is called when filter is opened, with it, call getfilter and add class off or not according to result of getfilter's return.`
   * @param {event} a - click event itself
   * @memberOf Filter#
-  * @name getfilter
   */
   checklist:function(a){
     this.callerEvents();
@@ -136,12 +131,12 @@ elements:{
       c.length || $(this).addClass("off");
     });
 },
+
   /**
-  * When confirm's method is called,it method call this method to run all select filter's opt and concat to return.
-  * @param {Object} a - Each select filter's opt and subfilter.
-  * @param {Array} b - Array OBjects list
+  * `When confirm's method is called,it method call this method to run all select filter's opt and concat to return.`
   * @memberOf Filter#
-  * @name reload
+  * @param {Object} a. Each select filter's opt and subfilter.
+  * @param {Array} b. Array OBjects list
   */
   reload:function(a,b){
     var i,b,d=[];
@@ -174,12 +169,12 @@ elements:{
         return d;
       }
   },
+
    /**
-  * This method is called when click ate confirm's button, and it's responsible to increment counter of select's item.
+  * `This method is called when click ate confirm's button, and it's responsible to increment counter of select's item.`
   * @param {Array} a - Each item's list
   * @param {Boolean} b - If is being with cookie or not
   * @memberOf Filter#
-  * @name confirm
   */
   confirm:function(arr,cookie){
     var b, c, d, e = this, f, g;
@@ -224,29 +219,30 @@ elements:{
       this.close();
     }
 },
+
  /**
-  * Close filter
+  * `Close filter`
   * @memberOf Filter#
-  * @name close
   */
 close:function(){
   $(".refine a").removeClass('sel').addClass('unsel');
   $(".not-autoshow").removeClass('sel');
   $(".sub-refine").addClass('hide').hide().find("ul").empty();
 },
+
+
   /**
-  * Reset filter
+  * `Reset filter`
   * @memberOf Filter#
-  * @name reset
   */
 reset:function(){
   this.list = [];
   this.data = null;
 },
+
 /**
-* Init filter
+* `Init filter`
 * @memberOf Filter#
-* @name init
 */
 
 init:function() {
